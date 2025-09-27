@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MSA Handmade</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #fbd3e9, #bbd2c5);
-      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #fde7ef, #d8ecff);
       text-align: center;
       color: #333;
     }
 
-    /* Meniu sus */
+    /* Meniu */
     nav {
       position: fixed;
       top: 0;
@@ -23,30 +22,35 @@
       display: flex;
       justify-content: center;
       gap: 30px;
-      padding: 10px 0;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 12px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       z-index: 10;
     }
-
     nav a {
       text-decoration: none;
       color: #333;
       font-weight: bold;
-      padding: 8px 15px;
-      transition: color 0.3s;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: 0.3s;
     }
-
     nav a:hover {
-      color: #ff7eb3;
+      background: #ffe6f2;
+      color: #e91e63;
     }
 
     /* Logo */
     .logo {
-      margin-top: 80px;
-      max-width: 350px;
+      margin-top: 90px;
+      max-width: 340px;
       width: 90%;
       border-radius: 20px;
-      box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+      box-shadow: 0 0 25px rgba(255, 200, 0, 0.6);
+      animation: glow 4s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 200, 0, 0.6); }
+      50% { box-shadow: 0 0 40px rgba(255, 150, 0, 0.9); }
     }
 
     h1 {
@@ -54,14 +58,13 @@
       margin: 20px 10px 10px;
       color: #222;
     }
-
     p {
       font-size: 1.1em;
       margin: 10px 20px 30px;
       color: #444;
     }
 
-    /* Buton */
+    /* Buton principal */
     .btn {
       display: inline-block;
       margin: 20px auto;
@@ -71,22 +74,71 @@
       color: white;
       border: none;
       border-radius: 30px;
-      background: linear-gradient(45deg, #ff512f, #dd2476, #ff7e5f, #feb47b, #86a8e7, #91eae4);
-      background-size: 400% 400%;
-      animation: gradient 6s ease infinite;
+      background: linear-gradient(45deg, #ff512f, #dd2476);
       text-decoration: none;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
       transition: transform 0.2s;
     }
-
     .btn:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
     }
 
-    @keyframes gradient {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
+    /* Contact */
+    #contact {
+      margin: 50px auto;
+      padding: 25px;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    #contact h2 {
+      margin-bottom: 15px;
+    }
+    #contact p {
+      font-size: 1.1em;
+      margin: 10px 0;
+    }
+
+    /* Linkuri contact */
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      margin-top: 15px;
+    }
+    .contact-links a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+      font-size: 1.1em;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      transition: 0.3s;
+      width: fit-content;
+    }
+    .contact-links a:hover {
+      transform: scale(1.05);
+    }
+
+    /* Stiluri specifice pentru butoane */
+    .email { background: #f0f0f0; color: #333; }
+    .whatsapp { background: #25d366; color: white; }
+    .instagram { background: linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5); color: white; }
+
+    /* Iconițe simple */
+    .icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
     }
 
     /* Petale */
@@ -100,7 +152,6 @@
       opacity: 0.8;
       animation: fall linear infinite;
     }
-
     @keyframes fall {
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
@@ -117,7 +168,7 @@
   </nav>
 
   <!-- Logo -->
-  <img class="logo" src="file_000000003bb461f4b8b738dabe595ea7.png" alt="MSA Decor Handmade Logo">
+  <img class="logo" src="logo.png" alt="MSA Decor Handmade Logo">
 
   <!-- Conținut -->
   <h1>Bun venit la M.S.A Handmade</h1>
@@ -125,9 +176,20 @@
   <a href="produse.html" class="btn">Vezi produsele</a>
 
   <!-- Contact -->
-  <div id="contact">
-    <p><b>Contact:</b> contact@msahandmade.ro</p>
-  </div>
+  <section id="contact">
+    <h2>Contact</h2>
+    <div class="contact-links">
+      <a class="email" href="mailto:msahandmade.contact@gmail.com">
+        📧 Email: msahandmade.contact@gmail.com
+      </a>
+      <a class="whatsapp" href="https://wa.me/40700111222" target="_blank">
+        💬 WhatsApp: +40 747246241
+      </a>
+      <a class="instagram" href="https://instagram.com/contul_tau" target="_blank">
+        📷 Instagram: @contul_tau
+      </a>
+    </div>
+  </section>
 
   <!-- Script petale -->
   <script>
