@@ -9,3 +9,112 @@
   <p>Test GitHub Pages – MSA Handmade 🎉</p>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSA Handmade</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Poți lăsa CSS-ul aici sau îl muți în styles.css */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f8f9fa, #e8eaf6);
+      color: #333;
+    }
+
+    header {
+      background: #8e44ad;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header img {
+      height: 60px;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: url("20250730_011326.jpg") no-repeat center/cover;
+      color: white;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      background: #ff9800;
+      color: white;
+      padding: 12px 25px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #e67e22;
+    }
+
+    footer {
+      background: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <!-- Poți înlocui cu logo-ul tău (imagine PNG/JPG/SVG) -->
+      <img src="20250730_011326.jpg" alt="Logo MSA Handmade">
+    </div>
+    <nav>
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Bun venit la MSA Handmade!</h1>
+    <p>Decorațiuni, lumânări sculptate și ceramică unică, realizate cu suflet.</p>
+    <a href="produse.html" class="btn">Vezi produsele</a>
+  </section>
+
+  <footer>
+    <p>&copy; <span id="year"></span> MSA Handmade. Toate drepturile rezervate.</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
