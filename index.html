@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -8,66 +9,110 @@
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #dbeafe, #fce7f3, #f3e8ff);
-      min-height: 100vh;
-      overflow-x: hidden;
+      background: linear-gradient(135deg, #f8d7e3, #d7e9f7);
+      overflow: hidden;
       text-align: center;
-      position: relative;
+      color: #333;
     }
 
     .container {
       position: relative;
       z-index: 2;
-      padding: 30px 20px;
+      padding: 20px;
     }
 
+    /* Logo cu efecte */
     .logo {
-      max-width: 320px;
+      position: relative;
+      max-width: 350px;
       margin: 20px auto;
       display: block;
       border-radius: 20px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      padding: 6px;
+      background: linear-gradient(270deg, #ffd700, #ffb347, #fffacd, #ffd700);
+      background-size: 600% 600%;
+      animation: shine 12s linear infinite, glow 4s ease-in-out infinite;
+      box-shadow: 0 0 25px rgba(255,215,0,0.6);
+    }
+
+    @keyframes shine {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 15px rgba(255,215,0,0.6), 0 0 30px rgba(255,215,0,0.3); }
+      50% { box-shadow: 0 0 25px rgba(255,215,0,0.9), 0 0 45px rgba(255,215,0,0.6); }
+    }
+
+    .logo img {
+      width: 100%;
+      display: block;
+      border-radius: 15px;
+    }
+
+    /* Sclipiri */
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle, white, rgba(255,255,255,0));
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkle 3s infinite;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.5); opacity: 1; }
     }
 
     h1 {
       font-size: 2.5rem;
-      color: #333;
-      margin-bottom: 15px;
+      margin: 10px 0;
+      color: #222;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
     }
 
     p {
       font-size: 1.2rem;
-      color: #444;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .btn {
       display: inline-block;
-      padding: 12px 28px;
-      background: linear-gradient(45deg, #e63946, #ffb703, #38b000);
-      color: white;
+      padding: 12px 24px;
       font-size: 1.2rem;
       font-weight: bold;
+      color: white;
+      background: linear-gradient(45deg, #ff4e50, #f9d423, #24c6dc, #514a9d);
+      border: none;
       border-radius: 30px;
       text-decoration: none;
-      box-shadow: 0 0 12px rgba(230,57,70,0.6);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      margin-top: 10px;
+      margin-top: 15px;
+      animation: pulse 2.5s infinite;
     }
 
     .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(56,176,0,0.7);
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 12px rgba(255, 183, 3, 0.5); }
+      50% { transform: scale(1.08); box-shadow: 0 0 25px rgba(255, 183, 3, 0.8); }
     }
 
     /* Petale */
     .petal {
       position: absolute;
       top: -10px;
-      width: 18px;
-      height: 18px;
       border-radius: 50%;
       opacity: 0.8;
+      pointer-events: none;
       animation: fall linear infinite;
     }
 
@@ -76,92 +121,124 @@
       100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
 
-    /* Buton muzică */
-    .music-toggle {
+    /* Copac în colț */
+    .tree {
       position: fixed;
-      top: 15px;
-      right: 15px;
-      background: rgba(255, 255, 255, 0.8);
-      border: none;
-      border-radius: 50%;
-      width: 55px;
-      height: 55px;
-      font-size: 26px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      transition: transform 0.2s ease;
-      z-index: 5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      bottom: 0;
+      left: 0;
+      width: 120px;
+      height: 300px;
+      background: #4b2e15;
+      border-radius: 30px;
+      z-index: 1;
     }
 
-    .music-toggle:hover {
-      transform: scale(1.1);
+    .branch {
+      position: absolute;
+      width: 150px;
+      height: 25px;
+      background: #4b2e15;
+      border-radius: 15px;
+      left: 80px;
+      transform-origin: left center;
+    }
+
+    .branch:nth-child(1) { top: 30px; transform: rotate(-15deg); }
+    .branch:nth-child(2) { top: 100px; transform: rotate(-5deg); }
+    .branch:nth-child(3) { top: 170px; transform: rotate(10deg); }
+
+    /* Flori pe ramuri */
+    .flower {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: pink;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(255,192,203,0.7);
+      animation: flowerPulse 3s infinite;
+    }
+
+    @keyframes flowerPulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.2); opacity: 1; }
     }
   </style>
 </head>
 <body>
+  <!-- Copac -->
+  <div class="tree">
+    <div class="branch" id="branch1"></div>
+    <div class="branch" id="branch2"></div>
+    <div class="branch" id="branch3"></div>
+  </div>
+
   <!-- Petale -->
   <div id="sakura"></div>
 
-  <!-- Buton muzică -->
-  <button class="music-toggle" id="musicBtn">🎵</button>
-
   <!-- Conținut -->
   <div class="container">
-    <img src="logo.png?v=4" alt="MSA Decor Handmade Logo" class="logo">
+    <div class="logo" id="logo-box">
+      <img src="file_000000003bb461f4b8b738dabe595ea7.png" alt="MSA Decor Handmade Logo">
+    </div>
     <h1>Bun venit la M.S.A Handmade</h1>
     <p>Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.</p>
     <a href="produse.html" class="btn">Vezi produsele</a>
   </div>
 
-  <!-- Audio fundal -->
-  <audio id="bg-music" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c16f1a3e74.mp3?filename=gentle-breeze-ambient-nature-sound-21929.mp3" type="audio/mpeg">
-  </audio>
-
-  <!-- Script petale -->
+  <!-- Script petale + sclipiri + flori -->
   <script>
     const sakura = document.getElementById('sakura');
+    const logoBox = document.getElementById('logo-box');
 
     function createPetal() {
       const petal = document.createElement('div');
       petal.classList.add('petal');
 
-      const size = Math.random() * 12 + 8;
+      const size = Math.random() * 15 + 10;
       petal.style.width = `${size}px`;
       petal.style.height = `${size}px`;
 
-      const colors = ['pink', 'lightpink', 'lavender', 'white', 'plum'];
+      // petalele încep din zona copacului
+      petal.style.left = (Math.random() * 150) + 'px';
+      const colors = ['pink', 'lightpink', 'lavender', 'white', '#ffb6c1'];
       petal.style.background = colors[Math.floor(Math.random() * colors.length)];
 
-      petal.style.left = Math.random() * 100 + 'vw';
       petal.style.animationDuration = (Math.random() * 3 + 3) + 's';
       petal.style.opacity = Math.random();
 
       sakura.appendChild(petal);
-
-      setTimeout(() => petal.remove(), 7000);
+      setTimeout(() => { petal.remove(); }, 6000);
     }
-
     setInterval(createPetal, 200);
 
-    // Muzică ON/OFF
-    const music = document.getElementById('bg-music');
-    const musicBtn = document.getElementById('musicBtn');
-    let isPlaying = false;
+    // Sclipiri pe logo
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
 
-    musicBtn.addEventListener('click', () => {
-      if (isPlaying) {
-        music.pause();
-        musicBtn.textContent = "🎵"; // note muzicale când e oprit
-      } else {
-        music.play();
-        musicBtn.textContent = "🎶"; // mai multe note când e pornit
+      sparkle.style.top = Math.random() * 100 + '%';
+      sparkle.style.left = Math.random() * 100 + '%';
+      sparkle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+
+      logoBox.appendChild(sparkle);
+      setTimeout(() => { sparkle.remove(); }, 3000);
+    }
+    setInterval(createSparkle, 800);
+
+    // Flori pe ramuri
+    function addFlowers(branchId) {
+      const branch = document.getElementById(branchId);
+      for (let i = 0; i < 5; i++) {
+        const flower = document.createElement('div');
+        flower.classList.add('flower');
+        flower.style.top = (Math.random() * 10) + 'px';
+        flower.style.left = (Math.random() * 140) + 'px';
+        branch.appendChild(flower);
       }
-      isPlaying = !isPlaying;
-    });
+    }
+    addFlowers('branch1');
+    addFlowers('branch2');
+    addFlowers('branch3');
   </script>
 </body>
 </html>
