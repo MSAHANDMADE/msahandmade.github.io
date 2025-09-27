@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -7,183 +6,139 @@
   <title>MSA Handmade</title>
   <style>
     :root{
-      --ink:#333;
+      --ink:#2d2d2d;
       --muted:#6b7280;
-      --brand:#8e44ad;
-      --brand2:#e67e22;
-      --btn-grad: linear-gradient(45deg,#e63946,#ffb703,#38b000);
+      --btn-grad: linear-gradient(45deg,#e63946,#ffb703,#38b000,#00b4d8);
     }
 
-    /* Fundal pastel + cercuri soft */
+    /* fundal pastel */
     body{
       margin:0;
       font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       color:var(--ink);
-      background: radial-gradient(1200px 900px at 10% -10%, #e8d9ff 0, #f7e9ff 30%, transparent 60%),
-                  radial-gradient(1200px 900px at 110% 110%, #d5f2ff 0, #f1fbff 30%, transparent 60%),
-                  linear-gradient(135deg,#f8d7e3,#f8d7e3 20%,#f3e9ff 50%, #eaf4ff 100%);
-      overflow-x: hidden;
-      min-height: 100dvh;
+      background:
+        radial-gradient(1200px 900px at 0% -20%, #f7e9ff 0, transparent 55%),
+        radial-gradient(1200px 900px at 100% 120%, #e0f6ff 0, transparent 55%),
+        linear-gradient(135deg,#fde7ef 0%, #f3e9ff 45%, #eaf6ff 100%);
+      min-height:100dvh; overflow-x:hidden;
     }
 
-    /* Balonașe */
-    .bubbles{position:fixed; inset:0; z-index:0; pointer-events:none;}
+    /* balonașe */
+    .bubbles{position:fixed; inset:0; z-index:0; pointer-events:none}
     .bubble{
-      position:absolute; width:14px; height:14px; border-radius:50%;
-      background: rgba(255,255,255,.7);
-      box-shadow: 0 6px 20px rgba(0,0,0,.08), inset 0 0 20px rgba(255,255,255,.8);
+      position:absolute; width:12px; height:12px; border-radius:50%;
+      background:rgba(255,255,255,.75);
+      box-shadow: inset 0 0 18px rgba(255,255,255,.9), 0 8px 20px rgba(0,0,0,.06);
       animation: float 18s linear infinite;
-      filter: blur(.3px);
+      filter:blur(.3px)
     }
-    @keyframes float{
-      from{transform: translateY(0) translateX(0)}
-      to{transform: translateY(-120vh) translateX(10vw)}
+    @keyframes float{from{transform:translateY(0)} to{transform:translateY(-120vh)}}
+
+    /* copac elegant din linii (SVG) */
+    .tree-wrap{
+      position:fixed; left:0; bottom:0; width:min(34vw, 260px); height:80vh;
+      z-index:1; pointer-events:none; opacity:.55; /* discret */
+    }
+    .tree-wrap svg{
+      width:100%; height:100%;
+    }
+    /* subțiem liniile pe telefoane */
+    @media (max-width:480px){
+      .tree-wrap{ width:38vw; opacity:.48 }
+      .tree-wrap path{ stroke-width:1.2 !important }
     }
 
-    /* COPAC: trunchi maro vizibil + o coroană difuză */
-    .tree{
-      position: fixed;
-      left: -2vh;               /* mută ușor stânga/dreapta dacă vrei */
-      bottom: -4vh;
-      width: 28vh; height: 70vh;
-      z-index:1; pointer-events:none;
-    }
-    .tree .trunk{
-      position:absolute; bottom:0; left:10vh;
-      width:8vh; height:70vh; border-radius:4vh;
-      background: linear-gradient(180deg,#a06838,#804a1d 60%,#5c3516);
-      box-shadow: inset 0 0 14px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.12);
-      opacity:.95;
-    }
-    .tree .crown{
-      position:absolute; left:-2vh; top:4vh;
-      width:28vh; height:28vh; border-radius:50%;
-      background: radial-gradient(circle at 40% 35%, rgba(160,220,180,.55),
-                                  rgba(130,200,240,.45) 60%, rgba(255,255,255,0) 62%);
-      filter: blur(1px);
-    }
-
-    /* CONȚINUT */
     .container{
-      position:relative;
-      z-index:3;             /* peste copac & petale */
-      max-width: 1024px;
-      margin: 0 auto;
-      padding: 24px clamp(16px, 5vw, 40px) 56px;
-      text-align:center;
+      position:relative; z-index:3; max-width:1024px;
+      margin:0 auto; text-align:center;
+      padding: 20px clamp(16px,5vw,40px) 56px;
     }
 
-    /* Card logo cu efect ușor */
     .logo-card{
-      display:inline-block;
-      background:#000;
-      border-radius:16px;
-      padding: clamp(8px,2vw,14px);
-      margin: 8px auto 10px;
-      box-shadow: 0 16px 40px rgba(0,0,0,.25);
-      position:relative;
-      overflow:hidden;
+      display:inline-block; background:#000; border-radius:16px;
+      padding: clamp(8px,2vw,14px); margin: 8px auto 10px;
+      box-shadow:0 16px 40px rgba(0,0,0,.25); position:relative; overflow:hidden;
     }
     .logo-card:before{
       content:""; position:absolute; inset:0;
-      background: linear-gradient(120deg, transparent 0 40%, rgba(255,255,255,.18) 50%, transparent 60% 100%);
-      transform: translateX(-120%);
-      animation: shine 6s ease-in-out infinite 1s;
-      pointer-events:none;
+      background:linear-gradient(120deg,transparent 0 40%,rgba(255,255,255,.18) 50%,transparent 60% 100%);
+      transform:translateX(-120%); animation:shine 6s ease-in-out infinite 1s
     }
-    @keyframes shine{ 0%{transform:translateX(-120%)} 60%{transform:translateX(120%)} 100%{transform:translateX(120%)} }
-
-    .logo-img{
-      display:block;
-      width: min(720px, 92vw);
-      height:auto;
-      border-radius:12px;
-    }
+    @keyframes shine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(120%)}}
+    .logo-img{display:block; width:min(720px,92vw); height:auto; border-radius:12px}
 
     h1{
-      font-size: clamp(28px, 6.6vw, 52px);
-      line-height: 1.1;
-      margin: 10px auto 6px;
-      text-shadow: 0 2px 0 rgba(255,255,255,.6), 0 12px 30px rgba(0,0,0,.08);
-      letter-spacing:.4px;
+      font-size:clamp(28px,6.6vw,52px); line-height:1.1;
+      margin:10px auto 6px; text-shadow:0 2px 0 rgba(255,255,255,.6), 0 12px 30px rgba(0,0,0,.08);
+      letter-spacing:.4px
     }
-    p.lead{
-      font-size: clamp(16px, 4.4vw, 22px);
-      color: var(--muted);
-      max-width: 860px;
-      margin: 0 auto 18px;
+    .lead{
+      font-size:clamp(16px,4.4vw,22px); color:var(--muted);
+      max-width:860px; margin:0 auto 18px
     }
 
     .btn{
-      display:inline-block;
-      margin-top: 6px;                 /* buton MAI SUS */
-      padding: 12px 26px;
-      font-size: clamp(16px, 4.2vw, 20px);
-      font-weight: 700;
-      color:white; text-decoration:none;
-      background: var(--btn-grad);
-      border-radius: 999px;
-      box-shadow: 0 10px 25px rgba(230,57,70,.35);
-      transform: translateZ(0);
-      transition: transform .15s ease, box-shadow .2s ease;
+      display:inline-block; margin-top:8px; padding:12px 26px;
+      font-size:clamp(16px,4.2vw,20px); font-weight:700; color:#fff; text-decoration:none;
+      background:var(--btn-grad); border-radius:999px;
+      box-shadow:0 10px 26px rgba(230,57,70,.35); transition:transform .15s, box-shadow .2s
     }
-    .btn:hover{ transform: scale(1.04); box-shadow: 0 14px 36px rgba(230,57,70,.45) }
-    .btn:active{ transform: scale(0.98) }
+    .btn:hover{transform:scale(1.04); box-shadow:0 14px 36px rgba(230,57,70,.45)}
+    .btn:active{transform:scale(.98)}
 
-    /* PETALE SAKURA */
-    #sakura{ position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+    /* petale */
+    #sakura{position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden}
     .petal{
-      position:absolute; top:-10vh;
-      width:22px; height:16px; border-radius: 12px 50% 50% 12px / 12px 50% 50% 12px;
-      opacity:.9; filter: blur(.2px);
-      transform-origin: center;
-      animation: fall linear forwards, sway ease-in-out infinite;
-      will-change: transform;
+      position:absolute; top:-10vh; width:22px; height:16px;
+      border-radius:12px 50% 50% 12px / 12px 50% 50% 12px;
+      opacity:.9; filter:blur(.15px);
+      transform-origin:center; will-change:transform;
+      animation:fall linear forwards, sway ease-in-out infinite;
       box-shadow: inset -2px -2px 6px rgba(0,0,0,.07), 0 6px 14px rgba(0,0,0,.06);
     }
-    @keyframes fall{ to{ transform: translateY(115vh) rotate(360deg) } }
-    @keyframes sway{
-      0%{ margin-left: 0 }
-      50%{ margin-left: 28px }
-      100%{ margin-left: 0 }
-    }
-
-    /* Indicativ mic „Logo” (dispare pe ecrane mari) */
-    .logo-hint{
-      position:absolute; top:-12px; left:50%; transform:translateX(-50%);
-      background: rgba(255,255,255,.55); color:#222; font-size:12px;
-      padding:6px 16px; border-radius: 12px; backdrop-filter: blur(6px);
-      display:inline-block;
-    }
-    @media (min-width:720px){ .logo-hint{ display:none } }
+    @keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
+    @keyframes sway{0%{margin-left:0}50%{margin-left:26px}100%{margin-left:0}}
   </style>
 </head>
 <body>
 
-  <!-- Copacul decorativ (stânga) -->
-  <div class="tree" aria-hidden="true">
-    <div class="trunk"></div>
-    <div class="crown"></div>
+  <!-- copac din ramuri subțiri (SVG) -->
+  <div class="tree-wrap" aria-hidden="true">
+    <svg viewBox="0 0 220 500" fill="none">
+      <!-- trunchi fin -->
+      <path d="M110 500 C108 420,106 360,105 300 C104 240,107 180,110 120"
+            stroke="#8b5a2b" stroke-width="2" stroke-linecap="round"/>
+      <!-- ramuri -->
+      <path d="M110 160 C 80 145, 62 128, 48 110" stroke="#8b5a2b" stroke-width="2" stroke-linecap="round"/>
+      <path d="M110 180 C 140 165, 160 150, 178 132" stroke="#8b5a2b" stroke-width="2" stroke-linecap="round"/>
+      <path d="M106 220 C 84 210, 66 196, 50 182" stroke="#8b5a2b" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M112 240 C 134 228, 156 214, 176 198" stroke="#8b5a2b" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M105 280 C 82 270, 60 256, 36 236" stroke="#8b5a2b" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M112 300 C 136 288, 160 274, 186 252" stroke="#8b5a2b" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M104 340 C 80 328, 54 312, 28 290" stroke="#8b5a2b" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M114 360 C 140 346, 168 330, 196 304" stroke="#8b5a2b" stroke-width="1.4" stroke-linecap="round"/>
+      <!-- frunzulițe ușor transparente pe vârfuri -->
+      <g opacity=".25" stroke="#5a9c60" stroke-width="1.2" stroke-linecap="round">
+        <path d="M48 110 q6 -6 14 -4"/>
+        <path d="M178 132 q-8 -4 -12 -10"/>
+        <path d="M36 236 q10 -6 18 -2"/>
+        <path d="M196 304 q-10 -6 -16 -4"/>
+      </g>
+    </svg>
   </div>
 
-  <!-- strat balonașe -->
-  <div class="bubbles" aria-hidden="true" id="bubbles"></div>
+  <!-- buline fundal -->
+  <div id="bubbles" class="bubbles" aria-hidden="true"></div>
 
   <!-- petale -->
   <div id="sakura" aria-hidden="true"></div>
 
-  <!-- CONȚINUT -->
   <main class="container">
     <div class="logo-card">
-      <span class="logo-hint">Logo</span>
-      <!-- ÎNCERCĂ MAI ÎNTÂI logo.png; dacă nu există, folosește numele lung încărcat -->
-      <img
-        id="brandLogo"
-        class="logo-img"
-        src="logo.png"
-        alt="MSA Decor Handmade Logo"
-        onerror="this.onerror=null; this.src='file_000000003bb461f4b8b738dabe595ea7.png';" />
-      <!-- ↑ Dacă numele fișierului diferă, înlocuiește-l aici cu exact ce vezi în repo. -->
+      <img id="brandLogo" class="logo-img"
+           src="logo.png"
+           alt="MSA Decor Handmade Logo"
+           onerror="this.onerror=null; this.src='file_000000003bb461f4b8b738dabe595ea7.png';">
     </div>
 
     <h1>Bun venit la M.S.A Handmade</h1>
@@ -195,53 +150,47 @@
   </main>
 
   <script>
-    /* BALOANE SOFT */
-    (function makeBubbles(){
+    /* balonașe */
+    (function(){
       const host = document.getElementById('bubbles');
-      const N = 36;
+      const N = 32;
+      const hues = [285, 330, 210, 260, 310, 180];
       for(let i=0;i<N;i++){
-        const b = document.createElement('span');
+        const b=document.createElement('span');
         b.className='bubble';
-        const size = 8 + Math.random()*18;
-        b.style.width = b.style.height = size+'px';
-        b.style.left = (Math.random()*100)+'vw';
-        b.style.top  = (Math.random()*100)+'vh';
-        b.style.animationDuration = (14+Math.random()*12)+'s';
-        b.style.animationDelay = (-Math.random()*20)+'s';
-        // nuanțe pastel
-        const hues = [285, 330, 210, 260, 310, 180];
-        const h = hues[Math.floor(Math.random()*hues.length)];
-        b.style.background = `rgba(255,255,255,.75)`;
-        b.style.boxShadow = `0 6px 20px rgba(0,0,0,.08), inset 0 0 20px hsla(${h},60%,90%,.85)`;
+        const s=8+Math.random()*18;
+        b.style.width=b.style.height=s+'px';
+        b.style.left=(Math.random()*100)+'vw';
+        b.style.top=(Math.random()*100)+'vh';
+        b.style.animationDuration=(14+Math.random()*12)+'s';
+        b.style.animationDelay=(-Math.random()*20)+'s';
+        const h=hues[Math.floor(Math.random()*hues.length)];
+        b.style.boxShadow=`inset 0 0 18px hsla(${h},70%,92%,.9), 0 8px 20px rgba(0,0,0,.06)`;
         host.appendChild(b);
       }
     })();
 
-    /* PETALE – ploaie rapidă & suavă, culori variate */
-    (function petals(){
-      const sakura = document.getElementById('sakura');
-      const colors = [
-        '#ffd1e6','#ffc0cb','#ffb3d1','#ffe0f2','#f6c2ff',
-        '#e3d7ff','#ffe8ef','#ffdde2','#ffd6f2'
-      ];
+    /* petale */
+    (function(){
+      const wrap=document.getElementById('sakura');
+      const colors=['#ffd1e6','#ffc0cb','#ffb3d1','#ffe0f2','#f6c2ff','#e3d7ff','#ffe8ef','#ffdde2','#ffd6f2'];
       function drop(){
-        const p = document.createElement('div');
+        const p=document.createElement('div');
         p.className='petal';
-        const size = 12 + Math.random()*18;
-        p.style.width = (size+8)+'px';
-        p.style.height= (size)+'px';
-        p.style.left   = (Math.random()*100)+'vw';
-        p.style.background = colors[Math.floor(Math.random()*colors.length)];
-        p.style.animationDuration = (6 + Math.random()*3) + 's';   // mai rapid
-        p.style.animationDelay    = (Math.random()*-2) + 's';
-        p.style.opacity = 0.85 + Math.random()*0.15;
-        sakura.appendChild(p);
-        setTimeout(()=> p.remove(), 10000);
+        const size=10+Math.random()*16;
+        p.style.width=(size+7)+'px';
+        p.style.height=size+'px';
+        // 60% cad din dreapta spre stânga, 40% invers, ca vânt ușor
+        const fromRight = Math.random()<.6;
+        p.style.left = fromRight ? (80+Math.random()*25)+'vw' : (Math.random()*25)+'vw';
+        p.style.animationDuration=(6+Math.random()*3)+'s';
+        p.style.animationDelay=(Math.random()*-2)+'s';
+        p.style.background=colors[Math.floor(Math.random()*colors.length)];
+        wrap.appendChild(p);
+        setTimeout(()=>p.remove(), 10000);
       }
-      // flux sănătos de petale
-      setInterval(drop, 120);
-      // start burst
       for(let i=0;i<20;i++) drop();
+      setInterval(drop,140);
     })();
   </script>
 </body>
