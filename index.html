@@ -11,6 +11,7 @@
       background: linear-gradient(135deg, #fbd3e9, #bbd2c5);
       overflow-x: hidden;
       text-align: center;
+      color: #333;
     }
 
     /* Meniu sus */
@@ -20,10 +21,10 @@
       width: 100%;
       background: rgba(255, 255, 255, 0.9);
       display: flex;
-      justify-content: space-around;
-      align-items: center;
+      justify-content: center;
+      gap: 30px;
       padding: 10px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       z-index: 10;
     }
 
@@ -41,27 +42,22 @@
 
     /* Logo */
     .logo {
-      margin-top: 90px; /* spațiu sub meniu */
-      max-width: 320px;
+      margin-top: 80px;
+      max-width: 350px;
+      width: 90%;
       border-radius: 20px;
       box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
-      animation: glow 4s ease-in-out infinite;
-    }
-
-    @keyframes glow {
-      0%,100% { box-shadow: 0 0 20px rgba(255,215,0,0.6); }
-      50% { box-shadow: 0 0 40px rgba(255,215,0,1); }
     }
 
     h1 {
-      font-size: 2.2em;
+      font-size: 2em;
       margin: 20px 10px 10px;
       color: #222;
     }
 
     p {
       font-size: 1.1em;
-      margin: 10px 20px;
+      margin: 10px 20px 30px;
       color: #444;
     }
 
@@ -73,28 +69,36 @@
       font-size: 1.2em;
       font-weight: bold;
       color: white;
-      background: linear-gradient(45deg, #ff512f, #dd2476, #ff512f);
+      border: none;
       border-radius: 30px;
+      background: linear-gradient(45deg, #ff512f, #dd2476, #ff7e5f, #feb47b, #86a8e7, #91eae4);
+      background-size: 400% 400%;
+      animation: gradient 6s ease infinite;
       text-decoration: none;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      transition: transform 0.3s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
     }
 
     .btn:hover {
       transform: scale(1.1);
     }
 
+    @keyframes gradient {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
     /* Petale */
     .petal {
-      position: fixed;
+      position: absolute;
       top: -10px;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       background: pink;
       border-radius: 50%;
       opacity: 0.8;
-      animation: fall linear forwards;
-      z-index: 1;
+      animation: fall linear infinite;
     }
 
     @keyframes fall {
@@ -107,42 +111,34 @@
 
   <!-- Meniu -->
   <nav>
-    <a href="#">MSA Handmade</a>
-    <a href="#">Acasă</a>
+    <a href="index.html">Acasă</a>
     <a href="produse.html">Produse</a>
-    <a href="#">Contact</a>
+    <a href="#contact">Contact</a>
   </nav>
 
   <!-- Logo -->
-  <img src="logo.png?v=3" alt="MSA Decor Handmade Logo" class="logo">
+  <img class="logo" src="file_000000003bb461f4b8b738dabe595ea7.png" alt="MSA Decor Handmade Logo">
 
-  <!-- Titlu -->
+  <!-- Conținut -->
   <h1>Bun venit la M.S.A Handmade</h1>
   <p>Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.</p>
-
-  <!-- Buton -->
   <a href="produse.html" class="btn">Vezi produsele</a>
+
+  <!-- Contact -->
+  <div id="contact">
+    <p><b>Contact:</b> contact@msahandmade.ro</p>
+  </div>
 
   <!-- Script petale -->
   <script>
     function createPetal() {
-      const petal = document.createElement("div");
-      petal.classList.add("petal");
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.animationDuration = (Math.random() * 3 + 3) + 's';
       document.body.appendChild(petal);
-
-      const size = Math.random() * 10 + 8;
-      petal.style.width = size + "px";
-      petal.style.height = size + "px";
-
-      const colors = ["#ffb7c5", "#ffcce7", "#fff0f5", "#ffd1dc"];
-      petal.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-      petal.style.left = Math.random() * window.innerWidth + "px";
-      petal.style.animationDuration = (Math.random() * 3 + 4) + "s";
-
-      setTimeout(() => { petal.remove(); }, 7000);
+      setTimeout(() => petal.remove(), 6000);
     }
-
     setInterval(createPetal, 200);
   </script>
 
