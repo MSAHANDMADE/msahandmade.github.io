@@ -1,0 +1,55 @@
+:root{
+  --brand:#8e44ad;
+  --ink:#2d2d2d;
+  --muted:#6b7280;
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --radius:16px;
+  --shadow:0 8px 24px rgba(0,0,0,.08);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.6;
+}
+
+/* layout */
+.wrapper{max-width:1000px;margin:auto;padding:20px}
+.center{text-align:center}.mt{margin-top:18px}
+.muted{color:var(--muted)}
+
+/* topbar */
+.topbar{background:var(--card);position:sticky;top:0;z-index:10;box-shadow:var(--shadow)}
+.nav{display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:800;text-decoration:none;color:var(--brand);letter-spacing:.3px}
+nav a{margin-left:14px;text-decoration:none;color:var(--ink);font-weight:600}
+nav a.active{color:var(--brand);}
+
+/* hero */
+.hero{background:linear-gradient(120deg,var(--brand),#b977d1);color:#fff}
+.hero .wrapper{padding:56px 20px;text-align:center}
+.hero .btn{background:#fff;color:var(--brand)}
+
+/* buttons */
+.btn{display:inline-block;padding:12px 18px;border-radius:999px;background:var(--brand);color:#fff;text-decoration:none;font-weight:700;box-shadow:var(--shadow)}
+.btn.ghost{background:transparent;border:2px solid var(--brand);color:var(--brand)}
+
+/* cards & grid */
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+.card img{width:100%;height:auto;border-radius:12px;display:block}
+.card h3{margin:10px 0 6px}
+.price{font-weight:800;color:var(--brand)}
+
+/* contact */
+.contact-grid{display:grid;gap:24px;grid-template-columns:1.2fr .8fr}
+@media (max-width:800px){.contact-grid{grid-template-columns:1fr}}
+
+form label{display:block;font-weight:600;margin-bottom:10px}
+input,textarea{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:10px;outline:none}
+input:focus,textarea:focus{border-color:var(--brand)}
+button{cursor:pointer}
