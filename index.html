@@ -3,114 +3,192 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MSA Handmade</title>
+  <title>MSA Decor Handmade</title>
   <style>
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #dbeafe, #fce7f3, #f3e8ff);
+      background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #fbc2eb, #a6c1ee);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
       overflow: hidden;
     }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      padding: 20px 20px 40px;
-      margin-top: -40px; /* ridică tot conținutul mai sus */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
+    /* Logo cu pulse + glow */
     .logo {
-      max-width: 250px;
-      margin-bottom: 10px;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      max-width: 340px;
+      margin-bottom: 15px;
+      border-radius: 15px;
+      animation: pulseGlow 5s infinite ease-in-out;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(255,182,193,0.6), 0 0 30px rgba(161,196,253,0.4); }
+      50%      { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,192,203,0.8), 0 0 50px rgba(166,193,238,0.6); }
     }
 
+    /* Titlu cu efect de scriere */
     h1 {
-      font-size: 2rem;
-      color: #333;
-      margin-bottom: 8px;
+      font-size: 2.6rem;
+      color: #222;
+      margin: 8px 0;
+      font-weight: bold;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.08);
     }
+    .typing {
+      display: inline-block;
+      border-right: 2px solid #333; /* cursor */
+      white-space: nowrap;
+      overflow: hidden;
+      animation: caret 0.8s steps(1) infinite;
+    }
+    @keyframes caret { 50% { border-color: transparent; } }
 
     p {
-      font-size: 1rem;
-      color: #555;
-      margin-bottom: 18px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+      font-size: 1.2rem;
+      color: #333;
+      margin: 10px auto 16px;
+      max-width: 640px;
     }
 
     .btn {
       display: inline-block;
-      padding: 10px 20px;
-      background: linear-gradient(45deg, #e63946, #ffb703, #38b000);
+      padding: 12px 28px;
+      background: linear-gradient(45deg, #e63946, #ffb703, #38b000, #3a86ff);
       color: white;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: bold;
       border-radius: 30px;
       text-decoration: none;
-      box-shadow: 0 0 12px rgba(230,57,70,0.5);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 15px rgba(58,134,255,0.5);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 6px;
     }
+    .btn:hover { transform: scale(1.08); box-shadow: 0 0 25px rgba(255,183,3,0.7), 0 0 35px rgba(56,176,0,0.6); }
 
-    .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(255,183,3,0.7), 0 0 35px rgba(56,176,0,0.6);
-    }
-
-    /* Sakura petals */
+    /* Petale Sakura */
     .petal {
       position: absolute;
-      top: -10px;
+      width: 20px; height: 20px;
       border-radius: 50%;
-      opacity: 0.8;
+      opacity: 0.8; pointer-events: none;
       animation: fall linear infinite;
+      filter: blur(0.5px);
+      box-shadow: 0 0 8px rgba(255,182,193,0.8);
     }
-
     @keyframes fall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
+    @keyframes drift {
+      0%   { transform: translateX(0) translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateX(-120vw) translateY(60vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Buton sunet mic */
+    #soundToggle{
+      position: fixed; bottom: 20px; right: 20px;
+      background: rgba(255,255,255,0.4); border: none;
+      width: 45px; height: 45px; border-radius: 50%;
+      cursor: pointer; font-size: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: background 0.3s ease, transform 0.2s ease;
+      z-index: 10;
+    }
+    #soundToggle:hover{ background: rgba(200,200,255,0.7); transform: scale(1.1); }
   </style>
 </head>
 <body>
   <!-- Petale Sakura -->
   <div id="sakura"></div>
 
-  <!-- Conținut -->
-  <div class="container">
-    <img src="logo.jpg" alt="MSA Handmade Logo" class="logo">
-    <h1>Bun venit la M.S.A Handmade</h1>
-    <p>Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.</p>
-    <a href="produse.html" class="btn">Vezi produsele</a>
-  </div>
+  <!-- Logo -->
+  <img src="logo.png" alt="MSA Decor Handmade Logo" class="logo">
 
-  <!-- Script petale -->
+  <!-- Titlu cu scriere -->
+  <h1><span id="typed" class="typing"></span></h1>
+
+  <!-- Text -->
+  <p>Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.</p>
+
+  <!-- Buton -->
+  <a href="produse.html" class="btn">Vezi produsele</a>
+
+  <!-- Audio vânt -->
+  <audio id="windSound" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2023/03/25/audio_2a7b4f1f9e.mp3?filename=wind-nature-ambient-143076.mp3" type="audio/mpeg">
+  </audio>
+  <button id="soundToggle">🔊</button>
+
+  <!-- Script petale + sunet + typing -->
   <script>
+    // Petale din sus + lateral
     const sakura = document.getElementById('sakura');
-
-    function createPetal() {
+    function createPetal(direction = "down") {
       const petal = document.createElement('div');
       petal.classList.add('petal');
 
-      const size = Math.random() * 15 + 10;
+      const size = Math.random() * 12 + 8;
       petal.style.width = `${size}px`;
       petal.style.height = `${size}px`;
 
-      petal.style.left = Math.random() * 100 + 'vw';
-
-      const colors = ['pink', 'lightpink', 'lavender', 'white', 'plum'];
+      const colors = [
+        'rgba(255,192,203,0.8)','rgba(255,182,193,0.7)',
+        'rgba(221,160,221,0.6)','rgba(255,255,255,0.9)',
+        'rgba(173,216,230,0.7)'
+      ];
       petal.style.background = colors[Math.floor(Math.random() * colors.length)];
 
-      petal.style.animationDuration = (Math.random() * 2 + 2) + 's'; /* mai rapid */
+      if (direction === "down") {
+        petal.style.left = Math.random() * 100 + 'vw';
+        petal.style.top = '-10px';
+        petal.style.animation = `fall ${Math.random() * 3 + 3}s linear forwards`;
+      } else {
+        petal.style.left = '100vw';
+        petal.style.top = Math.random() * 100 + 'vh';
+        petal.style.animation = `drift ${Math.random() * 5 + 5}s linear forwards`;
+      }
+
       sakura.appendChild(petal);
-
-      setTimeout(() => { petal.remove(); }, 6000);
+      setTimeout(() => petal.remove(), 8000);
     }
+    setInterval(() => createPetal("down"), 150);
+    setInterval(() => createPetal("side"), 400);
 
-    setInterval(createPetal, 120); /* mai multe petale */
+    // Sunet vânt
+    const windSound = document.getElementById('windSound');
+    const soundToggle = document.getElementById('soundToggle');
+    let playing = false;
+    soundToggle.addEventListener('click', () => {
+      if (playing) { windSound.pause(); soundToggle.textContent = "🔊"; }
+      else { windSound.play(); soundToggle.textContent = "🔇"; }
+      playing = !playing;
+    });
+
+    // Efect "scriere" titlu
+    const text = "Bun venit la M.S.A Handmade"; // <-- aici schimbi textul
+    const out = document.getElementById('typed');
+    let i = 0;
+    function type() {
+      if (i <= text.length) {
+        out.textContent = text.slice(0, i);
+        i++;
+        setTimeout(type, 60); // viteza de scriere (ms)
+      } else {
+        out.classList.add('typing');
+      }
+    }
+    type();
   </script>
 </body>
 </html>
