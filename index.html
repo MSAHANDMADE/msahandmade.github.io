@@ -2,243 +2,247 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MSA Handmade</title>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f8d7e3, #d7e9f7);
-      overflow: hidden;
-      text-align: center;
-      color: #333;
+    :root{
+      --ink:#333;
+      --muted:#6b7280;
+      --brand:#8e44ad;
+      --brand2:#e67e22;
+      --btn-grad: linear-gradient(45deg,#e63946,#ffb703,#38b000);
     }
 
-    .container {
-      position: relative;
-      z-index: 2;
-      padding: 20px;
+    /* Fundal pastel + cercuri soft */
+    body{
+      margin:0;
+      font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color:var(--ink);
+      background: radial-gradient(1200px 900px at 10% -10%, #e8d9ff 0, #f7e9ff 30%, transparent 60%),
+                  radial-gradient(1200px 900px at 110% 110%, #d5f2ff 0, #f1fbff 30%, transparent 60%),
+                  linear-gradient(135deg,#f8d7e3,#f8d7e3 20%,#f3e9ff 50%, #eaf4ff 100%);
+      overflow-x: hidden;
+      min-height: 100dvh;
     }
 
-    /* Logo cu efecte */
-    .logo {
-      position: relative;
-      max-width: 350px;
-      margin: 20px auto;
-      display: block;
-      border-radius: 20px;
-      padding: 6px;
-      background: linear-gradient(270deg, #ffd700, #ffb347, #fffacd, #ffd700);
-      background-size: 600% 600%;
-      animation: shine 12s linear infinite, glow 4s ease-in-out infinite;
-      box-shadow: 0 0 25px rgba(255,215,0,0.6);
+    /* Balonașe */
+    .bubbles{position:fixed; inset:0; z-index:0; pointer-events:none;}
+    .bubble{
+      position:absolute; width:14px; height:14px; border-radius:50%;
+      background: rgba(255,255,255,.7);
+      box-shadow: 0 6px 20px rgba(0,0,0,.08), inset 0 0 20px rgba(255,255,255,.8);
+      animation: float 18s linear infinite;
+      filter: blur(.3px);
+    }
+    @keyframes float{
+      from{transform: translateY(0) translateX(0)}
+      to{transform: translateY(-120vh) translateX(10vw)}
     }
 
-    @keyframes shine {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 15px rgba(255,215,0,0.6), 0 0 30px rgba(255,215,0,0.3); }
-      50% { box-shadow: 0 0 25px rgba(255,215,0,0.9), 0 0 45px rgba(255,215,0,0.6); }
-    }
-
-    .logo img {
-      width: 100%;
-      display: block;
-      border-radius: 15px;
-    }
-
-    /* Sclipiri */
-    .sparkle {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: radial-gradient(circle, white, rgba(255,255,255,0));
-      border-radius: 50%;
-      opacity: 0;
-      animation: sparkle 3s infinite;
-    }
-
-    @keyframes sparkle {
-      0%, 100% { transform: scale(0); opacity: 0; }
-      50% { transform: scale(1.5); opacity: 1; }
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin: 10px 0;
-      color: #222;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-    }
-
-    p {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 12px 24px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: white;
-      background: linear-gradient(45deg, #ff4e50, #f9d423, #24c6dc, #514a9d);
-      border: none;
-      border-radius: 30px;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      margin-top: 15px;
-      animation: pulse 2.5s infinite;
-    }
-
-    .btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 12px rgba(255, 183, 3, 0.5); }
-      50% { transform: scale(1.08); box-shadow: 0 0 25px rgba(255, 183, 3, 0.8); }
-    }
-
-    /* Petale */
-    .petal {
-      position: absolute;
-      top: -10px;
-      border-radius: 50%;
-      opacity: 0.8;
-      pointer-events: none;
-      animation: fall linear infinite;
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-    }
-
-    /* Copac în colț */
-    .tree {
+    /* COPAC: trunchi maro vizibil + o coroană difuză */
+    .tree{
       position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 120px;
-      height: 300px;
-      background: #4b2e15;
-      border-radius: 30px;
-      z-index: 1;
+      left: -2vh;               /* mută ușor stânga/dreapta dacă vrei */
+      bottom: -4vh;
+      width: 28vh; height: 70vh;
+      z-index:1; pointer-events:none;
+    }
+    .tree .trunk{
+      position:absolute; bottom:0; left:10vh;
+      width:8vh; height:70vh; border-radius:4vh;
+      background: linear-gradient(180deg,#a06838,#804a1d 60%,#5c3516);
+      box-shadow: inset 0 0 14px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.12);
+      opacity:.95;
+    }
+    .tree .crown{
+      position:absolute; left:-2vh; top:4vh;
+      width:28vh; height:28vh; border-radius:50%;
+      background: radial-gradient(circle at 40% 35%, rgba(160,220,180,.55),
+                                  rgba(130,200,240,.45) 60%, rgba(255,255,255,0) 62%);
+      filter: blur(1px);
     }
 
-    .branch {
-      position: absolute;
-      width: 150px;
-      height: 25px;
-      background: #4b2e15;
-      border-radius: 15px;
-      left: 80px;
-      transform-origin: left center;
+    /* CONȚINUT */
+    .container{
+      position:relative;
+      z-index:3;             /* peste copac & petale */
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 24px clamp(16px, 5vw, 40px) 56px;
+      text-align:center;
     }
 
-    .branch:nth-child(1) { top: 30px; transform: rotate(-15deg); }
-    .branch:nth-child(2) { top: 100px; transform: rotate(-5deg); }
-    .branch:nth-child(3) { top: 170px; transform: rotate(10deg); }
+    /* Card logo cu efect ușor */
+    .logo-card{
+      display:inline-block;
+      background:#000;
+      border-radius:16px;
+      padding: clamp(8px,2vw,14px);
+      margin: 8px auto 10px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.25);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo-card:before{
+      content:""; position:absolute; inset:0;
+      background: linear-gradient(120deg, transparent 0 40%, rgba(255,255,255,.18) 50%, transparent 60% 100%);
+      transform: translateX(-120%);
+      animation: shine 6s ease-in-out infinite 1s;
+      pointer-events:none;
+    }
+    @keyframes shine{ 0%{transform:translateX(-120%)} 60%{transform:translateX(120%)} 100%{transform:translateX(120%)} }
 
-    /* Flori pe ramuri */
-    .flower {
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      background: pink;
-      border-radius: 50%;
-      box-shadow: 0 0 8px rgba(255,192,203,0.7);
-      animation: flowerPulse 3s infinite;
+    .logo-img{
+      display:block;
+      width: min(720px, 92vw);
+      height:auto;
+      border-radius:12px;
     }
 
-    @keyframes flowerPulse {
-      0%, 100% { transform: scale(1); opacity: 0.9; }
-      50% { transform: scale(1.2); opacity: 1; }
+    h1{
+      font-size: clamp(28px, 6.6vw, 52px);
+      line-height: 1.1;
+      margin: 10px auto 6px;
+      text-shadow: 0 2px 0 rgba(255,255,255,.6), 0 12px 30px rgba(0,0,0,.08);
+      letter-spacing:.4px;
     }
+    p.lead{
+      font-size: clamp(16px, 4.4vw, 22px);
+      color: var(--muted);
+      max-width: 860px;
+      margin: 0 auto 18px;
+    }
+
+    .btn{
+      display:inline-block;
+      margin-top: 6px;                 /* buton MAI SUS */
+      padding: 12px 26px;
+      font-size: clamp(16px, 4.2vw, 20px);
+      font-weight: 700;
+      color:white; text-decoration:none;
+      background: var(--btn-grad);
+      border-radius: 999px;
+      box-shadow: 0 10px 25px rgba(230,57,70,.35);
+      transform: translateZ(0);
+      transition: transform .15s ease, box-shadow .2s ease;
+    }
+    .btn:hover{ transform: scale(1.04); box-shadow: 0 14px 36px rgba(230,57,70,.45) }
+    .btn:active{ transform: scale(0.98) }
+
+    /* PETALE SAKURA */
+    #sakura{ position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+    .petal{
+      position:absolute; top:-10vh;
+      width:22px; height:16px; border-radius: 12px 50% 50% 12px / 12px 50% 50% 12px;
+      opacity:.9; filter: blur(.2px);
+      transform-origin: center;
+      animation: fall linear forwards, sway ease-in-out infinite;
+      will-change: transform;
+      box-shadow: inset -2px -2px 6px rgba(0,0,0,.07), 0 6px 14px rgba(0,0,0,.06);
+    }
+    @keyframes fall{ to{ transform: translateY(115vh) rotate(360deg) } }
+    @keyframes sway{
+      0%{ margin-left: 0 }
+      50%{ margin-left: 28px }
+      100%{ margin-left: 0 }
+    }
+
+    /* Indicativ mic „Logo” (dispare pe ecrane mari) */
+    .logo-hint{
+      position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+      background: rgba(255,255,255,.55); color:#222; font-size:12px;
+      padding:6px 16px; border-radius: 12px; backdrop-filter: blur(6px);
+      display:inline-block;
+    }
+    @media (min-width:720px){ .logo-hint{ display:none } }
   </style>
 </head>
 <body>
-  <!-- Copac -->
-  <div class="tree">
-    <div class="branch" id="branch1"></div>
-    <div class="branch" id="branch2"></div>
-    <div class="branch" id="branch3"></div>
+
+  <!-- Copacul decorativ (stânga) -->
+  <div class="tree" aria-hidden="true">
+    <div class="trunk"></div>
+    <div class="crown"></div>
   </div>
 
-  <!-- Petale -->
-  <div id="sakura"></div>
+  <!-- strat balonașe -->
+  <div class="bubbles" aria-hidden="true" id="bubbles"></div>
 
-  <!-- Conținut -->
-  <div class="container">
-    <div class="logo" id="logo-box">
-      <img src="file_000000003bb461f4b8b738dabe595ea7.png" alt="MSA Decor Handmade Logo">
+  <!-- petale -->
+  <div id="sakura" aria-hidden="true"></div>
+
+  <!-- CONȚINUT -->
+  <main class="container">
+    <div class="logo-card">
+      <span class="logo-hint">Logo</span>
+      <!-- ÎNCERCĂ MAI ÎNTÂI logo.png; dacă nu există, folosește numele lung încărcat -->
+      <img
+        id="brandLogo"
+        class="logo-img"
+        src="logo.png"
+        alt="MSA Decor Handmade Logo"
+        onerror="this.onerror=null; this.src='file_000000003bb461f4b8b738dabe595ea7.png';" />
+      <!-- ↑ Dacă numele fișierului diferă, înlocuiește-l aici cu exact ce vezi în repo. -->
     </div>
+
     <h1>Bun venit la M.S.A Handmade</h1>
-    <p>Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.</p>
+    <p class="lead">
+      Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.
+    </p>
+
     <a href="produse.html" class="btn">Vezi produsele</a>
-  </div>
+  </main>
 
-  <!-- Script petale + sclipiri + flori -->
   <script>
-    const sakura = document.getElementById('sakura');
-    const logoBox = document.getElementById('logo-box');
-
-    function createPetal() {
-      const petal = document.createElement('div');
-      petal.classList.add('petal');
-
-      const size = Math.random() * 15 + 10;
-      petal.style.width = `${size}px`;
-      petal.style.height = `${size}px`;
-
-      // petalele încep din zona copacului
-      petal.style.left = (Math.random() * 150) + 'px';
-      const colors = ['pink', 'lightpink', 'lavender', 'white', '#ffb6c1'];
-      petal.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-      petal.style.animationDuration = (Math.random() * 3 + 3) + 's';
-      petal.style.opacity = Math.random();
-
-      sakura.appendChild(petal);
-      setTimeout(() => { petal.remove(); }, 6000);
-    }
-    setInterval(createPetal, 200);
-
-    // Sclipiri pe logo
-    function createSparkle() {
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('sparkle');
-
-      sparkle.style.top = Math.random() * 100 + '%';
-      sparkle.style.left = Math.random() * 100 + '%';
-      sparkle.style.animationDuration = (Math.random() * 2 + 2) + 's';
-
-      logoBox.appendChild(sparkle);
-      setTimeout(() => { sparkle.remove(); }, 3000);
-    }
-    setInterval(createSparkle, 800);
-
-    // Flori pe ramuri
-    function addFlowers(branchId) {
-      const branch = document.getElementById(branchId);
-      for (let i = 0; i < 5; i++) {
-        const flower = document.createElement('div');
-        flower.classList.add('flower');
-        flower.style.top = (Math.random() * 10) + 'px';
-        flower.style.left = (Math.random() * 140) + 'px';
-        branch.appendChild(flower);
+    /* BALOANE SOFT */
+    (function makeBubbles(){
+      const host = document.getElementById('bubbles');
+      const N = 36;
+      for(let i=0;i<N;i++){
+        const b = document.createElement('span');
+        b.className='bubble';
+        const size = 8 + Math.random()*18;
+        b.style.width = b.style.height = size+'px';
+        b.style.left = (Math.random()*100)+'vw';
+        b.style.top  = (Math.random()*100)+'vh';
+        b.style.animationDuration = (14+Math.random()*12)+'s';
+        b.style.animationDelay = (-Math.random()*20)+'s';
+        // nuanțe pastel
+        const hues = [285, 330, 210, 260, 310, 180];
+        const h = hues[Math.floor(Math.random()*hues.length)];
+        b.style.background = `rgba(255,255,255,.75)`;
+        b.style.boxShadow = `0 6px 20px rgba(0,0,0,.08), inset 0 0 20px hsla(${h},60%,90%,.85)`;
+        host.appendChild(b);
       }
-    }
-    addFlowers('branch1');
-    addFlowers('branch2');
-    addFlowers('branch3');
+    })();
+
+    /* PETALE – ploaie rapidă & suavă, culori variate */
+    (function petals(){
+      const sakura = document.getElementById('sakura');
+      const colors = [
+        '#ffd1e6','#ffc0cb','#ffb3d1','#ffe0f2','#f6c2ff',
+        '#e3d7ff','#ffe8ef','#ffdde2','#ffd6f2'
+      ];
+      function drop(){
+        const p = document.createElement('div');
+        p.className='petal';
+        const size = 12 + Math.random()*18;
+        p.style.width = (size+8)+'px';
+        p.style.height= (size)+'px';
+        p.style.left   = (Math.random()*100)+'vw';
+        p.style.background = colors[Math.floor(Math.random()*colors.length)];
+        p.style.animationDuration = (6 + Math.random()*3) + 's';   // mai rapid
+        p.style.animationDelay    = (Math.random()*-2) + 's';
+        p.style.opacity = 0.85 + Math.random()*0.15;
+        sakura.appendChild(p);
+        setTimeout(()=> p.remove(), 10000);
+      }
+      // flux sănătos de petale
+      setInterval(drop, 120);
+      // start burst
+      for(let i=0;i<20;i++) drop();
+    })();
   </script>
 </body>
 </html>
