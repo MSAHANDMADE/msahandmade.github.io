@@ -3,138 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MSA Decor Handmade</title>
+  <title>MSA Handmade</title>
   <style>
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #fbc2eb, #a6c1ee);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
+      background: linear-gradient(135deg, #dbeafe, #fce7f3, #f3e8ff);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      overflow-x: hidden;
       text-align: center;
-      overflow: hidden;
-    }
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      position: relative;
     }
 
-    /* Logo cu pulse + glow */
+    .container {
+      position: relative;
+      z-index: 2;
+      padding: 30px 20px;
+    }
+
     .logo {
-      max-width: 340px;
-      margin-bottom: 15px;
-      border-radius: 15px;
-      animation: pulseGlow 5s infinite ease-in-out;
-    }
-    @keyframes pulseGlow {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(255,182,193,0.6), 0 0 30px rgba(161,196,253,0.4); }
-      50%      { transform: scale(1.05); box-shadow: 0 0 25px rgba(255,192,203,0.8), 0 0 50px rgba(166,193,238,0.6); }
+      max-width: 320px;
+      margin: 20px auto;
+      display: block;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     }
 
-    /* Titlu cu efect de scriere */
     h1 {
-      font-size: 2.6rem;
-      color: #222;
-      margin: 8px 0;
-      font-weight: bold;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 15px;
     }
-    .typing {
-      display: inline-block;
-      border-right: 2px solid #333; /* cursor */
-      white-space: nowrap;
-      overflow: hidden;
-      animation: caret 0.8s steps(1) infinite;
-    }
-    @keyframes caret { 50% { border-color: transparent; } }
 
     p {
       font-size: 1.2rem;
-      color: #333;
-      margin: 10px auto 16px;
-      max-width: 640px;
+      color: #444;
+      margin-bottom: 25px;
     }
 
     .btn {
       display: inline-block;
       padding: 12px 28px;
-      background: linear-gradient(45deg, #e63946, #ffb703, #38b000, #3a86ff);
+      background: linear-gradient(45deg, #e63946, #ffb703, #38b000);
       color: white;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: bold;
       border-radius: 30px;
       text-decoration: none;
-      box-shadow: 0 0 15px rgba(58,134,255,0.5);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      margin-top: 6px;
+      box-shadow: 0 0 12px rgba(230,57,70,0.6);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-top: 10px;
     }
-    .btn:hover { transform: scale(1.08); box-shadow: 0 0 25px rgba(255,183,3,0.7), 0 0 35px rgba(56,176,0,0.6); }
 
-    /* Petale Sakura */
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(56,176,0,0.7);
+    }
+
+    /* Petale */
     .petal {
       position: absolute;
-      width: 20px; height: 20px;
+      top: -10px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
-      opacity: 0.8; pointer-events: none;
+      opacity: 0.8;
       animation: fall linear infinite;
-      filter: blur(0.5px);
-      box-shadow: 0 0 8px rgba(255,182,193,0.8);
-    }
-    @keyframes fall {
-      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-    }
-    @keyframes drift {
-      0%   { transform: translateX(0) translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateX(-120vw) translateY(60vh) rotate(360deg); opacity: 0; }
     }
 
-    /* Buton sunet mic */
-    #soundToggle{
-      position: fixed; bottom: 20px; right: 20px;
-      background: rgba(255,255,255,0.4); border: none;
-      width: 45px; height: 45px; border-radius: 50%;
-      cursor: pointer; font-size: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      transition: background 0.3s ease, transform 0.2s ease;
-      z-index: 10;
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
-    #soundToggle:hover{ background: rgba(200,200,255,0.7); transform: scale(1.1); }
+
+    /* Buton muzică */
+    .music-toggle {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 255, 255, 0.8);
+      border: none;
+      border-radius: 50%;
+      width: 55px;
+      height: 55px;
+      font-size: 26px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .music-toggle:hover {
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
-  <!-- Petale Sakura -->
+  <!-- Petale -->
   <div id="sakura"></div>
 
-  <!-- Logo -->
-  <img src="logo.png" alt="MSA Decor Handmade Logo" class="logo">
+  <!-- Buton muzică -->
+  <button class="music-toggle" id="musicBtn">🎵</button>
 
-  <!-- Titlu cu scriere -->
-  <h1><span id="typed" class="typing"></span></h1>
+  <!-- Conținut -->
+  <div class="container">
+    <img src="logo.png?v=4" alt="MSA Decor Handmade Logo" class="logo">
+    <h1>Bun venit la M.S.A Handmade</h1>
+    <p>Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.</p>
+    <a href="produse.html" class="btn">Vezi produsele</a>
+  </div>
 
-  <!-- Text -->
-  <p>Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.</p>
-
-  <!-- Buton -->
-  <a href="produse.html" class="btn">Vezi produsele</a>
-
-  <!-- Audio vânt -->
-  <audio id="windSound" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2023/03/25/audio_2a7b4f1f9e.mp3?filename=wind-nature-ambient-143076.mp3" type="audio/mpeg">
+  <!-- Audio fundal -->
+  <audio id="bg-music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c16f1a3e74.mp3?filename=gentle-breeze-ambient-nature-sound-21929.mp3" type="audio/mpeg">
   </audio>
-  <button id="soundToggle">🔊</button>
 
-  <!-- Script petale + sunet + typing -->
+  <!-- Script petale -->
   <script>
-    // Petale din sus + lateral
     const sakura = document.getElementById('sakura');
-    function createPetal(direction = "down") {
+
+    function createPetal() {
       const petal = document.createElement('div');
       petal.classList.add('petal');
 
@@ -142,53 +133,35 @@
       petal.style.width = `${size}px`;
       petal.style.height = `${size}px`;
 
-      const colors = [
-        'rgba(255,192,203,0.8)','rgba(255,182,193,0.7)',
-        'rgba(221,160,221,0.6)','rgba(255,255,255,0.9)',
-        'rgba(173,216,230,0.7)'
-      ];
+      const colors = ['pink', 'lightpink', 'lavender', 'white', 'plum'];
       petal.style.background = colors[Math.floor(Math.random() * colors.length)];
 
-      if (direction === "down") {
-        petal.style.left = Math.random() * 100 + 'vw';
-        petal.style.top = '-10px';
-        petal.style.animation = `fall ${Math.random() * 3 + 3}s linear forwards`;
-      } else {
-        petal.style.left = '100vw';
-        petal.style.top = Math.random() * 100 + 'vh';
-        petal.style.animation = `drift ${Math.random() * 5 + 5}s linear forwards`;
-      }
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.animationDuration = (Math.random() * 3 + 3) + 's';
+      petal.style.opacity = Math.random();
 
       sakura.appendChild(petal);
-      setTimeout(() => petal.remove(), 8000);
+
+      setTimeout(() => petal.remove(), 7000);
     }
-    setInterval(() => createPetal("down"), 150);
-    setInterval(() => createPetal("side"), 400);
 
-    // Sunet vânt
-    const windSound = document.getElementById('windSound');
-    const soundToggle = document.getElementById('soundToggle');
-    let playing = false;
-    soundToggle.addEventListener('click', () => {
-      if (playing) { windSound.pause(); soundToggle.textContent = "🔊"; }
-      else { windSound.play(); soundToggle.textContent = "🔇"; }
-      playing = !playing;
-    });
+    setInterval(createPetal, 200);
 
-    // Efect "scriere" titlu
-    const text = "Bun venit la M.S.A Handmade"; // <-- aici schimbi textul
-    const out = document.getElementById('typed');
-    let i = 0;
-    function type() {
-      if (i <= text.length) {
-        out.textContent = text.slice(0, i);
-        i++;
-        setTimeout(type, 60); // viteza de scriere (ms)
+    // Muzică ON/OFF
+    const music = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('musicBtn');
+    let isPlaying = false;
+
+    musicBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        music.pause();
+        musicBtn.textContent = "🎵"; // note muzicale când e oprit
       } else {
-        out.classList.add('typing');
+        music.play();
+        musicBtn.textContent = "🎶"; // mai multe note când e pornit
       }
-    }
-    type();
+      isPlaying = !isPlaying;
+    });
   </script>
 </body>
 </html>
