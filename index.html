@@ -1,16 +1,17 @@
+
 <!DOCTYPE html>
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css">
   <style>
-    /* ===== FUNDAL ===== */
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: linear-gradient(135deg, #fff7f3, #fbeaff, #e3f6f5);
+      background: linear-gradient(270deg, #fff7f3, #fbeaff, #e3f6f5);
+      background-size: 600% 600%;
+      animation: gradientBG 20s ease infinite;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -18,60 +19,65 @@
       min-height: 100vh;
       text-align: center;
       overflow: hidden;
-    }
-
-    /* ===== LOGO ===== */
-    .logo {
-      max-width: 320px;
-      margin-bottom: 20px;
-      border-radius: 12px;
-      animation: fadeUp 1s ease-out forwards;
-      opacity: 0;
-    }
-
-    /* Shine effect */
-    .logo {
       position: relative;
     }
-    .logo::after {
-      content: "";
-      position: absolute;
-      top: 0; left: -75%;
-      width: 50%; height: 100%;
-      background: linear-gradient(
-        120deg,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.6) 50%,
-        rgba(255,255,255,0) 100%
-      );
-      transform: skewX(-20deg);
-      animation: shine 4s infinite;
-    }
-    @keyframes shine {
-      100% { left: 125%; }
+
+    /* Gradient animat fundal */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    /* ===== TITLU ===== */
+    /* Card logo */
+    .logo-card {
+      background: rgba(173, 216, 230, 0.9); /* bleu deschis */
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      margin-bottom: 25px;
+      z-index: 1;
+      display: inline-block;
+    }
+
+    /* Logo cu animatie vizibila */
+    .logo {
+      max-width: 300px;
+      border-radius: 12px;
+      display: block;
+      margin: auto;
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    /* Pulse mai vizibil */
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px rgba(255,105,180,0.6)) 
+                drop-shadow(0 0 20px rgba(255,192,203,0.5));
+      }
+      50% {
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 25px rgba(255,20,147,0.9)) 
+                drop-shadow(0 0 40px rgba(255,182,193,0.8));
+      }
+    }
+
     h1 {
       font-size: 2.8rem;
       color: #222;
       margin: 10px 0;
-      letter-spacing: 2px;
-      animation: fadeUp 1s ease-out .3s forwards;
-      opacity: 0;
+      z-index: 1;
     }
 
-    /* ===== TEXT ===== */
     p {
       font-size: 1.3rem;
       color: #444;
       max-width: 600px;
       margin-bottom: 30px;
-      animation: fadeUp 1s ease-out .6s forwards;
-      opacity: 0;
+      z-index: 1;
     }
 
-    /* ===== BUTON ===== */
     .btn {
       display: inline-block;
       padding: 15px 40px;
@@ -82,33 +88,74 @@
       border-radius: 50px;
       text-decoration: none;
       box-shadow: 0 0 20px rgba(230,57,70,0.5);
-      animation: fadeUp 1s ease-out .9s forwards;
-      opacity: 0;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 1;
     }
     .btn:hover {
       transform: scale(1.08);
       box-shadow: 0 0 30px rgba(255,183,3,0.7), 0 0 50px rgba(56,176,0,0.6);
     }
 
-    /* ===== ANIMAȚII ===== */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
+    /* Sakura petals */
+    .petal {
+      position: absolute;
+      top: -10px;
+      width: 25px;
+      height: 25px;
+      background: pink;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: fall 10s linear infinite;
+    }
+    .petal::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      transform: rotate(45deg);
+      background: inherit;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
   </style>
 </head>
 <body>
-  <!-- LOGO -->
-  <img src="logo.jpg" alt="MSA Handmade Logo" class="logo">
+  <!-- Petale Sakura -->
+  <div id="sakura"></div>
 
-  <!-- TITLU -->
+  <!-- Logo cu fundal albastru -->
+  <div class="logo-card">
+    <img src="logo.jpg" alt="MSA Handmade Logo" class="logo">
+  </div>
+
+  <!-- Titlu -->
   <h1>Bun venit la M.S.A Handmade</h1>
 
-  <!-- TEXT -->
+  <!-- Text -->
   <p>Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.</p>
 
-  <!-- BUTON -->
+  <!-- Buton -->
   <a href="produse.html" class="btn">Vezi produsele</a>
+
+  <!-- Script petale -->
+  <script>
+    const sakura = document.getElementById('sakura');
+    function createPetal() {
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.background = ['pink','lightpink','lavender','white'][Math.floor(Math.random()*4)];
+      petal.style.animationDuration = (8 + Math.random() * 5) + 's';
+      petal.style.opacity = Math.random();
+      petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+      sakura.appendChild(petal);
+      setTimeout(() => { petal.remove(); }, 12000);
+    }
+    setInterval(createPetal, 500);
+  </script>
 </body>
 </html>
