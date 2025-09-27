@@ -1,196 +1,222 @@
+
 <!DOCTYPE html>
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MSA Handmade</title>
+
   <style>
     :root{
-      --ink:#2d2d2d;
+      --ink:#2b2b2b;
       --muted:#6b7280;
-      --btn-grad: linear-gradient(45deg,#e63946,#ffb703,#38b000,#00b4d8);
+      --brand1:#ffd700;
+      --brand2:#3ccf7f;
+      --btn-grad: linear-gradient(45deg,#ff6b6b,#ffd84d,#3ddc84);
+      --card:#ffffffee;
+      --glass: rgba(255,255,255,.55);
+      --shadow:0 10px 35px rgba(0,0,0,.15);
+      --radius:18px;
     }
-
-    /* fundal pastel */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    html{scroll-behavior:smooth}
     body{
-      margin:0;
-      font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      color:var(--ink);
+      margin:0; color:var(--ink);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
+      overflow-x:hidden;
+    }
+
+    /* BG pastel animat */
+    .bg{position:fixed; inset:-20vmax;
       background:
-        radial-gradient(1200px 900px at 0% -20%, #f7e9ff 0, transparent 55%),
-        radial-gradient(1200px 900px at 100% 120%, #e0f6ff 0, transparent 55%),
-        linear-gradient(135deg,#fde7ef 0%, #f3e9ff 45%, #eaf6ff 100%);
-      min-height:100dvh; overflow-x:hidden;
-    }
+        radial-gradient(1200px 1200px at 0% 0%, #ffeaf3 0%, transparent 60%),
+        radial-gradient(1200px 1200px at 100% 100%, #eaf7ff 0%, transparent 60%),
+        linear-gradient(135deg,#fdf3ff 0%, #f1fbff 50%, #fdeef3 100%);
+      filter:saturate(1.05);
+      animation:bgMove 18s ease-in-out infinite alternate; z-index:0;}
+    @keyframes bgMove{from{transform:translate3d(-2%,0,0) scale(1.03)} to{transform:translate3d(2%,0,0) scale(1.06)}}
 
-    /* balonașe */
-    .bubbles{position:fixed; inset:0; z-index:0; pointer-events:none}
-    .bubble{
-      position:absolute; width:12px; height:12px; border-radius:50%;
-      background:rgba(255,255,255,.75);
-      box-shadow: inset 0 0 18px rgba(255,255,255,.9), 0 8px 20px rgba(0,0,0,.06);
-      animation: float 18s linear infinite;
-      filter:blur(.3px)
+    /* Nav sticky, glass */
+    .nav{
+      position:sticky; top:0; z-index:10;
+      display:flex; gap:10px; align-items:center; justify-content:center;
+      padding:10px clamp(12px,3vw,24px);
+      backdrop-filter: blur(8px);
+      background: linear-gradient(to bottom, rgba(255,255,255,.55), rgba(255,255,255,.25));
+      border-bottom: 1px solid rgba(255,255,255,.5);
     }
-    @keyframes float{from{transform:translateY(0)} to{transform:translateY(-120vh)}}
+    .nav-inner{width:min(1100px, 96vw); display:flex; align-items:center; justify-content:space-between;}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.5px}
+    .brand-dot{width:12px; height:12px; border-radius:50%; background:conic-gradient(#ffd84d,#3ddc84,#ff6b6b,#ffd84d)}
+    .nav a{color:#2b2b2b; text-decoration:none; font-weight:600; padding:10px 14px; border-radius:999px}
+    .nav a:hover{background:rgba(255,255,255,.7)}
+    .nav-cta{background:var(--btn-grad); color:#fff !important; box-shadow:0 6px 16px rgba(0,0,0,.12)}
+    .nav-cta:hover{filter:brightness(1.02)}
 
-    /* copac elegant din linii (SVG) */
-    .tree-wrap{
-      position:fixed; left:0; bottom:0; width:min(34vw, 260px); height:80vh;
-      z-index:1; pointer-events:none; opacity:.55; /* discret */
-    }
-    .tree-wrap svg{
-      width:100%; height:100%;
-    }
-    /* subțiem liniile pe telefoane */
-    @media (max-width:480px){
-      .tree-wrap{ width:38vw; opacity:.48 }
-      .tree-wrap path{ stroke-width:1.2 !important }
-    }
+    /* Bokeh + Petale (efecte) */
+    .bokeh{ position:fixed; inset:0; z-index:1; pointer-events:none }
+    .bokeh span{ position:absolute; width:12px; height:12px; border-radius:50%;
+      background: radial-gradient(circle, rgba(255,255,255,.8), rgba(255,255,255,0));
+      filter: blur(1px); opacity:.25; animation: drift 12s ease-in-out infinite alternate;}
+    @keyframes drift{from{transform: translateY(-2vh)} to{transform: translateY(2vh)}}
 
-    .container{
-      position:relative; z-index:3; max-width:1024px;
-      margin:0 auto; text-align:center;
-      padding: 20px clamp(16px,5vw,40px) 56px;
-    }
-
-    .logo-card{
-      display:inline-block; background:#000; border-radius:16px;
-      padding: clamp(8px,2vw,14px); margin: 8px auto 10px;
-      box-shadow:0 16px 40px rgba(0,0,0,.25); position:relative; overflow:hidden;
-    }
-    .logo-card:before{
-      content:""; position:absolute; inset:0;
-      background:linear-gradient(120deg,transparent 0 40%,rgba(255,255,255,.18) 50%,transparent 60% 100%);
-      transform:translateX(-120%); animation:shine 6s ease-in-out infinite 1s
-    }
-    @keyframes shine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(120%)}}
-    .logo-img{display:block; width:min(720px,92vw); height:auto; border-radius:12px}
-
-    h1{
-      font-size:clamp(28px,6.6vw,52px); line-height:1.1;
-      margin:10px auto 6px; text-shadow:0 2px 0 rgba(255,255,255,.6), 0 12px 30px rgba(0,0,0,.08);
-      letter-spacing:.4px
-    }
-    .lead{
-      font-size:clamp(16px,4.4vw,22px); color:var(--muted);
-      max-width:860px; margin:0 auto 18px
-    }
-
-    .btn{
-      display:inline-block; margin-top:8px; padding:12px 26px;
-      font-size:clamp(16px,4.2vw,20px); font-weight:700; color:#fff; text-decoration:none;
-      background:var(--btn-grad); border-radius:999px;
-      box-shadow:0 10px 26px rgba(230,57,70,.35); transition:transform .15s, box-shadow .2s
-    }
-    .btn:hover{transform:scale(1.04); box-shadow:0 14px 36px rgba(230,57,70,.45)}
-    .btn:active{transform:scale(.98)}
-
-    /* petale */
-    #sakura{position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden}
+    .petals{ position:fixed; inset:0; pointer-events:none; z-index:2 }
     .petal{
-      position:absolute; top:-10vh; width:22px; height:16px;
-      border-radius:12px 50% 50% 12px / 12px 50% 50% 12px;
-      opacity:.9; filter:blur(.15px);
-      transform-origin:center; will-change:transform;
-      animation:fall linear forwards, sway ease-in-out infinite;
-      box-shadow: inset -2px -2px 6px rgba(0,0,0,.07), 0 6px 14px rgba(0,0,0,.06);
-    }
-    @keyframes fall{to{transform:translateY(115vh) rotate(360deg)}}
-    @keyframes sway{0%{margin-left:0}50%{margin-left:26px}100%{margin-left:0}}
+      position:absolute; top:-10vh;
+      width: 14px; height: 10px; border-radius: 60% 40% 60% 40%;
+      background: pink; opacity:.85; filter: blur(.2px);
+      animation: fall linear forwards, sway ease-in-out infinite;}
+    @keyframes fall{to { transform: translateY(115vh) rotate(360deg); opacity:0}}
+    @keyframes sway{0%{margin-left:0} 50%{margin-left:20px} 100%{margin-left:0}}
+
+    /* HERO */
+    .hero{position:relative; z-index:3; min-height:100svh; display:grid; place-items:center; padding: clamp(12px, 4vw, 40px)}
+    .wrap{max-width:980px; width:100%; display:grid; gap: clamp(18px, 3.5vw, 28px); justify-items:center; text-align:center}
+
+    .logo-card{position:relative; background:var(--card); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding: clamp(12px, 2.5vw, 18px);
+      border:2px solid rgba(255,215,0,.55); outline:6px solid rgba(255,215,0,.15); backdrop-filter: blur(2px); isolation:isolate}
+    .logo-card::after{content:""; position:absolute; inset:-2px; border-radius:inherit;
+      background: conic-gradient(from 0deg, transparent 0 20%, rgba(255,215,0,.55) 25%, transparent 35% 100%);
+      filter: blur(6px); z-index:-1; animation: spin 6s linear infinite; opacity:.6; pointer-events:none}
+    @keyframes spin{to{transform: rotate(360deg)}}
+    .logo{display:block; width:min(820px, 90vw); height:auto; border-radius: calc(var(--radius) - 6px)}
+
+    /* scântei în jurul cardului */
+    .sparkles{ position:absolute; inset:0; pointer-events:none }
+    .sparkles i{ position:absolute; width:8px; height:8px; border-radius:50%;
+      background: radial-gradient(circle,#fff, rgba(255,255,255,.35)); filter: blur(.5px); animation: pop 2.2s ease-in-out infinite}
+    @keyframes pop{0%,100%{ transform: scale(0); opacity:0} 20%{ transform: scale(1); opacity:.9} 80%{ transform: scale(0); opacity:0}}
+
+    h1{font-size: clamp(2rem, 6vw, 3.4rem); line-height:1.1; margin:0; text-shadow: 0 2px 0 rgba(255,255,255,.55), 0 12px 35px rgba(0,0,0,.15)}
+    .lead{margin:0; color:var(--muted); font-size: clamp(1.05rem, 2.6vw, 1.25rem); max-width:780px}
+
+    .cta{margin-top: clamp(6px, 2.8vw, 10px); display:inline-block;
+      padding: clamp(12px, 2.6vw, 16px) clamp(22px, 4vw, 32px);
+      border-radius:999px; background:var(--btn-grad); color:#fff; text-decoration:none; font-weight:700;
+      box-shadow: 0 10px 32px rgba(255,115,115,.25), 0 12px 38px rgba(60,220,132,.18);
+      transition: transform .15s ease, box-shadow .2s ease}
+    .cta:hover{ transform: translateY(-2px); box-shadow: 0 12px 38px rgba(255,115,115,.30), 0 16px 42px rgba(60,220,132,.22)}
+    .cta:active{ transform: translateY(0) scale(.98)}
+
+    /* Contact (ancoră) */
+    .contact{
+      position:relative; z-index:3;
+      padding: clamp(40px, 8vw, 80px) 20px 90px;
+      display:grid; place-items:center; text-align:center; gap:14px}
+    .contact .card{background:var(--card); padding:24px 20px; border-radius:16px; box-shadow:var(--shadow); width:min(800px, 92vw)}
+    .contact a{color:#0d9488; text-decoration:none; font-weight:700}
+    .contact small{color:var(--muted)}
   </style>
 </head>
 <body>
+  <!-- fundal + efecte -->
+  <div class="bg"></div>
+  <div class="bokeh" aria-hidden="true"></div>
+  <div class="petals" aria-hidden="true"></div>
 
-  <!-- copac din ramuri subțiri (SVG) -->
-  <div class="tree-wrap" aria-hidden="true">
-    <svg viewBox="0 0 220 500" fill="none">
-      <!-- trunchi fin -->
-      <path d="M110 500 C108 420,106 360,105 300 C104 240,107 180,110 120"
-            stroke="#8b5a2b" stroke-width="2" stroke-linecap="round"/>
-      <!-- ramuri -->
-      <path d="M110 160 C 80 145, 62 128, 48 110" stroke="#8b5a2b" stroke-width="2" stroke-linecap="round"/>
-      <path d="M110 180 C 140 165, 160 150, 178 132" stroke="#8b5a2b" stroke-width="2" stroke-linecap="round"/>
-      <path d="M106 220 C 84 210, 66 196, 50 182" stroke="#8b5a2b" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M112 240 C 134 228, 156 214, 176 198" stroke="#8b5a2b" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M105 280 C 82 270, 60 256, 36 236" stroke="#8b5a2b" stroke-width="1.6" stroke-linecap="round"/>
-      <path d="M112 300 C 136 288, 160 274, 186 252" stroke="#8b5a2b" stroke-width="1.6" stroke-linecap="round"/>
-      <path d="M104 340 C 80 328, 54 312, 28 290" stroke="#8b5a2b" stroke-width="1.4" stroke-linecap="round"/>
-      <path d="M114 360 C 140 346, 168 330, 196 304" stroke="#8b5a2b" stroke-width="1.4" stroke-linecap="round"/>
-      <!-- frunzulițe ușor transparente pe vârfuri -->
-      <g opacity=".25" stroke="#5a9c60" stroke-width="1.2" stroke-linecap="round">
-        <path d="M48 110 q6 -6 14 -4"/>
-        <path d="M178 132 q-8 -4 -12 -10"/>
-        <path d="M36 236 q10 -6 18 -2"/>
-        <path d="M196 304 q-10 -6 -16 -4"/>
-      </g>
-    </svg>
-  </div>
-
-  <!-- buline fundal -->
-  <div id="bubbles" class="bubbles" aria-hidden="true"></div>
-
-  <!-- petale -->
-  <div id="sakura" aria-hidden="true"></div>
-
-  <main class="container">
-    <div class="logo-card">
-      <img id="brandLogo" class="logo-img"
-           src="logo.png"
-           alt="MSA Decor Handmade Logo"
-           onerror="this.onerror=null; this.src='file_000000003bb461f4b8b738dabe595ea7.png';">
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-dot"></span> MSA Handmade
+      </div>
+      <div class="links">
+        <a href="#top">Acasă</a>
+        <a href="produse.html">Produse</a>
+        <a class="nav-cta" href="#contact">Contact</a>
+      </div>
     </div>
+  </nav>
 
-    <h1>Bun venit la M.S.A Handmade</h1>
-    <p class="lead">
-      Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.
-    </p>
+  <!-- HERO -->
+  <main id="top" class="hero">
+    <div class="wrap">
+      <div class="logo-card">
+        <img src="logo.png" alt="MSA Decor Handmade Logo" class="logo" />
+        <div class="sparkles" aria-hidden="true"></div>
+      </div>
 
-    <a href="produse.html" class="btn">Vezi produsele</a>
+      <h1>Bun venit la M.S.A Handmade</h1>
+      <p class="lead">Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.</p>
+
+      <a class="cta" href="produse.html">Vezi produsele</a>
+    </div>
   </main>
 
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="card">
+      <h2>Contact</h2>
+      <p>Îți răspund cu drag la întrebări și comenzi personalizate.</p>
+      <p>
+        ✉️ <a href="mailto:msahandmade@example.com">msahandmade@example.com</a><br/>
+        📱 <a href="tel:+40700000000">+40 700 000 000</a>
+      </p>
+      <small>Pentru răspuns rapid, scrie-mi pe e-mail sau WhatsApp.</small>
+    </div>
+  </section>
+
   <script>
-    /* balonașe */
-    (function(){
-      const host = document.getElementById('bubbles');
-      const N = 32;
-      const hues = [285, 330, 210, 260, 310, 180];
-      for(let i=0;i<N;i++){
-        const b=document.createElement('span');
-        b.className='bubble';
-        const s=8+Math.random()*18;
-        b.style.width=b.style.height=s+'px';
-        b.style.left=(Math.random()*100)+'vw';
-        b.style.top=(Math.random()*100)+'vh';
-        b.style.animationDuration=(14+Math.random()*12)+'s';
-        b.style.animationDelay=(-Math.random()*20)+'s';
-        const h=hues[Math.floor(Math.random()*hues.length)];
-        b.style.boxShadow=`inset 0 0 18px hsla(${h},70%,92%,.9), 0 8px 20px rgba(0,0,0,.06)`;
-        host.appendChild(b);
+    /* bokeh dots */
+    (function bokeh(){
+      const holder = document.querySelector('.bokeh');
+      const colors = ['#ffffff','#ffe1ef','#e9f5ff','#fff6e0'];
+      for(let i=0;i<24;i++){
+        const s = document.createElement('span');
+        const size = 6 + Math.random()*16;
+        s.style.width = s.style.height = size+'px';
+        s.style.left = Math.random()*100+'%';
+        s.style.top  = Math.random()*100+'%';
+        s.style.background = `radial-gradient(circle, ${colors[i%colors.length]}, transparent 60%)`;
+        s.style.animationDuration = (8+Math.random()*10)+'s';
+        holder.appendChild(s);
       }
     })();
 
+    /* scântei */
+    (function sparkle(){
+      const box = document.querySelector('.logo-card .sparkles');
+      const make = () => {
+        const i = document.createElement('i');
+        const w = box.clientWidth, h = box.clientHeight, pad = 8;
+        const side = Math.floor(Math.random()*4);
+        let x=0, y=0;
+        if(side===0){ x = Math.random()*w; y = pad; }
+        if(side===1){ x = Math.random()*w; y = h-pad; }
+        if(side===2){ x = pad; y = Math.random()*h; }
+        if(side===3){ x = w-pad; y = Math.random()*h; }
+        i.style.left = x+'px'; i.style.top  = y+'px';
+        i.style.animationDelay = (Math.random()*1.5)+'s';
+        i.style.transform = `scale(${0.6 + Math.random()*0.8})`;
+        box.appendChild(i);
+        setTimeout(()=> i.remove(), 2200);
+      };
+      setInterval(make, 240);
+    })();
+
     /* petale */
-    (function(){
-      const wrap=document.getElementById('sakura');
-      const colors=['#ffd1e6','#ffc0cb','#ffb3d1','#ffe0f2','#f6c2ff','#e3d7ff','#ffe8ef','#ffdde2','#ffd6f2'];
-      function drop(){
-        const p=document.createElement('div');
+    (function petals(){
+      const holder = document.querySelector('.petals');
+      const colors = ['#ffc0cb','#ffb3d1','#ffd6e7','#ffe1f0','#ffe9f5','#ffd0e9','#ffdede','#ffd1f7','#ffe5f9'];
+      const newPetal = ()=>{
+        const p = document.createElement('div');
         p.className='petal';
-        const size=10+Math.random()*16;
-        p.style.width=(size+7)+'px';
-        p.style.height=size+'px';
-        // 60% cad din dreapta spre stânga, 40% invers, ca vânt ușor
-        const fromRight = Math.random()<.6;
-        p.style.left = fromRight ? (80+Math.random()*25)+'vw' : (Math.random()*25)+'vw';
-        p.style.animationDuration=(6+Math.random()*3)+'s';
-        p.style.animationDelay=(Math.random()*-2)+'s';
-        p.style.background=colors[Math.floor(Math.random()*colors.length)];
-        wrap.appendChild(p);
-        setTimeout(()=>p.remove(), 10000);
-      }
-      for(let i=0;i<20;i++) drop();
-      setInterval(drop,140);
+        const size = 8 + Math.random()*12;
+        p.style.width = size+'px'; p.style.height = (size*0.72)+'px';
+        p.style.left = Math.random()*100+'vw';
+        p.style.background = colors[Math.floor(Math.random()*colors.length)];
+        p.style.animationDuration = (4 + Math.random()*3)+'s';
+        p.style.animationDelay    = (Math.random()*1)+'s';
+        p.style.filter = 'blur('+ (Math.random()*0.8)+'px)';
+        p.style.opacity = 0.75 + Math.random()*0.2;
+        p.style.borderRadius = `${60+Math.random()*20}% ${40+Math.random()*20}% ${60+Math.random()*20}% ${40+Math.random()*20}%`;
+        holder.appendChild(p);
+        setTimeout(()=> p.remove(), 8000);
+      };
+      setInterval(newPetal, 110);
+      for(let i=0;i<28;i++) setTimeout(newPetal, i*80);
     })();
   </script>
 </body>
