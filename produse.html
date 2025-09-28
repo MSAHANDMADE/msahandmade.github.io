@@ -1,184 +1,198 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Produse — MSA Handmade</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produse – MSA Handmade</title>
+  <link rel="stylesheet" href="styles.css" />
+
   <style>
-    :root{
-      --card:#fff; --text:#222; --muted:#666;
-      --accent:#ff6aa0; --accent2:#6ee7b7;
-      --shadow:0 14px 40px rgba(0,0,0,.1);
-      --radius:16px;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #fbd3e9, #bbd2c5);
+      color: #222;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      background:linear-gradient(180deg,#fff,#f7f7fb);
-      color:var(--text);
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
     }
-
-    header{
-      position:sticky;top:0;z-index:50;
-      background:rgba(255,255,255,.9);
-      backdrop-filter:blur(8px);
-      border-bottom:1px solid rgba(0,0,0,.05);
+    nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 16px;
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      justify-content: flex-start;
+      font-weight: 700;
     }
-    .nav{max-width:1100px;margin:auto;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
-    .nav .brand{font-weight:800}
-    .nav a{text-decoration:none;color:var(--text);font-weight:600;margin-left:14px}
-    .nav a:hover{opacity:.7}
-
-    h1{max-width:1100px;margin:28px auto 8px;padding:0 16px;font-size:28px}
-    .lead{max-width:1100px;margin:0 auto 24px;padding:0 16px;color:var(--muted)}
-
-    .grid{max-width:1100px;margin:0 auto 60px;padding:0 16px;display:grid;gap:18px;
-          grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-    .card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .2s,box-shadow .2s}
-    .card:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.15)}
-    .media{position:relative;aspect-ratio:4/3;overflow:hidden}
-    .media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
-    .card:hover .media img{transform:scale(1.05)}
-    .price-badge{position:absolute;right:10px;bottom:10px;background:linear-gradient(45deg,var(--accent),var(--accent2));color:#fff;font-weight:700;padding:6px 12px;border-radius:999px}
-    .content{padding:14px}
-    .title{margin:0;font-size:1.05rem;font-weight:700}
-    .desc{margin:6px 0 0;color:var(--muted);font-size:.95rem}
-
-    footer{text-align:center;color:var(--muted);padding:40px 16px;background:#fafafa}
-
-    /* Lightbox */
-    dialog#lb{border:0;padding:0;border-radius:12px;max-width:95vw}
-    dialog::backdrop{background:rgba(0,0,0,.5)}
-    .lb-wrap{position:relative;max-width:90vw;max-height:90vh;overflow:auto;background:#fff;border-radius:12px}
-    .lb-wrap img{display:block;max-width:100%;height:auto;margin:auto}
-    .lb-body{padding:16px}
-    .lb-title{margin:0 0 6px;font-size:1.2rem;font-weight:700}
-    .lb-price{font-weight:800;color:var(--accent)}
-    .lb-actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start}
-    .btn-order,.btn-close{
-      display:inline-block;padding:10px 14px;border-radius:10px;font-weight:700;text-decoration:none;cursor:pointer;
+    nav a {
+      text-decoration: none;
+      color: #333;
+      padding: 8px 10px;
+      border-radius: 12px;
+      transition: background .2s ease;
     }
-    .btn-order{background:linear-gradient(90deg,var(--accent),#ff9db3);color:#fff}
-    .btn-order:hover{opacity:.9}
-    .btn-close{background:#eee;color:#333}
-    .btn-close:hover{background:#ddd}
-    .lb-close{position:absolute;top:8px;right:8px;border:0;background:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+    nav a:hover { background: rgba(0,0,0,0.05); }
 
-    /* săgeți navigare */
-    .lb-nav{
-      position:absolute;top:50%;transform:translateY(-50%);
-      font-size:32px;font-weight:bold;color:#fff;background:rgba(0,0,0,0.4);
-      border:0;width:40px;height:60px;cursor:pointer;
+    .wrapper {
+      max-width: 1100px;
+      margin: 24px auto 64px;
+      padding: 0 16px;
+      text-align: center;
     }
-    .lb-nav.left{left:0;border-radius:0 6px 6px 0}
-    .lb-nav.right{right:0;border-radius:6px 0 0 6px}
-    .lb-nav:hover{background:rgba(0,0,0,0.6)}
+    h1 { font-size: 2rem; margin: 10px 0 6px; }
+    p.muted { color: #555; margin: 0 0 26px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+    }
+    .card {
+      grid-column: span 12;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 35px rgba(0,0,0,0.12);
+    }
+    @media (min-width: 700px) { .card { grid-column: span 6; } }
+    @media (min-width: 1024px) { .card { grid-column: span 4; } }
+
+    .card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+    .card .content { padding: 14px 16px 18px; text-align: left; }
+    .card h3 { margin: 6px 0 8px; font-size: 1.05rem; }
+    .price { font-weight: 800; margin: 4px 0 12px; }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 999px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 10px 18px rgba(0,0,0,0.12);
+      transition: transform .15s ease, box-shadow .15s ease, opacity .15s;
+      background: linear-gradient(45deg, #ff6a88, #ff9472, #7bd389, #5cc0ff);
+      background-size: 300% 300%;
+      animation: rainbow 8s linear infinite;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 14px 24px rgba(0,0,0,0.16); }
+    .btn:active { transform: translateY(0); opacity: .9; }
+
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <div class="nav">
-    <div class="brand">MSA Handmade</div>
+  <header>
     <nav>
       <a href="index.html">Acasă</a>
-      <a href="produse.html" aria-current="page">Produse</a>
-      <a href="#contact">Contact</a>
+      <a href="produse.html" style="background: rgba(0,0,0,0.06);">Produse</a>
+      <a href="index.html#contact">Contact</a>
     </nav>
-  </div>
-</header>
+  </header>
 
-<main>
-  <h1>Produsele noastre</h1>
-  <p class="lead">Apasă pe produs pentru a-l vedea mai mare și a comanda direct prin WhatsApp.</p>
+  <main class="wrapper">
+    <h1>Produsele mele</h1>
+    <p class="muted">Piese realizate manual, cu multă grijă și atenție la detalii.</p>
 
-  <section class="grid">
-    <div class="card" data-title="Lumânare „Dans”" data-desc="Model elegant, relief detaliat." data-price="35 RON" data-img="images_dans.jpg">
-      <div class="media">
-        <img src="images_dans.jpg" alt="Lumânare Dans">
-        <div class="price-badge">35 RON</div>
-      </div>
-      <div class="content">
-        <h3 class="title">Lumânare „Dans”</h3>
-        <p class="desc">Model elegant, relief detaliat.</p>
-      </div>
+    <div class="grid">
+      <!-- Buchet -->
+      <article class="card">
+        <img src="images/images_buchet.jpg" alt="Buchet din ceară – MSA Handmade">
+        <div class="content">
+          <h3>Buchet flori din ceară</h3>
+          <div class="price">29 lei</div>
+          <a class="btn" target="_blank" rel="noopener"
+             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Buchet%20flori%20din%20ceara%20(29%20lei)%20de%20pe%20msahandmade.github.io">
+            Comandă pe WhatsApp
+          </a>
+        </div>
+      </article>
+
+      <!-- Cuplu -->
+      <article class="card">
+        <img src="images/images_cuplu.jpg" alt="Lumânare cuplu – MSA Handmade">
+        <div class="content">
+          <h3>Lumânare cuplu</h3>
+          <div class="price">35 lei</div>
+          <a class="btn" target="_blank" rel="noopener"
+             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Lumanare%20Cuplu%20(35%20lei)%20de%20pe%20msahandmade.github.io">
+            Comandă pe WhatsApp
+          </a>
+        </div>
+      </article>
+
+      <!-- Dans -->
+      <article class="card">
+        <img src="images/images_dans.jpg" alt="Lumânare dans – MSA Handmade">
+        <div class="content">
+          <h3>Lumânare dans</h3>
+          <div class="price">35 lei</div>
+          <a class="btn" target="_blank" rel="noopener"
+             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Lumanare%20Dans%20(35%20lei)%20de%20pe%20msahandmade.github.io">
+            Comandă pe WhatsApp
+          </a>
+        </div>
+      </article>
+
+      <!-- Flori -->
+      <article class="card">
+        <img src="images/images_flori.jpg" alt="Lumânare flori – MSA Handmade">
+        <div class="content">
+          <h3>Lumânare flori</h3>
+          <div class="price">35 lei</div>
+          <a class="btn" target="_blank" rel="noopener"
+             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Lumanare%20Flori%20(35%20lei)%20de%20pe%20msahandmade.github.io">
+            Comandă pe WhatsApp
+          </a>
+        </div>
+      </article>
+
+      <!-- Înger -->
+      <article class="card">
+        <img src="images/images_inger.jpg" alt="Lumânare înger – MSA Handmade">
+        <div class="content">
+          <h3>Lumânare înger</h3>
+          <div class="price">35 lei</div>
+          <a class="btn" target="_blank" rel="noopener"
+             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Lumanare%20Inger%20(35%20lei)%20de%20pe%20msahandmade.github.io">
+            Comandă pe WhatsApp
+          </a>
+        </div>
+      </article>
+
+      <!-- Peisaj -->
+      <article class="card">
+        <img src="images/images_peisaj.jpg" alt="Mini peisaj – MSA Handmade">
+        <div class="content">
+          <h3>Mini peisaj decorativ</h3>
+          <div class="price">109 lei</div>
+          <a class="btn" target="_blank" rel="noopener"
+             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Mini%20peisaj%20decorativ%20(109%20lei)%20de%20pe%20msahandmade.github.io">
+            Comandă pe WhatsApp
+          </a>
+        </div>
+      </article>
     </div>
-
-    <div class="card" data-title="Lumânare „Cuplu”" data-desc="Simbol al iubirii și armoniei." data-price="35 RON" data-img="images_cuplu.jpg">
-      <div class="media">
-        <img src="images_cuplu.jpg" alt="Lumânare Cuplu">
-        <div class="price-badge">35 RON</div>
-      </div>
-      <div class="content">
-        <h3 class="title">Lumânare „Cuplu”</h3>
-        <p class="desc">Simbol al iubirii și armoniei.</p>
-      </div>
-    </div>
-
-    <div class="card" data-title="Lumânare „Înger”" data-desc="Design delicat, realizată manual." data-price="35 RON" data-img="images_inger.jpg">
-      <div class="media">
-        <img src="images_inger.jpg" alt="Lumânare Înger">
-        <div class="price-badge">35 RON</div>
-      </div>
-      <div class="content">
-        <h3 class="title">Lumânare „Înger”</h3>
-        <p class="desc">Design delicat, realizată manual.</p>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer id="contact">
-  <p>Contact: <a href="mailto:msahandmade.contact@gmail.com">msahandmade.contact@gmail.com</a> · WhatsApp: <a href="https://wa.me/40747246241">+40 747 246 241</a></p>
-  <p>© <script>document.write(new Date().getFullYear())</script> MSA Handmade</p>
-</footer>
-
-<!-- Lightbox -->
-<dialog id="lb">
-  <div class="lb-wrap">
-    <button class="lb-close" onclick="lb.close()">×</button>
-    <button class="lb-nav left" id="lb-prev">◀</button>
-    <button class="lb-nav right" id="lb-next">▶</button>
-    <img id="lb-img" src="" alt="">
-    <div class="lb-body">
-      <h3 id="lb-title" class="lb-title"></h3>
-      <p id="lb-desc"></p>
-      <p class="lb-price" id="lb-price"></p>
-      <div class="lb-actions">
-        <a id="lb-order" class="btn-order" target="_blank" rel="noopener">Comandă acum</a>
-        <button class="btn-close" onclick="lb.close()">Închide</button>
-      </div>
-    </div>
-  </div>
-</dialog>
-
-<script>
-  const lb=document.getElementById('lb');
-  const lbImg=document.getElementById('lb-img');
-  const lbTitle=document.getElementById('lb-title');
-  const lbDesc=document.getElementById('lb-desc');
-  const lbPrice=document.getElementById('lb-price');
-  const lbOrder=document.getElementById('lb-order');
-  const cards=[...document.querySelectorAll('.card')];
-  let currentIndex=0;
-
-  function openLightbox(index){
-    const card=cards[index];
-    if(!card) return;
-    currentIndex=index;
-    lbImg.src=card.dataset.img;
-    lbTitle.textContent=card.dataset.title;
-    lbDesc.textContent=card.dataset.desc;
-    lbPrice.textContent=card.dataset.price;
-    const msg=`Bună, vreau să comand ${card.dataset.title} (${card.dataset.price}).`;
-    lbOrder.href=`https://wa.me/40747246241?text=${encodeURIComponent(msg)}`;
-    lb.showModal();
-  }
-
-  cards.forEach((card,i)=>card.addEventListener('click',()=>openLightbox(i)));
-  document.getElementById('lb-prev').addEventListener('click',()=>openLightbox((currentIndex-1+cards.length)%cards.length));
-  document.getElementById('lb-next').addEventListener('click',()=>openLightbox((currentIndex+1)%cards.length));
-</script>
+  </main>
 
 </body>
 </html>
