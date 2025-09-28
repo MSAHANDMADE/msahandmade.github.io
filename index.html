@@ -1,11 +1,18 @@
-<!DOCTYPE html>
+      <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MSA Handmade</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSA Handmade Decor - Lumânări & Decorațiuni Handmade</title>
+
+  <!-- SEO META -->
+  <meta name="description" content="Lumânări handmade din ceară de soia, lumânări parfumate, decorațiuni din ipsos și ceramică handmade. Produse unice, perfecte pentru cadouri și decor.">
+  <meta name="keywords" content="lumânări handmade, lumânări parfumate, lumânări soia, decorațiuni ipsos, ceramică handmade, cadouri handmade, decor interior, MSA Handmade">
+  <meta name="author" content="M.S.A Handmade">
+
+  <!-- STILURI -->
   <style>
-    :root{
+    :root {
       --grad-1:#fde1e8;
       --grad-2:#dff3ff;
       --cta-1:#ff6a6a;
@@ -15,216 +22,89 @@
       --muted:#666;
       --card:#ffffffd9;
       --ring:#ffd84a;
-      --btn-shadow:0 10px 30px rgba(0,0,0,.15);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color:var(--ink);
-      background: radial-gradient(1200px 800px at 15% -10%, #ffe6f2 0%, transparent 60%),
-                  radial-gradient(1200px 900px at 110% 20%, #e6f7ff 0%, transparent 55%),
-                  linear-gradient(135deg, var(--grad-1), var(--grad-2));
-      overflow-x:hidden;
+      --btn-shadow:0 10px 30px rgba(0,0,0,0.2);
     }
 
-    /* NAV */
-    nav{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(8px);
-      background: #ffffffa6;
-      border-bottom:1px solid #ffffff80;
-    }
-    .nav-wrap{
-      max-width:1100px; margin:0 auto; padding:12px 18px;
-      display:flex; align-items:center; justify-content:space-between;
-    }
-    .brand{font-weight:800; letter-spacing:.3px}
-    .brand small{font-weight:600; opacity:.6}
-    .menu a{
-      text-decoration:none; color:var(--ink); font-weight:700;
-      margin-left:22px;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: system-ui, -apple-system, sans-serif; }
+
+    body {
+      color: var(--ink);
+      background: radial-gradient(1200px at 50% 50%, var(--grad-1), var(--grad-2));
+      overflow-x: hidden;
+      line-height: 1.6;
+      padding: 20px;
     }
 
-    /* SECTION */
-    .wrap{max-width:1100px; margin:0 auto; padding:22px 18px 96px}
-    .hero{position:relative; text-align:center; padding-top:18px}
-    .logo-card{
-      display:inline-block;
-      background:var(--card);
-      border-radius:26px;
-      padding:14px; margin:8px auto 18px;
-      box-shadow: var(--btn-shadow), 0 0 0 10px #fff8, 0 0 0 22px #fff5;
-      position:relative;
-    }
-    .logo-card::after{
-      content:""; position:absolute; inset:-6px;
-      border-radius:30px; pointer-events:none;
-      box-shadow:0 0 35px 8px var(--ring);
-      opacity:.65; animation:pulse 2.6s ease-in-out infinite;
-    }
-    @keyframes pulse{
-      0%,100%{opacity:.45; filter:blur(8px)}
-      50%{opacity:.8; filter:blur(12px)}
-    }
-    #logo{
-      width:min(720px, 92vw);
-      display:block; border-radius:18px;
+    header {
+      text-align: center;
+      padding: 20px;
     }
 
-    h1{
-      font-size: clamp(28px, 4.8vw, 56px);
-      line-height:1.1; margin:18px 0 10px;
-      text-shadow:0 2px 0 #fff8;
-    }
-    p.lead{
-      font-size: clamp(16px, 2.6vw, 22px);
-      color:var(--muted); margin:0 auto 24px;
-      max-width:780px;
+    header h1 {
+      font-size: 2rem;
+      color: var(--cta-1);
     }
 
-    .btn{
-      display:inline-block;
-      padding:14px 28px;
-      font-weight:800; color:#fff; text-decoration:none;
-      border-radius:999px;
-      background:linear-gradient(90deg, #ff6aa2, #ff7b66, #ffb84d, #51d36f, #4cb2ff);
-      background-size:200% 100%;
-      box-shadow: var(--btn-shadow), 0 0 0 6px #ffffff70 inset;
-      transition:transform .15s ease, box-shadow .2s ease, background-position .8s ease;
+    header p {
+      font-size: 1.2rem;
+      color: var(--muted);
     }
-    .btn:hover{ transform:translateY(-2px); background-position:100% 0 }
-    .btn:active{ transform:translateY(0) scale(.98) }
 
-    /* CONTACT */
-    .contact{
-      margin-top:54px;
-      background:#ffffffb8;
-      border-radius:22px;
-      padding:20px;
+    section {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
       box-shadow: var(--btn-shadow);
     }
-    .contact h2{
-      margin:0 0 14px; text-align:center; font-size:clamp(22px, 3.6vw, 34px)
-    }
-    .cta-row{
-      display:grid; gap:14px;
-      grid-template-columns: 1fr; 
-    }
-    @media (min-width:720px){
-      .cta-row{ grid-template-columns: 1fr 1fr }
-    }
-    .cta{
-      display:flex; align-items:center; justify-content:center;
-      border-radius:16px; padding:14px 16px; text-decoration:none; color:#fff;
-      font-weight:800; letter-spacing:.2px;
-      box-shadow: var(--btn-shadow);
-    }
-    .cta svg{width:22px; height:22px; margin-right:10px; flex:0 0 22px}
 
-    .cta-email{background:linear-gradient(135deg, #6aa7ff, #a07bff)}
-    .cta-wa   {background:linear-gradient(135deg, #22c35e, #6bd66b)}
-
-    /* PETALS (subtle) */
-    .petal{
-      position:fixed; top:-10vh; z-index:0;
-      width:18px; height:18px; border-radius:50%;
-      opacity:.55;
-      animation: fall linear forwards;
-      pointer-events:none;
-      filter:blur(.3px);
-    }
-    @keyframes fall{
-      0%{ transform: translateY(-10vh) translateX(0) rotate(0deg) scale(.9); opacity:.8 }
-      100%{ transform: translateY(120vh) translateX(12vw) rotate(360deg) scale(1); opacity:0 }
+    h2 {
+      color: var(--cta-2);
+      margin-bottom: 10px;
     }
 
-    /* Footer mini */
-    footer{ text-align:center; color:#777; font-size:13px; padding:60px 0 40px }
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-wrap">
-      <div class="brand">MSA Handmade <small>· decor & lumânări</small></div>
-      <div class="menu">
-        <a href="#acasa">Acasă</a>
-        <a href="produse.html">Produse</a>
-        <a href="#contact">Contact</a>
-      </div>
-    </div>
-  </nav>
+  <header>
+    <h1>MSA Handmade Decor</h1>
+    <p>Lumânări handmade din ceară de soia & decorațiuni unice</p>
+  </header>
 
-  <main class="wrap">
-    <!-- HERO -->
-    <section id="acasa" class="hero">
-      <div class="logo-card">
-        <!-- Dacă logo.png nu există, încarcă automat fișierul lung din repo -->
-        <img id="logo"
-             src="logo.png"
-             alt="MSA Decor Handmade Logo"
-             onerror="this.onerror=null; this.src='file_000000003bb461f4b8b738dabe595ea7.png';">
-      </div>
+  <section>
+    <h2>Produsele noastre</h2>
+    <p>Realizăm lumânări handmade din ceară naturală de soia, cu esențe parfumate de calitate, perfecte pentru relaxare și decor. De asemenea, creăm decorațiuni din ipsos și ceramică handmade, ideale pentru cadouri și pentru a aduce un plus de eleganță casei tale.</p>
+  </section>
 
-      <h1>Bun venit la M.S.A Handmade</h1>
-      <p class="lead">
-        Decorațiuni, lumânări din ceară de soia și ceramică unicat – create cu suflet pentru un decor deosebit.
-      </p>
+  <section>
+    <h2>De ce să alegi MSA Handmade?</h2>
+    <ul>
+      <li>🌿 Produse realizate manual cu grijă și atenție la detalii</li>
+      <li>🕯️ Lumânări 100% naturale, din ceară de soia</li>
+      <li>🎁 Cadouri unice pentru cei dragi</li>
+      <li>🇷🇴 Handmade în România</li>
+    </ul>
+  </section>
 
-      <a class="btn" href="produse.html">Vezi produsele</a>
+  <section>
+    <h2>Contact</h2>
+    <p>📞 Tel: 0747 246 241</p>
+    <p>✉️ Email: msahandmade.contact@gmail.com</p>
+    <p>🌐 Site: <a href="https://msahandmade.github.io" target="_blank">msahandmade.github.io</a></p>
+  </section>
 
-      <!-- CONTACT -->
-      <section id="contact" class="contact">
-        <h2>Contact</h2>
-        <div class="cta-row">
-          <a class="cta cta-email" href="mailto:msahandmade.contact@gmail.com?subject=Solicitare%20ofert%C4%83&body=Bun%C4%83%20MSA%2C%20a%C8%99%20dori%20informa%C8%9Bii%20despre...">
-            <!-- mail icon -->
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M3 6.5a2.5 2.5 0 0 1 2.5-2.5h13A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5v-11Z" stroke="white" stroke-width="2"/>
-              <path d="m4 7 8 6 8-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            msahandmade.contact@gmail.com
-          </a>
+  <footer>
+    <p>© 2025 M.S.A Handmade Decor - Toate drepturile rezervate</p>
+  </footer>
 
-          <a class="cta cta-wa" href="https://wa.me/40747246241?text=Bun%C4%83%20MSA%21%20A%C8%99%20dori%20detalii%20despre%20produse.%20Mul%C8%9Bumesc%21" target="_blank" rel="noopener">
-            <!-- whatsapp icon -->
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M20.5 12a8.5 8.5 0 0 1-12.6 7.4L3.5 21l1.6-4.3A8.5 8.5 0 1 1 20.5 12Z" stroke="white" stroke-width="2"/>
-              <path d="M9.2 9.6c.2-.6.8-.7 1.1-.6.3.1 1.1 1.3 1.2 1.6.1.4-.1.6-.3.8-.2.2-.3.4-.1.8.2.4.9 1.5 2.1 2 .3.2.6.1.8-.1l.6-.7c.2-.2.5-.1.8 0l1.5.9c.3.2.5.6.2 1-.3.5-1.3 1.3-2.6 1.2-1.4 0-3.2-.7-4.7-2.2-1.5-1.5-2.2-3.3-2.2-4.7 0-1.3.7-2.3 1.2-2.6.4-.3.8-.1 1 .2l.4.4Z" fill="white"/>
-            </svg>
-            WhatsApp
-          </a>
-        </div>
-      </section>
-    </section>
-  </main>
-
-  <footer>© <span id="year"></span> MSA Handmade</footer>
-
-  <!-- PETALS SCRIPT -->
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    const colors = ['#ffb3c7','#ffcfe1','#ffd6a3','#c7f3ff','#d7eaff','#f6e6ff'];
-    function dropPetal(){
-      const p = document.createElement('div');
-      p.className = 'petal';
-      p.style.left = Math.random()*100 + 'vw';
-      const s = 12 + Math.random()*14;
-      p.style.width = p.style.height = s + 'px';
-      p.style.background = colors[(Math.random()*colors.length)|0];
-      const dur = 8 + Math.random()*6;
-      p.style.animationDuration = dur + 's';
-      document.body.appendChild(p);
-      setTimeout(()=>p.remove(), (dur*1000)+500);
-    }
-    // densitate lejeră pe mobil, puțin mai bogată pe ecrane mari
-    const base = (window.innerWidth<480) ? 350 : 180;
-    setInterval(dropPetal, base);
-    for(let i=0;i<18;i++) setTimeout(dropPetal, i*120); // câteva la start
-  </script>
 </body>
 </html>
