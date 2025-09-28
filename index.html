@@ -1,110 +1,95 @@
-      <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MSA Handmade Decor - Lumânări & Decorațiuni Handmade</title>
+  <title>MSA Handmade Decor - Lumânări & Obiecte din Ipsos</title>
 
   <!-- SEO META -->
-  <meta name="description" content="Lumânări handmade din ceară de soia, lumânări parfumate, decorațiuni din ipsos și ceramică handmade. Produse unice, perfecte pentru cadouri și decor.">
-  <meta name="keywords" content="lumânări handmade, lumânări parfumate, lumânări soia, decorațiuni ipsos, ceramică handmade, cadouri handmade, decor interior, MSA Handmade">
-  <meta name="author" content="M.S.A Handmade">
+  <meta name="description" content="Lumânări handmade din ceară de soia, obiecte decorative din ipsos și cadouri personalizate. Produse 100% lucrate manual în România.">
+  <meta name="keywords" content="lumânări handmade, lumânări parfumate, ceară de soia, ipsos decorativ, ceramică handmade, cadouri handmade, decor interior">
+  <meta name="author" content="M.S.A Handmade Decor">
 
-  <!-- STILURI -->
+  <!-- STIL -->
   <style>
-    :root {
-      --grad-1:#fde1e8;
-      --grad-2:#dff3ff;
-      --cta-1:#ff6a6a;
-      --cta-2:#ff9c5b;
-      --cta-3:#8adf6a;
-      --ink:#222;
-      --muted:#666;
-      --card:#ffffffd9;
-      --ring:#ffd84a;
-      --btn-shadow:0 10px 30px rgba(0,0,0,0.2);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; font-family: system-ui, -apple-system, sans-serif; }
-
     body {
-      color: var(--ink);
-      background: radial-gradient(1200px at 50% 50%, var(--grad-1), var(--grad-2));
-      overflow-x: hidden;
-      line-height: 1.6;
-      padding: 20px;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fdfdfd;
+      color: #333;
+      text-align: center;
     }
-
     header {
-      text-align: center;
-      padding: 20px;
+      background: #ff6a6a;
+      color: white;
+      padding: 30px 20px;
     }
-
+    .logo {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid white;
+      margin-bottom: 15px;
+    }
     header h1 {
+      margin: 0;
       font-size: 2rem;
-      color: var(--cta-1);
     }
-
     header p {
+      margin: 5px 0 15px;
       font-size: 1.2rem;
-      color: var(--muted);
     }
-
-    section {
-      max-width: 800px;
-      margin: 40px auto;
+    .btn {
+      display: inline-block;
+      padding: 12px 25px;
+      background: white;
+      color: #ff6a6a;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .btn:hover {
+      background: #ffd6d6;
+      color: #e05555;
+    }
+    .intro {
       padding: 20px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: var(--btn-shadow);
     }
-
-    h2 {
-      color: var(--cta-2);
-      margin-bottom: 10px;
-    }
-
     footer {
-      text-align: center;
+      background: #333;
+      color: white;
       padding: 20px;
-      font-size: 0.9rem;
-      color: var(--muted);
+      margin-top: 20px;
+    }
+    footer a {
+      color: #ff6a6a;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
-
   <header>
+    <!-- logo trebuie sa fie incarcat in folderul images cu numele "logo.png" -->
+    <img src="images/logo.png" alt="Logo MSA Handmade Decor" class="logo">
     <h1>MSA Handmade Decor</h1>
-    <p>Lumânări handmade din ceară de soia & decorațiuni unice</p>
+    <p>Lumânări & Obiecte din Ipsos Handmade</p>
+    <a href="#produse" class="btn">✨ Vezi Produse</a>
   </header>
 
-  <section>
-    <h2>Produsele noastre</h2>
-    <p>Realizăm lumânări handmade din ceară naturală de soia, cu esențe parfumate de calitate, perfecte pentru relaxare și decor. De asemenea, creăm decorațiuni din ipsos și ceramică handmade, ideale pentru cadouri și pentru a aduce un plus de eleganță casei tale.</p>
-  </section>
-
-  <section>
-    <h2>De ce să alegi MSA Handmade?</h2>
-    <ul>
-      <li>🌿 Produse realizate manual cu grijă și atenție la detalii</li>
-      <li>🕯️ Lumânări 100% naturale, din ceară de soia</li>
-      <li>🎁 Cadouri unice pentru cei dragi</li>
-      <li>🇷🇴 Handmade în România</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Contact</h2>
-    <p>📞 Tel: 0747 246 241</p>
-    <p>✉️ Email: msahandmade.contact@gmail.com</p>
-    <p>🌐 Site: <a href="https://msahandmade.github.io" target="_blank">msahandmade.github.io</a></p>
+  <section class="intro" id="produse">
+    <h2>Bun venit!</h2>
+    <p>Produse unice, realizate manual cu grijă și pasiune. <br>
+       Lumânări din ceară de soia, obiecte decorative din ipsos și cadouri personalizate pentru sufletul tău.</p>
   </section>
 
   <footer>
-    <p>© 2025 M.S.A Handmade Decor - Toate drepturile rezervate</p>
+    <p>📞 0747 246 241 | ✉️ msahandmade.contact@gmail.com</p>
+    <p>🌐 <a href="https://msahandmade.github.io" target="_blank">msahandmade.github.io</a></p>
+    <p>© 2025 M.S.A Handmade Decor - Made in Romania</p>
   </footer>
-
 </body>
 </html>
