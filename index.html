@@ -4,57 +4,83 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="MSA Handmade Decor - Lumânări din ceară de soia, obiecte decorative din ipsos și cadouri handmade.">
-  <meta name="keywords" content="lumânări handmade, lumânări soia, decor ipsos, obiecte handmade, cadouri personalizate">
-  <meta name="author" content="M.S.A Handmade">
   <title>MSA Handmade Decor</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- Meniu navigare -->
+  <!-- NAVBAR -->
   <nav class="navbar">
-    <div class="menu-toggle" id="menu-toggle">&#9776;</div>
-    <ul class="nav-links" id="nav-links">
+    <button class="menu-toggle" id="menuToggle" aria-label="Deschide meniu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="brand">MSA Handmade Decor</div>
+  </nav>
+
+  <!-- DRAWER + BACKDROP -->
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <strong>Meniu</strong>
+      <button class="drawer-close" id="drawerClose" aria-label="Închide">×</button>
+    </div>
+    <ul class="nav-links">
       <li><a href="index.html">Acasă</a></li>
       <li><a href="produse.html">Produse</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
-  </nav>
+  </aside>
 
-  <!-- Logo -->
+  <!-- HERO -->
   <header class="hero">
-    <img src="logo.png" alt="MSA Handmade Decor" class="logo">
+    <img src="logo.png" alt="Logo MSA Handmade Decor" class="logo">
     <h1>MSA Handmade Decor</h1>
-    <p>Lumânări & Obiecte din Ipsos Handmade</p>
+    <p class="subtitle">Lumânări & Obiecte din Ipsos Handmade</p>
     <a href="produse.html" class="btn">✨ Vezi Produse</a>
   </header>
 
-  <!-- Secțiune decorativă -->
-  <section class="hero-decor">
+  <!-- INTRO -->
+  <section class="intro">
     <h2>Bun venit!</h2>
     <p>
-      Produse unice, realizate manual cu grijă și pasiune.  
-      Lumânări din ceară de soia, obiecte decorative din ipsos  
+      Produse unice, realizate manual cu grijă și pasiune.
+      Lumânări din ceară de soia, obiecte decorative din ipsos
       și cadouri personalizate pentru sufletul tău.
     </p>
   </section>
 
-  <!-- Footer -->
+  <!-- FOOTER -->
   <footer>
-    <p>📞 0747 246 241 | ✉️ msahandmade.contact@gmail.com</p>
-    <p>🌐 <a href="https://msahandmade.github.io">msahandmade.github.io</a></p>
-    <p>© 2025 M.S.A Handmade Decor - Made in Romania</p>
+    <p>📞 0747 246 241 · ✉️ msahandmade.contact@gmail.com</p>
+    <p>© 2025 M.S.A Handmade Decor — Made in Romania</p>
   </footer>
 
-  <!-- Script pentru meniu -->
+  <!-- SCRIPTS -->
   <script>
-    const toggle = document.getElementById('menu-toggle');
-    const links = document.getElementById('nav-links');
+    const menuToggle = document.getElementById('menuToggle');
+    const drawer = document.getElementById('drawer');
+    const backdrop = document.getElementById('backdrop');
+    const drawerClose = document.getElementById('drawerClose');
 
-    toggle.addEventListener('click', () => {
-      links.style.display = links.style.display === "block" ? "none" : "block";
-    });
+    function openDrawer() {
+      drawer.classList.add('open');
+      backdrop.classList.add('show');
+      drawer.setAttribute('aria-hidden', 'false');
+    }
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      backdrop.classList.remove('show');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+
+    menuToggle.addEventListener('click', openDrawer);
+    drawerClose.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+
+    // Close drawer after clicking a link
+    [...document.querySelectorAll('.nav-links a')].forEach(a =>
+      a.addEventListener('click', closeDrawer)
+    );
   </script>
-
 </body>
 </html>
