@@ -3,84 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="MSA Handmade Decor - Lumânări din ceară de soia, obiecte decorative din ipsos și cadouri handmade.">
   <title>MSA Handmade Decor</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <button class="menu-toggle" id="menuToggle" aria-label="Deschide meniu">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="brand">MSA Handmade Decor</div>
-  </nav>
-
-  <!-- DRAWER + BACKDROP -->
-  <div class="backdrop" id="backdrop"></div>
-  <aside class="drawer" id="drawer" aria-hidden="true">
-    <div class="drawer-header">
-      <strong>Meniu</strong>
-      <button class="drawer-close" id="drawerClose" aria-label="Închide">×</button>
+  <!-- Meniu Hamburger -->
+  <header>
+    <div class="logo-title">
+      <img src="logo.png" alt="MSA Handmade Decor Logo" class="logo">
     </div>
-    <ul class="nav-links">
-      <li><a href="index.html">Acasă</a></li>
-      <li><a href="produse.html">Produse</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </aside>
-
-  <!-- HERO -->
-  <header class="hero">
-    <img src="logo.png" alt="Logo MSA Handmade Decor" class="logo">
-    <h1>MSA Handmade Decor</h1>
-    <p class="subtitle">Lumânări & Obiecte din Ipsos Handmade</p>
-    <a href="produse.html" class="btn">✨ Vezi Produse</a>
+    <button class="hamburger" aria-label="Meniu">&#9776;</button>
+    <nav class="nav-links">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </header>
 
-  <!-- INTRO -->
-  <section class="intro">
-    <h2>Bun venit!</h2>
-    <p>
-      Produse unice, realizate manual cu grijă și pasiune.
-      Lumânări din ceară de soia, obiecte decorative din ipsos
-      și cadouri personalizate pentru sufletul tău.
-    </p>
-  </section>
+  <!-- Secțiunea principală -->
+  <main>
+    <section class="intro">
+      <h1>MSA Handmade Decor</h1>
+      <h2>Lumânări & Obiecte din Ipsos Handmade</h2>
+      <a href="produse.html" class="btn">✨ Vezi Produse</a>
+    </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <p>📞 0747 246 241 · ✉️ msahandmade.contact@gmail.com</p>
-    <p>© 2025 M.S.A Handmade Decor — Made in Romania</p>
+    <section class="descriere">
+      <h3>Bun venit!</h3>
+      <p>Produse unice, realizate manual cu grijă și pasiune.
+         Lumânări din ceară de soia, obiecte decorative din ipsos
+         și cadouri personalizate pentru sufletul tău.</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <p>📞 0747 246 241 | 📧 msahandmade.contact@gmail.com</p>
+    <p>🌐 <a href="https://msahandmade.github.io">msahandmade.github.io</a></p>
+    <p>© 2025 M.S.A Handmade Decor - Made in Romania</p>
   </footer>
 
-  <!-- SCRIPTS -->
   <script>
-    const menuToggle = document.getElementById('menuToggle');
-    const drawer = document.getElementById('drawer');
-    const backdrop = document.getElementById('backdrop');
-    const drawerClose = document.getElementById('drawerClose');
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
 
-    function openDrawer() {
-      drawer.classList.add('open');
-      backdrop.classList.add('show');
-      drawer.setAttribute('aria-hidden', 'false');
-    }
-    function closeDrawer() {
-      drawer.classList.remove('open');
-      backdrop.classList.remove('show');
-      drawer.setAttribute('aria-hidden', 'true');
-    }
-
-    menuToggle.addEventListener('click', openDrawer);
-    drawerClose.addEventListener('click', closeDrawer);
-    backdrop.addEventListener('click', closeDrawer);
-
-    // Close drawer after clicking a link
-    [...document.querySelectorAll('.nav-links a')].forEach(a =>
-      a.addEventListener('click', closeDrawer)
-    );
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
   </script>
+
 </body>
 </html>
