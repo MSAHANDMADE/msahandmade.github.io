@@ -1,31 +1,31 @@
-/* Stil pentru body */
+/* BODY */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #fffdf9;
   color: #333;
   text-align: center;
+  background-color: #fffdf9;
 }
 
-/* Header */
+/* HEADER */
 header {
-  background-color: #ffffff;
+  background-color: #ffffffdd;
   padding: 10px 20px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* logo centrat */
 }
 
-/* Logo */
-.logo-title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+/* LOGO */
 .logo {
   width: 180px;
   height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
-/* Buton Hamburger */
+/* HAMBURGER în dreapta */
 .hamburger {
   font-size: 28px;
   background: none;
@@ -33,20 +33,22 @@ header {
   color: #333;
   position: absolute;
   top: 20px;
-  left: 20px;
+  right: 20px;   /* îl punem în dreapta sus */
   cursor: pointer;
 }
 
-/* Meniu */
+/* MENIU */
 .nav-links {
   display: none;
   flex-direction: column;
-  background-color: #f8f8f8;
+  background-color: #f8f8f8ee;
   position: absolute;
   top: 60px;
-  left: 0;
-  width: 100%;
-  border-top: 1px solid #ccc;
+  right: 0;   /* apare în dreapta */
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .nav-links.active {
@@ -60,8 +62,11 @@ header {
   font-size: 18px;
   border-bottom: 1px solid #ccc;
 }
+.nav-links a:last-child {
+  border-bottom: none;
+}
 
-/* Intro */
+/* INTRO */
 .intro {
   padding: 30px 20px;
 }
@@ -74,7 +79,7 @@ header {
 .intro h2 {
   font-size: 1.2em;
   margin-bottom: 1em;
-  color: #666;
+  color: #555;
 }
 
 .btn {
@@ -92,19 +97,22 @@ header {
   background-color: #7d44b6;
 }
 
-/* Descriere */
+/* DESCRIERE */
 .descriere {
   padding: 20px;
+  background-color: #ffffffdd;
+  margin: 20px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
 }
 
-/* Footer */
+/* FOOTER */
 footer {
   background-color: #333;
   color: #fff;
   padding: 20px;
   font-size: 0.9em;
 }
-
 footer a {
   color: #fff;
   text-decoration: underline;
