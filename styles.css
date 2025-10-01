@@ -1,143 +1,119 @@
-/* Reset de bază */
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-img { max-width: 100%; height: auto; display: block; }
-
-/* Culori */
+/* ---------- Variabile ---------- */
 :root{
-  --ink:#1b1d1f;
-  --muted:#5b6166;
-  --brand:#174d2f;        /* verde text */
-  --cta:#7c4dff;          /* mov buton */
-  --cta-ink:#fff;
-  --bg:#fffdf9;
-  --card:#ffffff;
-  --ring:rgba(0,0,0,.08);
-  --shadow: 0 6px 24px rgba(0,0,0,.08);
+  --bg: #fff9f2;
+  --card: #fff7ee;
+  --text: #232323;
+  --muted: #6b6b6b;
+  --accent: #7a5cff;         /* lavandă cald */
+  --accent-2: #ff9f6e;       /* piersică */
+  --accent-3: #ffd36b;       /* miere */
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(0,0,0,.06);
 }
 
-/* Layout util */
+/* ---------- Reset simplu ---------- */
+*{ box-sizing: border-box; }
+html,body{
+  margin:0; padding:0;
+  color:var(--text);
+  background:
+    radial-gradient(90% 60% at 0% 0%, #fff3e5 0%, transparent 60%),
+    radial-gradient(80% 60% at 100% 10%, #f6f0ff 0%, transparent 60%),
+    radial-gradient(70% 60% at 50% 100%, #e9fff6 0%, transparent 60%),
+    var(--bg);
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+/* ---------- Container ---------- */
 .container{
-  width: min(1080px, 92vw);
+  max-width: 980px;
   margin: 0 auto;
-  padding: 16px 0 32px;
+  padding: 20px 16px 64px;
 }
 
-/* HEADER */
-.site-header{
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 8px 14px;
-  background: #fff;
-  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+/* ---------- Header ---------- */
+.header{
+  display:flex; align-items:center; gap:18px;
+  padding: 14px 0 10px;
 }
-.brand-logo{
-  width: clamp(84px, 18vw, 120px);
-  height: auto;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(0,0,0,.08);
-  object-fit: contain;
+.logo{
+  width:56px; height:56px; border-radius:50%;
+  overflow:hidden; flex:0 0 56px;
+  box-shadow: var(--shadow);
 }
+.logo img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-/* Hamburger */
-.hamburger{
-  width: 44px; height: 44px;
-  display: grid; place-items: center;
-  background: transparent; border: none; padding: 0; cursor: pointer;
-}
-.hamburger span{
-  width: 22px; height: 2px; background: #333;
-  border-radius: 2px; margin: 3px 0; display: block;
-}
-
-/* NAV mobil: slide-in din stânga */
 .nav{
-  position: fixed; inset: 0 auto 0 0;
-  width: 74%; max-width: 320px;
-  padding: 72px 18px 18px;
-  background: #fff;
-  box-shadow: 4px 0 16px rgba(0,0,0,.12);
-  transform: translateX(-100%);
-  transition: transform .25s ease;
-  display: flex; flex-direction: column; gap: 18px;
+  margin-left:auto; display:flex; gap:18px; flex-wrap:wrap;
 }
 .nav a{
-  color: var(--brand); font-weight: 700; text-decoration: none;
+  text-decoration:none; color:var(--text); font-weight:600;
+  padding:8px 12px; border-radius:12px;
 }
-.nav.open{ transform: translateX(0); }
-
-/* NAV desktop */
-@media (min-width: 860px){
-  .hamburger{ display:none; }
-  .nav{
-    position: static; transform: none; width: auto; max-width: none;
-    box-shadow: none; padding: 0; flex-direction: row; gap: 24px;
-  }
+.nav a.active, .nav a:hover{
+  background: #ffffffd0; box-shadow: var(--shadow);
 }
 
-/* HERO */
+/* ---------- Hero card ---------- */
 .hero{
-  background: linear-gradient(180deg, #fffaf4, #fff);
-  padding: clamp(18px, 5vw, 40px) 0 10px;
-  text-align: center;
+  margin: 24px 0 28px;
+  background: linear-gradient(180deg, #fffdfb, var(--card));
+  border-radius: var(--radius);
+  padding: 28px 22px;
+  box-shadow: var(--shadow);
+  text-align:center;
 }
-.hero-title{
-  color: var(--ink);
-  font-size: clamp(28px, 6vw, 48px);
-  font-weight: 800;
-  margin: 8px 0 8px;
+.hero h1{
+  margin: 4px 0 8px;
+  font-size: clamp(28px, 4.4vw, 44px);
+  letter-spacing:.4px;
 }
-.hero-subtitle{
-  color: var(--brand);
-  font-size: clamp(16px, 3.6vw, 24px);
-  margin: 0 0 18px;
+.hero p{
+  color: var(--muted);
+  max-width: 760px; margin: 0 auto 18px;
+  font-size: clamp(16px, 2.4vw, 18px);
 }
 .cta{
-  display: inline-block;
-  padding: 14px 24px;
-  border-radius: 999px;
-  background: var(--cta);
-  color: var(--cta-ink);
-  text-decoration: none;
-  font-weight: 700;
+  display:inline-block;
+  text-decoration:none; color:white; font-weight:700;
+  padding: 12px 22px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  box-shadow: 0 10px 20px rgba(122,92,255,.22);
+  transition:.2s transform ease, .2s box-shadow ease;
+}
+.cta:hover{ transform: translateY(-1px); box-shadow: 0 12px 26px rgba(122,92,255,.28); }
+
+/* ---------- Badges (încredere) ---------- */
+.benefits{
+  display:grid; gap:14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  margin: 18px 0 6px;
+}
+.badge{
+  background:#fff; border-radius:16px; padding:14px;
   box-shadow: var(--shadow);
-  transition: transform .12s ease, box-shadow .12s ease;
+  display:flex; gap:12px; align-items:flex-start;
 }
-.cta:active{ transform: translateY(1px); box-shadow: 0 3px 12px rgba(0,0,0,.12); }
+.badge i{
+  font-style:normal; font-size:22px; line-height:1; margin-top:2px;
+}
+.badge b{ display:block; }
 
-/* TEXT */
-.section-title{
-  font-size: clamp(22px, 4.8vw, 32px);
-  color: var(--ink);
-  margin: 6px 0 6px;
+/* ---------- Testimonials ---------- */
+.testimonials{
+  margin-top: 26px;
+  display:grid; gap:14px;
+  grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
 }
-.lead{
-  color: var(--muted);
-  font-size: clamp(16px, 3.6vw, 18px);
-  line-height: 1.6;
-  margin: 0;
+.testi{
+  background:#fff; border-radius:16px; padding:16px;
+  box-shadow: var(--shadow);
+  font-size:15px;
 }
+.testi b{ display:block; margin-top:6px; color:#444; }
 
-/* FOOTER */
-.site-footer{
-  margin-top: 32px;
-  background: #222;
-  color: #e8e8e8;
+/* ---------- Footer ---------- */
+.footer{
+  margin-top:36px; color:var(--muted); font-size:14px; text-align:center;
 }
-.footer-inner{
-  width: min(1080px, 92vw);
-  margin: 0 auto;
-  padding: 18px 0 22px;
-  text-align: center;
-}
-.footer-inner a{ color: #e8e8ff; text-decoration: none; }
-.small{ font-size: 13px; color: #bbb; margin: 8px 0 0; }
-
-/* Asigură-te că totul stă în pagină frumos */
-body{ background: var(--bg); }
