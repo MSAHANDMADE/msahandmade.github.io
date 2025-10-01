@@ -1,78 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MSA Handmade Decor — Lumânări & Obiecte din Ipsos</title>
-  <meta name="description" content="MSA Handmade Decor — lumânări din ceară de soia, obiecte decorative din ipsos și cadouri personalizate. Realizate manual cu grijă și pasiune.">
-  <meta name="keywords" content="lumanari soia, decor ipsos, handmade, cadouri personalizate, MSA Handmade Decor">
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="logo.png" type="image/png" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M.S.A Handmade Decor - Acasă</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <!-- HEADER (logo + hamburger + nav) -->
-  <header class="site-header">
-    <a href="index.html" class="brand" aria-label="Acasă">
-      <img src="logo.png" alt="MSA Handmade Decor logo" class="brand-logo">
+  <!-- HEADER -->
+  <header>
+    <a href="/index.html" aria-label="Acasă">
+      <img src="/logo.png?v=4" alt="M.S.A Handmade Decor"
+           onerror="this.onerror=null; this.src='/images/logo.png?v=4';" />
     </a>
 
-    <button class="hamburger" aria-label="Deschide meniul" aria-controls="nav" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-
-    <nav id="nav" class="nav" role="navigation">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="#contact">Contact</a>
+    <nav>
+      <ul>
+        <li><a href="/index.html" class="active">Acasă</a></li>
+        <li><a href="/produse.html">Produse</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+      </ul>
     </nav>
   </header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <h1 class="hero-title">MSA Handmade Decor</h1>
-    <p class="hero-subtitle">Lumânări &amp; Obiecte din Ipsos<br/>Handmade</p>
-
-    <a class="cta" href="produse.html" aria-label="Vezi Produse">✨ Vezi Produse</a>
-  </section>
-
-  <!-- INTRO -->
-  <main class="container">
-    <h2 class="section-title">Bun venit!</h2>
-    <p class="lead">
-      Produse unice, realizate manual cu grijă și pasiune. Lumânări din ceară de soia,
-      obiecte decorative din ipsos și cadouri personalizate pentru sufletul tău.
-    </p>
+  <!-- CONȚINUT PRINCIPAL -->
+  <main>
+    <section>
+      <h1>Bun venit la M.S.A Handmade Decor</h1>
+      <p>Realizăm lumânări decorative și produse handmade din ceară naturală, 
+         perfecte pentru cadouri și momente speciale.</p>
+      <p><a href="/produse.html">Vezi produsele noastre →</a></p>
+    </section>
   </main>
 
-  <!-- FOOTER / CONTACT -->
-  <footer id="contact" class="site-footer">
-    <div class="footer-inner">
-      <p class="contact-line">
-        <span aria-hidden="true">📞</span> 0747 246 241 &nbsp;|&nbsp; <span aria-hidden="true">✉️</span> 
-        <a href="mailto:msahandmade.contact@gmail.com">msahandmade.contact@gmail.com</a>
-      </p>
-      <p class="small">© 2025 M.S.A Handmade Decor — Made in Romania</p>
-    </div>
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2024 M.S.A Handmade Decor. Toate drepturile rezervate.</p>
   </footer>
-
-  <!-- JS: toggle meniu -->
-  <script>
-    const btn = document.querySelector('.hamburger');
-    const nav = document.getElementById('nav');
-
-    btn.addEventListener('click', () => {
-      const open = nav.classList.toggle('open');
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-
-    // închide meniul după click pe un link
-    nav.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        nav.classList.remove('open');
-        btn.setAttribute('aria-expanded','false');
-      });
-    });
-  </script>
 </body>
 </html>
