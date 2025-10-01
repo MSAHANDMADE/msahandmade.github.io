@@ -4,73 +4,86 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Produsele noastre - M.S.A Handmade Decor</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
-  <header class="site-header">
-    <a href="index.html" class="brand">
-      <img src="logo.png" alt="MSA Handmade Decor" class="brand-logo">
-    </a>
-    <nav class="nav">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html" class="active">Produse</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
+<header class="site-header">
+  <a href="index.html" class="brand">
+    <img src="logo.png" alt="MSA Handmade Decor" class="brand-logo">
+  </a>
+  <nav class="nav">
+    <a href="index.html">Acasă</a>
+    <a href="produse.html" class="active">Produse</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
 
-  <main class="container">
-    <h1 class="page-title">Produsele noastre</h1>
+<main class="container">
+  <h1 class="page-title">Produsele noastre</h1>
 
-    <div class="product-card">
-      <img src="images/images_dans.jpg" alt="Lumânare Dans">
+  <section class="products">
+
+    <article class="product-card">
+      <a href="images/images_dans.jpg" target="_blank" rel="noopener">
+        <img src="images/images_dans.jpg" alt="Lumânare Dans">
+      </a>
       <h2>Lumânare „Dans”</h2>
       <p>Realizată manual din ceară de soia. Ardere curată, fără fum.</p>
       <p><strong>Preț: 35 RON</strong></p>
-    </div>
+    </article>
 
-    <div class="product-card">
-      <img src="images/images_cuplu.jpg" alt="Lumânare Cuplu">
+    <article class="product-card">
+      <a href="images/images_cuplu.jpg" target="_blank" rel="noopener">
+        <img src="images/images_cuplu.jpg" alt="Lumânare Cuplu">
+      </a>
       <h2>Lumânare „Cuplu”</h2>
-      <p>Simbol al iubirii, turnată manual.</p>
+      <p>Simbol al iubirii, turnată manual în matriță.</p>
       <p><strong>Preț: 35 RON</strong></p>
-    </div>
+    </article>
 
-    <div class="product-card">
-      <img src="images/images_inger.jpg" alt="Lumânare Înger">
+    <article class="product-card">
+      <a href="images/images_inger.jpg" target="_blank" rel="noopener">
+        <img src="images/images_inger.jpg" alt="Lumânare Înger">
+      </a>
       <h2>Lumânare „Înger”</h2>
       <p>Delicată și elegantă, ideală pentru cadouri.</p>
       <p><strong>Preț: 35 RON</strong></p>
-    </div>
+    </article>
 
-    <div class="product-card">
-      <img src="images/images_flo ri.jpg" alt="Lumânare Flori">
+    <article class="product-card">
+      <a href="images/images_flori.jpg" target="_blank" rel="noopener">
+        <img src="images/images_flori.jpg" alt="Lumânare Flori">
+      </a>
       <h2>Lumânare „Flori”</h2>
       <p>Decorată cu motive florale, aduce veselie și frumusețe.</p>
       <p><strong>Preț: 35 RON</strong></p>
-    </div>
+    </article>
 
-    <div class="product-card">
-      <img src="images/images_buchet.jpg" alt="Lumânare Buchet">
+    <article class="product-card">
+      <a href="images/images_buchet.jpg" target="_blank" rel="noopener">
+        <img src="images/images_buchet.jpg" alt="Lumânare Buchet">
+      </a>
       <h2>Lumânare „Buchet”</h2>
       <p>Inspirată din frumusețea naturii, turnată manual.</p>
-      <p><strong>Preț: 35 RON</strong></p>
-    </div>
+      <p><strong>Preț: 29 RON</strong></p>
+    </article>
 
-    <div class="product-card">
-      <img src="images/images_peisaj.jpg" alt="Lumânare Peisaj">
+    <article class="product-card">
+      <a href="images/images_peisaj.jpg" target="_blank" rel="noopener">
+        <img src="images/images_peisaj.jpg" alt="Lumânare Peisaj">
+      </a>
       <h2>Lumânare „Peisaj”</h2>
-      <p>O poveste în ceară, peisaj artistic unicat.</p>
-      <p><strong>Preț: 35 RON</strong></p>
-    </div>
+      <p>O poveste în ceară – peisaj artistic unicat.</p>
+      <p><strong>Preț: 109 RON</strong></p>
+    </article>
 
-  </main>
+  </section>
+</main>
 
-  <footer class="site-footer">
-    <p>© <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.</p>
-  </footer>
+<footer class="site-footer">
+  © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
+</footer>
 
-  <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
-  </script>
+<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
 </body>
 </html>
