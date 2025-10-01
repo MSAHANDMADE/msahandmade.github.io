@@ -1,109 +1,69 @@
-/* ===== Tema pastel M.S.A ===== */
+/* --- Bază --- */
 :root{
-  --bg: #fff9f7;
-  --card: #ffffff;
-  --brand: #7b5cf1;         /* mov delicat */
-  --brand-2:#f7d9ff;       /* accente pastel */
-  --text: #2a2a2a;
-  --muted:#6b7280;
-  --shadow: 0 10px 30px rgba(0,0,0,.06);
-  --radius: 16px;
+  --bg:#fffaf4;
+  --card:#ffffff;
+  --ink:#222;
+  --muted:#6b6b6b;
+  --accent:#6f52ff;
+  --shadow:0 12px 28px rgba(0,0,0,.06);
+  --radius:18px;
 }
-
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
-  background: radial-gradient(1200px 600px at 50% -80%, #ffe6ec 0%, transparent 50%) , var(--bg);
-  color: var(--text);
-  font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
+  color:var(--ink);
+  background:linear-gradient(180deg,#fff7ee, #fffaf6 40%, #fff);
 }
 
-/* ===== Header & nav ===== */
+/* --- Header / Nav --- */
 .site-header{
-  position: sticky; top:0; z-index: 50;
-  background: rgba(255,255,255,.85);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid #f0e9ff;
+  position:sticky; top:0; z-index:10;
+  background:#fff; border-bottom:1px solid #f1e9df;
+  display:flex; align-items:center; gap:18px;
+  padding:10px 16px;
 }
-.header-inner{
-  max-width: 1100px; margin: 0 auto; padding: 10px 18px;
-  display:flex; align-items:center; justify-content:space-between; gap: 12px;
-}
-.brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text); }
-.brand-logo{ width:64px; height:64px; border-radius:50%; object-fit:cover; box-shadow: var(--shadow); }
-.brand-name{ font-weight:700; letter-spacing:.3px; }
-
+.brand{display:flex; align-items:center; gap:10px; text-decoration:none}
+.brand-logo{width:64px; height:64px; border-radius:50%; object-fit:cover}
+.nav{margin-left:auto; display:flex; gap:16px; flex-wrap:wrap}
 .nav a{
-  text-decoration:none; color:var(--text); font-weight:600; padding:10px 14px; border-radius:12px;
+  color:#333; text-decoration:none; font-weight:600; padding:8px 10px; border-radius:12px
 }
-.nav a:hover{ background: #f4efff; }
-.nav a.active{ background: var(--brand); color:#fff; }
+.nav a.active, .nav a:hover{background:#f6f1ff; color:#4328c7}
 
-/* ===== Container ===== */
-.container{ max-width: 1100px; margin: 0 auto; padding: 28px 18px; }
+/* --- Layout --- */
+.container{max-width:1000px; margin:24px auto; padding:0 16px}
+.page-title{
+  font-size:clamp(28px,6vw,46px);
+  line-height:1.1; margin:10px 0 18px 0;
+}
 
-/* ===== Hero (index) ===== */
+/* --- Hero acasă --- */
 .hero{
-  background: linear-gradient(180deg, #fff 0%, #fff7ff 100%);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 28px;
-  display:grid; grid-template-columns: 120px 1fr; gap:18px; align-items:center;
+  background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:18px; text-align:center;
 }
-.hero img{ width:120px; height:120px; border-radius:50%; object-fit:cover; box-shadow: var(--shadow); }
-.hero h1{ margin:0; font-size: clamp(26px, 4vw, 36px); line-height:1.2; }
-.hero p{ margin:6px 0 18px; color:var(--muted) }
+.hero img{width:100%; height:auto; border-radius:14px}
+.hero h1{margin:16px 0 8px 0}
+.cta{
+  display:inline-block; margin-top:10px; padding:14px 22px; border-radius:14px;
+  background:var(--accent); color:#fff; text-decoration:none; font-weight:700;
+  box-shadow:0 6px 18px rgba(111,82,255,.35)
+}
+.cta:hover{transform:translateY(-1px)}
 
-.btn{
-  display:inline-block; text-decoration:none; font-weight:700;
-  background: var(--brand); color:#fff; padding:12px 18px; border-radius: 12px;
-  box-shadow: var(--shadow);
+/* --- Carduri produse --- */
+.products{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px}
+.product-card{
+  background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:14px; overflow:hidden;
 }
-.btn:hover{ filter: brightness(1.05); }
+.product-card img{
+  width:100%; height:220px; object-fit:cover; border-radius:12px; display:block;
+}
+.product-card h2{margin:12px 0 6px 0; font-size:22px}
+.product-card p{margin:6px 0; color:var(--muted)}
+.product-card strong{color:#1f1f1f}
 
-/* ===== Titluri ===== */
-h1, h2{ font-weight:800; letter-spacing:.2px; margin: 8px 0 10px }
-h1{ font-size: clamp(26px, 4.5vw, 40px) }
-.section-title{ margin: 10px 0 18px }
-
-/* ===== Cards produse ===== */
-.products{
-  display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
-  gap: 18px;
-}
-.product{
-  background: var(--card);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 14px;
-  transition: .2s transform ease;
-}
-.product:hover{ transform: translateY(-2px) }
-.product img{
-  width:100%; height: 210px; object-fit:cover; border-radius: 12px; cursor: zoom-in;
-  background: #f3f3f3;
-}
-.price{ font-weight:800; color: var(--brand); }
-
-/* ===== Contact ===== */
-.contact-list{ display:grid; gap:12px; margin: 10px 0 18px }
-.contact-card{
-  background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding:14px;
-}
-.social{
-  display:flex; align-items:center; gap:14px;
-}
-.social a img{ width:40px; height:40px }
-
-/* ===== Footer ===== */
-.site-footer{
-  margin-top: 40px; padding: 20px 18px; text-align:center; color:var(--muted);
-  border-top: 1px solid #f0e9ff; background:#fff; 
-}
-
-/* ===== Lightbox ===== */
-.lb{
-  position: fixed; inset:0; display:none; place-items:center; background: rgba(0,0,0,.65);
-}
-.lb img{ max-width: 92vw; max-height:86vh; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
-.lb.show{ display:grid; }
+/* --- Footer --- */
+.site-footer{margin:36px 0 18px; text-align:center; color:var(--muted); font-size:14px}
