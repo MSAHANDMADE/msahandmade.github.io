@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MSA Handmade Decor</title>
+  <title>MSA Handmade Decor — Lumânări & Obiecte handmade</title>
+  <link rel="preload" href="logo.png" as="image">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
-  <!-- HERO -->
-  <header class="hero">
-    <img src="logo.png" alt="MSA Handmade Decor" class="hero__logo" />
-    <h1 class="hero__title">MSA Handmade Decor</h1>
-    <p class="hero__subtitle">Lumânări & Obiecte din Ipsos Handmade</p>
-    <a class="btn btn--white" href="produse.html">✨ Vezi Produse</a>
+  <header class="site-header">
+    <a href="index.html" class="brand">
+      <img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" />
+    </a>
+    <nav class="nav">
+      <a href="index.html" class="active">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="contact.html">Contact</a>
+    </nav>
   </header>
 
-  <!-- WELCOME -->
-  <main class="wrap">
-    <section class="welcome card">
+  <main>
+    <section class="hero">
+      <img src="logo.png" alt="MSA Handmade Decor" class="hero-logo" />
+      <h1>MSA Handmade Decor</h1>
+      <p class="subtitle">Lumânări & obiecte decorative handmade</p>
+      <a class="btn" href="produse.html">✨ Vezi Produse</a>
+    </section>
+
+    <section class="intro card">
       <h2>Bun venit!</h2>
       <p>
         Produse unice, realizate manual cu grijă și pasiune.
         Lumânări din ceară de soia, obiecte decorative din ipsos și cadouri
-        personalizate pentru sufletul tău.
+        personalizate pentru orice ocazie.
       </p>
     </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer__line">
-      <span>📞 0747 246 241</span>
-      <span class="sep">|</span>
-      <span>✉️ msahandmade.contact@gmail.com</span>
-    </div>
-    <div class="footer__line">
-      🌐 <a href="https://msahandmade.ro" target="_blank" rel="noopener">msahandmade.ro</a>
-    </div>
-    <div class="footer__copy">
-      © 2025 M.S.A Handmade Decor — Made in Romania
-    </div>
+  <footer class="site-footer">
+    © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
   </footer>
 
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
