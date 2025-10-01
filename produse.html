@@ -3,86 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Produse - MSA Handmade Decor</title>
+  <title>Produsele noastre - MSA Handmade</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Stil pentru galeria de produse */
+    section {
+      margin-bottom: 30px;
+    }
+    section img {
+      max-width: 200px;
+      cursor: pointer;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      transition: transform 0.2s;
+    }
+    section img:hover {
+      transform: scale(1.05);
+      border-color: #666;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border: 4px solid white;
+      border-radius: 10px;
+    }
+    .lightbox:target {
+      display: flex;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 30px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <nav class="navbar">
-      <div class="logo">
-        <a href="index.html">
-          <img src="logo.png" alt="MSA Handmade Decor Logo">
-        </a>
-      </div>
-      <ul class="nav-links">
+    <img src="/images/logo.png?v=3" alt="Logo MSA Handmade" style="max-width:200px;">
+    <nav>
+      <ul>
         <li><a href="index.html">Acasă</a></li>
-        <li><a href="produse.html" class="active">Produse</a></li>
+        <li><a href="produse.html">Produse</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
-    <section class="products">
-      <h1>Produsele noastre</h1>
-      <div class="product-grid">
+    <h1>Produsele noastre</h1>
 
-        <!-- Produs 1 - Dans -->
-        <div class="product-card">
-          <a href="images/images_dans.jpg" target="_blank" rel="noopener">
-            <img src="images/images_dans.jpg" alt="Lumânare Dans" class="product-img">
-          </a>
-          <h3>Lumânare „Dans”</h3>
-          <p>Lumânare realizată manual din ceară de soia.</p>
-          <p><strong>Preț: 35 RON</strong></p>
-        </div>
+    <section>
+      <a href="#img1"><img src="/images/images_dans.jpg?v=3" alt="Lumânare Dans"></a>
+      <h2>Lumânare „Dans”</h2>
+      <p>Lumânare realizată manual din ceară de soia.</p>
+      <p><strong>Preț: 35 RON</strong></p>
+    </section>
 
-        <!-- Produs 2 - Cuplu -->
-        <div class="product-card">
-          <a href="images/images_cuplu.jpg" target="_blank" rel="noopener">
-            <img src="images/images_cuplu.jpg" alt="Lumânare Cuplu" class="product-img">
-          </a>
-          <h3>Lumânare „Cuplu”</h3>
-          <p>Simbol al iubirii, turnată manual din ceară naturală.</p>
-          <p><strong>Preț: 35 RON</strong></p>
-        </div>
+    <section>
+      <a href="#img2"><img src="/images/images_cuplu.jpg?v=3" alt="Lumânare Cuplu"></a>
+      <h2>Lumânare „Cuplu”</h2>
+      <p>Simbol al iubirii, turnată manual din ceară naturală.</p>
+      <p><strong>Preț: 35 RON</strong></p>
+    </section>
 
-        <!-- Produs 3 - Înger -->
-        <div class="product-card">
-          <a href="images/images_inger.jpg" target="_blank" rel="noopener">
-            <img src="images/images_inger.jpg" alt="Lumânare Înger" class="product-img">
-          </a>
-          <h3>Lumânare „Înger”</h3>
-          <p>Decor delicat, perfect pentru cadouri speciale.</p>
-          <p><strong>Preț: 35 RON</strong></p>
-        </div>
-
-        <!-- Produs 4 - Peisaj -->
-        <div class="product-card">
-          <a href="images/images_peisaj.jpg" target="_blank" rel="noopener">
-            <img src="images/images_peisaj.jpg" alt="Tablou Peisaj" class="product-img">
-          </a>
-          <h3>Tablou „Peisaj”</h3>
-          <p>Tablou decorativ din ipsos pictat manual.</p>
-          <p><strong>Preț: 109 RON</strong></p>
-        </div>
-
-        <!-- Produs 5 - Buchet -->
-        <div class="product-card">
-          <a href="images/images_buchet.jpg" target="_blank" rel="noopener">
-            <img src="images/images_buchet.jpg" alt="Buchet decorativ" class="product-img">
-          </a>
-          <h3>Buchet decorativ</h3>
-          <p>Buchet elegant din ipsos colorat manual.</p>
-          <p><strong>Preț: 29 RON</strong></p>
-        </div>
-
-      </div>
+    <section>
+      <a href="#img3"><img src="/images/images_inger.jpg?v=3" alt="Lumânare Înger"></a>
+      <h2>Lumânare „Înger”</h2>
+      <p>Decor delicat, perfect pentru cadouri speciale.</p>
+      <p><strong>Preț: 35 RON</strong></p>
     </section>
   </main>
 
+  <!-- Lightbox pentru fiecare poză -->
+  <div id="img1" class="lightbox">
+    <a href="#" class="lightbox-close">&times;</a>
+    <img src="/images/images_dans.jpg?v=3" alt="Lumânare Dans">
+  </div>
+
+  <div id="img2" class="lightbox">
+    <a href="#" class="lightbox-close">&times;</a>
+    <img src="/images/images_cuplu.jpg?v=3" alt="Lumânare Cuplu">
+  </div>
+
+  <div id="img3" class="lightbox">
+    <a href="#" class="lightbox-close">&times;</a>
+    <img src="/images/images_inger.jpg?v=3" alt="Lumânare Înger">
+  </div>
+
   <footer>
-    <p>&copy; 2024 MSA Handmade Decor. Toate drepturile rezervate.</p>
+    <p>&copy; 2025 MSA Handmade. Toate drepturile rezervate.</p>
   </footer>
 </body>
 </html>
