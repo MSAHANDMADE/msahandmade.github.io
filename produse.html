@@ -1,198 +1,88 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Produse – MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css" />
-
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #fbd3e9, #bbd2c5);
-      color: #222;
-    }
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(255,255,255,0.8);
-      backdrop-filter: blur(6px);
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-    }
-    nav {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 14px 16px;
-      display: flex;
-      gap: 18px;
-      align-items: center;
-      justify-content: flex-start;
-      font-weight: 700;
-    }
-    nav a {
-      text-decoration: none;
-      color: #333;
-      padding: 8px 10px;
-      border-radius: 12px;
-      transition: background .2s ease;
-    }
-    nav a:hover { background: rgba(0,0,0,0.05); }
-
-    .wrapper {
-      max-width: 1100px;
-      margin: 24px auto 64px;
-      padding: 0 16px;
-      text-align: center;
-    }
-    h1 { font-size: 2rem; margin: 10px 0 6px; }
-    p.muted { color: #555; margin: 0 0 26px; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 16px;
-    }
-    .card {
-      grid-column: span 12;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 35px rgba(0,0,0,0.12);
-    }
-    @media (min-width: 700px) { .card { grid-column: span 6; } }
-    @media (min-width: 1024px) { .card { grid-column: span 4; } }
-
-    .card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
-    .card .content { padding: 14px 16px 18px; text-align: left; }
-    .card h3 { margin: 6px 0 8px; font-size: 1.05rem; }
-    .price { font-weight: 800; margin: 4px 0 12px; }
-
-    .btn {
-      display: inline-block;
-      padding: 10px 18px;
-      border-radius: 999px;
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      box-shadow: 0 10px 18px rgba(0,0,0,0.12);
-      transition: transform .15s ease, box-shadow .15s ease, opacity .15s;
-      background: linear-gradient(45deg, #ff6a88, #ff9472, #7bd389, #5cc0ff);
-      background-size: 300% 300%;
-      animation: rainbow 8s linear infinite;
-    }
-    .btn:hover { transform: translateY(-1px); box-shadow: 0 14px 24px rgba(0,0,0,0.16); }
-    .btn:active { transform: translateY(0); opacity: .9; }
-
-    @keyframes rainbow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produse - MSA Handmade Decor</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
   <header>
-    <nav>
-      <a href="index.html">Acasă</a>
-      <a href="produse.html" style="background: rgba(0,0,0,0.06);">Produse</a>
-      <a href="index.html#contact">Contact</a>
+    <nav class="navbar">
+      <div class="logo">
+        <a href="index.html">
+          <img src="logo.png" alt="MSA Handmade Decor Logo">
+        </a>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Acasă</a></li>
+        <li><a href="produse.html" class="active">Produse</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
     </nav>
   </header>
 
-  <main class="wrapper">
-    <h1>Produsele mele</h1>
-    <p class="muted">Piese realizate manual, cu multă grijă și atenție la detalii.</p>
+  <main>
+    <section class="products">
+      <h1>Produsele noastre</h1>
+      <div class="product-grid">
 
-    <div class="grid">
-      <!-- Buchet -->
-      <article class="card">
-        <img src="images/images_buchet.jpg" alt="Buchet din ceară – MSA Handmade">
-        <div class="content">
-          <h3>Buchet flori din ceară</h3>
-          <div class="price">29 lei</div>
-          <a class="btn" target="_blank" rel="noopener"
-             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Buchet%20flori%20din%20ceara%20(29%20lei)%20de%20pe%20msahandmade.github.io">
-            Comandă pe WhatsApp
+        <!-- Produs 1 - Dans -->
+        <div class="product-card">
+          <a href="images/images_dans.jpg" target="_blank" rel="noopener">
+            <img src="images/images_dans.jpg" alt="Lumânare Dans" class="product-img">
           </a>
+          <h3>Lumânare „Dans”</h3>
+          <p>Lumânare realizată manual din ceară de soia.</p>
+          <p><strong>Preț: 35 RON</strong></p>
         </div>
-      </article>
 
-      <!-- Cuplu -->
-      <article class="card">
-        <img src="images/images_cuplu.jpg" alt="Lumânare cuplu – MSA Handmade">
-        <div class="content">
-          <h3>Lumânare cuplu</h3>
-          <div class="price">35 lei</div>
-          <a class="btn" target="_blank" rel="noopener"
-             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Lumanare%20Cuplu%20(35%20lei)%20de%20pe%20msahandmade.github.io">
-            Comandă pe WhatsApp
+        <!-- Produs 2 - Cuplu -->
+        <div class="product-card">
+          <a href="images/images_cuplu.jpg" target="_blank" rel="noopener">
+            <img src="images/images_cuplu.jpg" alt="Lumânare Cuplu" class="product-img">
           </a>
+          <h3>Lumânare „Cuplu”</h3>
+          <p>Simbol al iubirii, turnată manual din ceară naturală.</p>
+          <p><strong>Preț: 35 RON</strong></p>
         </div>
-      </article>
 
-      <!-- Dans -->
-      <article class="card">
-        <img src="images/images_dans.jpg" alt="Lumânare dans – MSA Handmade">
-        <div class="content">
-          <h3>Lumânare dans</h3>
-          <div class="price">35 lei</div>
-          <a class="btn" target="_blank" rel="noopener"
-             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Lumanare%20Dans%20(35%20lei)%20de%20pe%20msahandmade.github.io">
-            Comandă pe WhatsApp
+        <!-- Produs 3 - Înger -->
+        <div class="product-card">
+          <a href="images/images_inger.jpg" target="_blank" rel="noopener">
+            <img src="images/images_inger.jpg" alt="Lumânare Înger" class="product-img">
           </a>
+          <h3>Lumânare „Înger”</h3>
+          <p>Decor delicat, perfect pentru cadouri speciale.</p>
+          <p><strong>Preț: 35 RON</strong></p>
         </div>
-      </article>
 
-      <!-- Flori -->
-      <article class="card">
-        <img src="images/images_flori.jpg" alt="Lumânare flori – MSA Handmade">
-        <div class="content">
-          <h3>Lumânare flori</h3>
-          <div class="price">35 lei</div>
-          <a class="btn" target="_blank" rel="noopener"
-             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Lumanare%20Flori%20(35%20lei)%20de%20pe%20msahandmade.github.io">
-            Comandă pe WhatsApp
+        <!-- Produs 4 - Peisaj -->
+        <div class="product-card">
+          <a href="images/images_peisaj.jpg" target="_blank" rel="noopener">
+            <img src="images/images_peisaj.jpg" alt="Tablou Peisaj" class="product-img">
           </a>
+          <h3>Tablou „Peisaj”</h3>
+          <p>Tablou decorativ din ipsos pictat manual.</p>
+          <p><strong>Preț: 109 RON</strong></p>
         </div>
-      </article>
 
-      <!-- Înger -->
-      <article class="card">
-        <img src="images/images_inger.jpg" alt="Lumânare înger – MSA Handmade">
-        <div class="content">
-          <h3>Lumânare înger</h3>
-          <div class="price">35 lei</div>
-          <a class="btn" target="_blank" rel="noopener"
-             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Lumanare%20Inger%20(35%20lei)%20de%20pe%20msahandmade.github.io">
-            Comandă pe WhatsApp
+        <!-- Produs 5 - Buchet -->
+        <div class="product-card">
+          <a href="images/images_buchet.jpg" target="_blank" rel="noopener">
+            <img src="images/images_buchet.jpg" alt="Buchet decorativ" class="product-img">
           </a>
+          <h3>Buchet decorativ</h3>
+          <p>Buchet elegant din ipsos colorat manual.</p>
+          <p><strong>Preț: 29 RON</strong></p>
         </div>
-      </article>
 
-      <!-- Peisaj -->
-      <article class="card">
-        <img src="images/images_peisaj.jpg" alt="Mini peisaj – MSA Handmade">
-        <div class="content">
-          <h3>Mini peisaj decorativ</h3>
-          <div class="price">109 lei</div>
-          <a class="btn" target="_blank" rel="noopener"
-             href="https://wa.me/40747246241?text=Salut%21%20Vreau%20sa%20comand%3A%20Mini%20peisaj%20decorativ%20(109%20lei)%20de%20pe%20msahandmade.github.io">
-            Comandă pe WhatsApp
-          </a>
-        </div>
-      </article>
-    </div>
+      </div>
+    </section>
   </main>
 
+  <footer>
+    <p>&copy; 2024 MSA Handmade Decor. Toate drepturile rezervate.</p>
+  </footer>
 </body>
 </html>
