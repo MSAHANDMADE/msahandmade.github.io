@@ -1,89 +1,126 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Produsele noastre - M.S.A Handmade Decor</title>
-  <link rel="stylesheet" href="styles.css?v=4">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Produsele noastre — M.S.A Handmade Decor</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Mic ajutor ca să fim siguri că pozele se văd corect */
+    .card img.prod-img{
+      width:100%;
+      height:auto;
+      display:block;
+      border-radius:14px;
+    }
+    .grid{
+      display:grid;
+      gap:22px;
+    }
+    .card{
+      background:#fff;
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 8px 26px rgba(0,0,0,.06);
+    }
+    .page-title{font-size:42px;margin:24px 0}
+    .price{font-weight:800;margin-top:10px}
+    header.site-header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter:saturate(120%) blur(8px);
+      background:rgba(255,255,255,.85);
+      border-bottom:1px solid rgba(0,0,0,.05);
+    }
+    .brand-logo{width:64px;height:64px;border-radius:50%;}
+    nav a{padding:.6rem 1rem;border-radius:999px}
+    nav a.active{background:#ece3ff}
+    main.container{max-width:960px;margin:0 auto;padding:16px}
+  </style>
 </head>
 <body>
-<header class="site-header">
-  <a href="index.html" class="brand">
-    <img src="logo.png" alt="MSA Handmade Decor" class="brand-logo">
-  </a>
-  <nav class="nav">
-    <a href="index.html">Acasă</a>
-    <a href="produse.html" class="active">Produse</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-</header>
 
-<main class="container">
-  <h1 class="page-title">Produsele noastre</h1>
+  <header class="site-header">
+    <div class="container" style="max-width:960px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:10px 16px;">
+      <a href="index.html" class="brand"><img src="/logo.png" alt="MSA Handmade Decor" class="brand-logo"></a>
+      <nav class="nav" style="margin-left:auto;display:flex;gap:8px;">
+        <a href="index.html">Acasă</a>
+        <a href="produse.html" class="active">Produse</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
 
-  <section class="products">
+  <main class="container">
+    <h1 class="page-title">Produsele noastre</h1>
 
-    <article class="product-card">
-      <a href="images/images_dans.jpg" target="_blank" rel="noopener">
-        <img src="images/images_dans.jpg" alt="Lumânare Dans">
-      </a>
-      <h2>Lumânare „Dans”</h2>
-      <p>Realizată manual din ceară de soia. Ardere curată, fără fum.</p>
-      <p><strong>Preț: 35 RON</strong></p>
-    </article>
+    <div class="grid">
 
-    <article class="product-card">
-      <a href="images/images_cuplu.jpg" target="_blank" rel="noopener">
-        <img src="images/images_cuplu.jpg" alt="Lumânare Cuplu">
-      </a>
-      <h2>Lumânare „Cuplu”</h2>
-      <p>Simbol al iubirii, turnată manual în matriță.</p>
-      <p><strong>Preț: 35 RON</strong></p>
-    </article>
+      <!-- DANS -->
+      <article class="card">
+        <a href="/images/images_dans.jpg" target="_blank" rel="noopener">
+          <img class="prod-img" src="/images/images_dans.jpg" alt="Lumânare Dans">
+        </a>
+        <h2>Lumânare „Dans”</h2>
+        <p>Realizată manual din ceară de soia. Ardere curată, fără fum.</p>
+        <p class="price">Preț: 35 RON</p>
+      </article>
 
-    <article class="product-card">
-      <a href="images/images_inger.jpg" target="_blank" rel="noopener">
-        <img src="images/images_inger.jpg" alt="Lumânare Înger">
-      </a>
-      <h2>Lumânare „Înger”</h2>
-      <p>Delicată și elegantă, ideală pentru cadouri.</p>
-      <p><strong>Preț: 35 RON</strong></p>
-    </article>
+      <!-- CUPLU -->
+      <article class="card">
+        <a href="/images/images_cuplu.jpg" target="_blank" rel="noopener">
+          <img class="prod-img" src="/images/images_cuplu.jpg" alt="Lumânare Cuplu">
+        </a>
+        <h2>Lumânare „Cuplu”</h2>
+        <p>Simbol al iubirii, turnată manual în matriță.</p>
+        <p class="price">Preț: 35 RON</p>
+      </article>
 
-    <article class="product-card">
-      <a href="images/images_flori.jpg" target="_blank" rel="noopener">
-        <img src="images/images_flori.jpg" alt="Lumânare Flori">
-      </a>
-      <h2>Lumânare „Flori”</h2>
-      <p>Decorată cu motive florale, aduce veselie și frumusețe.</p>
-      <p><strong>Preț: 35 RON</strong></p>
-    </article>
+      <!-- ÎNGER -->
+      <article class="card">
+        <a href="/images/images_inger.jpg" target="_blank" rel="noopener">
+          <img class="prod-img" src="/images/images_inger.jpg" alt="Lumânare Înger">
+        </a>
+        <h2>Lumânare „Înger”</h2>
+        <p>Delicată și elegantă, ideală pentru cadouri.</p>
+        <p class="price">Preț: 35 RON</p>
+      </article>
 
-    <article class="product-card">
-      <a href="images/images_buchet.jpg" target="_blank" rel="noopener">
-        <img src="images/images_buchet.jpg" alt="Lumânare Buchet">
-      </a>
-      <h2>Lumânare „Buchet”</h2>
-      <p>Inspirată din frumusețea naturii, turnată manual.</p>
-      <p><strong>Preț: 29 RON</strong></p>
-    </article>
+      <!-- FLORI -->
+      <article class="card">
+        <a href="/images/images_flori.jpg" target="_blank" rel="noopener">
+          <img class="prod-img" src="/images/images_flori.jpg" alt="Lumânare Flori">
+        </a>
+        <h2>Lumânare „Flori”</h2>
+        <p>Decorată cu motive florale.</p>
+        <p class="price">Preț: 35 RON</p>
+      </article>
 
-    <article class="product-card">
-      <a href="images/images_peisaj.jpg" target="_blank" rel="noopener">
-        <img src="images/images_peisaj.jpg" alt="Lumânare Peisaj">
-      </a>
-      <h2>Lumânare „Peisaj”</h2>
-      <p>O poveste în ceară – peisaj artistic unicat.</p>
-      <p><strong>Preț: 109 RON</strong></p>
-    </article>
+      <!-- BUCHET -->
+      <article class="card">
+        <a href="/images/images_buchet.jpg" target="_blank" rel="noopener">
+          <img class="prod-img" src="/images/images_buchet.jpg" alt="Lumânare Buchet">
+        </a>
+        <h2>Lumânare „Buchet”</h2>
+        <p>Inspirație florală, turnată manual.</p>
+        <p class="price">Preț: 35 RON</p>
+      </article>
 
-  </section>
-</main>
+      <!-- PEISAJ -->
+      <article class="card">
+        <a href="/images/images_peisaj.jpg" target="_blank" rel="noopener">
+          <img class="prod-img" src="/images/images_peisaj.jpg" alt="Lumânare Peisaj">
+        </a>
+        <h2>Lumânare „Peisaj”</h2>
+        <p>Compoziție decorativă de efect.</p>
+        <p class="price">Preț: 109 RON</p>
+      </article>
 
-<footer class="site-footer">
-  © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
-</footer>
+    </div>
+  </main>
 
-<script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+  <footer class="site-footer" style="text-align:center;padding:26px 12px;color:#666">
+    © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
+  </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
