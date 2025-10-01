@@ -8,28 +8,36 @@
 </head>
 <body>
   <header class="site-header">
-    <a href="index.html" class="brand">
-      <img src="logo.png" alt="M.S.A Handmade Decor" class="brand-logo">
-    </a>
-    <nav class="nav">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="contact.html">Contact</a>
-    </nav>
+    <div class="header-inner">
+      <a href="index.html" class="brand">
+        <img src="logo.png" alt="M.S.A Handmade Decor" class="brand-logo">
+        <strong class="brand-name">M.S.A Handmade Decor</strong>
+      </a>
+      <nav class="nav">
+        <a href="index.html" class="active">Acasă</a>
+        <a href="produse.html">Produse</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
   </header>
 
   <main class="container">
-    <h1>M.S.A Handmade Decor</h1>
-    <p>Lumânări & obiecte decorative handmade din ipsos și ceară de soia</p>
-    <a href="produse.html" class="btn">✨ Vezi Produse</a>
+    <section class="hero">
+      <img src="logo.png" alt="Logo M.S.A">
+      <div>
+        <h1>Bun venit la M.S.A Handmade Decor</h1>
+        <p>Lumânări din ceară de soia & obiecte decorative din ipsos — cadouri pline de farmec pentru orice ocazie.</p>
+        <a class="btn" href="produse.html">✨ Vezi produsele noastre</a>
+      </div>
+    </section>
+
+    <h2 class="section-title">De ce M.S.A?</h2>
+    <p style="color:var(--muted)">Fiecare piesă e turnată manual, cu atenție la detalii și multă bucurie. Culori pastel, forme delicate și parfumuri fine.</p>
   </main>
 
   <footer class="site-footer">
-    <p>© <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.</p>
+    © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
   </footer>
-
-  <script>
-    document.getElementById("y").textContent = new Date().getFullYear();
-  </script>
+  <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body>
 </html>
