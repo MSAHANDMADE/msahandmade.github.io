@@ -1,137 +1,110 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Produse — MSA Handmade Decor</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>M.S.A Handmade Decor — Produse</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header">
-    <a href="index.html" class="brand">
-      <img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" />
-    </a>
+
+<header class="site-header">
+  <div class="container" style="display:flex;align-items:center;">
+    <div class="brand">
+      <img src="logo.png" alt="M.S.A Handmade Decor">
+      <strong>M.S.A Handmade Decor</strong>
+    </div>
     <nav class="nav">
       <a href="index.html">Acasă</a>
       <a href="produse.html" class="active">Produse</a>
       <a href="contact.html">Contact</a>
     </nav>
-  </header>
-
-  <main class="container">
-    <h1 class="page-title">Produsele noastre</h1>
-
-    <div class="grid">
-      <!-- 1 -->
-      <article class="product card">
-        <a href="images/images_dans.jpg" data-full="images/images_dans.jpg" class="zoom">
-          <img src="images/images_dans.jpg" alt="Lumânare Dans" loading="lazy">
-        </a>
-        <h3>Lumânare „Dans”</h3>
-        <p>Realizată manual din ceară de soia. Ardere curată, fără fum.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
-
-      <!-- 2 -->
-      <article class="product card">
-        <a href="images/images_cuplu.jpg" data-full="images/images_cuplu.jpg" class="zoom">
-          <img src="images/images_cuplu.jpg" alt="Lumânare Cuplu" loading="lazy">
-        </a>
-        <h3>Lumânare „Cuplu”</h3>
-        <p>Simbol al iubirii, turnată manual în matriță.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
-
-      <!-- 3 -->
-      <article class="product card">
-        <a href="images/images_inger.jpg" data-full="images/images_inger.jpg" class="zoom">
-          <img src="images/images_inger.jpg" alt="Lumânare Înger" loading="lazy">
-        </a>
-        <h3>Lumânare „Înger”</h3>
-        <p>Delicată și elegantă, ideală pentru cadouri.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
-
-      <!-- 4 -->
-      <article class="product card">
-        <a href="images/images_buchet.jpg" data-full="images/images_buchet.jpg" class="zoom">
-          <img src="images/images_buchet.jpg" alt="Decor Buchet" loading="lazy">
-        </a>
-        <h3>Decor „Buchet”</h3>
-        <p>Compoziție florală decorativă realizată manual.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
-
-      <!-- 5 -->
-      <article class="product card">
-        <a href="images/images_flori.jpg" data-full="images/images_flori.jpg" class="zoom">
-          <img src="images/images_flori.jpg" alt="Decor Flori" loading="lazy">
-        </a>
-        <h3>Decor „Flori”</h3>
-        <p>Detalii fine și culori pline de farmec.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
-
-      <!-- 6 -->
-      <article class="product card">
-        <a href="images/images_peisaj.jpg" data-full="images/images_peisaj.jpg" class="zoom">
-          <img src="images/images_peisaj.jpg" alt="Decor Peisaj" loading="lazy">
-        </a>
-        <h3>Decor „Peisaj”</h3>
-        <p>Piesă decorativă atent lucrată, unică.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
-  </footer>
-
-  <!-- Lightbox (poza mare) -->
-  <div id="lightbox" class="lightbox" aria-hidden="true">
-    <button class="lb-close" aria-label="Închide">×</button>
-    <img id="lb-img" alt="">
   </div>
+</header>
 
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+<main class="container">
+  <h1 class="page-title">Produsele noastre</h1>
 
-    // lightbox
-    const box = document.getElementById('lightbox');
-    const img = document.getElementById('lb-img');
+  <div class="grid">
+    <article class="card">
+      <a href="images/images_dans.jpg" class="zoom">
+        <img src="images/images_dans.jpg" alt="Lumânare Dans">
+      </a>
+      <h3>Lumânare „Dans”</h3>
+      <p>Realizată manual din ceară de soia. Ardere curată.</p>
+      <p class="price">Preț: 35 RON</p>
+    </article>
 
-    document.querySelectorAll('a.zoom').forEach(a => {
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        const src = a.getAttribute('data-full') || a.getAttribute('href');
-        img.src = src;
-        box.classList.add('open');
-        box.setAttribute('aria-hidden', 'false');
-      });
+    <article class="card">
+      <a href="images/images_cuplu.jpg" class="zoom">
+        <img src="images/images_cuplu.jpg" alt="Lumânare Cuplu">
+      </a>
+      <h3>Lumânare „Cuplu”</h3>
+      <p>Simbol al iubirii, turnată manual.</p>
+      <p class="price">Preț: 35 RON</p>
+    </article>
+
+    <article class="card">
+      <a href="images/images_inger.jpg" class="zoom">
+        <img src="images/images_inger.jpg" alt="Lumânare Înger">
+      </a>
+      <h3>Lumânare „Înger”</h3>
+      <p>Delicată și elegantă, ideală cadou.</p>
+      <p class="price">Preț: 35 RON</p>
+    </article>
+
+    <article class="card">
+      <a href="images/images_buchet.jpg" class="zoom">
+        <img src="images/images_buchet.jpg" alt="Decor Buchet">
+      </a>
+      <h3>Decor „Buchet”</h3>
+      <p>Compoziție florală decorativă.</p>
+      <p class="price">Preț: 35 RON</p>
+    </article>
+
+    <article class="card">
+      <a href="images/images_flori.jpg" class="zoom">
+        <img src="images/images_flori.jpg" alt="Decor Flori">
+      </a>
+      <h3>Decor „Flori”</h3>
+      <p>Detalii fine și culori vii.</p>
+      <p class="price">Preț: 35 RON</p>
+    </article>
+
+    <article class="card">
+      <a href="images/images_peisaj.jpg" class="zoom">
+        <img src="images/images_peisaj.jpg" alt="Decor Peisaj">
+      </a>
+      <h3>Decor „Peisaj”</h3>
+      <p>Piesă pictată manual, unică.</p>
+      <p class="price">Preț: 109 RON</p>
+    </article>
+  </div>
+</main>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" aria-hidden="true">
+  <button class="lb-close" aria-label="Închide">×</button>
+  <img id="lb-img" alt="">
+</div>
+
+<footer class="site-footer">
+  © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
+</footer>
+
+<script>
+  document.getElementById('y').textContent=new Date().getFullYear();
+
+  const box=document.getElementById('lightbox');
+  const big=document.getElementById('lb-img');
+  document.querySelectorAll('a.zoom').forEach(a=>{
+    a.addEventListener('click',e=>{
+      e.preventDefault(); big.src=a.href; box.classList.add('open'); box.setAttribute('aria-hidden','false');
     });
-
-    document.querySelector('.lb-close').addEventListener('click', () => {
-      box.classList.remove('open');
-      box.setAttribute('aria-hidden', 'true');
-      img.removeAttribute('src');
-    });
-
-    box.addEventListener('click', (e) => {
-      if (e.target === box) {
-        box.classList.remove('open');
-        box.setAttribute('aria-hidden', 'true');
-        img.removeAttribute('src');
-      }
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        box.classList.remove('open');
-        box.setAttribute('aria-hidden', 'true');
-        img.removeAttribute('src');
-      }
-    });
-  </script>
+  });
+  document.querySelector('.lb-close').addEventListener('click',()=>{ box.classList.remove('open'); box.setAttribute('aria-hidden','true'); big.removeAttribute('src'); });
+  box.addEventListener('click',e=>{ if(e.target===box){ box.classList.remove('open'); box.setAttribute('aria-hidden','true'); big.removeAttribute('src'); }});
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ box.classList.remove('open'); box.setAttribute('aria-hidden','true'); big.removeAttribute('src'); }});
+</script>
 </body>
 </html>
