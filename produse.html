@@ -1,73 +1,137 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Produse — M.S.A Handmade Decor</title>
-  <meta name="description" content="Lumânări din soia și obiecte din ipsos făcute manual.">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=3" />
-  <link rel="icon" href="logo.png" />
+  <title>Produse — MSA Handmade Decor</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <div class="brand">
-        <a class="logo" href="index.html"><img src="logo.png" alt="M.S.A Handmade Decor"></a>
-      </div>
-      <nav class="nav">
-        <a href="index.html">Acasă</a>
-        <a class="active" href="produse.html">Produse</a>
-        <a href="contact.html">Contact</a>
-      </nav>
-    </header>
+  <header class="site-header">
+    <a href="index.html" class="brand">
+      <img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" />
+    </a>
+    <nav class="nav">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html" class="active">Produse</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
 
+  <main class="container">
     <h1 class="page-title">Produsele noastre</h1>
 
-    <section class="products">
-      <article class="product">
-        <a class="thumb" href="images/images_dans.jpg" data-lb>
-          <img src="images/images_dans.jpg?v=2" alt="Lumânare Dans" loading="lazy">
+    <div class="grid">
+      <!-- 1 -->
+      <article class="product card">
+        <a href="images/images_dans.jpg" data-full="images/images_dans.jpg" class="zoom">
+          <img src="images/images_dans.jpg" alt="Lumânare Dans" loading="lazy">
         </a>
-        <h2 class="title">Lumânare „Dans”</h2>
+        <h3>Lumânare „Dans”</h3>
         <p>Realizată manual din ceară de soia. Ardere curată, fără fum.</p>
         <p class="price">Preț: 35 RON</p>
       </article>
 
-      <article class="product">
-        <a class="thumb" href="images/images_cuplu.jpg" data-lb>
-          <img src="images/images_cuplu.jpg?v=2" alt="Lumânare Cuplu" loading="lazy">
+      <!-- 2 -->
+      <article class="product card">
+        <a href="images/images_cuplu.jpg" data-full="images/images_cuplu.jpg" class="zoom">
+          <img src="images/images_cuplu.jpg" alt="Lumânare Cuplu" loading="lazy">
         </a>
-        <h2 class="title">Lumânare „Cuplu”</h2>
+        <h3>Lumânare „Cuplu”</h3>
         <p>Simbol al iubirii, turnată manual în matriță.</p>
         <p class="price">Preț: 35 RON</p>
       </article>
 
-      <article class="product">
-        <a class="thumb" href="images/images_inger.jpg" data-lb>
-          <img src="images/images_inger.jpg?v=2" alt="Lumânare Înger" loading="lazy">
+      <!-- 3 -->
+      <article class="product card">
+        <a href="images/images_inger.jpg" data-full="images/images_inger.jpg" class="zoom">
+          <img src="images/images_inger.jpg" alt="Lumânare Înger" loading="lazy">
         </a>
-        <h2 class="title">Lumânare „Înger”</h2>
+        <h3>Lumânare „Înger”</h3>
         <p>Delicată și elegantă, ideală pentru cadouri.</p>
         <p class="price">Preț: 35 RON</p>
       </article>
-    </section>
 
-    <div class="lb-backdrop" id="lb"><img alt=""></div>
+      <!-- 4 -->
+      <article class="product card">
+        <a href="images/images_buchet.jpg" data-full="images/images_buchet.jpg" class="zoom">
+          <img src="images/images_buchet.jpg" alt="Decor Buchet" loading="lazy">
+        </a>
+        <h3>Decor „Buchet”</h3>
+        <p>Compoziție florală decorativă realizată manual.</p>
+        <p class="price">Preț: 35 RON</p>
+      </article>
 
-    <footer class="footer">© <span id="y"></span> M.S.A Handmade Decor</footer>
+      <!-- 5 -->
+      <article class="product card">
+        <a href="images/images_flori.jpg" data-full="images/images_flori.jpg" class="zoom">
+          <img src="images/images_flori.jpg" alt="Decor Flori" loading="lazy">
+        </a>
+        <h3>Decor „Flori”</h3>
+        <p>Detalii fine și culori pline de farmec.</p>
+        <p class="price">Preț: 35 RON</p>
+      </article>
+
+      <!-- 6 -->
+      <article class="product card">
+        <a href="images/images_peisaj.jpg" data-full="images/images_peisaj.jpg" class="zoom">
+          <img src="images/images_peisaj.jpg" alt="Decor Peisaj" loading="lazy">
+        </a>
+        <h3>Decor „Peisaj”</h3>
+        <p>Piesă decorativă atent lucrată, unică.</p>
+        <p class="price">Preț: 35 RON</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
+  </footer>
+
+  <!-- Lightbox (poza mare) -->
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <button class="lb-close" aria-label="Închide">×</button>
+    <img id="lb-img" alt="">
   </div>
 
   <script>
-    const lb=document.getElementById('lb'), img=lb.querySelector('img');
-    document.querySelectorAll('[data-lb]').forEach(a=>{
-      a.addEventListener('click', e=>{
-        e.preventDefault(); img.src=a.href; lb.classList.add('open');
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // lightbox
+    const box = document.getElementById('lightbox');
+    const img = document.getElementById('lb-img');
+
+    document.querySelectorAll('a.zoom').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const src = a.getAttribute('data-full') || a.getAttribute('href');
+        img.src = src;
+        box.classList.add('open');
+        box.setAttribute('aria-hidden', 'false');
       });
     });
-    lb.addEventListener('click', ()=> lb.classList.remove('open'));
-    document.getElementById('y').textContent=new Date().getFullYear();
+
+    document.querySelector('.lb-close').addEventListener('click', () => {
+      box.classList.remove('open');
+      box.setAttribute('aria-hidden', 'true');
+      img.removeAttribute('src');
+    });
+
+    box.addEventListener('click', (e) => {
+      if (e.target === box) {
+        box.classList.remove('open');
+        box.setAttribute('aria-hidden', 'true');
+        img.removeAttribute('src');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        box.classList.remove('open');
+        box.setAttribute('aria-hidden', 'true');
+        img.removeAttribute('src');
+      }
+    });
   </script>
 </body>
 </html>
