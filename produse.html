@@ -1,152 +1,82 @@
-
-
-  <!DOCTYPE html>
+<!doctype html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Produsele noastre - M.S.A Handmade Decor</title>
-  <link rel="stylesheet" href="/styles.css?v=4" />
-  <style>
-    /* layout simplu, în caz că nu ai grid în styles.css */
-    body { font-family: system-ui, Arial, sans-serif; margin:0; }
-    header { display:flex; align-items:center; gap:16px; padding:12px 16px; border-bottom:1px solid #eee; }
-    header img { height:60px; }
-    nav ul { list-style:none; display:flex; gap:12px; margin:0; padding:0; }
-    nav a { text-decoration:none; color:#333; font-weight:600; }
-    main { padding:20px 16px 60px; max-width:1100px; margin:0 auto; }
-    h1 { margin:6px 0 20px; }
-    .product-grid {
-      display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .product-card {
-      border:1px solid #eee; border-radius:12px; padding:14px; background:#fff;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-    }
-    .product-card img {
-      width:100%; height:auto; border-radius:10px; cursor:pointer;
-      border:1px solid #ddd; transition: transform .18s ease, box-shadow .18s ease;
-    }
-    .product-card img:hover { transform: scale(1.02); box-shadow:0 8px 20px rgba(0,0,0,0.12); }
-    .product-card h3 { margin:10px 0 8px; }
-    .product-card p { margin:6px 0; }
-    footer { text-align:center; padding:20px; border-top:1px solid #eee; color:#666; }
-
-    /* Lightbox (fără JS, cu ancora #id) */
-    .lightbox {
-      display:none; position:fixed; inset:0; z-index:9999;
-      background: rgba(0,0,0,0.9); justify-content:center; align-items:center; padding:24px;
-    }
-    .lightbox:target { display:flex; }
-    .lightbox img {
-      max-width: min(95vw, 1200px);
-      max-height: 85vh;
-      width:auto; height:auto;
-      border-radius: 12px; box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-      background:#fff;
-    }
-    .lightbox-close {
-      position:absolute; top:18px; right:22px;
-      color:#fff; text-decoration:none; font-size:32px; line-height:1; font-weight:700;
-      background: transparent; border:0; cursor:pointer;
-    }
-  </style>
+  <title>Produse — M.S.A Handmade Decor</title>
+  <meta name="description" content="Lumânări din soia și obiecte din ipsos făcute manual.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="logo.png" />
 </head>
 <body>
-  <header>
-    <!-- Logo cu fallback: caută mai întâi /logo.png; dacă nu există, folosește /images/logo.png -->
-    <a href="/index.html" aria-label="Acasă">
-      <img src="/logo.png?v=4" alt="M.S.A Handmade Decor"
-           onerror="this.onerror=null; this.src='/images/logo.png?v=4';" />
-    </a>
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <a class="logo" href="index.html"><img src="logo.png" alt="M.S.A Handmade Decor"></a>
+        <h1 class="site-title">M.S.A Handmade Decor</h1>
+      </div>
+      <nav class="nav">
+        <a href="index.html">Acasă</a>
+        <a class="active" href="produse.html">Produse</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </header>
 
-    <nav>
-      <ul>
-        <li><a href="/index.html">Acasă</a></li>
-        <li><a href="/produse.html" class="active">Produse</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+    <h1 class="page-title">Produsele noastre</h1>
 
-  <main>
-    <h1>Produsele noastre</h1>
-
-    <div class="product-grid">
-
-      <!-- Produs 1 - Dans -->
-      <div class="product-card">
-        <a href="#img-dans"><img src="/images/images_dans.jpg?v=4" alt="Lumânare „Dans” - ceară de soia"></a>
-        <h3>Lumânare „Dans”</h3>
+    <section class="products">
+      <!-- Dans -->
+      <article class="product">
+        <a class="thumb" href="images/images_dans.jpg" data-lb>
+          <img src="images/images_dans.jpg" alt="Lumânare Dans" loading="lazy">
+        </a>
+        <h2 class="title">Lumânare „Dans”</h2>
         <p>Realizată manual din ceară de soia. Ardere curată, fără fum.</p>
-        <p><strong>Preț: 35 RON</strong></p>
-      </div>
+        <p class="price">Preț: 35 RON</p>
+      </article>
 
-      <!-- Produs 2 - Cuplu -->
-      <div class="product-card">
-        <a href="#img-cuplu"><img src="/images/images_cuplu.jpg?v=4" alt="Lumânare „Cuplu” - ceară de soia"></a>
-        <h3>Lumânare „Cuplu”</h3>
+      <!-- Cuplu -->
+      <article class="product">
+        <a class="thumb" href="images/images_cuplu.jpg" data-lb>
+          <img src="images/images_cuplu.jpg" alt="Lumânare Cuplu" loading="lazy">
+        </a>
+        <h2 class="title">Lumânare „Cuplu”</h2>
         <p>Simbol al iubirii, turnată manual în matriță.</p>
-        <p><strong>Preț: 35 RON</strong></p>
-      </div>
+        <p class="price">Preț: 35 RON</p>
+      </article>
 
-      <!-- Produs 3 - Înger -->
-      <div class="product-card">
-        <a href="#img-inger"><img src="/images/images_inger.jpg?v=4" alt="Lumânare „Înger” - ceară de soia"></a>
-        <h3>Lumânare „Înger”</h3>
+      <!-- Înger -->
+      <article class="product">
+        <a class="thumb" href="images/images_inger.jpg" data-lb>
+          <img src="images/images_inger.jpg" alt="Lumânare Înger" loading="lazy">
+        </a>
+        <h2 class="title">Lumânare „Înger”</h2>
         <p>Delicată și elegantă, ideală pentru cadouri.</p>
-        <p><strong>Preț: 35 RON</strong></p>
-      </div>
+        <p class="price">Preț: 35 RON</p>
+      </article>
+    </section>
 
-      <!-- Produs 4 - Peisaj -->
-      <div class="product-card">
-        <a href="#img-peisaj"><img src="/images/images_peisaj.jpg?v=4" alt="Tablou „Peisaj” din ipsos pictat"></a>
-        <h3>Tablou „Peisaj”</h3>
-        <p>Decorațiune din ipsos, pictată manual în culori vii.</p>
-        <p><strong>Preț: 109 RON</strong></p>
-      </div>
+    <!-- Lightbox -->
+    <div class="lb-backdrop" id="lb"><img alt=""></div>
 
-      <!-- Produs 5 - Buchet -->
-      <div class="product-card">
-        <a href="#img-buchet"><img src="/images/images_buchet.jpg?v=4" alt="Buchet decorativ din ipsos"></a>
-        <h3>Buchet decorativ</h3>
-        <p>Buchet din ipsos colorat manual, stil elegant.</p>
-        <p><strong>Preț: 29 RON</strong></p>
-      </div>
-
-    </div>
-  </main>
-
-  <!-- Lightbox-uri (câte unul pentru fiecare poză) -->
-  <div id="img-dans" class="lightbox" aria-hidden="true">
-    <a href="#" class="lightbox-close" aria-label="Închide">&times;</a>
-    <img src="/images/images_dans.jpg?v=4" alt="Lumânare „Dans” - mare">
+    <footer class="footer">© <span id="y"></span> M.S.A Handmade Decor</footer>
   </div>
 
-  <div id="img-cuplu" class="lightbox" aria-hidden="true">
-    <a href="#" class="lightbox-close" aria-label="Închide">&times;</a>
-    <img src="/images/images_cuplu.jpg?v=4" alt="Lumânare „Cuplu” - mare">
-  </div>
-
-  <div id="img-inger" class="lightbox" aria-hidden="true">
-    <a href="#" class="lightbox-close" aria-label="Închide">&times;</a>
-    <img src="/images/images_inger.jpg?v=4" alt="Lumânare „Înger” - mare">
-  </div>
-
-  <div id="img-peisaj" class="lightbox" aria-hidden="true">
-    <a href="#" class="lightbox-close" aria-label="Închide">&times;</a>
-    <img src="/images/images_peisaj.jpg?v=4" alt="Tablou „Peisaj” - mare">
-  </div>
-
-  <div id="img-buchet" class="lightbox" aria-hidden="true">
-    <a href="#" class="lightbox-close" aria-label="Închide">&times;</a>
-    <img src="/images/images_buchet.jpg?v=4" alt="Buchet decorativ - mare">
-  </div>
-
-  <footer>
-    <p>&copy; 2025 M.S.A Handmade Decor. Toate drepturile rezervate.</p>
-  </footer>
+  <script>
+    // lightbox simplu
+    const lb = document.getElementById('lb');
+    const lbImg = lb.querySelector('img');
+    document.querySelectorAll('[data-lb]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        lbImg.src = a.getAttribute('href');
+        lb.classList.add('open');
+      });
+    });
+    lb.addEventListener('click', ()=> lb.classList.remove('open'));
+    document.getElementById('y').textContent=new Date().getFullYear();
+  </script>
 </body>
 </html>
