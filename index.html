@@ -1,37 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>M.S.A Handmade Decor – acasă</title>
-  <meta name="description" content="Lumânări din ceară de soia și obiecte decorative din ipsos, făcute manual în România." />
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=2" />
-  <link rel="icon" href="logo.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M.S.A Handmade Decor</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <div class="brand">
-        <a class="logo" href="index.html"><img src="logo.png" alt="M.S.A Handmade Decor"></a>
-        <!-- eliminat titlul care apărea sub logo -->
-      </div>
-      <nav class="nav">
-        <a class="active" href="index.html">Acasă</a>
-        <a href="produse.html">Produse</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="M.S.A Handmade Decor" class="logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Acasă</a></li>
+                <li><a href="produse.html">Produse</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <section class="hero card">
-      <h1>Bun venit la <strong>M.S.A Handmade Decor</strong></h1>
-      <p>Realizăm lumânări din ceară de soia și obiecte decorative din ipsos — cadouri pline de farmec pentru orice ocazie.</p>
-      <a class="cta" href="produse.html">Vezi produsele noastre →</a>
-    </section>
+    <main>
+        <section class="intro">
+            <h1>Bun venit la <span class="highlight">M.S.A Handmade Decor</span></h1>
+            <p>
+                Realizăm lumânări din ceară de soia și obiecte decorative din ipsos —
+                cadouri pline de farmec pentru orice ocazie.
+            </p>
+            <a href="produse.html" class="btn">Vezi produsele noastre →</a>
+        </section>
+    </main>
 
-    <footer class="footer">© <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.</footer>
-  </div>
-  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+    <footer>
+        <p>© 2025 M.S.A Handmade Decor — Toate drepturile rezervate.</p>
+    </footer>
 </body>
 </html>
