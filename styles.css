@@ -1,137 +1,137 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Produse — MSA Handmade Decor</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header class="site-header">
-    <a href="index.html" class="brand">
-      <img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" />
-    </a>
-    <nav class="nav">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html" class="active">Produse</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
+:root{
+  --bg: #fff9f5;
+  --card: #ffffff;
+  --text: #222;
+  --muted:#5b6472;
+  --brand:#6b5bff;
+  --brand-2:#8c79ff;
+  --glow: 0 10px 30px rgba(107,91,255,.25);
+  --radius: 18px;
+}
 
-  <main class="container">
-    <h1 class="page-title">Produsele noastre</h1>
+/* Reset scurt */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+img{max-width:100%;display:block}
 
-    <div class="grid">
-      <!-- 1 -->
-      <article class="product card">
-        <a href="images/images_dans.jpg" data-full="images/images_dans.jpg" class="zoom">
-          <img src="images/images_dans.jpg" alt="Lumânare Dans" loading="lazy">
-        </a>
-        <h3>Lumânare „Dans”</h3>
-        <p>Realizată manual din ceară de soia. Ardere curată, fără fum.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
+/* Layout */
+body{
+  font-family: ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol";
+  background: radial-gradient(1200px 600px at 50% -200px, #ffe2d8 0, transparent 60%),
+              radial-gradient(1000px 600px at 110% 120%, #e7ffef 0, transparent 60%),
+              var(--bg);
+  color:var(--text);
+  line-height:1.6;
+}
 
-      <!-- 2 -->
-      <article class="product card">
-        <a href="images/images_cuplu.jpg" data-full="images/images_cuplu.jpg" class="zoom">
-          <img src="images/images_cuplu.jpg" alt="Lumânare Cuplu" loading="lazy">
-        </a>
-        <h3>Lumânare „Cuplu”</h3>
-        <p>Simbol al iubirii, turnată manual în matriță.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
+.container{width:min(1100px, 92%);margin:0 auto}
 
-      <!-- 3 -->
-      <article class="product card">
-        <a href="images/images_inger.jpg" data-full="images/images_inger.jpg" class="zoom">
-          <img src="images/images_inger.jpg" alt="Lumânare Înger" loading="lazy">
-        </a>
-        <h3>Lumânare „Înger”</h3>
-        <p>Delicată și elegantă, ideală pentru cadouri.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
+/* Header + nav */
+.site-header{
+  position:sticky;top:0;z-index:10;
+  background: rgba(255,255,255,.8);
+  backdrop-filter: blur(8px);
+  border-bottom:1px solid #f0ecea;
+}
+.brand{
+  display:flex;align-items:center;gap:.75rem;
+  padding:.6rem 1rem 0.3rem 1rem;
+  justify-content:center;
+}
+.brand-logo{
+  width:84px;height:84px;border-radius:50%;
+  box-shadow:var(--glow);
+  object-fit:cover;
+}
+.nav{
+  display:flex;gap:1rem;justify-content:center;
+  padding:0 .5rem 1rem;
+}
+.nav a{
+  color:var(--muted);text-decoration:none;font-weight:600;
+  padding:.55rem .9rem;border-radius:999px;
+}
+.nav a.active, .nav a:hover{
+  color:white;background:linear-gradient(90deg,var(--brand),var(--brand-2));
+  box-shadow:var(--glow);
+}
 
-      <!-- 4 -->
-      <article class="product card">
-        <a href="images/images_buchet.jpg" data-full="images/images_buchet.jpg" class="zoom">
-          <img src="images/images_buchet.jpg" alt="Decor Buchet" loading="lazy">
-        </a>
-        <h3>Decor „Buchet”</h3>
-        <p>Compoziție florală decorativă realizată manual.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
+/* Hero */
+.hero{
+  text-align:center;
+  padding:2.2rem 1rem 1rem;
+}
+.hero-logo{
+  width:150px;height:150px;margin:0 auto 1rem; border-radius:50%;
+  box-shadow:var(--glow);object-fit:cover;
+}
+.hero h1{
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  margin:.3rem 0 .2rem;
+}
+.subtitle{color:var(--muted);margin:.2rem 0 1.2rem}
 
-      <!-- 5 -->
-      <article class="product card">
-        <a href="images/images_flori.jpg" data-full="images/images_flori.jpg" class="zoom">
-          <img src="images/images_flori.jpg" alt="Decor Flori" loading="lazy">
-        </a>
-        <h3>Decor „Flori”</h3>
-        <p>Detalii fine și culori pline de farmec.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
+/* Card / buton */
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow: 0 10px 30px rgba(0,0,0,.04);
+  padding:1.25rem;
+}
+.intro{width:min(900px, 92%);margin:1rem auto 2rem}
+.btn{
+  display:inline-block;
+  background:linear-gradient(90deg,var(--brand),var(--brand-2));
+  color:#fff;text-decoration:none;font-weight:700;
+  padding:.9rem 1.2rem;border-radius:14px;box-shadow:var(--glow)
+}
 
-      <!-- 6 -->
-      <article class="product card">
-        <a href="images/images_peisaj.jpg" data-full="images/images_peisaj.jpg" class="zoom">
-          <img src="images/images_peisaj.jpg" alt="Decor Peisaj" loading="lazy">
-        </a>
-        <h3>Decor „Peisaj”</h3>
-        <p>Piesă decorativă atent lucrată, unică.</p>
-        <p class="price">Preț: 35 RON</p>
-      </article>
-    </div>
-  </main>
+/* Titluri pagină */
+.page-title{
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  margin:1.2rem 0 .7rem;
+}
 
-  <footer class="site-footer">
-    © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
-  </footer>
+/* Grid produse */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap:1rem;
+  margin:1rem 0 2rem;
+}
+.product img{
+  width:100%;height:220px;object-fit:cover;border-radius:12px;
+}
+.product h3{margin:.7rem 0 .2rem}
+.price{font-weight:700}
 
-  <!-- Lightbox (poza mare) -->
-  <div id="lightbox" class="lightbox" aria-hidden="true">
-    <button class="lb-close" aria-label="Închide">×</button>
-    <img id="lb-img" alt="">
-  </div>
+/* Lightbox */
+.lightbox{
+  position:fixed;inset:0;background:rgba(0,0,0,.72);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:.2s;
+  padding:1rem;z-index:9999;
+}
+.lightbox.open{opacity:1;pointer-events:auto}
+.lightbox img{max-width:96vw;max-height:90vh;border-radius:12px}
+.lb-close{
+  position:absolute;top:16px;right:16px;
+  font-size:32px;background:#fff;border:0;border-radius:999px;
+  width:44px;height:44px;cursor:pointer;line-height:1;
+  box-shadow:var(--glow)
+}
 
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+/* Contact */
+.contact-cards{display:grid;gap:.6rem;margin:1rem 0 2rem}
+.citem{
+  display:block;text-decoration:none;color:var(--text);
+  background:#fff;border:1px solid #eee;border-radius:12px;
+  padding:.9rem 1rem
+}
+.citem:hover{box-shadow:var(--glow)}
 
-    // lightbox
-    const box = document.getElementById('lightbox');
-    const img = document.getElementById('lb-img');
-
-    document.querySelectorAll('a.zoom').forEach(a => {
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        const src = a.getAttribute('data-full') || a.getAttribute('href');
-        img.src = src;
-        box.classList.add('open');
-        box.setAttribute('aria-hidden', 'false');
-      });
-    });
-
-    document.querySelector('.lb-close').addEventListener('click', () => {
-      box.classList.remove('open');
-      box.setAttribute('aria-hidden', 'true');
-      img.removeAttribute('src');
-    });
-
-    box.addEventListener('click', (e) => {
-      if (e.target === box) {
-        box.classList.remove('open');
-        box.setAttribute('aria-hidden', 'true');
-        img.removeAttribute('src');
-      }
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        box.classList.remove('open');
-        box.setAttribute('aria-hidden', 'true');
-        img.removeAttribute('src');
-      }
-    });
-  </script>
-</body>
-</html>
+/* Footer */
+.site-footer{
+  text-align:center;color:var(--muted);
+  padding:2rem 1rem 2.4rem;
+}
