@@ -2,47 +2,34 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>M.S.A Handmade Decor — Acasă</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M.S.A Handmade Decor</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<header class="site-header">
-  <div class="container" style="display:flex;align-items:center;">
-    <div class="brand">
-      <img src="logo.png" alt="M.S.A Handmade Decor">
-      <strong>M.S.A Handmade Decor</strong>
-    </div>
+  <header class="site-header">
+    <a href="index.html" class="brand">
+      <img src="logo.png" alt="M.S.A Handmade Decor" class="brand-logo">
+    </a>
     <nav class="nav">
-      <a href="index.html" class="active">Acasă</a>
+      <a href="index.html">Acasă</a>
       <a href="produse.html">Produse</a>
       <a href="contact.html">Contact</a>
     </nav>
-  </div>
-</header>
+  </header>
 
-<main class="container">
-  <section class="hero">
-    <img src="logo.png" alt="Logo M.S.A Handmade Decor">
-    <div class="cta">
-      <a class="btn" href="produse.html">✨ Vezi Produse</a>
-    </div>
-  </section>
+  <main class="container">
+    <h1>M.S.A Handmade Decor</h1>
+    <p>Lumânări & obiecte decorative handmade din ipsos și ceară de soia</p>
+    <a href="produse.html" class="btn">✨ Vezi Produse</a>
+  </main>
 
-  <section>
-    <h1 class="page-title">Bun venit la M.S.A Handmade Decor</h1>
-    <p style="font-size:1.1rem;line-height:1.6;max-width:850px">
-      Produse unice, realizate manual cu grijă și pasiune. Lumânări din ceară de soia,
-      obiecte decorative din ipsos și cadouri personalizate pentru orice ocazie.
-    </p>
-  </section>
-</main>
+  <footer class="site-footer">
+    <p>© <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.</p>
+  </footer>
 
-<footer class="site-footer">
-  © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
-</footer>
-
-<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
