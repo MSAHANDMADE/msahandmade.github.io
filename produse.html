@@ -7,7 +7,7 @@
   <meta name="description" content="Lumânări din soia și obiecte din ipsos făcute manual.">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2" />
   <link rel="icon" href="logo.png" />
 </head>
 <body>
@@ -15,7 +15,6 @@
     <header class="header">
       <div class="brand">
         <a class="logo" href="index.html"><img src="logo.png" alt="M.S.A Handmade Decor"></a>
-        <h1 class="site-title">M.S.A Handmade Decor</h1>
       </div>
       <nav class="nav">
         <a href="index.html">Acasă</a>
@@ -27,30 +26,27 @@
     <h1 class="page-title">Produsele noastre</h1>
 
     <section class="products">
-      <!-- Dans -->
       <article class="product">
         <a class="thumb" href="images/images_dans.jpg" data-lb>
-          <img src="images/images_dans.jpg" alt="Lumânare Dans" loading="lazy">
+          <img src="images/images_dans.jpg?v=2" alt="Lumânare Dans" loading="lazy">
         </a>
         <h2 class="title">Lumânare „Dans”</h2>
         <p>Realizată manual din ceară de soia. Ardere curată, fără fum.</p>
         <p class="price">Preț: 35 RON</p>
       </article>
 
-      <!-- Cuplu -->
       <article class="product">
         <a class="thumb" href="images/images_cuplu.jpg" data-lb>
-          <img src="images/images_cuplu.jpg" alt="Lumânare Cuplu" loading="lazy">
+          <img src="images/images_cuplu.jpg?v=2" alt="Lumânare Cuplu" loading="lazy">
         </a>
         <h2 class="title">Lumânare „Cuplu”</h2>
         <p>Simbol al iubirii, turnată manual în matriță.</p>
         <p class="price">Preț: 35 RON</p>
       </article>
 
-      <!-- Înger -->
       <article class="product">
         <a class="thumb" href="images/images_inger.jpg" data-lb>
-          <img src="images/images_inger.jpg" alt="Lumânare Înger" loading="lazy">
+          <img src="images/images_inger.jpg?v=2" alt="Lumânare Înger" loading="lazy">
         </a>
         <h2 class="title">Lumânare „Înger”</h2>
         <p>Delicată și elegantă, ideală pentru cadouri.</p>
@@ -58,21 +54,16 @@
       </article>
     </section>
 
-    <!-- Lightbox -->
     <div class="lb-backdrop" id="lb"><img alt=""></div>
 
     <footer class="footer">© <span id="y"></span> M.S.A Handmade Decor</footer>
   </div>
 
   <script>
-    // lightbox simplu
-    const lb = document.getElementById('lb');
-    const lbImg = lb.querySelector('img');
+    const lb=document.getElementById('lb'), img=lb.querySelector('img');
     document.querySelectorAll('[data-lb]').forEach(a=>{
       a.addEventListener('click', e=>{
-        e.preventDefault();
-        lbImg.src = a.getAttribute('href');
-        lb.classList.add('open');
+        e.preventDefault(); img.src=a.href; lb.classList.add('open');
       });
     });
     lb.addEventListener('click', ()=> lb.classList.remove('open'));
