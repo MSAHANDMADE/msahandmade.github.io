@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Contact — MSA Handmade Decor</title>
+  <title>Contact - MSA Handmade Decor</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="site-header">
     <a href="index.html" class="brand">
-      <img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" />
+      <img src="logo.png" alt="MSA Handmade Decor" class="brand-logo">
     </a>
     <nav class="nav">
       <a href="index.html">Acasă</a>
@@ -22,19 +22,26 @@
     <h1 class="page-title">Contact</h1>
 
     <div class="card contact-cards">
-      <a class="citem" href="tel:+40747246241">📞 Telefon: <strong>0747 246 241</strong></a>
-      <a class="citem" href="mailto:msahandmade.contact@gmail.com">✉️ Email: <strong>msahandmade.contact@gmail.com</strong></a>
-      <a class="citem" href="https://www.facebook.com/search/top/?q=MSA%20Handmade%20Decor" target="_blank" rel="noopener">📘 Facebook: <strong>M.S.A HAndmade Decor</strong></a>
-      <a class="citem" href="https://www.instagram.com/explore/tags/msahandmade/" target="_blank" rel="noopener">📷 Instagram: <strong>@msahandmadedecor</strong></a>
+      <p>📞 Telefon: <strong><a href="tel:+40747246241">0747 246 241</a></strong></p>
+      <p>✉️ Email: <strong><a href="mailto:msahandmade.contact@gmail.com">msahandmade.contact@gmail.com</a></strong></p>
+
+      <div class="social-links" style="margin-top:20px;">
+        <a href="https://www.facebook.com/profile.php?id=61581609329255" target="_blank">
+          <img src="images/facebook.svg" alt="Facebook" width="40" style="margin: 0 10px;">
+        </a>
+        <a href="https://www.instagram.com/msahandmade.decor/" target="_blank">
+          <img src="images/instagram.svg" alt="Instagram" width="40" style="margin: 0 10px;">
+        </a>
+      </div>
     </div>
   </main>
 
   <footer class="site-footer">
-    © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
+    <p>© <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.</p>
   </footer>
 
   <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+    document.getElementById("y").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
