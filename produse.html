@@ -2,169 +2,114 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Produse — M.S.A Handmade Decor</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produse – MSA Handmade Decor</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* mici completări vizuale (nu ating stilurile tale existente) */
+    .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .product-card{background:#fff;border-radius:12px;box-shadow:0 12px 28px rgba(0,0,0,.06);padding:14px;overflow:hidden}
+    .product-card img{width:100%;height:240px;object-fit:cover;border-radius:12px;display:block}
+    .price{font-weight:700;margin:.25rem 0 1rem}
+    .add-btn{display:inline-block;padding:10px 16px;border-radius:10px;background:#6f52ff;color:#fff;border:none;cursor:pointer}
+    .add-btn.added{background:#22a06b} /* verde scurt după click */
+    .handmade-note{color:#6b7280;font-size:14px;margin:.5rem 0 0}
+    /* lightbox simplu */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:1000}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:min(92vw,1100px);max-height:88vh;border-radius:12px}
+    .lightbox button{position:absolute;top:14px;right:14px;background:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer}
+  </style>
 </head>
 <body>
-<header class="site-header">
-  <a class="brand" href="index.html"><img src="logo.png" alt="M.S.A Handmade Decor" class="brand-logo"/></a>
-  <nav class="nav-links">
-    <a href="index.html">Acasă</a>
-    <a href="produse.html" class="active">Produse</a>
-    <a href="contact.html">Contact</a>
-    <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
-  </nav>
-</header>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" /></a>
+    <nav class="nav-links">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html" class="active">Produse</a>
+      <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
+    </nav>
+  </header>
 
-<main class="container">
-  <h1 class="page-title">Produsele noastre</h1>
-  <p class="muted" style="margin-top:-10px;margin-bottom:18px">
-    Fiind produse handmade, pot exista mici variații de culoare, textură, finisaj și intensitate a aromei. 💛
-  </p>
+  <main class="container">
+    <h1 class="page-title">Produsele Noastre</h1>
+    <div id="grid" class="products-grid"></div>
+  </main>
 
-  <section class="grid-products">
-    <!-- 1. Buchet 29 -->
-    <div class="product-card">
-      <a class="photo" href="images/images_buchet.jpg" target="_blank" rel="noopener">
-        <img loading="lazy" src="images/images_buchet.jpg" alt="Lumânare Buchet" />
-      </a>
-      <h3>Lumânare „Buchet”</h3>
-      <p class="desc">Inspirată din natură, turnată manual.</p>
-      <p class="disclaimer">Produs handmade: pot apărea variații de culoare, textură, finisaj și intensitate a aromei.</p>
-      <p class="price"><strong>29 RON</strong></p>
-      <button class="add-to-cart"
-        onclick="addToCart({id:1, name:'Buchet', price:29}, this)">Adaugă în coș</button>
-    </div>
+  <footer class="site-footer">
+    <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
+  </footer>
 
-    <!-- 2. Dans 33 -->
-    <div class="product-card">
-      <a class="photo" href="images/images_dans.jpg" target="_blank" rel="noopener">
-        <img loading="lazy" src="images/images_dans.jpg" alt="Lumânare Dans" />
-      </a>
-      <h3>Dans</h3>
-      <p class="desc">Un design elegant, potrivit pentru decoruri romantice.</p>
-      <p class="disclaimer">Produs handmade: pot apărea variații de culoare, textură, finisaj și intensitate a aromei.</p>
-      <p class="price"><strong>33 RON</strong></p>
-      <button class="add-to-cart"
-        onclick="addToCart({id:2, name:'Dans', price:33}, this)">Adaugă în coș</button>
-    </div>
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <img id="lightbox-img" src="" alt="" />
+    <button type="button" onclick="closeLightbox(event)">Închide ✕</button>
+  </div>
 
-    <!-- 3. Înger 33 -->
-    <div class="product-card">
-      <a class="photo" href="images/images_inger.jpg" target="_blank" rel="noopener">
-        <img loading="lazy" src="images/images_inger.jpg" alt="Lumânare Înger" />
-      </a>
-      <h3>Înger</h3>
-      <p class="desc">Delicatețea luminii într-un simbol al protecției.</p>
-      <p class="disclaimer">Produs handmade: pot apărea variații de culoare, textură, finisaj și intensitate a aromei.</p>
-      <p class="price"><strong>33 RON</strong></p>
-      <button class="add-to-cart"
-        onclick="addToCart({id:3, name:'Înger', price:33}, this)">Adaugă în coș</button>
-    </div>
+  <script src="cart.js"></script>
+  <script>
+    // anul din footer
+    document.getElementById('y').textContent = new Date().getFullYear();
 
-    <!-- 4. Peisaj 99 -->
-    <div class="product-card">
-      <a class="photo" href="images/images_peisaj.jpg" target="_blank" rel="noopener">
-        <img loading="lazy" src="images/images_peisaj.jpg" alt="Lumânare Peisaj" />
-      </a>
-      <h3>Peisaj</h3>
-      <p class="desc">Lumânare artistică ce redă frumusețea naturii.</p>
-      <p class="disclaimer">Produs handmade: pot apărea variații de culoare, textură, finisaj și intensitate a aromei.</p>
-      <p class="price"><strong>99 RON</strong></p>
-      <button class="add-to-cart"
-        onclick="addToCart({id:4, name:'Peisaj', price:99}, this)">Adaugă în coș</button>
-    </div>
+    // Catalog – numele fișierelor sunt EXACT ca în folderul tău /images
+    const produse = [
+      {id:1,  name:'Buchet',       price:29, img:'images/images_buchet.jpg',       alt:'Lumânare Buchet'},
+      {id:2,  name:'Dans',         price:33, img:'images/images.dans.jpg',         alt:'Lumânare Dans'},
+      {id:3,  name:'Înger',        price:33, img:'images/images.inger.jpg',        alt:'Lumânare Înger'},
+      {id:4,  name:'Peisaj',       price:99, img:'images/images_peisaj.jpg',       alt:'Lumânare Peisaj'},
+      {id:5,  name:'Peisaj iarnă', price:99, img:'images/images.peisajiarna.jpg',  alt:'Lumânare Peisaj iarnă'},
+      {id:6,  name:'Flori',        price:33, img:'images/images_flori.jpg',        alt:'Lumânare Flori'},
+      {id:7,  name:'Crin',         price:33, img:'images/images.crin.jpg',         alt:'Lumânare Crin'},
+      {id:8,  name:'Sărut',        price:33, img:'images/images.sarut.jpg',        alt:'Lumânare Sărut'},
+      {id:9,  name:'Logodnă',      price:33, img:'images/images.logodna.jpg',      alt:'Lumânare Logodnă'},
+      {id:10, name:'Îndrăgostiți', price:99, img:'images/images.indragostiti.jpg', alt:'Lumânare Îndrăgostiți'},
+    ];
 
-    <!-- 5. Peisaj de iarnă 99 -->
-    <div class="product-card">
-      <a class="photo" href="images/images_peisajiarna.jpg" target="_blank" rel="noopener">
-        <img loading="lazy" src="images/images_peisajiarna.jpg" alt="Lumânare Peisaj de iarnă" />
-      </a>
-      <h3>Peisaj de iarnă</h3>
-      <p class="desc">Atmosferă de sărbătoare și liniște.</p>
-      <p class="disclaimer">Produs handmade: pot apărea variații de culoare, textură, finisaj și intensitate a aromei.</p>
-      <p class="price"><strong>99 RON</strong></p>
-      <button class="add-to-cart"
-        onclick="addToCart({id:5, name:'Peisaj de iarnă', price:99}, this)">Adaugă în coș</button>
-    </div>
+    // text mențiune handmade (același la toate)
+    const notaHandmade = 'Fiind produse handmade, pot apărea mici variații de culoare, textură sau formă.';
 
-    <!-- 6. Flori 33 -->
-    <div class="product-card">
-      <a class="photo" href="images/images_flori.jpg" target="_blank" rel="noopener">
-        <img loading="lazy" src="images/images_flori.jpg" alt="Lumânare Flori" />
-      </a>
-      <h3>Flori</h3>
-      <p class="desc">Un buchet de culoare și lumină.</p>
-      <p class="disclaimer">Produs handmade: pot apărea variații de culoare, textură, finisaj și intensitate a aromei.</p>
-      <p class="price"><strong>33 RON</strong></p>
-      <button class="add-to-cart"
-        onclick="addToCart({id:6, name:'Flori', price:33}, this)">Adaugă în coș</button>
-    </div>
+    // Render produse
+    const grid = document.getElementById('grid');
+    grid.innerHTML = produse.map(p => `
+      <div class="product-card">
+        <a href="${p.img}" onclick="return openLightbox('${p.img}','${p.alt}')">
+          <img loading="lazy" src="${p.img}" alt="${p.alt}">
+        </a>
+        <h3>${p.name}</h3>
+        <p class="price">Preț: <strong>${p.price} RON</strong></p>
+        <button class="add-btn" onclick="addItem(${p.id})">Adaugă în coș</button>
+        <p class="handmade-note">${notaHandmade}</p>
+      </div>
+    `).join('');
 
-    <!-- 7. Crin 33 -->
-    <div class="product-card">
-      <a class="photo" href="images/images_crin.jpg" target="_blank" rel="noopener">
-        <img loading="lazy" src="images/images_crin.jpg" alt="Lumânare Crin" />
-      </a>
-      <h3>Crin</h3>
-      <p class="desc">Elegantă și rafinament în fiecare detaliu.</p>
-      <p class="disclaimer">Produs handmade: pot apărea variații de culoare, textură, finisaj și intensitate a aromei.</p>
-      <p class="price"><strong>33 RON</strong></p>
-      <button class="add-to-cart"
-        onclick="addToCart({id:7, name:'Crin', price:33}, this)">Adaugă în coș</button>
-    </div>
+    // Add to cart + feedback verde
+    function addItem(id){
+      const item = produse.find(x => x.id === id);
+      if(!item) return;
+      addToCart({ id: item.id, name: item.name, price: item.price });
+      // feedback vizual pe buton
+      const btn = event.currentTarget;
+      btn.classList.add('added');
+      btn.textContent = 'Adăugat ✔';
+      setTimeout(() => { btn.classList.remove('added'); btn.textContent = 'Adaugă în coș'; }, 900);
+    }
 
-    <!-- 8. Sărut 33 -->
-    <div class="product-card">
-      <a class="photo" href="images/images_sarut.jpg" target="_blank" rel="noopener">
-        <img loading="lazy" src="images/images_sarut.jpg" alt="Lumânare Sărut" />
-      </a>
-      <h3>Sărut</h3>
-      <p class="desc">Un cadou romantic ce simbolizează iubirea.</p>
-      <p class="disclaimer">Produs handmade: pot apărea variații de culoare, textură, finisaj și intensitate a aromei.</p>
-      <p class="price"><strong>33 RON</strong></p>
-      <button class="add-to-cart"
-        onclick="addToCart({id:8, name:'Sărut', price:33}, this)">Adaugă în coș</button>
-    </div>
-
-    <!-- 9. Logodnă 33 -->
-    <div class="product-card">
-      <a class="photo" href="images/images_logodna.jpg" target="_blank" rel="noopener">
-        <img loading="lazy" src="images/images_logodna.jpg" alt="Lumânare Logodnă" />
-      </a>
-      <h3>Logodnă</h3>
-      <p class="desc">Perfectă pentru un eveniment special.</p>
-      <p class="disclaimer">Produs handmade: pot apărea variații de culoare, textură, finisaj și intensitate a aromei.</p>
-      <p class="price"><strong>33 RON</strong></p>
-      <button class="add-to-cart"
-        onclick="addToCart({id:9, name:'Logodnă', price:33}, this)">Adaugă în coș</button>
-    </div>
-
-    <!-- 10. Îndrăgostiți 99 -->
-    <div class="product-card">
-      <a class="photo" href="images/images_indragostiti.jpg" target="_blank" rel="noopener">
-        <img loading="lazy" src="images/images_indragostiti.jpg" alt="Lumânare Îndrăgostiți" />
-      </a>
-      <h3>Îndrăgostiți</h3>
-      <p class="desc">Romantism în forma cea mai pură.</p>
-      <p class="disclaimer">Produs handmade: pot apărea variații de culoare, textură, finisaj și intensitate a aromei.</p>
-      <p class="price"><strong>99 RON</strong></p>
-      <button class="add-to-cart"
-        onclick="addToCart({id:10, name:'Îndrăgostiți', price:99}, this)">Adaugă în coș</button>
-    </div>
-  </section>
-</main>
-
-<footer class="site-footer">
-  <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
-</footer>
-
-<script src="cart.js" defer></script>
-<script>
-  document.getElementById('y').textContent = new Date().getFullYear();
-  // la încărcare, actualizează contorul
-  document.addEventListener('DOMContentLoaded', () => { try { updateCartCount(); } catch(e){} });
-</script>
+    // Lightbox logic
+    function openLightbox(src, alt){
+      const img = document.getElementById('lightbox-img');
+      img.src = src;
+      img.alt = alt || '';
+      document.getElementById('lightbox').classList.add('open');
+      return false; // prevenim navigarea
+    }
+    function closeLightbox(e){
+      // închidem doar dacă se apasă pe overlay sau pe buton
+      if(e.target.id === 'lightbox' || e.target.tagName === 'BUTTON'){
+        document.getElementById('lightbox').classList.remove('open');
+        document.getElementById('lightbox-img').src = '';
+      }
+    }
+  </script>
 </body>
 </html>
