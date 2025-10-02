@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coș - MSA Handmade Decor</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coș – MSA Handmade Decor</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <header class="site-header">
@@ -19,34 +19,16 @@
 
 <main class="container">
   <h1 class="page-title">Coșul tău</h1>
-  <div id="cart-items"></div>
-  <div id="cart-totals"></div>
 
-  <h2>Date livrare (plata la livrare)</h2>
+  <!-- Lista produse din coș -->
+  <div id="cart-root" class="cart-root"></div>
 
-  <form id="orderForm"
-        action="https://formsubmit.co/msahandmade.contact@gmail.com"
-        method="POST"
-        onsubmit="return prepareAndSubmit(this)"
-        class="order-form">
-
-    <!-- Ascunse pentru FormSubmit -->
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_subject" value="Comandă nouă — msahandmade.ro">
-    <input type="hidden" name="_next" value="https://msahandmade.ro/multumesc.html">
-    <input type="hidden" name="_autoresponse" 
-           value="Mulțumim pentru comandă! Am primit solicitarea ta și te vom contacta pentru detalii de livrare. — M.S.A Handmade Decor">
-
-    <!-- Ascunse pentru date produse -->
-    <input type="hidden" name="produse" id="f_items">
-    <input type="hidden" name="subtotal" id="f_subtotal">
-    <input type="hidden" name="livrare" id="f_livrare">
-    <input type="hidden" name="total" id="f_total">
-
+  <!-- Formular livrare -->
+  <h2 style="margin-top:24px">Date livrare (plata la livrare)</h2>
+  <form class="order-form" onsubmit="return placeOrderViaEmail(this)">
     <div class="radio-group">
-      <label><input type="radio" name="tip" value="Persoană fizică" checked onchange="togglePJ(this)"> Persoană fizică</label>
-      <label><input type="radio" name="tip" value="Persoană juridică" onchange="togglePJ(this)"> Persoană juridică</label>
+      <label><input type="radio" name="tip" value="pf" checked onclick="togglePJ(false)"> Persoană fizică</label>
+      <label><input type="radio" name="tip" value="pj" onclick="togglePJ(true)"> Persoană juridică</label>
     </div>
 
     <div class="form-row">
@@ -59,11 +41,11 @@
     </div>
 
     <div class="form-row">
-      <label>Telefon
-        <input name="telefon" inputmode="tel" required>
+      <label>Email (pentru confirmare)
+        <input name="email" type="email" placeholder="ex: nume@email.com">
       </label>
-      <label>Email
-        <input name="email" type="email" placeholder="exemplu@domeniu.ro" required>
+      <label>Telefon
+        <input name="telefon" required placeholder="07xx xxx xxx">
       </label>
     </div>
 
@@ -78,13 +60,14 @@
 
     <div class="form-row">
       <label>Cod poștal
-        <input name="codpostal" inputmode="numeric">
+        <input name="cod_postal">
       </label>
       <label>Adresă
-        <input name="adresa" required>
+        <input name="adresa" required placeholder="Str., Nr., Bl., Sc., Ap.">
       </label>
     </div>
 
+    <!-- Câmpuri PJ (se arată doar când e bifat PJ) -->
     <div id="pj-fields" style="display:none">
       <div class="form-row">
         <label>Denumire firmă
@@ -96,27 +79,76 @@
       </div>
     </div>
 
-    <label>Mențiuni (opțional)
-      <textarea name="mentiuni" rows="3" placeholder="Culoare/variantă dorită, interval livrare etc."></textarea>
+    <label>Mentiuni (optional)
+      <textarea name="mentiuni" placeholder="Culoare/variantă dorită, interval livrare, etc."></textarea>
     </label>
 
-    <div class="form-row" style="justify-content:flex-start; gap:10px">
-      <button id="submitBtn" type="submit" class="btn-primary">Trimite comanda</button>
-      <button type="button" class="btn-ghost" onclick="clearCart(); renderCart();">Golește coșul</button>
+    <div class="form-row" style="justify-content:flex-start;gap:12px">
+      <button type="submit" class="btn-primary">Trimite comanda</button>
+      <button type="button" class="btn-ghost" onclick="clearCart()">Golește coșul</button>
     </div>
   </form>
-
-  <div id="status" class="status"></div>
 </main>
 
 <footer class="site-footer">
-  <span id="y"></span> © M.S.A Handmade Decor – Toate drepturile rezervate.
+  <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
 </footer>
 
 <script src="cart.js"></script>
 <script>
-  document.getElementById('y').textContent = new Date().getFullYear();
-  renderCart();
+// anul din footer
+document.getElementById('y').textContent = new Date().getFullYear();
+
+// afișare/ascundere câmpuri PJ
+function togglePJ(show){
+  document.getElementById('pj-fields').style.display = show ? '' : 'none';
+}
+
+// Render coș în pagina curentă
+window.renderCart = function renderCart(){
+  const root = document.getElementById('cart-root');
+  const cart = getCart();
+
+  if (!cart.length) {
+    root.innerHTML = '<p>Coșul este gol.</p>';
+    return;
+  }
+
+  const rows = cart.map(p => `
+    <div class="cart-row">
+      <div class="cart-info">
+        <div class="cart-title">${p.name}</div>
+        <div class="cart-price">${(p.price).toFixed(2)} RON / buc</div>
+      </div>
+
+      <div class="cart-qty">
+        <button type="button" class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
+        <span>${p.qty}</span>
+        <button type="button" class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+      </div>
+
+      <div class="cart-subtotal">${(p.price * p.qty).toFixed(2)} RON</div>
+      <button type="button" class="remove-btn" onclick="removeItem(${p.id})">Șterge</button>
+    </div>
+  `).join('');
+
+  const subtotal = cart.reduce((s,p)=> s + p.price * p.qty, 0);
+  const livrare  = 17;
+  const total    = subtotal + livrare;
+
+  root.innerHTML = `
+    <div class="cart-list">${rows}</div>
+    <div class="cart-total">
+      <div>Subtotal: <strong>${subtotal.toFixed(2)} RON</strong></div>
+      <div>Livrare: <strong>${livrare.toFixed(2)} RON</strong></div>
+      <div style="font-size:18px;margin-top:6px">Total: <strong>${total.toFixed(2)} RON</strong></div>
+    </div>
+  `;
+};
+
+// init
+togglePJ(false);
+renderCart();
 </script>
 </body>
 </html>
