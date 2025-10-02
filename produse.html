@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Produse – MSA Handmade Decor</title>
+  <title>Produse - MSA Handmade Decor</title>
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- mici completări vizuale care nu ating styles.css -->
   <style>
-    /* mici completări vizuale (nu ating stilurile tale existente) */
     .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
     .product-card{background:#fff;border-radius:12px;box-shadow:0 12px 28px rgba(0,0,0,.06);padding:14px;overflow:hidden}
     .product-card img{width:100%;height:240px;object-fit:cover;border-radius:12px;display:block}
-    .price{font-weight:700;margin:.25rem 0 1rem}
-    .add-btn{display:inline-block;padding:10px 16px;border-radius:10px;background:#6f52ff;color:#fff;border:none;cursor:pointer}
-    .add-btn.added{background:#22a06b} /* verde scurt după click */
+    .price{margin:10px 0 6px 0;font-size:22px}
     .handmade-note{color:#6b7280;font-size:14px;margin:.5rem 0 0}
-    /* lightbox simplu */
-    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:1000}
+    .add-btn{display:inline-block;margin-top:10px;padding:12px 18px;border-radius:10px;background:#6f52ff;color:#fff;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(111,82,255,.35);font-weight:700}
+    .add-btn.added{background:#22a06b} /* verde scurt după click */
+
+    /* Lightbox simplu */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center}
     .lightbox.open{display:flex}
-    .lightbox img{max-width:min(92vw,1100px);max-height:88vh;border-radius:12px}
+    #lightbox-img{max-width:min(92vw,1100px);max-height:88vh;border-radius:12px}
     .lightbox button{position:absolute;top:14px;right:14px;background:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer}
   </style>
 </head>
@@ -38,35 +40,35 @@
   </main>
 
   <footer class="site-footer">
-    <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
+    <span id="y"></span> © M.S.A Handmade Decor – Toate drepturile rezervate.
   </footer>
 
   <!-- Lightbox -->
   <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
-    <img id="lightbox-img" src="" alt="" />
+    <img id="lightbox-img" src="" alt="">
     <button type="button" onclick="closeLightbox(event)">Închide ✕</button>
   </div>
 
+  <!-- coș & logică pagină -->
   <script src="cart.js"></script>
   <script>
     // anul din footer
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Catalog – numele fișierelor sunt EXACT ca în folderul tău /images
+    // Catalog – NUMELE FIȘIERELOR EXACT ca în /images
     const produse = [
-      {id:1,  name:'Buchet',       price:29, img:'images/images_buchet.jpg',       alt:'Lumânare Buchet'},
-      {id:2,  name:'Dans',         price:33, img:'images/images.dans.jpg',         alt:'Lumânare Dans'},
-      {id:3,  name:'Înger',        price:33, img:'images/images.inger.jpg',        alt:'Lumânare Înger'},
-      {id:4,  name:'Peisaj',       price:99, img:'images/images_peisaj.jpg',       alt:'Lumânare Peisaj'},
-      {id:5,  name:'Peisaj iarnă', price:99, img:'images/images.peisajiarna.jpg',  alt:'Lumânare Peisaj iarnă'},
-      {id:6,  name:'Flori',        price:33, img:'images/images_flori.jpg',        alt:'Lumânare Flori'},
-      {id:7,  name:'Crin',         price:33, img:'images/images.crin.jpg',         alt:'Lumânare Crin'},
-      {id:8,  name:'Sărut',        price:33, img:'images/images.sarut.jpg',        alt:'Lumânare Sărut'},
-      {id:9,  name:'Logodnă',      price:33, img:'images/images.logodna.jpg',      alt:'Lumânare Logodnă'},
-      {id:10, name:'Îndrăgostiți', price:99, img:'images/images.indragostiti.jpg', alt:'Lumânare Îndrăgostiți'},
+      {id:1,  name:'Buchet',        price:29, img:'images/images_buchet.jpg',       alt:'Lumânare Buchet'},
+      {id:2,  name:'Dans',          price:33, img:'images/images.dans.jpg',          alt:'Lumânare Dans'},
+      {id:3,  name:'Înger',         price:33, img:'images/images.inger.jpg',         alt:'Lumânare Înger'},
+      {id:4,  name:'Peisaj',        price:99, img:'images/images_peisaj.jpg',        alt:'Lumânare Peisaj'},
+      {id:5,  name:'Peisaj iarnă',  price:99, img:'images/images.peisajiarna.jpg',   alt:'Lumânare Peisaj iarnă'},
+      {id:6,  name:'Flori',         price:33, img:'images/images_flori.jpg',         alt:'Lumânare Flori'},
+      {id:7,  name:'Crin',          price:33, img:'images/images.crin.jpg',          alt:'Lumânare Crin'},
+      {id:8,  name:'Sărut',         price:33, img:'images/images.sarut.jpg',         alt:'Lumânare Sărut'},
+      {id:9,  name:'Logodnă',       price:33, img:'images/images.logodna.jpg',       alt:'Lumânare Logodnă'},
+      {id:10, name:'Îndrăgostiți',  price:99, img:'images/images.indragostiti.jpg',  alt:'Lumânare Îndrăgostiți'}
     ];
 
-    // text mențiune handmade (același la toate)
     const notaHandmade = 'Fiind produse handmade, pot apărea mici variații de culoare, textură sau formă.';
 
     // Render produse
@@ -87,12 +89,16 @@
     function addItem(id){
       const item = produse.find(x => x.id === id);
       if(!item) return;
-      addToCart({ id: item.id, name: item.name, price: item.price });
+      // adăugăm în coș (cart.js expune addToCart global)
+      addToCart({ id:item.id, name:item.name, price:item.price });
+
       // feedback vizual pe buton
-      const btn = event.currentTarget;
-      btn.classList.add('added');
-      btn.textContent = 'Adăugat ✔';
-      setTimeout(() => { btn.classList.remove('added'); btn.textContent = 'Adaugă în coș'; }, 900);
+      const btn = event?.currentTarget;
+      if(btn){
+        btn.classList.add('added');
+        btn.textContent = 'Adăugat ✓';
+        setTimeout(()=>{ btn.classList.remove('added'); btn.textContent='Adaugă în coș'; }, 900);
+      }
     }
 
     // Lightbox logic
