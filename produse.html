@@ -3,107 +3,134 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Produse - M.S.A Handmade Decor</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #fffaf6; }
-    header { background: #d4a373; color: white; text-align: center; padding: 15px; }
-    .container { display: flex; flex-wrap: wrap; justify-content: center; padding: 20px; }
-    .product { background: white; border: 1px solid #ddd; border-radius: 10px; width: 250px; margin: 15px; padding: 15px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);}
-    .product img { width: 100%; border-radius: 10px; }
-    .product h3 { margin: 10px 0; }
-    .product p { color: #444; font-size: 14px; }
-    .product button { background: #d4a373; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-    .product button:hover { background: #b4845b; }
-    #orderForm { display: none; background: #fff; padding: 20px; border: 2px solid #d4a373; border-radius: 10px; width: 300px; margin: 20px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.2);}
-    #orderForm input, #orderForm textarea { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; }
-    #orderForm button { background: #d4a373; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; }
-    #orderForm button:hover { background: #b4845b; }
-  </style>
+  <title>Produse - MSA Handmade Decor</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>Produsele Noastre</h1>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo"></a>
+    <nav class="nav-links">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html" class="active">Produse</a>
+      <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
+    </nav>
   </header>
 
-  <div class="container">
-    <div class="product">
-      <img src="images/dans.jpg" alt="Dans">
-      <h3>Dans</h3>
-      <p><b>Preț:</b> 33 RON</p>
-      <p><i>Fiind un produs handmade, pot apărea mici variații de culoare și formă.</i></p>
-      <button onclick="openForm('Dans - 33 RON')">Comandă acum</button>
+  <main class="container">
+    <h1>Produsele Noastre</h1>
+    <div class="products-grid">
+
+      <!-- Produs 1 -->
+      <div class="product-card">
+        <img src="images/images_buchet.jpg" alt="Lumânare Buchet">
+        <h3>Lumânare „Buchet”</h3>
+        <p>Inspirată din frumusețea naturii, turnată manual. <br>
+        Fiind handmade, pot apărea mici variații de culoare și formă.</p>
+        <p><strong>Preț: 29 RON</strong></p>
+        <button onclick="addToCart({id:1, name:'Lumânare Buchet', price:29})">Adaugă în coș</button>
+      </div>
+
+      <!-- Produs 2 -->
+      <div class="product-card">
+        <img src="images/images_dans.jpg" alt="Lumânare Dans">
+        <h3>Dans</h3>
+        <p>Un design elegant, potrivit pentru decoruri romantice. <br>
+        Handmade, fiecare este unic.</p>
+        <p><strong>Preț: 33 RON</strong></p>
+        <button onclick="addToCart({id:2, name:'Dans', price:33})">Adaugă în coș</button>
+      </div>
+
+      <!-- Produs 3 -->
+      <div class="product-card">
+        <img src="images/images_inger.jpg" alt="Lumânare Înger">
+        <h3>Înger</h3>
+        <p>Delicatețea luminii într-un simbol al protecției. <br>
+        Handmade, pot apărea mici diferențe.</p>
+        <p><strong>Preț: 33 RON</strong></p>
+        <button onclick="addToCart({id:3, name:'Înger', price:33})">Adaugă în coș</button>
+      </div>
+
+      <!-- Produs 4 -->
+      <div class="product-card">
+        <img src="images/images_peisaj.jpg" alt="Lumânare Peisaj">
+        <h3>Peisaj</h3>
+        <p>Lumânare artistică ce redă frumusețea naturii. <br>
+        Handmade, fiecare piesă e unică.</p>
+        <p><strong>Preț: 99 RON</strong></p>
+        <button onclick="addToCart({id:4, name:'Peisaj', price:99})">Adaugă în coș</button>
+      </div>
+
+      <!-- Produs 5 -->
+      <div class="product-card">
+        <img src="images/images_peisajiarnajpg" alt="Lumânare Peisaj Iarnă">
+        <h3>Peisaj de iarnă</h3>
+        <p>Un cadou perfect pentru sărbători. <br>
+        Handmade cu detalii fine.</p>
+        <p><strong>Preț: 99 RON</strong></p>
+        <button onclick="addToCart({id:5, name:'Peisaj iarnă', price:99})">Adaugă în coș</button>
+      </div>
+
+      <!-- Produs 6 -->
+      <div class="product-card">
+        <img src="images/images_fiori.jpg" alt="Lumânare Flori">
+        <h3>Flori</h3>
+        <p>Lumânare florală, inspirată de bucuria primăverii. <br>
+        Făcută manual cu multă grijă.</p>
+        <p><strong>Preț: 33 RON</strong></p>
+        <button onclick="addToCart({id:6, name:'Flori', price:33})">Adaugă în coș</button>
+      </div>
+
+      <!-- Produs 7 -->
+      <div class="product-card">
+        <img src="images/images_crin.jpg" alt="Lumânare Crin">
+        <h3>Crin</h3>
+        <p>Lumânare elegantă, simbol al purității. <br>
+        Handmade, fiecare diferă puțin.</p>
+        <p><strong>Preț: 33 RON</strong></p>
+        <button onclick="addToCart({id:7, name:'Crin', price:33})">Adaugă în coș</button>
+      </div>
+
+      <!-- Produs 8 -->
+      <div class="product-card">
+        <img src="images/images_sarut.jpg" alt="Lumânare Sărut">
+        <h3>Sărut</h3>
+        <p>Un cadou romantic ce simbolizează iubirea. <br>
+        Făcut manual cu atenție.</p>
+        <p><strong>Preț: 33 RON</strong></p>
+        <button onclick="addToCart({id:8, name:'Sărut', price:33})">Adaugă în coș</button>
+      </div>
+
+      <!-- Produs 9 -->
+      <div class="product-card">
+        <img src="images/images_logodna.jpg" alt="Lumânare Logodnă">
+        <h3>Logodnă</h3>
+        <p>Perfectă pentru un eveniment special. <br>
+        Handmade, detalii unice.</p>
+        <p><strong>Preț: 33 RON</strong></p>
+        <button onclick="addToCart({id:9, name:'Logodnă', price:33})">Adaugă în coș</button>
+      </div>
+
+      <!-- Produs 10 -->
+      <div class="product-card">
+        <img src="images/images_indragostiti.jpg" alt="Lumânare Îndrăgostiți">
+        <h3>Îndrăgostiți</h3>
+        <p>Lumânare romantică, inspirată de iubirea pură. <br>
+        Handmade, fiecare pereche e unică.</p>
+        <p><strong>Preț: 99 RON</strong></p>
+        <button onclick="addToCart({id:10, name:'Îndrăgostiți', price:99})">Adaugă în coș</button>
+      </div>
+
     </div>
+  </main>
 
-    <div class="product">
-      <img src="images/inger.jpg" alt="Înger">
-      <h3>Înger</h3>
-      <p><b>Preț:</b> 33 RON</p>
-      <p><i>Fiind un produs handmade, pot apărea mici variații de culoare și formă.</i></p>
-      <button onclick="openForm('Înger - 33 RON')">Comandă acum</button>
-    </div>
+  <footer class="site-footer">
+    <span id="y"></span> © M.S.A Handmade Decor – Toate drepturile rezervate.
+  </footer>
 
-    <div class="product">
-      <img src="images/peisaj.jpg" alt="Peisaj">
-      <h3>Peisaj</h3>
-      <p><b>Preț:</b> 99 RON</p>
-      <p><i>Fiind un produs handmade, pot apărea mici variații de culoare și formă.</i></p>
-      <button onclick="openForm('Peisaj - 99 RON')">Comandă acum</button>
-    </div>
-
-    <div class="product">
-      <img src="images/peisaj_iarna.jpg" alt="Peisaj de iarnă">
-      <h3>Peisaj de iarnă</h3>
-      <p><b>Preț:</b> 99 RON</p>
-      <p><i>Fiind un produs handmade, pot apărea mici variații de culoare și formă.</i></p>
-      <button onclick="openForm('Peisaj de iarnă - 99 RON')">Comandă acum</button>
-    </div>
-
-    <div class="product">
-      <img src="images/buchet.jpg" alt="Buchet">
-      <h3>Buchet</h3>
-      <p><b>Preț:</b> 29 RON</p>
-      <p><i>Fiind un produs handmade, pot apărea mici variații de culoare și formă.</i></p>
-      <button onclick="openForm('Buchet - 29 RON')">Comandă acum</button>
-    </div>
-
-    <div class="product">
-      <img src="images/flori.jpg" alt="Flori">
-      <h3>Flori</h3>
-      <p><b>Preț:</b> 33 RON</p>
-      <p><i>Fiind un produs handmade, pot apărea mici variații de culoare și formă.</i></p>
-      <button onclick="openForm('Flori - 33 RON')">Comandă acum</button>
-    </div>
-  </div>
-
-  <!-- Formular comanda -->
-  <div id="orderForm">
-    <h3>Plasează comanda</h3>
-    <form action="mailto:msahandmade.contact@gmail.com" method="post" enctype="text/plain">
-      <label for="name">Nume:</label>
-      <input type="text" name="Nume" required>
-      
-      <label for="phone">Telefon:</label>
-      <input type="text" name="Telefon" required>
-      
-      <label for="address">Adresă:</label>
-      <textarea name="Adresa" required></textarea>
-      
-      <label for="product">Produs:</label>
-      <input type="text" id="productField" name="Produs" readonly>
-      
-      <label for="quantity">Cantitate:</label>
-      <input type="number" name="Cantitate" value="1" min="1">
-      
-      <button type="submit">Trimite comanda</button>
-    </form>
-  </div>
-
+  <script src="cart.js"></script>
   <script>
-    function openForm(product) {
-      document.getElementById("orderForm").style.display = "block";
-      document.getElementById("productField").value = product;
-      window.scrollTo(0,document.body.scrollHeight);
-    }
+    document.getElementById("y").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
