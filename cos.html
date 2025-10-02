@@ -1,142 +1,110 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coș – MSA Handmade Decor</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coșul tău</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Header / meniu -->
-  <header class="site-header">
-    <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" /></a>
-    <nav class="nav-links">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
-    </nav>
+  <header>
+    <a href="index.html">Acasă</a>
+    <a href="produse.html">Produse</a>
+    <a href="contact.html">Contact</a>
+    <a href="cos.html">Coș (<span id="cart-count">0</span>)</a>
   </header>
 
-  <main class="container">
-    <h1 class="page-title">Coșul tău</h1>
-
-    <!-- AICI se listează produsele din coș (randate din cart.js) -->
+  <main>
+    <h1>Coșul tău</h1>
     <div id="cart-root"></div>
 
-    <h2 style="margin-top:24px">Date livrare (plata la livrare)</h2>
-
-    <!-- ===== FORMULARUL COMPLET — TRIMITE LA FormSubmit + autoresponse ===== -->
-    <form id="order-form"
+    <h2>Date livrare (plata la livrare)</h2>
+    <form id="order-form" class="order-form"
           action="https://formsubmit.co/msahandmade.contact@gmail.com"
-          method="POST" class="order-form">
+          method="POST">
+
+      <!-- setări FormSubmit -->
+      <input type="hidden" name="_next" value="https://msahandmade.ro/multumesc.html">
+      <input type="hidden" name="_subject" value="Comandă nouă – M.S.A Handmade Decor">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <textarea id="order_message" name="Mesaj" hidden></textarea>
 
       <div class="radio-group">
-        <label><input type="radio" name="tip_client" value="Persoană fizică" checked> Persoană fizică</label>
-        <label><input type="radio" name="tip_client" value="Persoană juridică"> Persoană juridică</label>
+        <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
+        <label><input type="radio" name="tip" value="pj"> Persoană juridică</label>
       </div>
 
       <div class="form-row">
-        <label>Nume <input name="nume" required></label>
-        <label>Prenume <input name="prenume" required></label>
+        <label>Nume
+          <input type="text" name="nume" required>
+        </label>
+        <label>Prenume
+          <input type="text" name="prenume" required>
+        </label>
       </div>
 
       <div class="form-row">
-        <label>Email <input type="email" name="email" required></label>
-        <label>Telefon <input name="telefon" required></label>
+        <label>Email
+          <input type="email" name="email" required>
+        </label>
+        <label>Telefon
+          <input type="tel" name="telefon" required>
+        </label>
       </div>
 
       <div class="form-row">
-        <label>Județ <input name="judet" required></label>
-        <label>Oraș <input name="oras" required></label>
+        <label>Județ
+          <input type="text" name="judet" required>
+        </label>
+        <label>Oraș
+          <input type="text" name="oras" required>
+        </label>
       </div>
 
       <div class="form-row">
-        <label>Cod poștal <input name="cod_postal"></label>
-        <label>Adresă <input name="adresa" required></label>
+        <label>Cod poștal
+          <input type="text" name="codpostal" required>
+        </label>
+        <label>Adresă
+          <input type="text" name="adresa" required>
+        </label>
       </div>
 
-      <!-- câmpuri firmă (apar doar pentru PJ) -->
-      <div class="form-row" id="firma-fields" style="display:none">
-        <label>Denumire firmă <input name="denumire_firma"></label>
-        <label>CUI <input name="cui"></label>
+      <!-- câmpuri extra pentru Persoană juridică -->
+      <div class="form-row" id="pj-fields">
+        <label>Denumire firmă
+          <input type="text" name="firma">
+        </label>
+        <label>CUI
+          <input type="text" name="cui">
+        </label>
       </div>
 
-      <label>Mențiuni (opțional)
-        <textarea name="mentiuni" rows="3" placeholder="Culoare/variantă dorită, interval livrare etc."></textarea>
-      </label>
+      <div class="form-row">
+        <label>Mențiuni (opțional)
+          <textarea name="mentiuni" rows="3"></textarea>
+        </label>
+      </div>
 
-      <!-- controle FormSubmit + atașăm coșul -->
-      <input type="hidden" name="_subject" value="Comandă nouă - msahandmade.ro">
-      <input type="hidden" name="_autoresponse"
-             value="Îți mulțumim pentru comandă! O confirmăm în scurt timp. Dacă ai vreo modificare, răspunde acestui e-mail. — M.S.A Handmade Decor">
-      <input type="hidden" name="_next" value="https://msahandmade.ro/multumesc.html">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="cart_details" id="hidden-cart">
-
-      <div class="form-row" style="margin-top:12px">
+      <div class="form-row">
         <button type="submit" class="btn-primary">Trimite comanda</button>
         <button type="button" class="btn-ghost" onclick="clearCart()">Golește coșul</button>
       </div>
     </form>
   </main>
 
-  <footer class="site-footer">
-    <span id="y"></span> © M.S.A Handmade Decor – Toate drepturile rezervate.
-  </footer>
-
-  <!-- Script coș existent -->
   <script src="cart.js"></script>
-
-  <!-- Scripturi de pe pagină -->
   <script>
-    // anul curent în footer
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    // cheie coș – trebuie să fie aceeași ca în cart.js
-    const CART_KEY = 'msa_cart_v1';
-
-    // la încărcare, dacă există o funcție de randare în cart.js, o rulăm
-    if (window.renderCart) window.renderCart();
-
-    // arată/ascunde câmpurile de firmă pentru PJ
-    document.querySelectorAll('input[name="tip_client"]').forEach(r => {
+    // ascunde/arată câmpurile pentru PJ
+    document.querySelectorAll('input[name="tip"]').forEach(r => {
       r.addEventListener('change', () => {
-        const pj = r.value === 'Persoană juridică' && r.checked;
-        document.getElementById('firma-fields').style.display = pj ? 'flex' : 'none';
+        const pj = document.querySelector('input[name="tip"][value="pj"]').checked;
+        document.getElementById('pj-fields').style.display = pj ? 'flex' : 'none';
       });
     });
-
-    // atașăm sumarul coșului în hidden înainte de trimiterea formularului
-    document.getElementById('order-form').addEventListener('submit', function(e){
-      const cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-      if (!cart.length) { alert('Coșul este gol.'); e.preventDefault(); return; }
-
-      const subtotal = cart.reduce((s,p)=> s + p.price * (p.qty||1), 0);
-      const livrare  = 17;
-      const total    = subtotal + livrare;
-
-      const itemsText = cart.map(p => `${p.name} × ${p.qty||1} = ${p.price*(p.qty||1)} RON`).join('\n');
-
-      document.getElementById('hidden-cart').value =
-`Comandă msahandmade.ro
-Tip client: ${this.tip_client.value}
-
-Produse:
-${itemsText}
-
-Subtotal: ${subtotal} RON
-Livrare:  ${livrare} RON
-Total:    ${total} RON`;
-    });
-
-    // buton „Golește coșul”
-    function clearCart(){
-      localStorage.removeItem(CART_KEY);
-      if (window.renderCart) window.renderCart();
-      document.querySelectorAll('#cart-count').forEach(el => el.textContent = '0');
-      alert('Coș golit.');
-    }
+    document.getElementById('pj-fields').style.display =
+      document.querySelector('input[name="tip"][value="pj"]').checked ? 'flex' : 'none';
   </script>
 </body>
 </html>
