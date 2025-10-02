@@ -2,59 +2,90 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mulțumim! — MSA Handmade Decor</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mulțumim! — M.S.A Handmade Decor</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    .thanks-wrap {
+      background:#fff; border-radius: var(--radius,16px); padding: 20px;
+      box-shadow: var(--shadow, 0 8px 24px rgba(0,0,0,.08)); margin: 18px 0;
+    }
+    .order-summary h3{ margin-top: 8px; }
+    .order-summary ul{ margin:10px 0 0 18px; line-height:1.8; }
+    .cta-row{ display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+    .btn { display:inline-block; padding:10px 16px; border-radius:10px; text-decoration:none; }
+    .btn-primary{ background:#6d934a; color:#fff; }
+    .btn-ghost{ background:#eee; color:#111; }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" /></a>
-    <nav class="nav-links">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
-    </nav>
-  </header>
+<header class="site-header">
+  <a class="brand" href="index.html"><img src="logo.png" alt="M.S.A Handmade Decor" class="brand-logo"/></a>
+  <nav class="nav-links">
+    <a href="index.html">Acasă</a>
+    <a href="produse.html">Produse</a>
+    <a href="contact.html">Contact</a>
+    <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
+  </nav>
+</header>
 
-  <main class="container">
-    <h1 class="page-title">Comandă trimisă cu succes 💌</h1>
-    <p>Ți-am trimis un e-mail de confirmare. Vom reveni rapid cu detalii despre livrare.</p>
+<main class="container">
+  <h1 class="page-title">Comandă trimisă cu succes 💌</h1>
 
-    <div class="order-summary" id="order-summary" style="margin:20px 0;"></div>
+  <div class="thanks-wrap">
+    <p>Îți mulțumim! Comanda ta a fost trimisă și vei primi un e-mail de confirmare. Te vom contacta pentru detalii de livrare.</p>
 
-    <a class="cta" href="produse.html">Înapoi la produse</a>
-  </main>
+    <div id="order-summary" class="order-summary"></div>
 
-  <footer class="site-footer">
-    <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
-  </footer>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="produse.html">Înapoi la produse</a>
+      <a class="btn btn-ghost" href="index.html">Mergi la Acasă</a>
+    </div>
+  </div>
+</main>
 
-  <script src="cart.js"></script>
-  <script>
-    // anul din footer
-    document.getElementById('y').textContent = new Date().getFullYear();
+<footer class="site-footer">
+  <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
+</footer>
 
-    // Golește coșul după trimitere
-    clearCart();
-    updateCartCount();
+<script src="cart.js"></script>
+<script>
+  // anul curent
+  document.getElementById('y').textContent = new Date().getFullYear();
 
-    // Dacă am salvat sumarul comenzii în localStorage, îl afișăm frumos
+  // 1) Golește coșul (siguranță)
+  try { clearCart(); updateCartCount(); } catch(e){}
+
+  // 2) Afișează sumarul dacă există în localStorage
+  (function showSummary(){
+    const root = document.getElementById('order-summary');
     try {
-      const sum = JSON.parse(localStorage.getItem('msa_last_order_summary') || '{}');
-      if (sum && sum.items) {
-        const root = document.getElementById('order-summary');
-        const rows = sum.items.map(it => `<li>${it.name} × ${it.qty} — ${it.price * it.qty} RON</li>`).join('');
-        root.innerHTML = `
-          <h3>Sumar comandă</h3>
-          <ul style="line-height:1.8">${rows}</ul>
-          <p><strong>Subtotal:</strong> ${sum.subtotal} RON<br>
-             <strong>Livrare:</strong> ${sum.livrare} RON<br>
-             <strong>Total:</strong> ${sum.total} RON</p>`;
+      // Încearcă să citești un sumar salvat anterior
+      const sumRaw = localStorage.getItem('msa_last_order_summary');
+      if (!sumRaw) {
+        root.innerHTML = '';
+        return;
       }
-      // curățăm rezumatul temporar
+      const sum = JSON.parse(sumRaw);
+      // Listează produse
+      const items = (sum.items || []).map(it => 
+        `<li>${it.name} × ${it.qty} — ${(it.price * it.qty).toFixed(2)} RON</li>`
+      ).join('');
+      root.innerHTML = `
+        <h3>Sumar comandă</h3>
+        <ul>${items}</ul>
+        <p style="margin-top:8px;">
+          <strong>Subtotal:</strong> ${Number(sum.subtotal).toFixed(2)} RON<br>
+          <strong>Livrare:</strong> ${Number(sum.livrare).toFixed(2)} RON<br>
+          <strong>Total:</strong> ${Number(sum.total).toFixed(2)} RON
+        </p>
+      `;
+      // curăță pentru data viitoare
       localStorage.removeItem('msa_last_order_summary');
-    } catch(e){}
-  </script>
+    } catch(e){
+      root.innerHTML = '';
+    }
+  })();
+</script>
 </body>
 </html>
