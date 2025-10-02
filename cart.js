@@ -1,5 +1,6 @@
-// ----------------------- MSA CART -----------------------
+// --------------------  MSA CART  --------------------
 const CART_KEY = 'msa_cart_v1';
+const SHIPPING = 17; // cost livrare fix
 
 function getCart() {
   try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
@@ -15,15 +16,15 @@ function updateCartCount() {
   document.querySelectorAll('#cart-count').forEach(el => el.textContent = count);
 }
 
+// CRUD coș
 function addToCart(item) {
   const cart = getCart();
   const i = cart.findIndex(p => p.id === item.id);
-  if (i >= 0) cart[i].qty += item.qty || 1;
+  if (i >= 0) cart[i].qty = (cart[i].qty || 1) + 1;
   else cart.push({...item, qty: item.qty || 1});
   saveCart(cart);
-  if (window.msaToast) msaToast('Adăugat în coș ✔');
+  if (window.renderCart) window.renderCart();
 }
-
 function changeQty(id, delta) {
   const cart = getCart().map(p => p.id===id ? {...p, qty: Math.max(1, p.qty+delta)} : p);
   saveCart(cart);
@@ -34,62 +35,109 @@ function removeItem(id) {
   saveCart(cart);
   if (window.renderCart) window.renderCart();
 }
-function clearCart() {
-  saveCart([]);
-  if (window.renderCart) window.renderCart();
-}
+function clearCart() { saveCart([]); if (window.renderCart) window.renderCart(); }
 
-// Trimitere comandă prin e-mail (plata la livrare)
-function placeOrderViaEmail(form) {
+// UI
+function money(v){ return v.toFixed(0) + ' RON'; }
+
+window.renderCart = function renderCart() {
+  const root = document.getElementById('cart-root');
+  const empty = document.getElementById('cart-empty');
+  const totalsBox = document.getElementById('totals-box');
+  const subtotalText = document.getElementById('subtotal-text');
+  const shippingText = document.getElementById('shipping-text');
+  const grandText = document.getElementById('grand-text');
+
+  const cart = getCart();
+  if (!cart.length) {
+    root.innerHTML = '';
+    empty.style.display = 'block';
+    totalsBox.style.display = 'none';
+    return;
+  }
+
+  empty.style.display = 'none';
+
+  const rows = cart.map(p => `
+    <div class="cart-row">
+      <div class="cart-title">${p.name}</div>
+      <div>Preț: ${money(p.price)}</div>
+      <div>
+        <button type="button" class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
+        <span style="min-width:24px; display:inline-block; text-align:center;">${p.qty}</span>
+        <button type="button" class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+      </div>
+      <button type="button" class="remove-btn" onclick="removeItem(${p.id})">Șterge</button>
+    </div>
+  `).join('');
+
+  const subtotal = cart.reduce((s,p)=>s+p.price*p.qty,0);
+  const total = subtotal + SHIPPING;
+
+  root.innerHTML = rows;
+  totalsBox.style.display = 'block';
+  subtotalText.textContent = money(subtotal);
+  shippingText.textContent = money(SHIPPING);
+  grandText.textContent = money(total);
+};
+
+// PF / PJ + mailto
+window.toggleCompany = function(show){
+  const block = document.getElementById('company-block');
+  block.style.display = show ? 'grid' : 'none';
+  const firma = document.querySelector('input[name="firma"]');
+  const cui = document.querySelector('input[name="cui"]');
+  if (firma && cui) { firma.required = show; cui.required = show; }
+};
+
+window.placeOrderViaEmail = function(form){
   const cart = getCart();
   if (!cart.length) { alert('Coșul este gol.'); return false; }
 
+  const tip_client = (new FormData(form)).get('tip_client') || 'pf';
   const nume = form.nume.value.trim();
+  const prenume = form.prenume.value.trim();
   const telefon = form.telefon.value.trim();
+  const judet = form.judet.value.trim();
+  const oras = form.oras.value.trim();
+  const cod_postal = form.cod_postal.value.trim();
   const adresa = form.adresa.value.trim();
-  const mesaj = form.mesaj.value.trim();
+  const mentiuni = form.mentiuni.value.trim();
 
-  if (!nume || !telefon || !adresa) {
-    alert('Te rog completează Nume, Telefon și Adresă.');
+  let firma = '', cui = '';
+  if (tip_client === 'pj') { firma = form.firma.value.trim(); cui = form.cui.value.trim(); }
+
+  if (!nume || !prenume || !telefon || !judet || !oras || !cod_postal || !adresa) {
+    alert('Te rog completează toate câmpurile obligatorii.');
     return false;
   }
 
-  const total = cart.reduce((s,p)=>s + p.price * p.qty, 0);
-  const itemsText = cart.map(p => `• ${p.name} x ${p.qty} — ${p.price} RON`).join('%0A');
-  const subject = encodeURIComponent('Comandă nouă — msahandmade.ro');
-  const body = encodeURIComponent(
-`Bună!
+  const subtotal = cart.reduce((s,p)=>s+p.price*p.qty,0);
+  const total = subtotal + SHIPPING;
+  const itemsText = cart.map(p => `${p.name} × ${p.qty} × ${p.price} RON`).join('%0A');
 
-Doresc comandă cu plata la livrare:
+  const subject = encodeURIComponent('Comandă nouă – msahandmade.ro');
+  const lines = [
+    `Tip client: ${tip_client === 'pj' ? 'Persoană juridică' : 'Persoană fizică'}`,
+    (tip_client==='pj' ? `Firmă: ${firma}%0ACUI: ${cui}` : ''),
+    `Nume: ${nume}%0APrenume: ${prenume}%0ATelefon: ${telefon}`,
+    `Județ: ${judet}%0AOraș: ${oras}%0ACod poștal: ${cod_postal}`,
+    `Adresă: ${adresa}`,
+    (mentiuni ? `Mențiuni: ${mentiuni}` : ''),
+    '',
+    'Produse:',
+    itemsText,
+    '',
+    `Subtotal: ${subtotal} RON`,
+    `Livrare: ${SHIPPING} RON`,
+    `TOTAL: ${total} RON`
+  ].filter(Boolean).join('%0A');
 
-${decodeURIComponent(itemsText)}
-Total: ${total} RON
-
-Nume: ${nume}
-Telefon: ${telefon}
-Adresă: ${adresa}
-Mesaj: ${mesaj}
-
-Mulțumesc!`
-  );
-
-  window.location.href = `mailto:msahandmade.contact@gmail.com?subject=${subject}&body=${body}`;
+  const to = 'msahandmade.contact@gmail.com';
+  window.location.href = `mailto:${to}?subject=${subject}&body=${encodeURIComponent(lines)}`;
   return false;
-}
-
-document.addEventListener('DOMContentLoaded', updateCartCount);
-
-// mic toast
-window.msaToast = (t) => {
-  let el = document.getElementById('msa-toast');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'msa-toast';
-    el.style.cssText = 'position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#333;color:#fff;padding:10px 14px;border-radius:999px;opacity:.95;font-size:14px;z-index:9999';
-    document.body.appendChild(el);
-  }
-  el.textContent = t;
-  el.style.display='block';
-  setTimeout(()=>{el.style.display='none'}, 1600);
 };
-// --------------------- /MSA CART ------------------------
+
+// init
+updateCartCount();
+if (document.getElementById('cart-root')) renderCart();
