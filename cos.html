@@ -2,14 +2,44 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coș — MSA Handmade Decor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coș – MSA Handmade Decor</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .cart-wrap { display: grid; gap: 24px; }
+    @media (min-width: 900px) { .cart-wrap { grid-template-columns: 1.2fr 1fr; } }
+
+    .card { background:#fff; border-radius:16px; padding:20px; box-shadow: 0 8px 24px rgba(0,0,0,.06);}
+    .section-title { margin:0 0 16px; font-size:1.25rem; }
+    .cart-row { display:grid; grid-template-columns: 1fr auto auto auto; gap:12px; align-items:center; padding:10px 0; border-bottom:1px solid #eee; }
+    .cart-title { font-weight:600; }
+    .qty-btn { padding:6px 10px; border-radius:10px; border:1px solid #ddd; background:#fafafa; }
+    .remove-btn { border:none; background:#ffe9e9; color:#a00; padding:6px 10px; border-radius:10px; }
+    .order-form .row { display:grid; gap:12px; }
+    .order-form label { font-size:.9rem; color:#444; }
+    .order-form input, .order-form select, .order-form textarea {
+      width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:12px; background:#fff;
+    }
+    .order-form textarea { min-height:96px; }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .muted { color:#666; font-size:.9rem; }
+    .radio-line { display:flex; gap:18px; align-items:center; }
+    .radio-line input { transform: translateY(1px); }
+    .btn-primary { display:inline-block; background:#e6b38b; color:#1f1f1f; border:none; padding:12px 18px; border-radius:12px; font-weight:700; }
+    .btn-ghost { background:#f3f3f3; border:1px solid #ddd; padding:10px 14px; border-radius:10px; }
+    .company-block { display:none; }
+    .empty { padding:16px; background:#fff7ea; border:1px dashed #e7c68f; border-radius:12px; }
+
+    .totals { margin-top:12px; }
+    .totals .line { display:flex; justify-content:space-between; padding:6px 0; }
+    .totals .grand { font-weight:800; font-size:1.05rem; border-top:1px solid #eee; margin-top:6px; padding-top:10px; }
+  </style>
 </head>
 <body>
 <header class="site-header">
   <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" /></a>
-  <nav class="nav">
+  <nav class="nav-links">
     <a href="index.html">Acasă</a>
     <a href="produse.html">Produse</a>
     <a href="contact.html">Contact</a>
@@ -20,17 +50,100 @@
 <main class="container">
   <h1>Coșul tău</h1>
 
-  <div id="cart-root" class="cart-root"></div>
+  <div class="cart-wrap">
+    <!-- LISTA PRODUSE -->
+    <section class="card">
+      <h2 class="section-title">Produse în coș</h2>
+      <div id="cart-root"></div>
+      <div id="cart-empty" class="empty" style="display:none;">Coșul este gol.</div>
 
-  <h2>Detalii livrare (plata la livrare)</h2>
-  <form onsubmit="return placeOrderViaEmail(this)" class="order-form">
-    <label>Nume* <input name="nume" required /></label>
-    <label>Telefon* <input name="telefon" required /></label>
-    <label>Adresă* <textarea name="adresa" rows="2" required></textarea></label>
-    <label>Mesaj (opțional) <textarea name="mesaj" rows="2"></textarea></label>
-    <button type="submit" class="btn-primary">Trimite comanda</button>
-    <button type="button" class="btn-ghost" onclick="clearCart()">Golește coșul</button>
-  </form>
+      <div class="totals" id="totals-box" style="display:none;">
+        <div class="line"><span>Subtotal</span> <strong id="subtotal-text">0 RON</strong></div>
+        <div class="line"><span>Livrare</span> <strong id="shipping-text">17 RON</strong></div>
+        <div class="line grand"><span>Total</span> <strong id="grand-text">0 RON</strong></div>
+      </div>
+
+      <div style="margin-top:12px; display:flex; gap:8px;">
+        <button type="button" class="btn-ghost" onclick="clearCart()">Golește coșul</button>
+      </div>
+      <p class="muted" style="margin-top:10px;">
+        * Fiind produse handmade, pot apărea mici variații de culoare și formă.
+      </p>
+    </section>
+
+    <!-- FORM COMANDĂ -->
+    <section class="card">
+      <h2 class="section-title">Date livrare (plata la livrare)</h2>
+      <form class="order-form" onsubmit="return placeOrderViaEmail(this)">
+        <div class="row">
+          <label class="radio-line"><input type="radio" name="tip_client" value="pf" checked onchange="toggleCompany(false)" /> Persoană fizică</label>
+          <label class="radio-line"><input type="radio" name="tip_client" value="pj" onchange="toggleCompany(true)" /> Persoană juridică</label>
+        </div>
+
+        <div class="row grid-2">
+          <div>
+            <label>Nume</label>
+            <input name="nume" required placeholder="Popescu" />
+          </div>
+          <div>
+            <label>Prenume</label>
+            <input name="prenume" required placeholder="Ana" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Telefon</label>
+            <input name="telefon" required inputmode="tel" placeholder="07xx xxx xxx" />
+          </div>
+        </div>
+
+        <div class="row grid-3">
+          <div>
+            <label>Județ</label>
+            <input name="judet" required placeholder="Ilfov" />
+          </div>
+          <div>
+            <label>Oraș</label>
+            <input name="oras" required placeholder="Otopeni" />
+          </div>
+          <div>
+            <label>Cod poștal</label>
+            <input name="cod_postal" required inputmode="numeric" placeholder="013xxx" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Adresă</label>
+            <input name="adresa" required placeholder="Str. Exemplu nr. 10, bl. X, sc. Y, ap. Z" />
+          </div>
+        </div>
+
+        <div class="row company-block" id="company-block">
+          <div>
+            <label>Denumire firmă</label>
+            <input name="firma" placeholder="SC Exemplu SRL" />
+          </div>
+          <div>
+            <label>CUI</label>
+            <input name="cui" placeholder="ROxxxxxxx" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Mențiuni (opțional)</label>
+            <textarea name="mentiuni" placeholder="Culoare/variantă dorită, interval livrare, etc."></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <button type="submit" class="btn-primary">Trimite comanda</button>
+        </div>
+      </form>
+    </section>
+  </div>
 </main>
 
 <footer class="site-footer">
@@ -38,45 +151,6 @@
 </footer>
 
 <script src="cart.js"></script>
-<script>
-  document.getElementById('y').textContent = new Date().getFullYear();
-
-  function money(v){ return v.toFixed(0) + ' RON'; }
-
-  window.renderCart = function renderCart() {
-    const root = document.getElementById('cart-root');
-    const cart = getCart();
-
-    if (!cart.length) {
-      root.innerHTML = '<p>Coșul este gol.</p>';
-      return;
-    }
-
-    const rows = cart.map(p => `
-      <div class="cart-row">
-        <div class="cart-info">
-          <div class="cart-title">${p.name}</div>
-          <div class="cart-price">${money(p.price)} / buc</div>
-        </div>
-        <div class="cart-qty">
-          <button type="button" class="qty-btn" onclick="changeQty('${p.id}', -1)">–</button>
-          <span>${p.qty}</span>
-          <button type="button" class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
-        </div>
-        <div class="cart-subtotal">${money(p.price * p.qty)}</div>
-        <button type="button" class="remove-btn" onclick="removeItem('${p.id}')">Șterge</button>
-      </div>
-    `).join('');
-
-    const total = cart.reduce((s,p)=>s+p.price*p.qty,0);
-
-    root.innerHTML = `
-      <div class="cart-list">${rows}</div>
-      <div class="cart-total">Total: <strong>${money(total)}</strong></div>
-    `;
-  }
-
-  renderCart();
-</script>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
