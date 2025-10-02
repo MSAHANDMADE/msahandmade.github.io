@@ -4,55 +4,72 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Comandă trimisă</title>
+  <link rel="icon" href="logo.png">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f8fdf8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
+    :root{
+      --bg:#fff4f4; --card:#ffffff; --ink:#222; --accent:#6f52ff;
+      --ok:#2e7d32;
+      --shadow: 0 12px 28px rgba(0,0,0,.06); --radius:18px;
     }
-    .box {
-      background: #fff;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      text-align: center;
-      max-width: 400px;
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      color:var(--ink); background:linear-gradient(180deg,#fff7ee,#fffaf6 40%,#fff);
+      min-height:100vh; display:flex; flex-direction:column;
     }
-    h1 {
-      color: #28a745;
-      margin-bottom: 20px;
+    header{display:flex; gap:16px; align-items:center; padding:12px 18px;}
+    header a{color:#333; text-decoration:none; font-weight:600; padding:8px 10px; border-radius:12px}
+    header a:hover{background:#f6f1ff; color:#4328c7}
+    .container{max-width:900px; margin:36px auto; padding:0 16px}
+    .card{
+      background:var(--card); box-shadow:var(--shadow); border-radius:var(--radius);
+      padding:28px; text-align:center;
     }
-    p {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-    a {
-      display: inline-block;
-      padding: 10px 20px;
-      background: #28a745;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    a:hover {
-      background: #218838;
-    }
+    h1{margin:0 0 8px; font-size:clamp(28px,5vw,42px);}
+    p.big{font-size:18px; margin:0 0 18px}
+    .ok{color:var(--ok); font-weight:700}
+    .actions{margin-top:22px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+    .btn{display:inline-block; padding:12px 18px; border-radius:14px; text-decoration:none;
+         box-shadow:0 6px 18px rgba(111,82,255,.25); font-weight:700}
+    .btn-primary{background:var(--accent); color:#fff}
+    .btn-ghost{background:#eee; color:#333}
+    footer{margin:40px 0 18px; text-align:center; color:#6b6b6b; font-size:14px}
   </style>
 </head>
 <body>
-  <div class="box">
-    <h1>✅ Comanda a fost trimisă cu succes!</h1>
-    <p>Vă mulțumim pentru încredere. Veți primi în scurt timp un email de confirmare.</p>
-    <a href="index.html">Înapoi la Acasă</a>
-  </div>
+  <header>
+    <a href="index.html">Acasă</a>
+    <a href="produse.html">Produse</a>
+    <a href="contact.html">Contact</a>
+  </header>
+
+  <main class="container">
+    <div class="card">
+      <h1>✅ Comanda a fost trimisă cu succes!</h1>
+      <p class="big">
+        Îți mulțumim pentru încredere. Vei primi în scurt timp un e-mail de confirmare
+        cu detaliile comenzii.
+      </p>
+      <p class="ok">Coșul tău a fost golit automat.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="produse.html">Continuă cumpărăturile</a>
+        <a class="btn btn-ghost" href="index.html">Înapoi la Acasă</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
+  </footer>
 
   <script>
-    // Când se încarcă pagina de mulțumire, goliți coșul
-    localStorage.removeItem("msa_cart_v1");
+    // golește coșul la sosirea pe pagina de mulțumire
+    try {
+      localStorage.removeItem('msa_cart_v1');  // cheia folosită de cart.js
+    } catch(e){}
+
+    // anul din footer
+    document.getElementById('y').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
