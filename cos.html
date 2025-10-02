@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coș — MSA Handmade Decor</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" /></a>
+  <nav class="nav">
+    <a href="index.html">Acasă</a>
+    <a href="produse.html">Produse</a>
+    <a href="contact.html">Contact</a>
+    <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
+  </nav>
+</header>
+
+<main class="container">
+  <h1>Coșul tău</h1>
+
+  <div id="cart-root" class="cart-root"></div>
+
+  <h2>Detalii livrare (plata la livrare)</h2>
+  <form onsubmit="return placeOrderViaEmail(this)" class="order-form">
+    <label>Nume* <input name="nume" required /></label>
+    <label>Telefon* <input name="telefon" required /></label>
+    <label>Adresă* <textarea name="adresa" rows="2" required></textarea></label>
+    <label>Mesaj (opțional) <textarea name="mesaj" rows="2"></textarea></label>
+    <button type="submit" class="btn-primary">Trimite comanda</button>
+    <button type="button" class="btn-ghost" onclick="clearCart()">Golește coșul</button>
+  </form>
+</main>
+
+<footer class="site-footer">
+  <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
+</footer>
+
+<script src="cart.js"></script>
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  function money(v){ return v.toFixed(0) + ' RON'; }
+
+  window.renderCart = function renderCart() {
+    const root = document.getElementById('cart-root');
+    const cart = getCart();
+
+    if (!cart.length) {
+      root.innerHTML = '<p>Coșul este gol.</p>';
+      return;
+    }
+
+    const rows = cart.map(p => `
+      <div class="cart-row">
+        <div class="cart-info">
+          <div class="cart-title">${p.name}</div>
+          <div class="cart-price">${money(p.price)} / buc</div>
+        </div>
+        <div class="cart-qty">
+          <button type="button" class="qty-btn" onclick="changeQty('${p.id}', -1)">–</button>
+          <span>${p.qty}</span>
+          <button type="button" class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
+        </div>
+        <div class="cart-subtotal">${money(p.price * p.qty)}</div>
+        <button type="button" class="remove-btn" onclick="removeItem('${p.id}')">Șterge</button>
+      </div>
+    `).join('');
+
+    const total = cart.reduce((s,p)=>s+p.price*p.qty,0);
+
+    root.innerHTML = `
+      <div class="cart-list">${rows}</div>
+      <div class="cart-total">Total: <strong>${money(total)}</strong></div>
+    `;
+  }
+
+  renderCart();
+</script>
+</body>
+</html>
