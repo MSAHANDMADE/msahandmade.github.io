@@ -8,7 +8,7 @@
 </head>
 <body>
 <header class="site-header">
-  <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo"></a>
+  <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" /></a>
   <nav class="nav-links">
     <a href="index.html">Acasă</a>
     <a href="produse.html">Produse</a>
@@ -18,44 +18,77 @@
 </header>
 
 <main class="container">
-  <h1>Coșul tău</h1>
-  <div id="cart-root"></div>
+  <h1 class="page-title">Coșul tău</h1>
+
+  <!-- Lista produse din coș -->
+  <div id="cart-root" class="cart-list"></div>
+
+  <!-- Totaluri -->
+  <div class="cart-totals">
+    <div>Subtotal: <strong id="cart-subtotal">0 RON</strong></div>
+    <div>Transport: <strong id="cart-shipping">0 RON</strong></div>
+    <div>Total: <strong id="cart-total">0 RON</strong></div>
+  </div>
+
+  <hr />
 
   <h2>Date livrare (plata la livrare)</h2>
-  <form onsubmit="return placeOrder(this)" class="order-form">
+
+  <form onsubmit="return placeOrderViaEmail(this)" class="order-form">
     <div class="radio-group">
-      <label><input type="radio" name="tip" value="fizica" checked> Persoană fizică</label>
-      <label><input type="radio" name="tip" value="juridica"> Persoană juridică</label>
+      <label><input type="radio" name="tip" value="pf" checked onclick="togglePJ()"> Persoană fizică</label>
+      <label><input type="radio" name="tip" value="pj" onclick="togglePJ()"> Persoană juridică</label>
     </div>
 
     <div class="form-row">
-      <label>Nume <input name="nume" required></label>
-      <label>Prenume <input name="prenume" required></label>
-    </div>
-    <div class="form-row">
-      <label>Telefon <input name="telefon" required></label>
-    </div>
-    <div class="form-row">
-      <label>Județ <input name="judet" required></label>
-      <label>Oraș <input name="oras" required></label>
-      <label>Cod poștal <input name="codpostal" required></label>
-    </div>
-    <div class="form-row">
-      <label>Adresă <input name="adresa" required></label>
+      <label>Nume
+        <input name="nume" required />
+      </label>
+      <label>Prenume
+        <input name="prenume" required />
+      </label>
     </div>
 
-    <!-- câmpuri doar pentru juridica -->
-    <div id="pj-fields" style="display:none;">
+    <div class="form-row">
+      <label>Telefon
+        <input name="telefon" required />
+      </label>
+    </div>
+
+    <div class="form-row">
+      <label>Județ
+        <input name="judet" required />
+      </label>
+      <label>Oraș
+        <input name="oras" required />
+      </label>
+      <label>Cod poștal
+        <input name="codpostal" required />
+      </label>
+    </div>
+
+    <div class="form-row">
+      <label style="flex:1">Adresă
+        <input name="adresa" required />
+      </label>
+    </div>
+
+    <!-- doar pentru PJ -->
+    <div id="pj-fields" style="display:none">
       <div class="form-row">
-        <label>Denumire firmă <input name="firma"></label>
-      </div>
-      <div class="form-row">
-        <label>CUI <input name="cui"></label>
+        <label>Denumire firmă
+          <input name="firma" />
+        </label>
+        <label>CUI
+          <input name="cui" />
+        </label>
       </div>
     </div>
 
     <div class="form-row">
-      <label>Mențiuni (opțional) <textarea name="mentiuni"></textarea></label>
+      <label style="flex:1">Mențiuni (opțional)
+        <textarea name="mentiuni" placeholder="Culoare/variantă dorită, interval livrare, etc."></textarea>
+      </label>
     </div>
 
     <div class="form-row">
@@ -66,20 +99,23 @@
 </main>
 
 <footer class="site-footer">
-  <span id="y"></span> © M.S.A Handmade Decor – Toate drepturile rezervate.
+  <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
 </footer>
 
 <script src="cart.js"></script>
 <script>
+  // footer anul curent
   document.getElementById('y').textContent = new Date().getFullYear();
 
-  // afișare câmpuri juridica dacă selectează
-  document.querySelectorAll('input[name="tip"]').forEach(radio=>{
-    radio.addEventListener('change', ()=>{
-      const pj = document.getElementById('pj-fields');
-      pj.style.display = (radio.value === 'juridica' && radio.checked) ? 'block' : 'none';
-    });
-  });
+  // afișare/ascundere câmpuri PJ
+  function togglePJ(){
+    const pj = document.querySelector('input[name="tip"][value="pj"]').checked;
+    document.getElementById('pj-fields').style.display = pj ? 'block' : 'none';
+  }
+  // la încărcare
+  togglePJ();
+  // randare coș
+  if (window.renderCart) renderCart();
 </script>
 </body>
 </html>
