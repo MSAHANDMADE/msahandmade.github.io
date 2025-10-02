@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Comandă trimisă</title>
   <style>
     body {
@@ -45,12 +45,14 @@
 </head>
 <body>
   <div class="box">
-    <h1>🎉 Comanda a fost trimisă cu succes!</h1>
+    <h1>✅ Comanda a fost trimisă cu succes!</h1>
     <p>Vă mulțumim pentru încredere. Veți primi în scurt timp un email de confirmare.</p>
     <a href="index.html">Înapoi la Acasă</a>
-  </div><script>
-  // Când se încarcă pagina de mulțumire, goliți coșul
-  localStorage.removeItem("cart");
-</script>
+  </div>
+
+  <script>
+    // Când se încarcă pagina de mulțumire, goliți coșul
+    localStorage.removeItem("msa_cart_v1");
+  </script>
 </body>
 </html>
