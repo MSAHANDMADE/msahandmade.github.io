@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coșul tău</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <a href="index.html">Acasă</a>
-    <a href="produse.html">Produse</a>
-    <a href="contact.html">Contact</a>
-    <a href="cos.html">Coș (<span id="cart-count">0</span>)</a>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" /></a>
+    <nav class="nav-links">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
+    </nav>
   </header>
 
-  <main>
-    <h1>Coșul tău</h1>
+  <main class="container">
+    <h1 class="page-title">Coșul tău</h1>
+
+    <!-- aici randăm produsele din coș -->
     <div id="cart-root"></div>
 
     <h2>Date livrare (plata la livrare)</h2>
-    <form id="order-form" class="order-form"
-          action="https://formsubmit.co/msahandmade.contact@gmail.com"
-          method="POST">
 
+    <!-- Formularul care merge la FormSubmit -->
+    <form id="order-form" class="order-form" action="https://formsubmit.co/msahandmade.contact@gmail.com" method="POST">
       <!-- setări FormSubmit -->
       <input type="hidden" name="_next" value="https://msahandmade.ro/multumesc.html">
-      <input type="hidden" name="_subject" value="Comandă nouă – M.S.A Handmade Decor">
+      <input type="hidden" name="_subject" value="Comandă nouă - M.S.A Handmade">
       <input type="hidden" name="_template" value="table">
       <input type="hidden" name="_captcha" value="false">
-      <textarea id="order_message" name="Mesaj" hidden></textarea>
+      <!-- aici JS va pune mesajul cu detalii comandă -->
+      <textarea id="order_message" name="message" hidden></textarea>
 
       <div class="radio-group">
         <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
@@ -71,8 +76,8 @@
         </label>
       </div>
 
-      <!-- câmpuri extra pentru Persoană juridică -->
-      <div class="form-row" id="pj-fields">
+      <!-- câmpuri pentru Persoană juridică -->
+      <div class="form-row" id="pj-fields" style="display:none">
         <label>Denumire firmă
           <input type="text" name="firma">
         </label>
@@ -83,7 +88,7 @@
 
       <div class="form-row">
         <label>Mențiuni (opțional)
-          <textarea name="mentiuni" rows="3"></textarea>
+          <textarea name="mentiuni" rows="3" placeholder="Culoare/variantă dorită, interval livrare etc."></textarea>
         </label>
       </div>
 
@@ -94,17 +99,22 @@
     </form>
   </main>
 
+  <footer class="site-footer">
+    <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
+  </footer>
+
   <script src="cart.js"></script>
   <script>
+    // anul din footer
+    document.getElementById('y').textContent = new Date().getFullYear();
+
     // ascunde/arată câmpurile pentru PJ
-    document.querySelectorAll('input[name="tip"]').forEach(r => {
-      r.addEventListener('change', () => {
-        const pj = document.querySelector('input[name="tip"][value="pj"]').checked;
-        document.getElementById('pj-fields').style.display = pj ? 'flex' : 'none';
-      });
-    });
-    document.getElementById('pj-fields').style.display =
-      document.querySelector('input[name="tip"][value="pj"]').checked ? 'flex' : 'none';
+    function togglePJ(){
+      const pj = document.querySelector('input[name="tip"][value="pj"]').checked;
+      document.getElementById('pj-fields').style.display = pj ? 'flex' : 'none';
+    }
+    document.querySelectorAll('input[name="tip"]').forEach(r => r.addEventListener('change', togglePJ));
+    togglePJ(); // la încărcare
   </script>
 </body>
 </html>
