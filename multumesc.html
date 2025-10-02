@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mulțumim! — MSA Handmade Decor</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" /></a>
+    <nav class="nav-links">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1 class="page-title">Comandă trimisă cu succes 💌</h1>
+    <p>Ți-am trimis un e-mail de confirmare. Vom reveni rapid cu detalii despre livrare.</p>
+
+    <div class="order-summary" id="order-summary" style="margin:20px 0;"></div>
+
+    <a class="cta" href="produse.html">Înapoi la produse</a>
+  </main>
+
+  <footer class="site-footer">
+    <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
+  </footer>
+
+  <script src="cart.js"></script>
+  <script>
+    // anul din footer
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Golește coșul după trimitere
+    clearCart();
+    updateCartCount();
+
+    // Dacă am salvat sumarul comenzii în localStorage, îl afișăm frumos
+    try {
+      const sum = JSON.parse(localStorage.getItem('msa_last_order_summary') || '{}');
+      if (sum && sum.items) {
+        const root = document.getElementById('order-summary');
+        const rows = sum.items.map(it => `<li>${it.name} × ${it.qty} — ${it.price * it.qty} RON</li>`).join('');
+        root.innerHTML = `
+          <h3>Sumar comandă</h3>
+          <ul style="line-height:1.8">${rows}</ul>
+          <p><strong>Subtotal:</strong> ${sum.subtotal} RON<br>
+             <strong>Livrare:</strong> ${sum.livrare} RON<br>
+             <strong>Total:</strong> ${sum.total} RON</p>`;
+      }
+      // curățăm rezumatul temporar
+      localStorage.removeItem('msa_last_order_summary');
+    } catch(e){}
+  </script>
+</body>
+</html>
