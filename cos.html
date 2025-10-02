@@ -3,21 +3,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mulțumim!</title>
+  <title>Coș de cumpărături - M.S.A Handmade Decor</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    body { text-align:center; padding:50px; font-family:sans-serif; background:#fdf6f0; }
-    .box { background:#fff; padding:40px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.1); display:inline-block; }
-    h1 { color:#6f52ff; margin-bottom:20px; }
-    p { color:#444; margin-bottom:16px; }
-    a { text-decoration:none; color:#fff; background:#6f52ff; padding:12px 24px; border-radius:8px; font-weight:600; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #fdfdfd;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    .total {
+      font-weight: bold;
+      text-align: right;
+      margin-top: 10px;
+    }
+    form {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
   </style>
 </head>
 <body>
-  <div class="box">
-    <h1>Comanda a fost trimisă cu succes!</h1>
-    <p>Ți-am trimis o copie pe email (dacă ai completat adresa). Te vom contacta în curând pentru detalii.</p>
-    <a href="index.html">Înapoi la acasă</a>
-  </div>
+
+  <h1>Coșul tău de cumpărături</h1>
+
+  <table id="cart-table">
+    <thead>
+      <tr>
+        <th>Produs</th>
+        <th>Cantitate</th>
+        <th>Preț</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody id="cart-items">
+      <!-- produsele din coș se inserează aici -->
+    </tbody>
+  </table>
+
+  <p class="total">Subtotal: <span id="subtotal">0</span> lei</p>
+  <p class="total">Livrare: 17 lei</p>
+  <p class="total">Total: <span id="grandtotal">0</span> lei</p>
+
+  <form action="https://formsubmit.co/msahandmade.contact@gmail.com" method="POST">
+    <!-- ascunse -->
+    <input type="hidden" name="_next" value="https://msahandmade.github.io/multumesc.html">
+    <input type="hidden" name="_subject" value="Nouă comandă de pe site!">
+    <input type="hidden" name="_autoresponse" value="Mulțumim pentru comandă! Vă vom contacta în scurt timp.">
+    <input type="hidden" name="_template" value="table">
+
+    <label for="nume">Nume complet</label>
+    <input type="text" name="Nume" id="nume" required>
+
+    <label for="email">Email</label>
+    <input type="email" name="Email" id="email" required>
+
+    <label for="telefon">Telefon</label>
+    <input type="text" name="Telefon" id="telefon" required>
+
+    <label for="oras">Oraș</label>
+    <input type="text" name="Oraș" id="oras" required>
+
+    <label for="judet">Județ</label>
+    <input type="text" name="Județ" id="judet" required>
+
+    <label for="adresa">Adresă completă</label>
+    <textarea name="Adresă" id="adresa" required></textarea>
+
+    <label for="mentiuni">Mențiuni</label>
+    <textarea name="Mențiuni" id="mentiuni"></textarea>
+
+    <button type="submit">Trimite comanda</button>
+  </form>
+
+  <script>
+    // Coșul salvat în localStorage
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartItemsContainer = document.getElementById("cart-items");
+    const subtotalEl = document.getElementById("subtotal");
+    const grandtotalEl = document.getElementById("grandtotal");
+
+    function renderCart() {
+      cartItemsContainer.innerHTML = "";
+      let subtotal = 0;
+
+      cart.forEach(item => {
+        const total = item.price * item.quantity;
+        subtotal += total;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.name}</td>
+          <td>${item.quantity}</td>
+          <td>${item.price} lei</td>
+          <td>${total} lei</td>
+        `;
+        cartItemsContainer.appendChild(row);
+      });
+
+      subtotalEl.textContent = subtotal;
+      grandtotalEl.textContent = subtotal + 17; // + livrare
+    }
+
+    renderCart();
+  </script>
+
 </body>
 </html>
