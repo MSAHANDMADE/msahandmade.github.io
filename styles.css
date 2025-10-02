@@ -110,4 +110,23 @@ textarea {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+}/* ---- Lista cos ---- */
+.cart-list { margin: 12px 0 18px; }
+.cart-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  box-shadow: var(--shadow);
+  margin: 8px 0;
 }
+.cart-title { font-weight: 600; }
+.cart-price, .cart-subtotal { color: var(--muted); }
+.cart-qty { display:flex; align-items:center; gap:8px; }
+.qty-btn, .remove-btn {
+  padding: 6px 10px; border-radius: 8px; border:1px solid #ddd; background:#fff; cursor:pointer;
+}
+.cart-totals { margin: 12px 0 20px; font-weight:600; display:grid; gap:6px; }
