@@ -3,21 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mulțumim!</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Comandă trimisă</title>
   <style>
-    body { text-align:center; padding:50px; font-family:sans-serif; background:#fdf6f0; }
-    .box { background:#fff; padding:40px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,.1); display:inline-block; }
-    h1 { color:#6f52ff; margin-bottom:20px; }
-    p { color:#444; margin-bottom:16px; }
-    a { text-decoration:none; color:#fff; background:#6f52ff; padding:12px 24px; border-radius:8px; font-weight:600; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8fdf8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .box {
+      background: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+    }
+    h1 {
+      color: #28a745;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    a {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    a:hover {
+      background: #218838;
+    }
   </style>
 </head>
 <body>
   <div class="box">
-    <h1>Comanda a fost trimisă cu succes!</h1>
-    <p>Ți-am trimis o copie pe email (dacă ai completat adresa). Te vom contacta în curând pentru detalii.</p>
-    <a href="index.html">Înapoi la acasă</a>
-  </div>
+    <h1>🎉 Comanda a fost trimisă cu succes!</h1>
+    <p>Vă mulțumim pentru încredere. Veți primi în scurt timp un email de confirmare.</p>
+    <a href="index.html">Înapoi la Acasă</a>
+  </div><script>
+  // Când se încarcă pagina de mulțumire, goliți coșul
+  localStorage.removeItem("cart");
+</script>
 </body>
 </html>
