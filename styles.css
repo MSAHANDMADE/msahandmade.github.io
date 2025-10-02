@@ -167,3 +167,120 @@ textarea {
 .form-actions{ display:flex; gap:10px; }
 .btn-primary{ background:#6d934a; color:#fff; border:none; padding:10px 16px; border-radius:10px; cursor:pointer; }
 .btn-ghost{ background:#eee; border:none; padding:10px 16px; border-radius:10px; cursor:pointer; }
+/* ===================== CART & FORM ===================== */
+
+/* Status messages */
+.status {
+  display: none;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+}
+.status.show { display: block; }
+.status.success { background: #d4edda; color: #155724; }
+.status.error   { background: #f8d7da; color: #721c24; }
+
+/* Cart list */
+.cart-list {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+.cart-head, .cart-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 0.5fr;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+.cart-head {
+  background: #f3f3f3;
+  font-weight: bold;
+}
+.cart-row:nth-child(even) {
+  background: #fafafa;
+}
+
+/* Cart buttons */
+.qty-btn {
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 3px 8px;
+  margin: 0 3px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.qty-btn:hover { background: #ddd; }
+
+.remove-btn {
+  background: #ffcccc;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.remove-btn:hover { background: #ff9999; }
+
+/* Totals */
+.cart-totals {
+  margin-top: 15px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  font-size: 16px;
+}
+.cart-total {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2a7a2a;
+}
+
+/* Form styling */
+form {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+form input, form textarea, form select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+form button {
+  background: #2a7a2a;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+form button:hover {
+  background: #226622;
+}
+
+/* Radio buttons PF/PJ */
+.form-options {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+}
