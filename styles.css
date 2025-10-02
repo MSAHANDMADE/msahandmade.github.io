@@ -130,3 +130,40 @@ textarea {
   padding: 6px 10px; border-radius: 8px; border:1px solid #ddd; background:#fff; cursor:pointer;
 }
 .cart-totals { margin: 12px 0 20px; font-weight:600; display:grid; gap:6px; }
+/* ===== Coș / Checkout ===== */
+.cart-card, .totals-card, .order-card{
+  background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:16px; margin:18px 0;
+}
+
+/* Lista produse din coș */
+.cart-list { width:100%; }
+.cart-head, .cart-row{
+  display:grid; grid-template-columns: 1.4fr 0.8fr 0.8fr 0.8fr auto;
+  gap:10px; align-items:center;
+}
+.cart-head{ font-weight:700; color:#666; margin-bottom:8px; }
+.cart-row{ background:#fafafa; border-radius:12px; padding:10px 12px; margin:8px 0; }
+.cart-title{ font-weight:600; }
+.cart-price,.cart-subtotal{ color:#666; }
+.cart-qty{ display:flex; align-items:center; gap:8px; }
+.qty-btn{ padding:6px 10px; border:1px solid #ddd; background:#fff; border-radius:8px; cursor:pointer; }
+.remove-btn{ border:1px solid #f1c5c5; background:#fff; border-radius:8px; padding:6px 10px; cursor:pointer; }
+.cart-totals{ display:grid; gap:6px; font-size:16px; }
+.cart-total{ font-size:18px; }
+
+/* Formular */
+.radio-line{ display:flex; gap:18px; margin-bottom:10px; }
+.radio{ display:flex; align-items:center; gap:8px; font-weight:600; }
+
+.order-form{ display:grid; gap:16px; }
+.form-col{ display:grid; gap:12px; }
+.form-col label{ display:grid; gap:6px; font-size:14px; }
+.form-col input, .form-col textarea{
+  border:1px solid #ddd; border-radius:8px; padding:10px; font-size:16px; width:100%;
+}
+.hidden{ display:none; }
+
+.form-actions{ display:flex; gap:10px; }
+.btn-primary{ background:#6d934a; color:#fff; border:none; padding:10px 16px; border-radius:10px; cursor:pointer; }
+.btn-ghost{ background:#eee; border:none; padding:10px 16px; border-radius:10px; cursor:pointer; }
