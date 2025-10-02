@@ -1,72 +1,85 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coș - MSA Handmade Decor</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coș – MSA Handmade Decor</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="site-header">
-    <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo"></a>
-    <nav class="nav-links">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
-    </nav>
-  </header>
+<header class="site-header">
+  <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo"></a>
+  <nav class="nav-links">
+    <a href="index.html">Acasă</a>
+    <a href="produse.html">Produse</a>
+    <a href="contact.html">Contact</a>
+    <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
+  </nav>
+</header>
 
-  <main class="container">
-    <h1>Coșul tău</h1>
-    <div id="cart-root"></div>
+<main class="container">
+  <h1>Coșul tău</h1>
+  <div id="cart-root"></div>
 
-    <h2>Date livrare (plata la livrare)</h2>
+  <h2>Date livrare (plata la livrare)</h2>
+  <form onsubmit="return placeOrder(this)" class="order-form">
+    <div class="radio-group">
+      <label><input type="radio" name="tip" value="fizica" checked> Persoană fizică</label>
+      <label><input type="radio" name="tip" value="juridica"> Persoană juridică</label>
+    </div>
 
-    <form onsubmit="return placeOrder(this)" class="order-form">
-      <div class="field-group">
-        <label><input type="radio" name="tip" value="fizica" checked onchange="toggleCompany(false)"> Persoană fizică</label>
-        <label><input type="radio" name="tip" value="juridica" onchange="toggleCompany(true)"> Persoană juridică</label>
+    <div class="form-row">
+      <label>Nume <input name="nume" required></label>
+      <label>Prenume <input name="prenume" required></label>
+    </div>
+    <div class="form-row">
+      <label>Telefon <input name="telefon" required></label>
+    </div>
+    <div class="form-row">
+      <label>Județ <input name="judet" required></label>
+      <label>Oraș <input name="oras" required></label>
+      <label>Cod poștal <input name="codpostal" required></label>
+    </div>
+    <div class="form-row">
+      <label>Adresă <input name="adresa" required></label>
+    </div>
+
+    <!-- câmpuri doar pentru juridica -->
+    <div id="pj-fields" style="display:none;">
+      <div class="form-row">
+        <label>Denumire firmă <input name="firma"></label>
       </div>
-
-      <label>Nume <input type="text" name="nume" required></label>
-      <label>Prenume <input type="text" name="prenume" required></label>
-      <label>Telefon <input type="text" name="telefon" required></label>
-
-      <label>Județ <input type="text" name="judet" required></label>
-      <label>Oraș <input type="text" name="oras" required></label>
-      <label>Cod poștal <input type="text" name="codpostal" required></label>
-      <label>Adresă <textarea name="adresa" rows="2" required></textarea></label>
-
-      <div id="company-fields" style="display:none;">
-        <label>Denumire firmă <input type="text" name="firma"></label>
-        <label>CUI <input type="text" name="cui"></label>
+      <div class="form-row">
+        <label>CUI <input name="cui"></label>
       </div>
+    </div>
 
-      <label>Mențiuni (opțional) <textarea name="mentiuni" rows="2"></textarea></label>
+    <div class="form-row">
+      <label>Mențiuni (opțional) <textarea name="mentiuni"></textarea></label>
+    </div>
 
+    <div class="form-row">
       <button type="submit" class="btn-primary">Trimite comanda</button>
       <button type="button" class="btn-ghost" onclick="clearCart()">Golește coșul</button>
-    </form>
-  </main>
+    </div>
+  </form>
+</main>
 
-  <footer class="site-footer">
-    <span id="y"></span> © M.S.A Handmade Decor – Toate drepturile rezervate.
-  </footer>
+<footer class="site-footer">
+  <span id="y"></span> © M.S.A Handmade Decor – Toate drepturile rezervate.
+</footer>
 
-  <script src="cart.js" defer></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      if (window.updateCartCount) updateCartCount();
-      if (window.renderCart) renderCart();
-      toggleCompany(false);
+<script src="cart.js"></script>
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  // afișare câmpuri juridica dacă selectează
+  document.querySelectorAll('input[name="tip"]').forEach(radio=>{
+    radio.addEventListener('change', ()=>{
+      const pj = document.getElementById('pj-fields');
+      pj.style.display = (radio.value === 'juridica' && radio.checked) ? 'block' : 'none';
     });
-
-    function toggleCompany(show) {
-      document.getElementById('company-fields').style.display = show ? 'block' : 'none';
-    }
-
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
+  });
+</script>
 </body>
 </html>
