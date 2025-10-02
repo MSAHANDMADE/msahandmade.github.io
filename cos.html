@@ -2,7 +2,7 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Coșul tău</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -20,20 +20,23 @@
   <main class="container">
     <h1 class="page-title">Coșul tău</h1>
 
-    <!-- aici randăm produsele din coș -->
+    <!-- Lista coș + totaluri vin din cart.js în acest div -->
     <div id="cart-root"></div>
 
     <h2>Date livrare (plata la livrare)</h2>
-
-    <!-- Formularul care merge la FormSubmit -->
-    <form id="order-form" class="order-form" action="https://formsubmit.co/msahandmade.contact@gmail.com" method="POST">
-      <!-- setări FormSubmit -->
+    <form id="order-form" class="order-form"
+          action="https://formsubmit.co/msahandmade.contact@gmail.com"
+          method="POST">
+      <!-- Setări FormSubmit -->
       <input type="hidden" name="_next" value="https://msahandmade.ro/multumesc.html">
-      <input type="hidden" name="_subject" value="Comandă nouă - M.S.A Handmade">
+      <input type="hidden" name="_subject" value="Comandă nouă - M.S.A Handmade Decor">
       <input type="hidden" name="_template" value="table">
       <input type="hidden" name="_captcha" value="false">
-      <!-- aici JS va pune mesajul cu detalii comandă -->
-      <textarea id="order_message" name="message" hidden></textarea>
+      <!-- trimite o copie automată clientului (auto-reply) -->
+      <input type="hidden" name="_autoresponse"
+             value="Îți mulțumim pentru comandă! Am primit solicitarea ta și te vom contacta în cel mai scurt timp. Echipa M.S.A Handmade Decor.">
+      <!-- unde punem detaliile comenzii (produse + totaluri) înainte de submit -->
+      <textarea id="order_message" name="Mesaj" hidden></textarea>
 
       <div class="radio-group">
         <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
@@ -51,6 +54,7 @@
 
       <div class="form-row">
         <label>Email
+          <!-- acest câmp este folosit de FormSubmit pentru a trimite auto-reply -->
           <input type="email" name="email" required>
         </label>
         <label>Telefon
@@ -76,7 +80,7 @@
         </label>
       </div>
 
-      <!-- câmpuri pentru Persoană juridică -->
+      <!-- Câmpuri extra pentru Persoană juridică -->
       <div class="form-row" id="pj-fields" style="display:none">
         <label>Denumire firmă
           <input type="text" name="firma">
@@ -88,7 +92,7 @@
 
       <div class="form-row">
         <label>Mențiuni (opțional)
-          <textarea name="mentiuni" rows="3" placeholder="Culoare/variantă dorită, interval livrare etc."></textarea>
+          <textarea name="mentiuni" rows="3" placeholder="Culoare/variantă dorită, interval livrare, etc."></textarea>
         </label>
       </div>
 
@@ -108,13 +112,72 @@
     // anul din footer
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // ascunde/arată câmpurile pentru PJ
+    // arată/ascunde câmpurile pentru PJ și setează required doar când e nevoie
+    const pjFields = document.getElementById('pj-fields');
+    const pjRadio  = document.querySelector('input[name="tip"][value="pj"]');
+    const pfRadio  = document.querySelector('input[name="tip"][value="pf"]');
     function togglePJ(){
-      const pj = document.querySelector('input[name="tip"][value="pj"]').checked;
-      document.getElementById('pj-fields').style.display = pj ? 'flex' : 'none';
+      const isPJ = pjRadio.checked;
+      pjFields.style.display = isPJ ? 'flex' : 'none';
+      pjFields.querySelectorAll('input').forEach(i => i.required = isPJ);
     }
     document.querySelectorAll('input[name="tip"]').forEach(r => r.addEventListener('change', togglePJ));
-    togglePJ(); // la încărcare
+    togglePJ();
+
+    // compune mesajul cu produsele înainte de trimiterea formularului
+    const SHIPPING = 17;
+    document.getElementById('order-form').addEventListener('submit', function(e){
+      // ia coșul din localStorage prin utilitățile din cart.js
+      const cart = (typeof getCart === 'function') ? getCart() : [];
+
+      if (!cart.length){
+        e.preventDefault();
+        alert('Coșul este gol.');
+        return false;
+      }
+
+      const subtotal = cart.reduce((s, p) => s + (p.price * (p.qty || 1)), 0);
+      const total    = subtotal + SHIPPING;
+
+      const itemsText = cart.map(p => `• ${p.name} × ${p.qty || 1} — ${p.price} RON`).join('%0A');
+
+      const f = e.target;
+      const tip = f.tip.value === 'pj' ? 'Persoană juridică' : 'Persoană fizică';
+      const nume = f.nume.value.trim();
+      const prenume = f.prenume.value.trim();
+      const email = f.email.value.trim();
+      const telefon = f.telefon.value.trim();
+      const judet = f.judet.value.trim();
+      const oras = f.oras.value.trim();
+      const codpostal = f.codpostal.value.trim();
+      const adresa = f.adresa.value.trim();
+      const firma = f.firma.value.trim();
+      const cui = f.cui.value.trim();
+      const mentiuni = f.mentiuni.value.trim() || '-';
+
+      const body =
+`Tip client: ${tip}
+Nume: ${nume} ${prenume}
+Email: ${email}
+Telefon: ${telefon}
+Adresă: ${adresa}, ${oraș || oras}, ${județ || judet}, ${codpostal}
+${tip === 'Persoană juridică' ? `Firmă: ${firma}
+CUI: ${cui}
+` : ''}Produse:
+${decodeURIComponent(itemsText)}
+
+Subtotal: ${subtotal} RON
+Livrare: ${SHIPPING} RON
+TOTAL: ${total} RON
+
+Mențiuni: ${mentiuni}`;
+
+      document.getElementById('order_message').value = body;
+      // lăsăm formularul să se trimită normal către FormSubmit
+    });
+
+    // după încărcare, randăm coșul
+    if (typeof renderCart === 'function') renderCart();
   </script>
 </body>
 </html>
