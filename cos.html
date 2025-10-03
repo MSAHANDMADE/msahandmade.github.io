@@ -5,8 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Coș — MSA Handmade</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ====== DOAR pentru formularul de pe coș (stack + radio sus) ====== */
+    .checkout-box{ margin-top:18px }
+    .radio-group{
+      display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px;
+      align-items:center;
+    }
+    .radio{
+      display:inline-flex; align-items:center; gap:6px;
+      border:1px solid #e5e7eb; border-radius:999px; padding:6px 10px;
+      background:#fff; cursor:pointer; font-weight:600; font-size:14px;
+    }
+    .radio input{ accent-color:#111827 }
+    .form-vertical{ display:flex; flex-direction:column; gap:10px }
+    .form-vertical label{ display:flex; flex-direction:column; gap:6px; font-weight:600; color:#1f2937 }
+    .form-vertical input,.form-vertical textarea,.form-vertical select{
+      padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px; font-weight:500; width:100%;
+    }
+    .row-2{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
+    @media (max-width:720px){ .row-2{ grid-template-columns:1fr } }
+    .qty-btn{
+      width:28px; height:28px; border:1px solid #ddd; border-radius:8px;
+      background:#fff; cursor:pointer;
+    }
+    .qty-input{
+      width:52px; text-align:center; border:1px solid #ddd; border-radius:8px; padding:4px 6px;
+    }
+  </style>
 </head>
 <body>
+  <!-- HEADER -->
   <header class="header">
     <button class="menu-toggle" aria-label="Deschide meniul" aria-expanded="false">☰</button>
     <nav class="nav">
@@ -30,27 +59,60 @@
       </div>
     </div>
 
-    <!-- FORMULAR (rămâne ca la tine; trimite prin EmailJS) -->
-    <form id="order-form" style="margin-top:18px;display:none">
-      <h3 style="margin:0 0 10px">Date pentru livrare</h3>
-
-      <div class="form-grid">
-        <label>Tip
-          <select name="tip" required>
-            <option value="Persoană fizică">Persoană fizică</option>
-            <option value="Persoană juridică">Persoană juridică</option>
-          </select>
+    <!-- FORMULAR — radio sus + câmpuri UNA SUB ALTA -->
+    <form id="order-form" class="checkout-box" style="display:none">
+      <!-- tip client -->
+      <div class="radio-group" role="radiogroup" aria-label="Tip client">
+        <label class="radio">
+          <input type="radio" name="tip" value="Persoană fizică" checked />
+          Persoană fizică
         </label>
+        <label class="radio">
+          <input type="radio" name="tip" value="Persoană juridică" />
+          Persoană juridică
+        </label>
+      </div>
 
-        <label>Nume <input type="text" name="nume" required /></label>
-        <label>Prenume <input type="text" name="prenume" required /></label>
-        <label>Email <input type="email" name="email" required /></label>
-        <label>Telefon <input type="tel" name="telefon" required /></label>
-        <label>Județ <input type="text" name="judet" required /></label>
-        <label>Oraș <input type="text" name="oras" required /></label>
-        <label>Cod poștal <input type="text" name="codpostal" required /></label>
-        <label>Adresă <input type="text" name="adresa" required /></label>
-        <label>Mențiuni (opțional) <textarea name="mentiuni" rows="3"></textarea></label>
+      <div class="form-vertical">
+        <div class="row-2">
+          <label>Nume
+            <input type="text" name="nume" required />
+          </label>
+          <label>Prenume
+            <input type="text" name="prenume" required />
+          </label>
+        </div>
+
+        <div class="row-2">
+          <label>Email
+            <input type="email" name="email" required />
+          </label>
+          <label>Telefon
+            <input type="tel" name="telefon" required />
+          </label>
+        </div>
+
+        <div class="row-2">
+          <label>Județ
+            <input type="text" name="judet" required />
+          </label>
+          <label>Oraș
+            <input type="text" name="oras" required />
+          </label>
+        </div>
+
+        <div class="row-2">
+          <label>Cod poștal
+            <input type="text" name="codpostal" required />
+          </label>
+          <label>Adresă
+            <input type="text" name="adresa" required />
+          </label>
+        </div>
+
+        <label>Mențiuni (opțional)
+          <textarea name="mentiuni" rows="3"></textarea>
+        </label>
       </div>
 
       <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
@@ -66,24 +128,26 @@
     <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
+  <!-- JS-urile tale -->
   <script src="script.js"></script>
   <script src="cart.js"></script>
 
   <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    // ===== COMPLETEAZĂ CU DATELE TALE (păstrează valorile tale existente) =====
+    // ===== COMPLETEAZĂ CU DATELE TALE EmailJS =====
     const EMAILJS_PUBLIC_KEY = "PUBLIC_KEY_DE_LA_EMAILJS";
     const EMAILJS_SERVICE_ID = "service_ix0zpp7";
     const EMAILJS_TEMPLATE_ADMIN  = "template_admin";
     const EMAILJS_TEMPLATE_CLIENT = "template_client";
     emailjs.init(EMAILJS_PUBLIC_KEY);
 
-    // ===== RANDARE COȘ CU – / qty / + și Șterge =====
+    // ===== RANDARE COȘ cu – / + / cantitate / Șterge =====
     function renderCart() {
       const {
         readCart, removeFromCart, clearCart,
-        increaseQty, decreaseQty, computeTotals, updateCartCountBadge
+        increaseQty, decreaseQty, setQty,
+        computeTotals, updateCartCountBadge
       } = window.MSACart;
 
       const list = document.getElementById("cart-list");
@@ -119,7 +183,7 @@
         img.style.width = "64px"; img.style.height = "48px";
         img.style.objectFit = "cover"; img.style.borderRadius = "8px";
 
-        // nume + controale cantitate
+        // nume + cantitate
         const nameWrap = document.createElement("div");
         nameWrap.innerHTML = `<div style="font-weight:600">${it.name}</div>`;
         const qtyBox = document.createElement("div");
@@ -129,20 +193,16 @@
         qtyBox.style.marginTop = "6px";
 
         const minus = document.createElement("button");
-        minus.type = "button";
-        minus.textContent = "–";
-        minus.style.cssText = "width:28px;height:28px;border:1px solid #ddd;border-radius:8px;cursor:pointer;background:#fff;";
+        minus.type = "button"; minus.className = "qty-btn"; minus.textContent = "–";
         minus.onclick = () => { decreaseQty(it.id); renderCart(); };
 
         const qty = document.createElement("input");
         qty.type = "number"; qty.min = "0"; qty.step = "1"; qty.value = it.qty;
-        qty.style.cssText = "width:52px;text-align:center;border:1px solid #ddd;border-radius:8px;padding:4px 6px;";
-        qty.onchange = (ev) => { window.MSACart.setQty(it.id, ev.target.value); renderCart(); };
+        qty.className = "qty-input";
+        qty.onchange = (ev) => { setQty(it.id, ev.target.value); renderCart(); };
 
         const plus = document.createElement("button");
-        plus.type = "button";
-        plus.textContent = "+";
-        plus.style.cssText = "width:28px;height:28px;border:1px solid #ddd;border-radius:8px;cursor:pointer;background:#fff;";
+        plus.type = "button"; plus.className = "qty-btn"; plus.textContent = "+";
         plus.onclick = () => { increaseQty(it.id); renderCart(); };
 
         qtyBox.append(minus, qty, plus);
@@ -154,8 +214,7 @@
 
         // ștergere completă
         const del = document.createElement("button");
-        del.className = "add-btn";
-        del.style.background = "#ef4444";
+        del.className = "add-btn"; del.style.background = "#ef4444";
         del.textContent = "Șterge";
         del.onclick = () => { removeFromCart(it.id); renderCart(); };
 
@@ -173,30 +232,35 @@
     }
     document.addEventListener("DOMContentLoaded", renderCart);
 
-    // ===== SUBMIT (trimite la EmailJS exact câmpurile tale) =====
+    // ID comandă scurt (ex: #A1B2C3)
     function genOrderId(){ return Math.random().toString(36).slice(2,8).toUpperCase(); }
 
+    // ===== SUBMIT EmailJS: trimite EXACT câmpurile tale =====
     document.getElementById("order-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const { readCart, computeTotals, clearCart } = window.MSACart;
       const cart = readCart(); if (!cart.length) return;
 
       const fd = new FormData(e.target);
+      // tip din radio:
+      const tip = fd.get("tip"); // "Persoană fizică" sau "Persoană juridică"
+
+      // text produse
       const produse = cart.map(it => `• ${it.name} × ${it.qty} — ${it.price} RON`).join("\n");
       const { subtotal, shipping, total } = computeTotals(cart);
       const order_id = genOrderId();
 
       const payload = {
-        tip:        fd.get("tip"),
-        nume:       fd.get("nume"),
-        prenume:    fd.get("prenume"),
-        email:      fd.get("email"),
-        telefon:    fd.get("telefon"),
-        judet:      fd.get("judet"),
-        oras:       fd.get("oras"),
-        codpostal:  fd.get("codpostal"),
-        adresa:     fd.get("adresa"),
-        mentiuni:   fd.get("mentiuni") || "",
+        tip,
+        nume:      fd.get("nume"),
+        prenume:   fd.get("prenume"),
+        email:     fd.get("email"),
+        telefon:   fd.get("telefon"),
+        judet:     fd.get("judet"),
+        oras:      fd.get("oras"),
+        codpostal: fd.get("codpostal"),
+        adresa:    fd.get("adresa"),
+        mentiuni:  fd.get("mentiuni") || "",
         produse, subtotal, livrare: shipping, total, order_id
       };
 
