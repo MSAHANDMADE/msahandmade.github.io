@@ -1,104 +1,56 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coșul tău</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<header class="site-header">
-  <a class="brand" href="index.html">MSA Handmade Decor</a>
-  <nav class="nav-links">
-    <a href="index.html">Acasă</a>
-    <a href="produse.html">Produse</a>
-    <a href="contact.html">Contact</a>
-    <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
-  </nav>
-</header>
+<form id="order-form" class="order-form"
+      action="https://formspree.io/f/xqaybwao"
+      method="POST">
 
-<main class="container">
-  <h1 class="page-title">Coșul tău</h1>
+  <h2>Finalizează comanda</h2>
 
-  <!-- aici se randează coșul -->
-  <div id="cart-root"></div>
+  <label for="tip">Tip client:</label>
+  <select id="tip" name="tip" required>
+    <option value="Persoană fizică">Persoană fizică</option>
+    <option value="Persoană juridică">Persoană juridică</option>
+  </select>
 
-  <h2>Date livrare (plata la livrare)</h2>
+  <label for="nume">Nume:</label>
+  <input type="text" id="nume" name="nume" required>
 
-  <!-- Formular către FormSubmit -->
-  <form id="order-form" class="order-form"
-        action="https://formsubmit.co/msahandmade.contact@gmail.com"
-        method="POST">
+  <label for="prenume">Prenume:</label>
+  <input type="text" id="prenume" name="prenume" required>
 
-    <!-- Setări FormSubmit -->
-    <input type="hidden" name="_next"     value="https://msahandmade.ro/multumesc.html">
-    <input type="hidden" name="_subject"  value="Comandă nouă – M.S.A Handmade Decor">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_captcha"  value="false">
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required>
 
-    <!-- Auto-reply pentru client (se umple din JS) -->
-    <input type="hidden" name="_autoresponse" id="fs_autoresponse">
-    <input type="hidden" name="_replyto"      id="fs_replyto">
+  <label for="telefon">Telefon:</label>
+  <input type="tel" id="telefon" name="telefon" required>
 
-    <!-- Rezumat pentru admin (se umple din JS) -->
-    <textarea id="order_message" name="message" hidden></textarea>
+  <label for="judet">Județ:</label>
+  <input type="text" id="judet" name="judet" required>
 
-    <!-- Tip client -->
-    <div class="radio-group">
-      <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
-      <label><input type="radio" name="tip" value="pj"> Persoană juridică</label>
-    </div>
+  <label for="oras">Oraș:</label>
+  <input type="text" id="oras" name="oras" required>
 
-    <!-- Date personale -->
-    <div class="form-row">
-      <label>Nume <input type="text" name="nume" required></label>
-      <label>Prenume <input type="text" name="prenume" required></label>
-    </div>
+  <label for="adresa">Adresă:</label>
+  <textarea id="adresa" name="adresa" required></textarea>
 
-    <div class="form-row">
-      <label>Email <input type="email" name="email" required></label>
-      <label>Telefon <input type="tel" name="telefon" required></label>
-    </div>
+  <label for="codpostal">Cod poștal:</label>
+  <input type="text" id="codpostal" name="codpostal" required>
 
-    <div class="form-row">
-      <label>Județ <input type="text" name="judet" required></label>
-      <label>Oraș <input type="text" name="oras" required></label>
-    </div>
+  <label for="produse">Produse comandate:</label>
+  <textarea id="produse" name="produse" readonly></textarea>
 
-    <div class="form-row">
-      <label>Cod poștal <input type="text" name="codpostal" required></label>
-      <label>Adresă <input type="text" name="adresa" required></label>
-    </div>
+  <label for="total">Total (RON):</label>
+  <input type="text" id="total" name="total" readonly>
 
-    <!-- Câmpuri pentru firmă (PJ) -->
-    <div class="form-row" id="pj-fields">
-      <label>Firmă <input type="text" name="firma"></label>
-      <label>CUI <input type="text" name="cui"></label>
-    </div>
+  <label for="mentiuni">Mențiuni:</label>
+  <textarea id="mentiuni" name="mentiuni"></textarea>
 
-    <div class="form-row">
-      <label>Mențiuni (opțional)<textarea name="mentiuni" rows="3"></textarea></label>
-    </div>
+  <!-- Mesajul pe care clientul îl primește după trimitere -->
+  <input type="hidden" name="_subject" value="Comanda ta a fost confirmată!">
+  <input type="hidden" name="_replyto" value="">
+  <input type="hidden" name="_autoresponse" 
+         value="Îți mulțumim pentru comanda efectuată! 
+Comanda ta a fost înregistrată și va fi procesată în 1–3 zile lucrătoare. 
+O zi minunată, cu magie și lumină! 🌸 
+Echipa M.S.A Handmade Decor.">
 
-    <div class="form-row">
-      <button type="submit" class="btn-primary">Trimite comanda</button>
-      <button type="button" class="btn-ghost" onclick="clearCart()">Golește coșul</button>
-    </div>
-  </form>
-</main>
-
-<script src="cart.js"></script>
-<script>
-  // ascunde câmpurile pentru PJ dacă nu e selectat
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const pjFields = document.getElementById('pj-fields');
-    function togglePJ(){
-      pjFields.style.display =
-        document.querySelector('input[name="tip"][value="pj"]').checked ? 'flex' : 'none';
-    }
-    document.querySelectorAll('input[name="tip"]').forEach(r=>r.addEventListener('change', togglePJ));
-    togglePJ();
-  });
-</script>
-</body>
-</html>
+  <button type="submit">Trimite comanda</button>
+</form>
