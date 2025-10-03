@@ -1,56 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>M.S.A Handmade — Acasă</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="cart.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>M.S.A Handmade Decor</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="cart.js"></script>
 </head>
 <body>
-  <!-- HEADER -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="index.html" aria-label="M.S.A Handmade">
-        <img src="logo.png" alt="M.S.A Handmade" class="logo" />
-      </a>
 
-      <nav class="nav" aria-label="Meniu principal">
-        <a href="index.html" class="nav-link active">Acasă</a>
-        <a href="produse.html" class="nav-link">Produse</a>
-        <a href="cos.html" class="nav-link cart-link">
-          <svg class="cart-ico" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 4h-2l-1 2v2h2l3.6 7.59c.16.34.5.56.87.56h7.53a1 1 0 0 0 .95-.68l2.62-7.87A1 1 0 0 0 21.6 6H7.42L7 4zm0 16a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-          </svg>
-          Coș <span class="badge" id="cart-count">0</span>
-        </a>
-      </nav>
-
-      <button class="nav-toggle" aria-label="Deschide meniul">☰</button>
+<header class="header">
+  <div class="container nav">
+    <div class="brand">
+      <img src="logo.png" alt="M.S.A Handmade Decor" class="logo">
+      <small>Magie și lumină într-un singur loc</small>
     </div>
-  </header>
+    <nav class="menu">
+      <a class="link" href="index.html">Acasă</a>
+      <a class="link" href="produse.html">Produse</a>
+      <a class="link" href="cos.html">Coș <span id="cart-count" class="cart-count">0</span></a>
+    </nav>
+  </div>
+</header>
 
-  <!-- HERO MINIMAL -->
-  <section class="hero-min">
-    <div class="container center">
-      <h1 class="h1">Magie & lumină, handmade ✨</h1>
-      <p class="muted">Produse create cu suflet. Descoperă colecția.</p>
-      <a href="produse.html" class="btn">Vezi produse</a>
+<main class="container">
+  <section class="hero">
+    <h1>Bine ai venit la M.S.A Handmade!</h1>
+    <p>Descoperă lumânări și decorațiuni turnate manual, cadouri cu suflet. 💚</p>
+    <div style="text-align:center;margin-top:14px">
+      <a class="cta" href="produse.html">Vezi produsele</a>
     </div>
   </section>
+</main>
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>© 2025 M.S.A Handmade — Toate drepturile rezervate.</p>
-      <p>Contact: <a href="mailto:msahandmade.contact@gmail.com">msahandmade.contact@gmail.com</a></p>
-    </div>
-  </footer>
+<footer class="footer">
+  © <span id="y"></span> M.S.A Handmade — Toate drepturile rezervate ·
+  <a href="contact.html">Contact</a>
+</footer>
 
-  <script>
-    // meniu mobil
-    document.querySelector('.nav-toggle').onclick = () =>
-      document.querySelector('.nav').classList.toggle('open');
-  </script>
+<div class="toast" aria-live="polite"></div>
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
