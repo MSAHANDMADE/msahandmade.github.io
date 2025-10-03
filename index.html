@@ -1,39 +1,61 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSA Handmade — Acasă</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .home-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+      text-align: center;
+    }
+    .home-hero img {
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    .btn-main {
+      background: #b91c1c;
+      color: #fff;
+      padding: 14px 26px;
+      border-radius: 12px;
+      font-weight: 800;
+      text-decoration: none;
+      font-size: 18px;
+      transition: background 0.2s;
+    }
+    .btn-main:hover {
+      background: #dc2626;
+    }
+  </style>
 </head>
 <body>
-  <!-- HEADER -->
+  <!-- HEADER comun -->
   <header class="header">
-    <button class="menu-toggle" aria-label="Deschide meniul" aria-expanded="false">☰</button>
     <nav class="nav">
       <a href="index.html" aria-current="page">Acasă</a>
       <a href="produse.html">Produse</a>
-      <a href="cos.html" class="cart">Coș <span id="cart-count">0</span></a>
+      <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
     </nav>
   </header>
 
-  <!-- HERO cu logo mai mare și fundal roșu -->
-  <section class="hero hero-red">
-    <div class="brand">
-      <img class="logo" src="logo.png" alt="MSA Handmade">
-      <h1>MSA Handmade</h1>
-      <p>Cadouri pictate cu drag</p>
-      <a class="btn btn-star" href="produse.html"><span class="star">★</span> Vezi produse</a>
-    </div>
-  </section>
+  <!-- CONȚINUT -->
+  <main class="home-hero">
+    <img src="logo.png" alt="MSA Handmade logo">
+    <a href="produse.html" class="btn-main">⭐ Vezi produsele</a>
+  </main>
 
   <!-- FOOTER -->
-  <footer class="footer footer-red">
+  <footer class="footer">
     <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
   </footer>
 
-  <!-- JS -->
   <script src="script.js"></script>
-  <script src="cart.js"></script>
 </body>
 </html>
