@@ -7,171 +7,97 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header>
-  <a href="index.html">Acasă</a>
-  <a href="produse.html">Produse</a>
-  <a href="contact.html">Contact</a>
-  <a href="cos.html">Coș (<span id="cart-count">0</span>)</a>
+<header class="site-header">
+  <a class="brand" href="index.html">MSA Handmade Decor</a>
+  <nav class="nav-links">
+    <a href="index.html">Acasă</a>
+    <a href="produse.html">Produse</a>
+    <a href="contact.html">Contact</a>
+    <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
+  </nav>
 </header>
 
-<main>
-  <h1>Coșul tău</h1>
+<main class="container">
+  <h1 class="page-title">Coșul tău</h1>
+
+  <!-- aici se randează coșul -->
   <div id="cart-root"></div>
 
   <h2>Date livrare (plata la livrare)</h2>
-  <form id="order-form" class="order-form" 
-        action="https://formsubmit.co/msahandmade.contact@gmail.com" 
+
+  <!-- Formular către FormSubmit -->
+  <form id="order-form" class="order-form"
+        action="https://formsubmit.co/msahandmade.contact@gmail.com"
         method="POST">
 
     <!-- Setări FormSubmit -->
-    <input type="hidden" name="_next" value="https://msahandmade.ro/multumesc.html">
-    <input type="hidden" name="_subject" value="Comandă nouă – M.S.A Handmade Decor">
+    <input type="hidden" name="_next"     value="https://msahandmade.ro/multumesc.html">
+    <input type="hidden" name="_subject"  value="Comandă nouă – M.S.A Handmade Decor">
     <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_captcha"  value="false">
 
-    <!-- Auto-reply către client (suprascris din JS) -->
-    <input type="hidden" name="_autoresponse" id="order_replyto">
+    <!-- Auto-reply pentru client (se umple din JS) -->
+    <input type="hidden" name="_autoresponse" id="fs_autoresponse">
+    <input type="hidden" name="_replyto"      id="fs_replyto">
 
-    <!-- CC: Emailul clientului (pus din JS) -->
-    <input type="hidden" name="_cc" id="order_cc">
-
-    <!-- câmp pentru rezumat comandă (din JS) -->
+    <!-- Rezumat pentru admin (se umple din JS) -->
     <textarea id="order_message" name="message" hidden></textarea>
 
-    <div>
+    <!-- Tip client -->
+    <div class="radio-group">
       <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
       <label><input type="radio" name="tip" value="pj"> Persoană juridică</label>
     </div>
 
-    <div>
+    <!-- Date personale -->
+    <div class="form-row">
       <label>Nume <input type="text" name="nume" required></label>
       <label>Prenume <input type="text" name="prenume" required></label>
     </div>
 
-    <div>
-      <label>Email <input type="email" name="email" id="client_email" required></label>
+    <div class="form-row">
+      <label>Email <input type="email" name="email" required></label>
       <label>Telefon <input type="tel" name="telefon" required></label>
     </div>
 
-    <div>
+    <div class="form-row">
       <label>Județ <input type="text" name="judet" required></label>
       <label>Oraș <input type="text" name="oras" required></label>
     </div>
 
-    <div>
+    <div class="form-row">
       <label>Cod poștal <input type="text" name="codpostal" required></label>
       <label>Adresă <input type="text" name="adresa" required></label>
     </div>
 
-    <div id="pj-fields" style="display:none;">
-      <label>Denumire firmă <input type="text" name="firma"></label>
+    <!-- Câmpuri pentru firmă (PJ) -->
+    <div class="form-row" id="pj-fields">
+      <label>Firmă <input type="text" name="firma"></label>
       <label>CUI <input type="text" name="cui"></label>
     </div>
 
-    <div>
-      <label>Mențiuni (opțional)</label>
-      <textarea name="mentiuni" rows="3"></textarea>
+    <div class="form-row">
+      <label>Mențiuni (opțional)<textarea name="mentiuni" rows="3"></textarea></label>
     </div>
 
-    <button type="submit">Trimite comanda</button>
+    <div class="form-row">
+      <button type="submit" class="btn-primary">Trimite comanda</button>
+      <button type="button" class="btn-ghost" onclick="clearCart()">Golește coșul</button>
+    </div>
   </form>
 </main>
 
 <script src="cart.js"></script>
 <script>
-  // Ascundem câmpurile pentru Persoană Juridică
-  document.querySelectorAll('input[name="tip"]').forEach(r => {
-    r.addEventListener('change', () => {
-      document.getElementById('pj-fields').style.display =
-        document.querySelector('input[name="tip"][value="pj"]').checked ? 'block' : 'none';
-    });
-  });
-
-  // Prelucrăm formularul înainte de trimitere
-  document.getElementById('order-form').addEventListener('submit', function(e) {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    if (cart.length === 0) {
-      alert('Coșul este gol!');
-      e.preventDefault();
-      return;
+  // ascunde câmpurile pentru PJ dacă nu e selectat
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const pjFields = document.getElementById('pj-fields');
+    function togglePJ(){
+      pjFields.style.display =
+        document.querySelector('input[name="tip"][value="pj"]').checked ? 'flex' : 'none';
     }
-
-    // Date din formular
-    const form = e.target;
-    const nume = form.nume.value;
-    const prenume = form.prenume.value;
-    const email = form.email.value;
-    const telefon = form.telefon.value;
-    const judet = form.judet.value;
-    const oras = form.oras.value;
-    const codpostal = form.codpostal.value;
-    const adresa = form.adresa.value;
-    const tip = form.tip.value;
-    const firma = form.firma.value;
-    const cui = form.cui.value;
-    const mentiuni = form.mentiuni.value;
-
-    // Rezumat produse
-    let subtotal = 0;
-    let itemsLines = cart.map(it => {
-      subtotal += it.price * it.qty;
-      return `• ${it.name} × ${it.qty} — ${it.price * it.qty} RON`;
-    }).join("\n");
-
-    const shipping = 17;
-    const total = subtotal + shipping;
-
-    // Rezumat comandă pentru administrator
-    const message = 
-`Tip client: ${tip === 'pf' ? 'Persoană fizică' : 'Persoană juridică'}
-Nume: ${nume} ${prenume}
-Email: ${email}
-Telefon: ${telefon}
-Adresă: ${adresa}, ${oras}, ${judet}, ${codpostal}
-${tip === 'pj' ? `Firmă: ${firma}, CUI: ${cui}\n` : ''}${mentiuni ? `Mențiuni: ${mentiuni}\n` : ''}
-
-Produse:
-${itemsLines}
-
-Subtotal: ${subtotal} RON
-Livrare: ${shipping} RON
-TOTAL: ${total} RON`;
-
-    document.getElementById('order_message').value = message;
-
-    // ===== Mesaj FRUMOS pentru client =====
-    const orderId = 'MSA-' + Date.now().toString().slice(-8);
-    const clientPretty =
-`✅ Comanda ta a fost înregistrată cu succes!
-
-Număr comandă: ${orderId}
-
-Salut, ${nume} ${prenume}!
-Îți mulțumim că ai ales M.S.A Handmade Decor. Mai jos ai un rezumat:
-
-${itemsLines}
-
-Subtotal: ${subtotal} RON
-Livrare: ${shipping} RON
-TOTAL: ${total} RON
-
-Adresă livrare:
-${adresa}, ${oras}, ${judet}, ${codpostal}
-Telefon: ${telefon}
-
-${tip === 'pj' ? `Persoană juridică: ${firma} (CUI: ${cui})\n` : ''}${mentiuni ? `Mențiuni: ${mentiuni}\n` : ''}
-
-⏱️ Comanda ta va fi procesată în 1-3 zile lucrătoare.
-Te vom contacta telefonic sau prin email pentru confirmare.
-
-Cu drag,
-M.S.A Handmade Decor`;
-
-    document.getElementById('order_replyto').value = clientPretty;
-    document.getElementById('order_cc').value = email;
-
-    // Golim coșul
-    localStorage.removeItem('cart');
+    document.querySelectorAll('input[name="tip"]').forEach(r=>r.addEventListener('change', togglePJ));
+    togglePJ();
   });
 </script>
 </body>
