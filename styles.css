@@ -1,65 +1,101 @@
 :root{
-  --brand:#6b46c1; /* mov prietenos */
-  --bg:#faf9ff;
-  --text:#1f2937;
-  --muted:#6b7280;
-  --card:#ffffff;
-  --ring:rgba(107,70,193,.15);
+  --bg:#0f172a;
+  --card:#0b1020;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --accent:#22d3ee;
+  --ring:rgba(34,211,238,.5);
 }
 
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg)}
-a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
-
-.container{max-width:980px;margin:0 auto;padding:18px}
-
-.header{
-  position:sticky;top:0;z-index:20;background:rgba(255,255,255,.8);
-  backdrop-filter:blur(8px);border-bottom:1px solid #eee;
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:radial-gradient(1000px 700px at 0% 0%,#0b1220,var(--bg));
+  color:var(--text);
 }
-.nav{display:flex;align-items:center;justify-content:space-between;gap:14px}
-.logo{height:64px;width:auto;display:block;margin:8px auto}
-.brand{display:flex;align-items:center;gap:10px}
-.brand small{color:var(--muted)}
-.menu{display:flex;gap:14px;align-items:center}
-.link{padding:8px 10px;border-radius:10px}
-.link:hover{background:#f3f0ff}
 
-.cta{
-  display:inline-block;background:var(--brand);color:#fff;border-radius:12px;
-  padding:10px 16px;font-weight:600;box-shadow:0 6px 14px var(--ring)
+.site-header{
+  max-width:1100px;
+  margin:24px auto 0;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
-.cta:hover{filter:brightness(.98)}
+.site-header h1{
+  margin:0;
+  font-size:28px;
+  letter-spacing:.2px;
+}
+.social a{
+  display:inline-flex;
+  width:28px;height:28px;
+  margin-left:10px;
+  opacity:.8;
+  transition:opacity .15s ease, transform .15s ease;
+}
+.social a:hover{opacity:1; transform:translateY(-1px)}
+.social img{width:100%;height:100%}
 
-.hero{padding:22px 0 8px}
-.hero h1{font-size:22px;margin:8px 0 6px;text-align:center}
-.hero p{color:var(--muted);text-align:center;margin:0}
+.container{
+  max-width:1100px;
+  margin:18px auto 40px;
+  padding:0 16px;
+}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin:18px 0}
+.grid{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+}
+
 .card{
-  background:var(--card);border:1px solid #eee;border-radius:16px;overflow:hidden;
-  box-shadow:0 6px 14px rgba(0,0,0,.03)
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:16px;
+  box-shadow:0 10px 24px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.03);
+  overflow:hidden;
+  transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
-.card .pad{padding:12px}
-.card h3{font-size:16px;margin:0 0 6px}
-.price{font-weight:700}
-.muted{color:var(--muted);font-size:14px}
-
-.btn{width:100%;border:1px solid var(--brand);color:var(--brand);background:#fff;padding:10px;border-radius:12px;font-weight:600}
-.btn:hover{background:#f3f0ff}
-
-.cart-count{
-  background:var(--brand);color:#fff;border-radius:999px;padding:2px 7px;font-size:12px;font-weight:700
+.card:hover{
+  transform:translateY(-3px);
+  border-color:var(--ring);
+  box-shadow:0 14px 30px rgba(0,0,0,.45);
 }
 
-.footer{border-top:1px solid #eee;margin-top:26px;padding:20px 0;color:var(--muted);font-size:14px;text-align:center}
-
-/* toast mic */
-.toast{
-  position:fixed;left:50%;transform:translateX(-50%);
-  bottom:18px;background:#111;color:#fff;padding:10px 14px;border-radius:999px;
-  box-shadow:0 8px 24px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;
-  z-index:50
+.card figure{margin:0}
+.card img{
+  display:block;
+  width:100%;
+  aspect-ratio: 4 / 3;          /* păstrează proporții frumoase */
+  object-fit:cover;
+  background:#111827;
 }
-.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+
+.card figcaption{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+}
+.card h3{
+  margin:0;
+  font-size:16px;
+  font-weight:600;
+}
+.price{
+  font-weight:700;
+  color:var(--accent);
+}
+
+.footer{
+  text-align:center;
+  color:var(--muted);
+  padding:20px 12px 32px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
