@@ -1,177 +1,39 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coș — MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    /* Stiluri scurte doar pentru această pagină */
-    .checkout-box{ margin-top:18px }
-    .radio-group{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; align-items:center }
-    .radio{ display:inline-flex; align-items:center; gap:6px; border:1px solid #e5e7eb; border-radius:999px; padding:6px 10px; background:#fff; cursor:pointer; font-weight:600; font-size:14px }
-    .radio input{ accent-color:#111827 }
-    .form-vertical{ display:flex; flex-direction:column; gap:10px }
-    .form-vertical label{ display:flex; flex-direction:column; gap:6px; font-weight:600; color:#1f2937 }
-    .form-vertical input,.form-vertical textarea{ padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px; font-weight:500; width:100% }
-    .row-2{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
-    @media (max-width:720px){ .row-2{ grid-template-columns:1fr } }
-    .qty-btn{ width:28px; height:28px; border:1px solid #ddd; border-radius:8px; background:#fff; cursor:pointer }
-    .qty-input{ width:52px; text-align:center; border:1px solid #ddd; border-radius:8px; padding:4px 6px }
-    .btn-danger{ background:#ef4444; color:#fff; border:none; padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer }
-    .btn-secondary{ background:#9ca3af; color:#fff; border:none; padding:10px 14px; border-radius:12px; font-weight:800; cursor:pointer }
-    .btn{ background:#111827; color:#fff; border:none; padding:12px 18px; border-radius:14px; font-weight:800; cursor:pointer }
-    .status{ margin-top:10px; font-weight:700; color:#6b7280 }
-    .status.err{ color:#b91c1c } .status.ok{ color:#065f46 }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coșul tău</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- HEADER -->
-  <header class="header">
-    <button class="menu-toggle" aria-label="Deschide meniul" aria-expanded="false">☰</button>
-    <nav class="nav">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="cos.html" class="cart" aria-current="page">Coș <span id="cart-count">0</span></a>
-    </nav>
-  </header>
+  <h1>Coșul tău</h1>
+  <div id="cart-items"></div>
+  <p>Subtotal: <span id="subtotal">0</span> RON  
+     Livrare: 17 RON  
+     Total: <span id="total">17</span> RON</p>
 
-  <main class="container">
-    <h2 class="section-title">Coșul tău</h2>
+  <form id="checkout-form">
+    <label><input type="radio" name="tip" value="Persoană fizică" checked> Persoană fizică</label>
+    <label><input type="radio" name="tip" value="Persoană juridică"> Persoană juridică</label>
 
-    <!-- lista de produse din coș -->
-    <div id="cart-empty" style="display:none;color:#6b7280">Coșul este gol.</div>
-    <div id="cart-list"></div>
+    <input type="text" name="nume" placeholder="Nume" required>
+    <input type="text" name="prenume" placeholder="Prenume" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="text" name="telefon" placeholder="Telefon" required>
+    <input type="text" name="judet" placeholder="Județ" required>
+    <input type="text" name="oras" placeholder="Oraș" required>
+    <input type="text" name="codpostal" placeholder="Cod poștal" required>
+    <input type="text" name="adresa" placeholder="Adresă" required>
+    <textarea name="mentiuni" placeholder="Mențiuni (opțional)"></textarea>
 
-    <!-- totaluri -->
-    <div id="totals" style="margin-top:16px;display:none">
-      <div style="display:flex;justify-content:flex-end;gap:16px;flex-wrap:wrap">
-        <div><strong>Subtotal:</strong> <span id="t-sub">0</span> RON</div>
-        <div><strong>Livrare:</strong> <span id="t-ship">17</span> RON</div>
-        <div><strong>Total:</strong> <span id="t-total">0</span> RON</div>
-      </div>
-    </div>
+    <button type="button" id="clear-cart">Golește coșul</button>
+    <button type="submit">Plasează comanda</button>
+  </form>
 
-    <!-- formular comandă -->
-    <form id="order-form" class="checkout-box" style="display:none">
-      <div class="radio-group" role="radiogroup" aria-label="Tip client">
-        <label class="radio"><input type="radio" name="tip" value="Persoană fizică" checked /> Persoană fizică</label>
-        <label class="radio"><input type="radio" name="tip" value="Persoană juridică" /> Persoană juridică</label>
-      </div>
+  <div id="message"></div>
 
-      <div class="form-vertical">
-        <div class="row-2">
-          <label>Nume<input type="text" name="nume" required /></label>
-          <label>Prenume<input type="text" name="prenume" required /></label>
-        </div>
-        <div class="row-2">
-          <label>Email<input type="email" name="email" required /></label>
-          <label>Telefon<input type="tel" name="telefon" required /></label>
-        </div>
-        <div class="row-2">
-          <label>Județ<input type="text" name="judet" required /></label>
-          <label>Oraș<input type="text" name="oras" required /></label>
-        </div>
-        <div class="row-2">
-          <label>Cod poștal<input type="text" name="codpostal" required /></label>
-          <label>Adresă<input type="text" name="adresa" required /></label>
-        </div>
-        <label>Mențiuni (opțional)<textarea name="mentiuni" rows="3"></textarea></label>
-      </div>
-
-      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-        <button id="clear-cart" type="button" class="btn-secondary">Golește coșul</button>
-        <button id="place-order" type="submit" class="btn">Plasează comanda</button>
-      </div>
-
-      <div id="order-status" class="status"></div>
-    </form>
-  </main>
-
-  <footer class="footer">
-    <small>&copy; <span id="year"></span> — MSA Handmade.</small>
-  </footer>
-
-  <!-- ORDINĂ CORECTĂ DE SCRIPTURI (obligatoriu) -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script src="script.js"></script>  <!-- EmailJS + submit comanda -->
-  <script src="cart.js"></script>    <!-- logica coșului -->
-
-  <!-- RANDARE COȘ DINAMIC -->
-  <script>
-    function renderCart() {
-      const api = window.MSACart;
-      const { readCart, removeFromCart, clearCart, increaseQty, decreaseQty, setQty, computeTotals, updateCartCountBadge } = api;
-
-      const list = document.getElementById("cart-list");
-      const empty = document.getElementById("cart-empty");
-      const form  = document.getElementById("order-form");
-      const totalsBox = document.getElementById("totals");
-
-      const cart = readCart();
-      list.innerHTML = "";
-
-      if (!cart.length) {
-        empty.style.display = "block";
-        form.style.display = "none";
-        totalsBox.style.display = "none";
-        return;
-      }
-      empty.style.display = "none";
-      form.style.display = "block";
-      totalsBox.style.display = "block";
-
-      cart.forEach(it => {
-        const row = document.createElement("div");
-        row.style.cssText = "display:grid;grid-template-columns:64px 1fr auto auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #eee";
-
-        const img = document.createElement("img");
-        img.src = it.image; img.alt = it.name;
-        Object.assign(img.style, { width:"64px", height:"48px", objectFit:"cover", borderRadius:"8px" });
-
-        const nameWrap = document.createElement("div");
-        nameWrap.innerHTML = `<div style="font-weight:600">${it.name}</div>`;
-
-        const qtyBox = document.createElement("div");
-        qtyBox.style.cssText = "display:inline-flex;align-items:center;gap:6px;margin-top:6px";
-
-        const minus = document.createElement("button");
-        minus.type = "button"; minus.textContent = "–"; minus.className = "qty-btn";
-        minus.onclick = () => { decreaseQty(it.id); renderCart(); };
-
-        const qty = document.createElement("input");
-        qty.type = "number"; qty.min = "0"; qty.step = "1"; qty.value = it.qty; qty.className = "qty-input";
-        qty.onchange = (ev) => { setQty(it.id, ev.target.value); renderCart(); };
-
-        const plus = document.createElement("button");
-        plus.type = "button"; plus.textContent = "+"; plus.className = "qty-btn";
-        plus.onclick = () => { increaseQty(it.id); renderCart(); };
-
-        qtyBox.append(minus, qty, plus);
-        nameWrap.append(qtyBox);
-
-        const price = document.createElement("div");
-        price.textContent = `${it.price} RON`;
-
-        const del = document.createElement("button");
-        del.className = "btn-danger";
-        del.textContent = "Șterge";
-        del.onclick = () => { removeFromCart(it.id); renderCart(); };
-
-        row.append(img, nameWrap, price, del);
-        list.appendChild(row);
-      });
-
-      const { subtotal, shipping, total } = computeTotals(cart);
-      document.getElementById("t-sub").textContent = subtotal;
-      document.getElementById("t-ship").textContent = shipping;
-      document.getElementById("t-total").textContent = total;
-
-      document.getElementById("clear-cart").onclick = () => { clearCart(); renderCart(); };
-      updateCartCountBadge();
-    }
-
-    document.addEventListener("DOMContentLoaded", renderCart);
-  </script>
+  <script src="script.js"></script>
+  <script src="cart.js"></script>
 </body>
 </html>
