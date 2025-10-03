@@ -9,13 +9,7 @@ btn?.addEventListener("click", () => {
   btn.setAttribute("aria-expanded", String(open));
 });
 
-// scroll lin către #produse dacă URL are hash
-if (location.hash) {
-  const el = document.querySelector(location.hash);
-  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-// fallback sigur pentru imagini lipsă
+// fallback pentru imagini lipsă (nu mai vezi casete goale)
 document.querySelectorAll(".card img").forEach((img) => {
   img.addEventListener("error", () => {
     const ph = document.createElement("div");
