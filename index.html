@@ -1,16 +1,95 @@
-<!DOCTYPE html><html lang="ro"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MSA Handmade Decor</title>
-<link rel="stylesheet" href="styles.css">
-<script src="cart.js"></script>
-</head><body>
-<header class="site-header">
-  <a href="index.html">Acasă</a>
-  <a href="produse.html">Produse</a>
-  <a href="contact.html">Contact</a>
-  <a href="cos.html">Coș (<span id="cart-count">0</span>)</a>
-</header>
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M.S.A Handmade - Acasă</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="cart.js" defer></script>
+</head>
+<body>
 
-<h1>Bun venit!</h1>
-<p>Intră la <a href="produse.html">Produse</a> și adaugă în coș.</p>
-</body></html>
+  <!-- HEADER -->
+  <header>
+    <img src="logo.png" alt="M.S.A Handmade" class="logo">
+    <nav>
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="cos.html">Coș (<span id="cart-count">0</span>)</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Bine ai venit la M.S.A Handmade!</h1>
+    <p>Descoperă colecția noastră unică de produse handmade cu suflet.</p>
+  </section>
+
+  <!-- PRODUSE -->
+  <section class="produse">
+    <h2>Produse populare</h2>
+    <div class="grid">
+      <div class="produs">
+        <img src="images/images.crin.jpg" alt="Crin">
+        <h3>Crin</h3>
+        <p>Preț: 33 RON</p>
+        <button onclick="adaugaInCos('Crin', 100)">Adaugă în coș</button>
+      </div>
+      <div class="produs">
+        <img src="images/images.dans.jpg" alt="Dans">
+        <h3>Dans</h3>
+        <p>Preț: 33 RON</p>
+        <button onclick="adaugaInCos('Dans', 120)">Adaugă în coș</button>
+      </div>
+      <div class="produs">
+        <img src="images/images.indragostiti.jpg" alt="Îndrăgostiți">
+        <h3>Îndrăgostiți</h3>
+        <p>Preț: 99 RON</p>
+        <button onclick="adaugaInCos('Îndrăgostiți', 150)">Adaugă în coș</button>
+      </div>
+      <div class="produs">
+        <img src="images/images.inger.jpg" alt="Înger">
+        <h3>Înger</h3>
+        <p>Preț: 33 RON</p>
+        <button onclick="adaugaInCos('Înger', 90)">Adaugă în coș</button>
+      </div>
+      <div class="produs">
+        <img src="images/images.logodna.jpg" alt="Logodnă">
+        <h3>Logodnă</h3>
+        <p>Preț: 33 RON</p>
+        <button onclick="adaugaInCos('Logodnă', 200)">Adaugă în coș</button>
+      </div>
+      <div class="produs">
+        <img src="images/images.peisajiarna.jpg" alt="Peisaj iarnă">
+        <h3>Peisaj iarnă</h3>
+        <p>Preț: 99 RON</p>
+        <button onclick="adaugaInCos('Peisaj iarnă', 180)">Adaugă în coș</button>
+      </div>
+      <div class="produs">
+        <img src="images/images.sarut.jpg" alt="Sărut">
+        <h3>Sărut</h3>
+        <p>Preț: 33 RON</p>
+        <button onclick="adaugaInCos('Sărut', 170)">Adaugă în coș</button>
+      </div>
+      <div class="produs">
+        <img src="images/images_flori.jpg" alt="Flori">
+        <h3>Flori</h3>
+        <p>Preț: 36 RON</p>
+        <button onclick="adaugaInCos('Flori', 80)">Adaugă în coș</button>
+      </div>
+      <div class="produs">
+        <img src="images/images_peisaj.jpg" alt="Peisaj">
+        <h3>Peisaj</h3>
+        <p>Preț: 99 RON</p>
+        <button onclick="adaugaInCos('Peisaj', 130)">Adaugă în coș</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 M.S.A Handmade - Toate drepturile rezervate.</p>
+  </footer>
+
+</body>
+</html>
