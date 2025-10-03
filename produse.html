@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Bara de navigație -->
   <header class="header">
     <button class="menu-toggle" aria-label="Deschide meniul" aria-expanded="false">☰</button>
     <nav class="nav">
@@ -17,79 +16,141 @@
     </nav>
   </header>
 
-  <!-- Lista de produse -->
   <main class="container">
     <h2 class="section-title">Produse</h2>
-    <ul class="grid produse">
+    <ul class="grid produse" id="products">
+      <!-- Peisaj de iarnă (99) -->
       <li class="card">
         <figure>
           <img src="images/images.peisajiarna.jpg" alt="Peisaj de iarnă" />
           <figcaption><h3>Peisaj de iarnă</h3><span class="price">99 RON</span></figcaption>
         </figure>
+        <button class="add-btn"
+          data-id="peisaj-iarna"
+          data-name="Peisaj de iarnă"
+          data-price="99"
+          data-image="images/images.peisajiarna.jpg">Adaugă în coș</button>
       </li>
+
+      <!-- Peisaj (99) -->
       <li class="card">
         <figure>
           <img src="images/images_peisaj.jpg" alt="Peisaj" />
           <figcaption><h3>Peisaj</h3><span class="price">99 RON</span></figcaption>
         </figure>
+        <button class="add-btn"
+          data-id="peisaj"
+          data-name="Peisaj"
+          data-price="99"
+          data-image="images/images_peisaj.jpg">Adaugă în coș</button>
       </li>
+
+      <!-- Buchet (29) -->
       <li class="card">
         <figure>
           <img src="images/images_buchet.jpg" alt="Buchet" />
           <figcaption><h3>Buchet</h3><span class="price">29 RON</span></figcaption>
         </figure>
+        <button class="add-btn"
+          data-id="buchet"
+          data-name="Buchet"
+          data-price="29"
+          data-image="images/images_buchet.jpg">Adaugă în coș</button>
       </li>
+
+      <!-- Restul (33) -->
       <li class="card">
         <figure>
           <img src="images/images.crin.jpg" alt="Crin" />
           <figcaption><h3>Crin</h3><span class="price">33 RON</span></figcaption>
         </figure>
+        <button class="add-btn"
+          data-id="crin"
+          data-name="Crin"
+          data-price="33"
+          data-image="images/images.crin.jpg">Adaugă în coș</button>
       </li>
+
       <li class="card">
         <figure>
           <img src="images/images.dans.jpg" alt="Dans" />
           <figcaption><h3>Dans</h3><span class="price">33 RON</span></figcaption>
         </figure>
+        <button class="add-btn"
+          data-id="dans"
+          data-name="Dans"
+          data-price="33"
+          data-image="images/images.dans.jpg">Adaugă în coș</button>
       </li>
+
       <li class="card">
         <figure>
           <img src="images/images.indragostiti.jpg" alt="Îndrăgostiți" />
           <figcaption><h3>Îndrăgostiți</h3><span class="price">33 RON</span></figcaption>
         </figure>
+        <button class="add-btn"
+          data-id="indragostiti"
+          data-name="Îndrăgostiți"
+          data-price="33"
+          data-image="images/images.indragostiti.jpg">Adaugă în coș</button>
       </li>
+
       <li class="card">
         <figure>
           <img src="images/images.inger.jpg" alt="Înger" />
           <figcaption><h3>Înger</h3><span class="price">33 RON</span></figcaption>
         </figure>
+        <button class="add-btn"
+          data-id="inger"
+          data-name="Înger"
+          data-price="33"
+          data-image="images/images.inger.jpg">Adaugă în coș</button>
       </li>
+
       <li class="card">
         <figure>
           <img src="images/images.logodna.jpg" alt="Logodna" />
           <figcaption><h3>Logodna</h3><span class="price">33 RON</span></figcaption>
         </figure>
+        <button class="add-btn"
+          data-id="logodna"
+          data-name="Logodna"
+          data-price="33"
+          data-image="images/images.logodna.jpg">Adaugă în coș</button>
       </li>
+
       <li class="card">
         <figure>
           <img src="images/images.sarut.jpg" alt="Sărut" />
           <figcaption><h3>Sărut</h3><span class="price">33 RON</span></figcaption>
         </figure>
+        <button class="add-btn"
+          data-id="sarut"
+          data-name="Sărut"
+          data-price="33"
+          data-image="images/images.sarut.jpg">Adaugă în coș</button>
       </li>
+
       <li class="card">
         <figure>
           <img src="images/images_flori.jpg" alt="Flori" />
           <figcaption><h3>Flori</h3><span class="price">33 RON</span></figcaption>
         </figure>
+        <button class="add-btn"
+          data-id="flori"
+          data-name="Flori"
+          data-price="33"
+          data-image="images/images_flori.jpg">Adaugă în coș</button>
       </li>
     </ul>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
     <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
-  <!-- Script -->
+  <!-- IMPORTANT: JS-urile care fac butonul să funcționeze -->
   <script src="script.js"></script>
+  <script src="cart.js"></script>
 </body>
 </html>
