@@ -1,21 +1,32 @@
 <!DOCTYPE html>
 <html lang="ro">
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mulțumim — MSA Handmade</title>
-<link rel="stylesheet" href="styles.css">
-<body class="container">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mulțumim — MSA Handmade</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .thanks{max-width:700px;margin:40px auto;padding:20px;text-align:center}
+    .thanks h1{font-size:32px}
+  </style>
+</head>
+<body>
   <header class="header">
     <nav class="nav">
       <a href="index.html">Acasă</a>
       <a href="produse.html">Produse</a>
-      <a href="cos.html" class="cart">Coș <span id="cart-count">0</span></a>
+      <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
     </nav>
   </header>
 
-  <main style="text-align:center;margin:40px 0">
-    <h2>Mulțumim pentru comandă! 💛</h2>
+  <main class="thanks">
+    <h1>Mulțumim pentru comandă! 💛</h1>
     <p>Ți-am trimis un email de confirmare. Te vom contacta în curând.</p>
-    <p><a class="btn" href="produse.html">Înapoi la produse</a></p>
+    <p>
+      <a href="produse.html" class="btn-main" style="margin:8px">Înapoi la produse</a>
+      <a href="index.html" class="btn-main" style="margin:8px;background:#0f766e">Înapoi acasă</a>
+    </p>
   </main>
 
   <footer class="footer">
