@@ -3,22 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coș — MSA Handmade</title>
+  <title>MSA Handmade — Coș</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* Estetică pagină coș (independente) */
+    /* ——— Estetică pagină coș ——— */
+    .cart-wrap{max-width:900px;margin:0 auto;padding:20px}
     .cart-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .totals{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
     .totals > div{background:#f8fafc;border:1px solid #e5e7eb;padding:8px 12px;border-radius:12px;font-weight:700}
     .cart-row{display:grid;grid-template-columns:72px 1fr auto auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #edf2f7}
     .cart-row img{width:72px;height:56px;object-fit:cover;border-radius:10px}
     .qty{display:inline-flex;gap:8px;align-items:center;margin-top:6px}
-    .qty-btn{width:32px;height:32px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-weight:800}
+    .qty-btn{width:32px;height:32px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-weight:800;cursor:pointer}
     .qty-input{width:56px;text-align:center;border:1px solid #e5e7eb;border-radius:10px;padding:6px}
-    .btn{background:#111827;color:#fff;border:none;padding:12px 18px;border-radius:14px;font-weight:800}
-    .btn-danger{background:#ef4444;color:#fff;border:none;padding:10px 14px;border-radius:12px;font-weight:700}
-    .btn-secondary{background:#9ca3af;color:#fff;border:none;padding:10px 14px;border-radius:12px;font-weight:800}
-    .checkout{margin-top:18px}
+    .btn{background:#111827;color:#fff;border:none;padding:12px 18px;border-radius:14px;font-weight:800;cursor:pointer}
+    .btn:hover{opacity:.92}
+    .btn-danger{background:#ef4444;color:#fff;border:none;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer}
+    .btn-secondary{background:#9ca3af;color:#fff;border:none;padding:10px 14px;border-radius:12px;font-weight:800;cursor:pointer}
+    .checkout{margin-top:20px}
     .radio-set{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 12px}
     .radio-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #e5e7eb;border-radius:999px;padding:8px 12px;background:#fff;font-weight:700}
     .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -30,18 +32,19 @@
   </style>
 </head>
 <body>
+  <!-- HEADER comun -->
   <header class="header">
-    <button class="menu-toggle" aria-label="Deschide meniul" aria-expanded="false">☰</button>
     <nav class="nav">
       <a href="index.html">Acasă</a>
       <a href="produse.html">Produse</a>
-      <a href="cos.html" class="cart" aria-current="page">Coș <span id="cart-count">0</span></a>
+      <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart" aria-current="page">🛒 <span id="cart-count">0</span></a>
     </nav>
   </header>
 
-  <main class="container">
+  <main class="cart-wrap">
     <div class="cart-head">
-      <h2 class="section-title">Coșul tău</h2>
+      <h2>Coșul tău</h2>
       <div class="totals" id="totals" style="display:none">
         <div>Subtotal: <span id="t-sub">0</span> RON</div>
         <div>Livrare: <span id="t-ship">17</span> RON</div>
@@ -83,14 +86,14 @@
     <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
-  <!-- IMPORTANT: EmailJS înainte de scripturile tale -->
+  <!-- IMPORTANT: EmailJS înainte de cart.js (ca submitOrder să aibă librăria) -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-  <!-- Script de bază + logica de coș -->
+  <!-- Script de bază + logica de coș (exact cele pe care le ai deja) -->
   <script src="script.js"></script>
   <script src="cart.js"></script>
 
-  <!-- RENDER COȘ (folosește MSACart din cart.js) -->
+  <!-- RENDER + SUBMIT (folosește API-ul din cart.js) -->
   <script>
     function renderCart() {
       const api = window.MSACart;
@@ -141,7 +144,7 @@
       document.getElementById("t-ship").textContent = shipping;
       document.getElementById("t-total").textContent = total;
 
-      // butoane ștergere
+      // ștergere
       list.querySelectorAll("[data-del]").forEach(b=>{
         b.onclick = ()=>{ api.removeFromCart(b.dataset.del); renderCart(); };
       });
@@ -161,19 +164,19 @@
       // golește coș
       document.getElementById("clear-cart").onclick = ()=>{ api.clearCart(); renderCart(); };
 
-      // submit comandă
+      // submit comandă (folosește MSACart.submitOrder din cart.js)
       form.onsubmit = async (e)=>{
         e.preventDefault();
         status.className = "status info";
         status.textContent = "Se trimite comanda…";
         try{
-          await api.submitOrder(new FormData(form)); // funcție din cart.js
+          await api.submitOrder(new FormData(form));
           status.className = "status ok";
           status.textContent = "Comanda a fost trimisă cu succes!";
           setTimeout(()=>{ location.href="multumesc.html"; }, 900);
         }catch(err){
           status.className = "status err";
-          status.textContent = "Eroare la trimitere. Încearcă din nou.";
+          status.textContent = "Eroare la trimitere: " + (err?.text || err?.message || "verifică setările EmailJS");
           console.error(err);
         }
       };
