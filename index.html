@@ -4,32 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MSA Handmade</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- Bara de navigație -->
   <header class="header">
     <button class="menu-toggle" aria-label="Deschide meniul" aria-expanded="false">☰</button>
     <nav class="nav">
-      <a href="index.html">Acasă</a>
+      <a href="index.html" aria-current="page">Acasă</a>
       <a href="produse.html">Produse</a>
       <a href="cos.html" class="cart">Coș <span id="cart-count">0</span></a>
     </nav>
   </header>
 
+  <!-- Secțiunea principală (Acasă) -->
   <section id="acasa" class="hero">
     <div class="brand">
-      <!-- pune logo-ul tău dacă ai (ex: images/logo.svg) -->
-      <!-- <img class="logo" src="images/logo.svg" alt="MSA Handmade"> -->
+      <!-- Logo-ul -->
+      <img class="logo" src="logo.png" alt="MSA Handmade">
+      <!-- Titlu -->
       <h1>MSA Handmade</h1>
+      <!-- Subtitlu -->
       <p>Cadouri pictate cu drag</p>
+      <!-- Buton către pagina Produse -->
       <a class="btn" href="produse.html">Vezi produse</a>
     </div>
   </section>
 
+  <!-- Footer -->
   <footer class="footer">
     <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
+  <!-- Script -->
   <script src="script.js"></script>
 </body>
 </html>
