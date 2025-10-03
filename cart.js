@@ -1,54 +1,72 @@
-// ============ MSA CART ============
-
+// ============= MSA CART – v3 =============
 const CART_KEY = 'msa_cart_v1';
+const SHIPPING_FLAT = 17; // livrare fixă
 
-// ---- Utils stocare ----
-function getCart() {
+// migrare automată din vechiul "cart"
+(function migrate(){
+  try{
+    const old = localStorage.getItem('cart');
+    const cur = localStorage.getItem(CART_KEY);
+    if (old && !cur) {
+      localStorage.setItem(CART_KEY, old);
+      localStorage.removeItem('cart');
+    }
+  }catch(e){}
+})();
+
+// ==== utilitare stocare ====
+function getCart(){
   try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
-  catch { return []; }
+  catch(e){ return []; }
 }
-function saveCart(cart) {
+function saveCart(cart){
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
   updateCartCount();
 }
-function updateCartCount() {
+function updateCartCount(){
   const cart = getCart();
-  const count = cart.reduce((s,i)=>s+i.qty,0);
+  const count = cart.reduce((s,i)=>s+(i.qty||0),0);
   document.querySelectorAll('#cart-count').forEach(el => el.textContent = count);
 }
 
-// ---- Acțiuni ----
-function addToCart(item) {
+// ==== acțiuni ====
+function addToCart(item){
   const cart = getCart();
   const i = cart.findIndex(p => p.id === item.id);
-  if (i >= 0) { cart[i].qty = (cart[i].qty || 1) + 1; }
-  else { cart.push({...item, qty: 1}); }
+  if (i >= 0) cart[i].qty = (cart[i].qty||0) + 1;
+  else cart.push({...item, qty:1});
   saveCart(cart);
-  if (window.msaToast) msaToast('Adăugat în coș ✔');
+  if (window.msaToast) window.msaToast('Adăugat în coș ✔');
 }
-function changeQty(id, delta) {
-  const cart = getCart().map(p => p.id===id ? {...p, qty: Math.max(1, (p.qty||1)+delta)} : p);
+window.addToCart = addToCart;
+
+function changeQty(id, delta){
+  const cart = getCart().map(p => p.id===id ? {...p, qty: Math.max(1,(p.qty||1)+delta)} : p);
   saveCart(cart);
   if (window.renderCart) window.renderCart();
 }
-function removeItem(id) {
+function removeItem(id){
   const cart = getCart().filter(p => p.id !== id);
   saveCart(cart);
   if (window.renderCart) window.renderCart();
 }
-function clearCart() {
+window.changeQty = changeQty;
+window.removeItem = removeItem;
+
+function clearCart(){
   localStorage.removeItem(CART_KEY);
   updateCartCount();
   if (window.renderCart) window.renderCart();
 }
+window.clearCart = clearCart;
 
-// ---- Randare coș (pentru cos.html) ----
+// ==== randare coș (pentru cos.html) ====
 window.renderCart = function renderCart(){
   const root = document.getElementById('cart-root');
   if (!root) return;
 
   const cart = getCart();
-  if (!cart.length) {
+  if (!cart.length){
     root.innerHTML = '<p>Coșul este gol.</p>';
     document.getElementById('totals')?.remove();
     return;
@@ -61,23 +79,23 @@ window.renderCart = function renderCart(){
         <div class="cart-price">${money(p.price)} / buc</div>
       </div>
       <div class="cart-qty">
-        <button type="button" class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
-        <span>${p.qty}</span>
-        <button type="button" class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+        <button type="button" class="qty-btn" onclick="changeQty(${p.id},-1)">−</button>
+        <span>${p.qty||1}</span>
+        <button type="button" class="qty-btn" onclick="changeQty(${p.id},1)">+</button>
       </div>
-      <div class="cart-subtotal">${money(p.price * p.qty)}</div>
+      <div class="cart-subtotal">${money(p.price*(p.qty||1))}</div>
       <button type="button" class="remove-btn" onclick="removeItem(${p.id})">Șterge</button>
     </div>
   `).join('');
 
-  const subtotal = cart.reduce((s,p)=>s+p.price*(p.qty||1),0);
-  const shipping = 17; // livrare fixă
+  const subtotal = cart.reduce((s,p)=> s + p.price*(p.qty||1), 0);
+  const shipping = SHIPPING_FLAT;
   const total = subtotal + shipping;
 
   root.innerHTML = `
     <div class="cart-list">${rows}</div>
     <div id="totals" class="cart-total">
-      <div>Subtotal: <strong>${money(subtotal)}</strong></div>
+      <div><strong>Subtotal: ${money(subtotal)}</strong></div>
       <div>Livrare: <strong>${money(shipping)}</strong></div>
       <div>Total: <strong>${money(total)}</strong></div>
     </div>
@@ -86,48 +104,57 @@ window.renderCart = function renderCart(){
 
 function money(v){ return v.toFixed(0) + ' RON'; }
 
-// ---- Trimitere comandă către FormSubmit ----
-function trimiteComanda(e){
-  e.preventDefault();
-  const form = e.target;
-  const cart = getCart();
+// ==== compunerea mesajului pentru FormSubmit ====
+// IMPORTANT: nu anulăm submit-ul! lăsăm browserul să trimită normal către FormSubmit,
+// doar setăm dinamic subiectul și textarea cu rezumatul comenzii.
+document.addEventListener('DOMContentLoaded', () => {
+  updateCartCount();
+  if (document.getElementById('cart-root')) renderCart();
 
-  if (!cart.length) { alert('Coșul este gol.'); return false; }
+  const form = document.getElementById('order-form');
+  if (!form) return;
 
-  // date client
-  const nume     = form.nume.value.trim();
-  const prenume  = form.prenume.value.trim();
-  const email    = form.email.value.trim();
-  const telefon  = form.telefon.value.trim();
-  const judet    = form.judet.value.trim();
-  const oras     = form.oras.value.trim();
-  const codpostal= form.codpostal.value.trim();
-  const adresa   = form.adresa.value.trim();
-  const tip      = form.tip.value; // pf/pj
-  const firma    = (form.firma?.value.trim() || '');
-  const cui      = (form.cui?.value.trim() || '');
-  const mentiuni = (form.mentiuni?.value.trim() || '');
+  form.addEventListener('submit', () => {
+    const cart = getCart();
+    // dacă e gol, lasă HTML5 "required" să blocheze oricum,
+    // dar afișăm și un alert prietenos
+    if (!cart.length){
+      alert('Coșul este gol.');
+      return;
+    }
 
-  if (!nume || !prenume || !email || !telefon || !judet || !oras || !codpostal || !adresa) {
-    alert('Te rog completează toate câmpurile obligatorii.');
-    return false;
-  }
+    const nume = form.nume.value.trim();
+    const prenume = form.prenume.value.trim();
+    const email = form.email.value.trim();
+    const telefon = form.telefon.value.trim();
+    const judet = form.judet.value.trim();
+    const oras = form.oras.value.trim();
+    const codpostal = form.codpostal.value.trim();
+    const adresa = form.adresa.value.trim();
+    const tip = form.tip.value; // pf / pj
+    const firma = (form.firma?.value.trim()) || '';
+    const cui = (form.cui?.value.trim()) || '';
+    const mentiuni = form.mentiuni.value.trim();
 
-  // totaluri
-  const subtotal = cart.reduce((s,p)=>s+p.price*(p.qty||1),0);
-  const shipping = 17;
-  const total = subtotal + shipping;
+    const subtotal = cart.reduce((s,p)=> s + p.price*(p.qty||1), 0);
+    const shipping = SHIPPING_FLAT;
+    const total = subtotal + shipping;
 
-  // listă produse
-  const itemsText = cart.map(p => `${p.name} × ${p.qty} — ${p.price} RON`).join('%0A');
+    const itemsText = cart
+      .map(p => `${p.name} × ${p.qty} — ${p.price} RON`)
+      .join('%0A'); // \n URL-encoded
 
-  // compunem mesajul
-  const body =
+    // subiect personalizat
+    form.querySelector('input[name="_subject"]').value =
+      `Comandă nouă – ${nume} ${prenume} (${tip.toUpperCase()})`;
+
+    // mesajul tabelar (va apărea frumos în e-mail datorită _template=table)
+    const body =
 `Tip client: ${tip==='pj' ? 'Persoană juridică' : 'Persoană fizică'}
-${tip==='pj' ? `Firmă: ${firma}\nCUI: ${cui}\n` : ''}Nume: ${nume} ${prenume}
+Nume: ${nume} ${prenume}
 Email: ${email}
 Telefon: ${telefon}
-Adresă: ${adresa}, ${oraș}, ${judet}, ${codpostal}
+Adresă: ${adresa}, ${oraș=oras}, ${județ=judet}, ${codpostal}
 
 Produse:
 ${decodeURIComponent(itemsText)}
@@ -136,20 +163,10 @@ Subtotal: ${subtotal} RON
 Livrare: ${shipping} RON
 TOTAL: ${total} RON
 
-Mențiuni: ${mentiuni || '-'}`; // end body
+${mentiuni ? ('Mențiuni: ' + mentiuni) : ''}`;
 
-  // punem textul în textarea <textarea name="message">
-  document.getElementById('order_message').value = body;
-
-  // trimitem formularul normal (FormSubmit se ocupă de e-mail și redirect)
-  form.submit();
-  return true;
-}
-
-// ---- Inițializare la încărcare pagină ----
-document.addEventListener('DOMContentLoaded', () => {
-  updateCartCount();
-  const orderForm = document.getElementById('order-form');
-  if (orderForm) orderForm.addEventListener('submit', trimiteComanda);
-  if (document.getElementById('cart-root')) renderCart();
+    document.getElementById('order_message').value = body;
+    // nu facem preventDefault – lăsăm submit-ul normal să meargă la FormSubmit,
+    // iar redirect-ul către multumesc.html se face prin _next.
+  });
 });
