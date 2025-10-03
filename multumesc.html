@@ -1,89 +1,27 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mulțumim – Comandă trimisă</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    /* stil local, finuț, peste styles.css */
-    .thank-wrap{
-      max-width: 820px; margin: 32px auto; padding: 0 16px;
-    }
-    .thank-card{
-      background:#fff; border-radius:18px; padding:28px;
-      box-shadow: 0 12px 28px rgba(0,0,0,.06);
-      text-align:center;
-    }
-    .thank-emoji{ font-size:52px; margin-bottom:12px; }
-    .thank-title{ font-size:clamp(24px,3.6vw,36px); margin:8px 0 12px; }
-    .thank-text{ color:#444; line-height:1.6; margin:0 auto 18px; max-width:56ch; }
-    .badge{
-      display:inline-block; font-weight:700; padding:6px 12px; border-radius:999px;
-      background:#e8f7ed; color:#15803d; margin-bottom:10px;
-    }
-    .btns{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:8px; }
-    .btn{
-      display:inline-block; padding:12px 18px; border-radius:14px; text-decoration:none;
-      font-weight:700; box-shadow: 0 6px 18px rgba(17,82,255,.12);
-    }
-    .btn-primary{ background:#6f52ff; color:#fff; }
-    .btn-ghost{ background:#f3f4f6; color:#222; }
-    .fine{ font-size:13px; color:#667085; margin-top:14px; }
-  </style>
-</head>
-<body>
-  <header class="site-header">
-    <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" /></a>
-    <nav class="nav-links">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
-    </nav>
-  </header>
+<!DOCTYPE html><html lang="ro"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mulțumim pentru comandă</title>
+<link rel="stylesheet" href="styles.css">
+<script src="cart.js"></script>
+<style>
+.card{max-width:680px;margin:30px auto;padding:24px;border-radius:16px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.07);text-align:center}
+.ok{font-size:64px}
+</style>
+</head><body>
+<header class="site-header">
+  <a href="index.html">Acasă</a>
+  <a href="produse.html">Produse</a>
+  <a href="cos.html">Coș (<span id="cart-count">0</span>)</a>
+</header>
 
-  <main class="thank-wrap">
-    <div class="thank-card">
-      <div class="thank-emoji">✅</div>
-      <div class="badge">Coșul tău a fost golit automat</div>
-      <h1 class="thank-title">Comanda a fost trimisă cu succes!</h1>
-      <p class="thank-text">
-        Îți mulțumim pentru încredere 🤍. Am înregistrat comanda și ți-am trimis un e-mail de confirmare
-        cu detaliile. Comenzile se procesează în <strong>1–3 zile lucrătoare</strong>, apoi livrăm prin curier.
-      </p>
+<div class="card">
+  <div class="ok">✅</div>
+  <h1>Comanda a fost trimisă cu succes!</h1>
+  <p>Ți-am trimis un e-mail de confirmare cu detaliile comenzii.<br>
+     Comenzile se procesează în <strong>1–3 zile lucrătoare</strong>, apoi livrăm prin curier.</p>
+  <p><a class="btn" href="produse.html">Continuă cumpărăturile</a>
+     <a class="btn secondary" href="index.html">Înapoi la Acasă</a></p>
+</div>
 
-      <div class="btns">
-        <a class="btn btn-primary" href="produse.html">Continuă cumpărăturile</a>
-        <a class="btn btn-ghost" href="index.html">Înapoi la Acasă</a>
-      </div>
-
-      <p class="fine">Dacă vrei să modifici ceva (culoare, variantă, interval livrare), răspunde la e-mailul primit.</p>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
-  </footer>
-
-  <script>
-    // anul din footer
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    // goliți coșul la sosirea pe pagina de mulțumire
-    try{
-      localStorage.removeItem('cart');
-      // dacă folosiți counter-ul în header, resetați-l
-      var cc = document.getElementById('cart-count');
-      if (cc) cc.textContent = '0';
-    }catch(e){}
-
-    // mică „asigurare” pentru back/forward cache pe mobil
-    window.addEventListener('pageshow', function(){
-      try{ localStorage.removeItem('cart'); }catch(e){}
-      var cc = document.getElementById('cart-count');
-      if (cc) cc.textContent = '0';
-    });
-  </script>
-</body>
-</html>
+<script>clearCart();</script>
+</body></html>
