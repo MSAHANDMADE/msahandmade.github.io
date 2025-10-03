@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coș — MSA Handmade</title>
+  <title>Produse — MSA Handmade</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* ===== doar pentru pagina coș ===== */
-    .checkout-box{ margin-top:18px }
-    .radio-group{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; align-items:center }
-    .radio{ display:inline-flex; align-items:center; gap:6px; border:1px solid #e5e7eb; border-radius:999px; padding:6px 10px; background:#fff; cursor:pointer; font-weight:600; font-size:14px }
-    .radio input{ accent-color:#111827 }
-    .form-vertical{ display:flex; flex-direction:column; gap:10px }
-    .form-vertical label{ display:flex; flex-direction:column; gap:6px; font-weight:600; color:#1f2937 }
-    .form-vertical input,.form-vertical textarea,.form-vertical select{ padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px; font-weight:500; width:100% }
-    .row-2{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
-    @media (max-width:720px){ .row-2{ grid-template-columns:1fr } }
-    .qty-btn{ width:28px; height:28px; border:1px solid #ddd; border-radius:8px; background:#fff; cursor:pointer }
-    .qty-input{ width:52px; text-align:center; border:1px solid #ddd; border-radius:8px; padding:4px 6px }
-    .status{ margin-top:10px; font-weight:700; color:#6b7280 }
-    .status.err{ color:#b91c1c } .status.ok{ color:#065f46 }
+    /* Coș flotant în dreapta sus */
+    .fab-cart{
+      position:fixed; right:14px; top:14px; z-index:60;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius:999px; background:#111827; color:#fff;
+      text-decoration:none; font-weight:800; box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+    .fab-cart svg{ width:20px; height:20px }
+    .fab-cart .badge{ min-width:18px; text-align:center; font-size:12px; background:#fff; color:#111827; border-radius:999px; padding:2px 6px }
+    /* Toast mic jos */
+    .toast{ position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      background:#111827; color:#fff; padding:10px 14px; border-radius:10px;
+      box-shadow:0 10px 24px rgba(0,0,0,.2); opacity:0; pointer-events:none; transition:.2s;
+      z-index:70; }
+    .toast.show{ opacity:1; }
   </style>
 </head>
 <body>
@@ -28,143 +29,169 @@
     <button class="menu-toggle" aria-label="Deschide meniul" aria-expanded="false">☰</button>
     <nav class="nav">
       <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="cos.html" class="cart" aria-current="page">Coș <span id="cart-count">0</span></a>
+      <a href="produse.html" aria-current="page">Produse</a>
+      <a href="cos.html" class="cart">Coș <span id="cart-count">0</span></a>
     </nav>
   </header>
 
+  <!-- Coș flotant -->
+  <a class="fab-cart" href="cos.html" aria-label="Deschide coșul">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13l-1.5 6h12M7 13l-2-8M10 19a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"/></svg>
+    <span class="badge" id="cart-count-fab">0</span>
+  </a>
+
+  <!-- LISTĂ PRODUSE -->
   <main class="container">
-    <h2 class="section-title">Coșul tău</h2>
+    <h2 class="section-title">Produse</h2>
+    <ul class="grid produse">
+      <!-- Peisaj de iarnă — 99 -->
+      <li class="card">
+        <figure>
+          <img src="images/images.peisajiarna.jpg" alt="Peisaj de iarnă" />
+          <figcaption><h3>Peisaj de iarnă</h3><span class="price">99 RON</span></figcaption>
+        </figure>
+        <button class="add-to-cart"
+          data-id="peisaj-iarna"
+          data-name="Peisaj de iarnă"
+          data-price="99"
+          data-image="images/images.peisajiarna.jpg">Adaugă în coș</button>
+      </li>
 
-    <div id="cart-empty" style="display:none;color:#6b7280">Coșul este gol.</div>
-    <div id="cart-list"></div>
+      <!-- Peisaj — 99 -->
+      <li class="card">
+        <figure>
+          <img src="images/images_peisaj.jpg" alt="Peisaj" />
+          <figcaption><h3>Peisaj</h3><span class="price">99 RON</span></figcaption>
+        </figure>
+        <button class="add-to-cart"
+          data-id="peisaj"
+          data-name="Peisaj"
+          data-price="99"
+          data-image="images/images_peisaj.jpg">Adaugă în coș</button>
+      </li>
 
-    <div id="totals" style="margin-top:16px;display:none">
-      <div style="display:flex;justify-content:flex-end;gap:16px;flex-wrap:wrap">
-        <div><strong>Subtotal:</strong> <span id="t-sub">0</span> RON</div>
-        <div><strong>Livrare:</strong> <span id="t-ship">17</span> RON</div>
-        <div><strong>Total:</strong> <span id="t-total">0</span> RON</div>
-      </div>
-    </div>
+      <!-- Îndrăgostiți — 99 -->
+      <li class="card">
+        <figure>
+          <img src="images/images.indragostiti.jpg" alt="Îndrăgostiți" />
+          <figcaption><h3>Îndrăgostiți</h3><span class="price">99 RON</span></figcaption>
+        </figure>
+        <button class="add-to-cart"
+          data-id="indragostiti"
+          data-name="Îndrăgostiți"
+          data-price="99"
+          data-image="images/images.indragostiti.jpg">Adaugă în coș</button>
+      </li>
 
-    <!-- FORMULAR — radio sus + câmpuri UNA SUB ALTA -->
-    <form id="order-form" class="checkout-box" style="display:none">
-      <div class="radio-group" role="radiogroup" aria-label="Tip client">
-        <label class="radio"><input type="radio" name="tip" value="Persoană fizică" checked /> Persoană fizică</label>
-        <label class="radio"><input type="radio" name="tip" value="Persoană juridică" /> Persoană juridică</label>
-      </div>
+      <!-- Buchet — 29 -->
+      <li class="card">
+        <figure>
+          <img src="images/images_buchet.jpg" alt="Buchet" />
+          <figcaption><h3>Buchet</h3><span class="price">29 RON</span></figcaption>
+        </figure>
+        <button class="add-to-cart"
+          data-id="buchet"
+          data-name="Buchet"
+          data-price="29"
+          data-image="images/images_buchet.jpg">Adaugă în coș</button>
+      </li>
 
-      <div class="form-vertical">
-        <div class="row-2">
-          <label>Nume<input type="text" name="nume" required /></label>
-          <label>Prenume<input type="text" name="prenume" required /></label>
-        </div>
-        <div class="row-2">
-          <label>Email<input type="email" name="email" required /></label>
-          <label>Telefon<input type="tel" name="telefon" required /></label>
-        </div>
-        <div class="row-2">
-          <label>Județ<input type="text" name="judet" required /></label>
-          <label>Oraș<input type="text" name="oras" required /></label>
-        </div>
-        <div class="row-2">
-          <label>Cod poștal<input type="text" name="codpostal" required /></label>
-          <label>Adresă<input type="text" name="adresa" required /></label>
-        </div>
-        <label>Mențiuni (opțional)<textarea name="mentiuni" rows="3"></textarea></label>
-      </div>
+      <!-- Restul — 33 -->
+      <li class="card">
+        <figure>
+          <img src="images/images.crin.jpg" alt="Crin" />
+          <figcaption><h3>Crin</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+        <button class="add-to-cart"
+          data-id="crin"
+          data-name="Crin"
+          data-price="33"
+          data-image="images/images.crin.jpg">Adaugă în coș</button>
+      </li>
 
-      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-        <button id="clear-cart" type="button" class="add-btn" style="background:#9ca3af">Golește coșul</button>
-        <button id="place-order" type="submit" class="btn">Plasează comanda</button>
-      </div>
+      <li class="card">
+        <figure>
+          <img src="images/images.dans.jpg" alt="Dans" />
+          <figcaption><h3>Dans</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+        <button class="add-to-cart"
+          data-id="dans"
+          data-name="Dans"
+          data-price="33"
+          data-image="images/images.dans.jpg">Adaugă în coș</button>
+      </li>
 
-      <div id="order-status" class="status"></div>
-    </form>
+      <li class="card">
+        <figure>
+          <img src="images/images.inger.jpg" alt="Înger" />
+          <figcaption><h3>Înger</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+        <button class="add-to-cart"
+          data-id="inger"
+          data-name="Înger"
+          data-price="33"
+          data-image="images/images.inger.jpg">Adaugă în coș</button>
+      </li>
+
+      <li class="card">
+        <figure>
+          <img src="images/images.logodna.jpg" alt="Logodnă" />
+          <figcaption><h3>Logodnă</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+        <button class="add-to-cart"
+          data-id="logodna"
+          data-name="Logodnă"
+          data-price="33"
+          data-image="images/images.logodna.jpg">Adaugă în coș</button>
+      </li>
+
+      <li class="card">
+        <figure>
+          <img src="images/images.sarut.jpg" alt="Sărut" />
+          <figcaption><h3>Sărut</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+        <button class="add-to-cart"
+          data-id="sarut"
+          data-name="Sărut"
+          data-price="33"
+          data-image="images/images.sarut.jpg">Adaugă în coș</button>
+      </li>
+
+      <li class="card">
+        <figure>
+          <img src="images/images_flori.jpg" alt="Flori" />
+          <figcaption><h3>Flori</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+        <button class="add-to-cart"
+          data-id="flori"
+          data-name="Flori"
+          data-price="33"
+          data-image="images/images_flori.jpg">Adaugă în coș</button>
+      </li>
+    </ul>
   </main>
 
   <footer class="footer">
     <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
-  <!-- ORDINĂ CORECTĂ DE SCRIPTURI -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script src="script.js"></script>  <!-- aici ai cheile + logica de trimitere -->
+  <!-- Toast -->
+  <div class="toast" id="toast">Adăugat în coș</div>
+
+  <!-- JS -->
+  <script src="script.js"></script>
   <script src="cart.js"></script>
-
-  <!-- RANDARE LISTĂ COȘ (folosește MSACart din cart.js) -->
   <script>
-    function renderCart() {
-      const { readCart, removeFromCart, clearCart, increaseQty, decreaseQty, setQty, computeTotals, updateCartCountBadge } = window.MSACart;
-
-      const list = document.getElementById("cart-list");
-      const empty = document.getElementById("cart-empty");
-      const form  = document.getElementById("order-form");
-      const totalsBox = document.getElementById("totals");
-
-      const cart = readCart();
-      list.innerHTML = "";
-
-      if (!cart.length) {
-        empty.style.display = "block";
-        form.style.display = "none";
-        totalsBox.style.display = "none";
-        return;
-      }
-      empty.style.display = "none";
-      form.style.display = "block";
-      totalsBox.style.display = "block";
-
-      cart.forEach(it => {
-        const row = document.createElement("div");
-        row.style.cssText = "display:grid;grid-template-columns:64px 1fr auto auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #eee";
-
-        const img = document.createElement("img");
-        img.src = it.image; img.alt = it.name;
-        Object.assign(img.style, { width:"64px", height:"48px", objectFit:"cover", borderRadius:"8px" });
-
-        const nameWrap = document.createElement("div");
-        nameWrap.innerHTML = `<div style="font-weight:600">${it.name}</div>`;
-
-        const qtyBox = document.createElement("div");
-        qtyBox.style.cssText = "display:inline-flex;align-items:center;gap:6px;margin-top:6px";
-
-        const minus = document.createElement("button");
-        minus.type = "button"; minus.textContent = "–"; minus.className = "qty-btn";
-        minus.onclick = () => { decreaseQty(it.id); renderCart(); };
-
-        const qty = document.createElement("input");
-        qty.type = "number"; qty.min = "0"; qty.step = "1"; qty.value = it.qty; qty.className = "qty-input";
-        qty.onchange = (ev) => { setQty(it.id, ev.target.value); renderCart(); };
-
-        const plus = document.createElement("button");
-        plus.type = "button"; plus.textContent = "+"; plus.className = "qty-btn";
-        plus.onclick = () => { increaseQty(it.id); renderCart(); };
-
-        qtyBox.append(minus, qty, plus);
-        nameWrap.append(qtyBox);
-
-        const price = document.createElement("div");
-        price.textContent = `${it.price} RON`;
-
-        const del = document.createElement("button");
-        del.className = "add-btn"; del.style.background = "#ef4444";
-        del.textContent = "Șterge";
-        del.onclick = () => { removeFromCart(it.id); renderCart(); };
-
-        row.append(img, nameWrap, price, del);
-        list.appendChild(row);
-      });
-
-      const { subtotal, shipping, total } = computeTotals(cart);
-      document.getElementById("t-sub").textContent = subtotal;
-      document.getElementById("t-ship").textContent = shipping;
-      document.getElementById("t-total").textContent = total;
-
-      document.getElementById("clear-cart").onclick = () => { clearCart(); renderCart(); };
-      updateCartCountBadge();
+    // Toast la adăugare
+    const toast = document.getElementById("toast");
+    function showToast(msg){
+      toast.textContent = msg || "Adăugat în coș";
+      toast.classList.add("show");
+      setTimeout(()=>toast.classList.remove("show"), 1200);
     }
-    document.addEventListener("DOMContentLoaded", renderCart);
+    document.addEventListener("msa:added", (e)=>{
+      showToast(`${e.detail.name} — adăugat în coș`);
+    });
   </script>
 </body>
 </html>
