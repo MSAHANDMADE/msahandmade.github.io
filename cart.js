@@ -1,88 +1,115 @@
-<script>
-// ===== COȘ (localStorage) =====
-const CART_KEY = 'msa_cart_v1';
+/* === Cart helper === */
+const STORAGE_KEY = 'cart';
 
-function getCart() {
-  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
-  catch(e){ return []; }
+function loadCart(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch{ return []; }
 }
-function saveCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); updateCartCount(); }
-function updateCartCount(){
-  const cart = getCart();
-  const count = cart.reduce((s,i)=>s+i.qty,0);
+function saveCart(cart){ localStorage.setItem(STORAGE_KEY, JSON.stringify(cart)); }
+function cartCount(){
+  const cart = loadCart();
+  return cart.reduce((s,i)=>s+i.qty,0);
+}
+function updateCartBadge(){
   const el = document.getElementById('cart-count');
-  if(el) el.textContent = count;
+  if(!el) return;
+  el.textContent = cartCount();
 }
-function addToCart(id, name, price, qty=1){
-  const cart = getCart();
-  const i = cart.findIndex(p=>p.id===id);
-  if(i>-1) cart[i].qty += qty;
-  else cart.push({id, name, price:Number(price), qty:Number(qty)});
+
+function addToCart(item){ // item: {id,name,price,image}
+  const cart = loadCart();
+  const i = cart.findIndex(p => p.id === item.id);
+  if(i>-1){ cart[i].qty += 1; }
+  else{ cart.push({...item, qty:1}); }
   saveCart(cart);
-  alert('Adăugat în coș!');
+  updateCartBadge();
+  showToast('Produsul a fost adăugat în coș ✅');
 }
+
 function removeFromCart(id){
-  const cart = getCart().filter(p=>p.id!==id);
-  saveCart(cart); renderCart();
+  const cart = loadCart().filter(p=>p.id!==id);
+  saveCart(cart); updateCartBadge();
 }
+
 function changeQty(id, delta){
-  const cart = getCart();
+  const cart = loadCart();
   const it = cart.find(p=>p.id===id);
   if(!it) return;
-  it.qty = Math.max(1, it.qty + delta);
-  saveCart(cart); renderCart();
+  it.qty += delta;
+  if(it.qty<=0){ return removeFromCart(id); }
+  saveCart(cart); updateCartBadge();
 }
-function clearCart(){ localStorage.removeItem(CART_KEY); updateCartCount(); }
 
-// ===== RENDER pe cos.html =====
-function renderCart(){
-  const root = document.getElementById('cart-root');
-  if(!root) return;
+function formatRON(n){ return new Intl.NumberFormat('ro-RO',{style:'currency',currency:'RON',minimumFractionDigits:2}).format(n); }
 
-  const cart = getCart();
-  if(cart.length===0){
-    root.innerHTML = '<p>Coșul tău este gol.</p>';
-    ['subtotal','livrare','total'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent='0'; });
-    const os = document.getElementById('order_summary'); if(os) os.value='';
-    return;
-  }
+/* toast mic */
+function showToast(msg){
+  let t = document.querySelector('.toast');
+  if(!t){ t = document.createElement('div'); t.className='toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  requestAnimationFrame(()=>{ t.classList.add('show'); });
+  setTimeout(()=> t.classList.remove('show'), 1800);
+}
 
-  let html = '<table class="cart-table"><thead><tr><th>Produs</th><th>Preț</th><th>Cant.</th><th>Subtotal</th><th></th></tr></thead><tbody>';
-  let subtotal = 0;
-  cart.forEach(p=>{
-    const line = p.price * p.qty;
-    subtotal += line;
-    html += `
-      <tr>
+/* init badge la încărcare */
+document.addEventListener('DOMContentLoaded', updateCartBadge);
+
+/* === Hook generic pentru butoane .add-to-cart ===
+   Orice buton cu .add-to-cart și data-id, data-name, data-price, data-image
+   va funcționa automat. */
+document.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.add-to-cart');
+  if(!btn) return;
+  const id = btn.dataset.id;
+  const name = btn.dataset.name;
+  const price = parseFloat(btn.dataset.price);
+  const image = btn.dataset.image || '';
+  if(!id || !name || isNaN(price)){ return; }
+  addToCart({id,name,price,image});
+});
+
+/* === Render coș pe cos.html, dacă există #cart-table === */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const table = document.getElementById('cart-table');
+  const totalEl = document.getElementById('cart-total');
+  if(!table || !totalEl) return;
+
+  function render(){
+    const cart = loadCart();
+    table.innerHTML = '';
+    let subtotal = 0;
+    if(cart.length===0){
+      table.innerHTML = `<tr><td colspan="5" class="muted">Coșul este gol.</td></tr>`;
+      totalEl.textContent = formatRON(0);
+      return;
+    }
+    cart.forEach(p=>{
+      const line = p.price * p.qty; subtotal += line;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="width:60px">${p.image ? `<img src="${p.image}" style="height:44px;border-radius:8px">` : ''}</td>
         <td>${p.name}</td>
-        <td>${p.price.toFixed(2)} RON</td>
+        <td>${formatRON(p.price)}</td>
         <td>
-          <button type="button" onclick="changeQty('${p.id}',-1)">-</button>
-          <span style="display:inline-block;min-width:32px;text-align:center">${p.qty}</span>
-          <button type="button" onclick="changeQty('${p.id}',1)">+</button>
+          <button class="btn-qty" data-act="dec" data-id="${p.id}">-</button>
+          <strong style="padding:0 8px">${p.qty}</strong>
+          <button class="btn-qty" data-act="inc" data-id="${p.id}">+</button>
         </td>
-        <td>${line.toFixed(2)} RON</td>
-        <td><button type="button" onclick="removeFromCart('${p.id}')">Șterge</button></td>
-      </tr>`;
+        <td>${formatRON(line)}</td>
+      `;
+      table.appendChild(tr);
+    });
+    totalEl.textContent = formatRON(subtotal);
+  }
+  render();
+
+  table.addEventListener('click',(e)=>{
+    const b = e.target.closest('.btn-qty'); if(!b) return;
+    const id = b.dataset.id; const act = b.dataset.act;
+    changeQty(id, act==='inc'? +1 : -1);
+    // re-render
+    const event = new Event('render-cart'); document.dispatchEvent(event);
   });
-  html += '</tbody></table>';
-  root.innerHTML = html;
 
-  const livrare = 17;
-  const total = subtotal + livrare;
-  document.getElementById('subtotal').textContent = subtotal.toFixed(2);
-  document.getElementById('livrare').textContent  = livrare.toFixed(2);
-  document.getElementById('total').textContent    = total.toFixed(2);
-
-  let lines = ['Produse:'];
-  cart.forEach(p=>lines.push(`• ${p.name} × ${p.qty} — ${(p.price*p.qty).toFixed(2)} RON`));
-  lines.push('');
-  lines.push(`Subtotal: ${subtotal.toFixed(2)} RON`);
-  lines.push(`Livrare: ${livrare.toFixed(2)} RON`);
-  lines.push(`TOTAL: ${total.toFixed(2)} RON`);
-  const os = document.getElementById('order_summary');
-  if(os) os.value = lines.join('\n');
-}
-
-document.addEventListener('DOMContentLoaded', updateCartCount);
-</script>
+  document.addEventListener('render-cart', render);
+});
