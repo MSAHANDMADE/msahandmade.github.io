@@ -7,84 +7,92 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<header class="site-header">
-  <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" /></a>
-  <nav class="nav-links">
-    <a href="index.html">Acasă</a>
-    <a href="produse.html">Produse</a>
-    <a href="contact.html">Contact</a>
-    <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
-  </nav>
-</header>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="logo.png" alt="MSA Handmade Decor" class="brand-logo" /></a>
+    <nav class="nav-links">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
+    </nav>
+  </header>
 
-<main class="container">
-  <h1 class="page-title">Coșul tău</h1>
-  <div id="cart-root"></div>
+  <main class="container">
+    <h1 class="page-title">Coșul tău</h1>
 
-  <h2>Date livrare (plata la livrare)</h2>
+    <!-- aici se randează conținutul coșului -->
+    <div id="cart-root"></div>
 
-  <!-- Formularul care trimite prin FormSubmit -->
-  <form id="order-form"
-        class="order-form"
-        action="https://formsubmit.co/msahandmade.contact@gmail.com"
-        method="POST">
-    <!-- Setări FormSubmit -->
-    <input type="hidden" name="_next" value="https://msahandmade.ro/multumesc.html">
-    <input type="hidden" name="_subject" value="Comandă nouă – M.S.A Handmade Decor">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_captcha" value="false">
-    <!-- mesajul real pe care îl compunem din coș -->
-    <textarea id="order_message" name="Mesaj" hidden></textarea>
+    <h2>Date livrare (plata la livrare)</h2>
 
-    <div class="order-card">
+    <!-- Formularul către FormSubmit -->
+    <form id="order-form" class="order-form"
+          action="https://formsubmit.co/msahandmade.contact@gmail.com"
+          method="POST">
+
+      <!-- Setări FormSubmit -->
+      <input type="hidden" name="_next" value="https://msahandmade.ro/multumesc.html" />
+      <input type="hidden" name="_subject" value="Comandă nouă – M.S.A Handmade Decor" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_captcha" value="false" />
+      <!-- Auto-reply către client -->
+      <input type="hidden" name="_autoresponse"
+             value="Mulțumim pentru comandă! Am primit solicitarea ta și revenim în scurt timp cu confirmarea. — M.S.A Handmade Decor" />
+      <!-- CC: vom completa dinamic cu emailul clientului din JS -->
+      <input type="hidden" name="_cc" id="order_cc" value="" />
+      <!-- Reply-To: îl setăm din JS cu emailul clientului -->
+      <input type="hidden" name="_replyto" id="order_replyto" value="" />
+      <!-- aici JS va pune rezumatul comenzii -->
+      <textarea id="order_message" name="message" hidden></textarea>
+
       <div class="radio-group">
         <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
-        <label><input type="radio" name="tip" value="pj"> Persoană juridică</label>
+        <label style="margin-left:16px"><input type="radio" name="tip" value="pj"> Persoană juridică</label>
       </div>
 
       <div class="form-row">
         <label>Nume
-          <input type="text" name="nume" required>
+          <input type="text" name="nume" required />
         </label>
         <label>Prenume
-          <input type="text" name="prenume" required>
+          <input type="text" name="prenume" required />
         </label>
       </div>
 
       <div class="form-row">
         <label>Email
-          <input type="email" name="email" required>
+          <input type="email" name="email" required />
         </label>
         <label>Telefon
-          <input type="tel" name="telefon" required>
+          <input type="tel" name="telefon" required />
         </label>
       </div>
 
       <div class="form-row">
         <label>Județ
-          <input type="text" name="judet" required>
+          <input type="text" name="judet" required />
         </label>
         <label>Oraș
-          <input type="text" name="oras" required>
+          <input type="text" name="oras" required />
         </label>
       </div>
 
       <div class="form-row">
         <label>Cod poștal
-          <input type="text" name="codpostal" required>
+          <input type="text" name="codpostal" required />
         </label>
         <label>Adresă
-          <input type="text" name="adresa" required>
+          <input type="text" name="adresa" required />
         </label>
       </div>
 
-      <!-- câmpuri extra pentru persoană juridică -->
+      <!-- doar pentru Persoană juridică -->
       <div class="form-row" id="pj-fields" style="display:none">
         <label>Denumire firmă
-          <input type="text" name="firma">
+          <input type="text" name="firma" />
         </label>
         <label>CUI
-          <input type="text" name="cui">
+          <input type="text" name="cui" />
         </label>
       </div>
 
@@ -98,29 +106,27 @@
         <button type="submit" class="btn-primary">Trimite comanda</button>
         <button type="button" class="btn-ghost" onclick="clearCart()">Golește coșul</button>
       </div>
-    </div>
-  </form>
-</main>
+    </form>
+  </main>
 
-<footer class="site-footer">
-  <span id="y"></span> © M.S.A Handmade Decor — Toate drepturile rezervate.
-</footer>
+  <footer class="site-footer">
+    © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
+  </footer>
 
-<script src="cart.js"></script>
-<script>
-  // anul din footer
-  document.getElementById('y').textContent = new Date().getFullYear();
+  <script src="cart.js"></script>
+  <script>
+    // anul din footer
+    document.getElementById('y').textContent = new Date().getFullYear();
 
-  // arată/ascunde câmpurile pentru PJ
-  document.querySelectorAll('input[name="tip"]').forEach(r => {
-    r.addEventListener('change', () => {
-      const pj = document.querySelector('input[name="tip"][value="pj"]').checked;
-      document.getElementById('pj-fields').style.display = pj ? 'flex' : 'none';
-    });
-  });
-  // starea inițială
-  document.getElementById('pj-fields').style.display =
-    document.querySelector('input[name="tip"][value="pj"]').checked ? 'flex' : 'none';
-</script>
+    // arată / ascunde câmpurile PJ
+    function togglePJ(){
+      const isPJ = document.querySelector('input[name="tip"][value="pj"]').checked;
+      const box = document.getElementById('pj-fields');
+      box.style.display = isPJ ? 'flex' : 'none';
+      box.querySelectorAll('input').forEach(i => i.required = isPJ);
+    }
+    document.querySelectorAll('input[name="tip"]').forEach(r => r.addEventListener('change', togglePJ));
+    togglePJ();
+  </script>
 </body>
 </html>
