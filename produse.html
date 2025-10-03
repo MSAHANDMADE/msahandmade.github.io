@@ -3,123 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Produse — M.S.A Handmade</title>
-  <style>
-    :root { --violet:#6b46c1; --bg:#faf7ff; }
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#fff;color:#222}
-    .site-header{display:flex;gap:18px;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--bg);border-bottom:1px solid #eee;position:sticky;top:0;z-index:5}
-    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#222;font-weight:700}
-    .brand img{height:40px; width:40px; object-fit:cover; border-radius:8px}
-    .nav-links a{margin:0 8px;text-decoration:none;color:#333}
-    .cart-link{font-weight:600}
-    .container{max-width:1100px;margin:22px auto;padding:0 16px}
-    .grid{display:grid;grid-template-columns:repeat( auto-fill, minmax(220px,1fr) );gap:18px}
-    .card{border:1px solid #eee;border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
-    .card img{width:100%;height:170px;object-fit:cover;background:#f6f6f6}
-    .card .info{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
-    .name{font-weight:700}
-    .price{font-weight:700;color:var(--violet)}
-    .btn{cursor:pointer;border:none;background:var(--violet);color:#fff;border-radius:10px;padding:10px 12px;font-weight:700}
-    .btn:active{transform:translateY(1px)}
-    .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-    .search{flex:1;max-width:360px}
-    .search input{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:10px}
-  </style>
+  <title>Produse — MSA Handmade</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- HEADER -->
-  <header class="site-header">
-    <a class="brand" href="index.html">
-      <img src="images/logo.png" alt="MSA Handmade Decor" onerror="this.style.display='none'">
-      <span>M.S.A Handmade Decor</span>
-    </a>
-    <nav class="nav-links">
+  <header class="header">
+    <button class="menu-toggle" aria-label="Deschide meniul" aria-expanded="false">☰</button>
+    <nav class="nav">
       <a href="index.html">Acasă</a>
-      <a href="produse.html"><strong>Produse</strong></a>
-      <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart-link">Coș (<span id="cart-count">0</span>)</a>
+      <a href="produse.html" aria-current="page">Produse</a>
+      <a href="cos.html" class="cart">Coș <span id="cart-count">0</span></a>
     </nav>
   </header>
 
   <main class="container">
-    <div class="toolbar">
-      <h1 style="margin:6px 0">Produsele noastre</h1>
-      <div class="search">
-        <input id="q" type="search" placeholder="Caută produs…" oninput="render()">
-      </div>
-    </div>
-
-    <div id="grid" class="grid"></div>
+    <h2 class="section-title">Produse</h2>
+    <ul class="grid produse">
+      <li class="card">
+        <figure>
+          <img src="images/images.peisajiarna.jpg" alt="Peisaj de iarnă" />
+          <figcaption><h3>Peisaj de iarnă</h3><span class="price">99 RON</span></figcaption>
+        </figure>
+      </li>
+      <li class="card">
+        <figure>
+          <img src="images/images_peisaj.jpg" alt="Peisaj" />
+          <figcaption><h3>Peisaj</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+      </li>
+      <li class="card">
+        <figure>
+          <img src="images/images_buchet.jpg" alt="Buchet" />
+          <figcaption><h3>Buchet</h3><span class="price">29 RON</span></figcaption>
+        </figure>
+      </li>
+      <li class="card">
+        <figure>
+          <img src="images/images.crin.jpg" alt="Crin" />
+          <figcaption><h3>Crin</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+      </li>
+      <li class="card">
+        <figure>
+          <img src="images/images.dans.jpg" alt="Dans" />
+          <figcaption><h3>Dans</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+      </li>
+      <li class="card">
+        <figure>
+          <img src="images/images.indragostiti.jpg" alt="Îndrăgostiți" />
+          <figcaption><h3>Îndrăgostiți</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+      </li>
+      <li class="card">
+        <figure>
+          <img src="images/images.inger.jpg" alt="Înger" />
+          <figcaption><h3>Înger</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+      </li>
+      <li class="card">
+        <figure>
+          <img src="images/images.logodna.jpg" alt="Logodna" />
+          <figcaption><h3>Logodna</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+      </li>
+      <li class="card">
+        <figure>
+          <img src="images/images.sarut.jpg" alt="Sărut" />
+          <figcaption><h3>Sărut</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+      </li>
+      <li class="card">
+        <figure>
+          <img src="images/images_flori.jpg" alt="Flori" />
+          <figcaption><h3>Flori</h3><span class="price">33 RON</span></figcaption>
+        </figure>
+      </li>
+    </ul>
   </main>
 
-  <script>
-    /********** PRODUSE — folosește exact pozele tale din /images **********/
-    const produse = [
-      { id: 1, name: "Buchet flori (handmade)", price: 120, img: "images/images_buchet.jpg" },
-      { id: 2, name: "Tablou flori",            price: 150, img: "images/images_flori.jpg" },
-      { id: 3, name: "Tablou crin",             price: 140, img: "images/images.crin.jpg" },
-      { id: 4, name: "Tablou îndrăgostiți",     price: 160, img: "images/images.indragostiti.jpg" },
-      { id: 5, name: "Tablou înger",            price: 130, img: "images/images.inger.jpg" },
-      { id: 6, name: "Tablou logodnă",          price: 170, img: "images/images.logodna.jpg" },
-      { id: 7, name: "Tablou dans",             price: 160, img: "images/images.dans.jpg" },
-      { id: 8, name: "Tablou sărut",            price: 160, img: "images/images.sarut.jpg" },
-      { id: 9, name: "Peisaj (vară)",           price: 140, img: "images/images_peisaj.jpg" },
-      { id:10, name: "Peisaj iarnă",            price: 150, img: "images/images.peisajiarna.jpg" }
-    ];
+  <footer class="footer">
+    <small>&copy; <span id="year"></span> — MSA Handmade.</small>
+  </footer>
 
-    /********** COȘ — păstrăm în localStorage **********/
-    const CART_KEY = "msa_cart";
-
-    function readCart(){
-      try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
-      catch(e){ return []; }
-    }
-    function writeCart(items){
-      localStorage.setItem(CART_KEY, JSON.stringify(items));
-      updateCartCount();
-    }
-    function updateCartCount(){
-      const items = readCart();
-      const totalQty = items.reduce((s, it)=> s + it.qty, 0);
-      const el = document.getElementById('cart-count');
-      if(el) el.textContent = totalQty;
-    }
-
-    function addToCart(product){
-      const cart = readCart();
-      const idx = cart.findIndex(it => it.id === product.id);
-      if(idx >= 0){
-        cart[idx].qty += 1;
-      }else{
-        cart.push({ id: product.id, name: product.name, price: product.price, img: product.img, qty: 1 });
-      }
-      writeCart(cart);
-      alert("Adăugat în coș: " + product.name);
-    }
-
-    /********** RENDER GRID **********/
-    function formatPrice(v){ return v.toFixed(0) + " RON"; }
-
-    function render(){
-      const q = (document.getElementById('q').value || '').toLowerCase().trim();
-      const list = !q ? produse : produse.filter(p => (p.name || '').toLowerCase().includes(q));
-      const grid = document.getElementById('grid');
-      grid.innerHTML = list.map(p => `
-        <div class="card">
-          <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/600x400?text=Poza+lipse'">
-          <div class="info">
-            <div class="name">${p.name}</div>
-            <div class="price">${formatPrice(p.price)}</div>
-            <button class="btn" onclick='addToCart(${JSON.stringify(p)})'>Adaugă în coș</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // inițializare
-    updateCartCount();
-    render();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
