@@ -1,14 +1,50 @@
-<!DOCTYPE html><html lang="ro"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Contact</title>
-<link rel="stylesheet" href="styles.css">
-<script src="cart.js"></script>
-</head><body>
-<header class="site-header">
-  <a href="index.html">Acasă</a>
-  <a href="produse.html">Produse</a>
-  <a href="cos.html">Coș (<span id="cart-count">0</span>)</a>
-</header>
-<h1>Contact</h1>
-<p>Email: msahandmade.contact@gmail.com</p>
-</body></html>
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MSA Handmade — Contact</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .contact-box{
+      max-width:600px;margin:40px auto;padding:20px;
+      background:#fff;border:1px solid #e5e7eb;border-radius:12px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    }
+    .contact-box h2{margin-bottom:10px}
+    .contact-box p{margin-bottom:20px}
+    .contact-info{line-height:1.8}
+    .contact-info strong{color:#111827}
+  </style>
+</head>
+<body>
+  <!-- HEADER comun -->
+  <header class="header">
+    <nav class="nav">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="contact.html" aria-current="page">Contact</a>
+      <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
+    </nav>
+  </header>
+
+  <!-- CONȚINUT -->
+  <main class="contact-box">
+    <h2>Contact</h2>
+    <p>Ne poți scrie sau suna oricând:</p>
+    <div class="contact-info">
+      <p><strong>Email:</strong> msahandmade.contact@gmail.com</p>
+      <p><strong>Telefon:</strong> +40 7xx xxx xxx</p>
+      <p><strong>WhatsApp:</strong> link direct spre <a href="https://wa.me/40xxxxxxxxx" target="_blank">conversație</a></p>
+      <p><strong>Facebook:</strong> <a href="https://facebook.com/msahandmade" target="_blank">MSA Handmade</a></p>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
