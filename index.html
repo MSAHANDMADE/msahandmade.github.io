@@ -1,46 +1,143 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>M.S.A Handmade Decor</title>
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="cart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Galerie produse</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <header class="site-header">
+    <h1>Lista de Produse</h1>
 
-<header class="header">
-  <div class="container nav">
-    <div class="brand">
-      <img src="logo.png" alt="M.S.A Handmade Decor" class="logo">
-      <small>Magie și lumină într-un singur loc</small>
-    </div>
-    <nav class="menu">
-      <a class="link" href="index.html">Acasă</a>
-      <a class="link" href="produse.html">Produse</a>
-      <a class="link" href="cos.html">Coș <span id="cart-count" class="cart-count">0</span></a>
+    <nav class="social">
+      <a href="#" aria-label="Facebook">
+        <img src="./facebook.svg" alt="Facebook" />
+      </a>
+      <a href="#" aria-label="Instagram">
+        <img src="./instagram.svg" alt="Instagram" />
+      </a>
     </nav>
-  </div>
-</header>
+  </header>
 
-<main class="container">
-  <section class="hero">
-    <h1>Bine ai venit la M.S.A Handmade!</h1>
-    <p>Descoperă lumânări și decorațiuni turnate manual, cadouri cu suflet. 💚</p>
-    <div style="text-align:center;margin-top:14px">
-      <a class="cta" href="produse.html">Vezi produsele</a>
-    </div>
-  </section>
-</main>
+  <main class="container">
+    <ul class="grid produse">
+      <!-- 1. Peisaj de iarnă -->
+      <li class="card">
+        <figure>
+          <img src="./images.peisajiarna.jpg" alt="Peisaj de iarnă" />
+          <figcaption>
+            <h3>Peisaj de iarnă</h3>
+            <span class="price">99 RON</span>
+          </figcaption>
+        </figure>
+      </li>
 
-<footer class="footer">
-  © <span id="y"></span> M.S.A Handmade — Toate drepturile rezervate ·
-  <a href="contact.html">Contact</a>
-</footer>
+      <!-- 2. Peisaj -->
+      <li class="card">
+        <figure>
+          <img src="./images_peisaj.jpg" alt="Peisaj" />
+          <figcaption>
+            <h3>Peisaj</h3>
+            <span class="price">33 RON</span>
+          </figcaption>
+        </figure>
+      </li>
 
-<div class="toast" aria-live="polite"></div>
-<script>
-  document.getElementById('y').textContent = new Date().getFullYear();
-</script>
+      <!-- 3. Buchet -->
+      <li class="card">
+        <figure>
+          <img src="./images_buchet.jpg" alt="Buchet" />
+          <figcaption>
+            <h3>Buchet</h3>
+            <span class="price">29 RON</span>
+          </figcaption>
+        </figure>
+      </li>
+
+      <!-- 4. Crin -->
+      <li class="card">
+        <figure>
+          <img src="./images.crin.jpg" alt="Crin" />
+          <figcaption>
+            <h3>Crin</h3>
+            <span class="price">33 RON</span>
+          </figcaption>
+        </figure>
+      </li>
+
+      <!-- 5. Dans -->
+      <li class="card">
+        <figure>
+          <img src="./images.dans.jpg" alt="Dans" />
+          <figcaption>
+            <h3>Dans</h3>
+            <span class="price">33 RON</span>
+          </figcaption>
+        </figure>
+      </li>
+
+      <!-- 6. Îndrăgostiți -->
+      <li class="card">
+        <figure>
+          <img src="./images.indragostiti.jpg" alt="Îndrăgostiți" />
+          <figcaption>
+            <h3>Îndrăgostiți</h3>
+            <span class="price">33 RON</span>
+          </figcaption>
+        </figure>
+      </li>
+
+      <!-- 7. Înger -->
+      <li class="card">
+        <figure>
+          <img src="./images.inger.jpg" alt="Înger" />
+          <figcaption>
+            <h3>Înger</h3>
+            <span class="price">33 RON</span>
+          </figcaption>
+        </figure>
+      </li>
+
+      <!-- 8. Logodna -->
+      <li class="card">
+        <figure>
+          <img src="./images.logodna.jpg" alt="Logodna" />
+          <figcaption>
+            <h3>Logodna</h3>
+            <span class="price">33 RON</span>
+          </figcaption>
+        </figure>
+      </li>
+
+      <!-- 9. Sărut -->
+      <li class="card">
+        <figure>
+          <img src="./images.sarut.jpg" alt="Sărut" />
+          <figcaption>
+            <h3>Sărut</h3>
+            <span class="price">33 RON</span>
+          </figcaption>
+        </figure>
+      </li>
+
+      <!-- 10. Flori -->
+      <li class="card">
+        <figure>
+          <img src="./images_flori.jpg" alt="Flori" />
+          <figcaption>
+            <h3>Flori</h3>
+            <span class="price">33 RON</span>
+          </figcaption>
+        </figure>
+      </li>
+    </ul>
+  </main>
+
+  <footer class="footer">
+    <small>&copy; <span id="year"></span> — Galerie.</small>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
