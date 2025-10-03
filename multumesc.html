@@ -1,27 +1,27 @@
-<!DOCTYPE html><html lang="ro"><head>
+<!DOCTYPE html>
+<html lang="ro">
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mulțumim pentru comandă</title>
+<title>Mulțumim — MSA Handmade</title>
 <link rel="stylesheet" href="styles.css">
-<script src="cart.js"></script>
-<style>
-.card{max-width:680px;margin:30px auto;padding:24px;border-radius:16px;background:#fff;box-shadow:0 8px 30px rgba(0,0,0,.07);text-align:center}
-.ok{font-size:64px}
-</style>
-</head><body>
-<header class="site-header">
-  <a href="index.html">Acasă</a>
-  <a href="produse.html">Produse</a>
-  <a href="cos.html">Coș (<span id="cart-count">0</span>)</a>
-</header>
+<body class="container">
+  <header class="header">
+    <nav class="nav">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="cos.html" class="cart">Coș <span id="cart-count">0</span></a>
+    </nav>
+  </header>
 
-<div class="card">
-  <div class="ok">✅</div>
-  <h1>Comanda a fost trimisă cu succes!</h1>
-  <p>Ți-am trimis un e-mail de confirmare cu detaliile comenzii.<br>
-     Comenzile se procesează în <strong>1–3 zile lucrătoare</strong>, apoi livrăm prin curier.</p>
-  <p><a class="btn" href="produse.html">Continuă cumpărăturile</a>
-     <a class="btn secondary" href="index.html">Înapoi la Acasă</a></p>
-</div>
+  <main style="text-align:center;margin:40px 0">
+    <h2>Mulțumim pentru comandă! 💛</h2>
+    <p>Ți-am trimis un email de confirmare. Te vom contacta în curând.</p>
+    <p><a class="btn" href="produse.html">Înapoi la produse</a></p>
+  </main>
 
-<script>clearCart();</script>
-</body></html>
+  <footer class="footer">
+    <small>&copy; <span id="year"></span> — MSA Handmade.</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
