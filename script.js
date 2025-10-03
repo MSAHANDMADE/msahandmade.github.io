@@ -1,7 +1,8 @@
-// anul din footer
-document.getElementById("year").textContent = new Date().getFullYear();
+// === anul în footer
+const y = document.getElementById("year");
+if (y) y.textContent = new Date().getFullYear();
 
-// meniu mobil
+// === meniu mobil (hamburger DOAR pe mobil)
 const btn = document.querySelector(".menu-toggle");
 const nav = document.querySelector(".nav");
 btn?.addEventListener("click", () => {
@@ -9,18 +10,47 @@ btn?.addEventListener("click", () => {
   btn.setAttribute("aria-expanded", String(open));
 });
 
-// fallback pentru imagini lipsă (nu mai vezi casete goale)
-document.querySelectorAll(".card img").forEach((img) => {
-  img.addEventListener("error", () => {
-    const ph = document.createElement("div");
-    ph.style.width = "100%";
-    ph.style.aspectRatio = "4 / 3";
-    ph.style.display = "grid";
-    ph.style.placeItems = "center";
-    ph.style.background = "#0f172a";
-    ph.style.color = "#9ca3af";
-    ph.style.font = "600 14px/1 system-ui, -apple-system, Segoe UI, Roboto, Arial";
-    ph.textContent = "imagine indisponibilă";
-    img.replaceWith(ph);
+// === contor coș vizibil (funcționează și fără cart.js încărcat)
+(function ensureCartBadge(){
+  try {
+    const raw = localStorage.getItem("msa_cart");
+    const cart = raw ? JSON.parse(raw) : [];
+    const count = cart.reduce((s, it) => s + (it.qty || 0), 0);
+    const badge = document.getElementById("cart-count");
+    if (badge) badge.textContent = String(count);
+  } catch {}
+})();
+
+// === LIGHTBOX pentru toate imaginile din site
+(function setupLightbox(){
+  // creăm overlay-ul o singură dată
+  const lb = document.createElement("div");
+  lb.className = "lightbox";
+  lb.innerHTML = `
+    <button class="close" aria-label="Închide">✕</button>
+    <img alt="previzualizare imagine">
+  `;
+  document.body.appendChild(lb);
+  const imgTag = lb.querySelector("img");
+  const closeBtn = lb.querySelector(".close");
+
+  function open(src, alt){
+    imgTag.src = src;
+    imgTag.alt = alt || "imagine";
+    lb.classList.add("open");
+  }
+  function close(){ lb.classList.remove("open"); imgTag.src = ""; }
+
+  // închide pe fundal sau pe buton
+  lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+  closeBtn.addEventListener("click", close);
+  document.addEventListener("keydown", (e)=>{ if(e.key==="Escape") close(); });
+
+  // ascultă click pe orice imagine din carduri / pagini produs
+  document.addEventListener("click", (e) => {
+    const img = e.target.closest(".card img, .product img");
+    if (!img) return;
+    e.preventDefault();
+    open(img.src, img.alt);
   });
-});
+})();
