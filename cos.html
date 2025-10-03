@@ -32,73 +32,76 @@
 
       <!-- Setări FormSubmit -->
       <input type="hidden" name="_next" value="https://msahandmade.ro/multumesc.html" />
-      <input type="hidden" name="_subject" value="Comandă nouă – M.S.A Handmade Decor" />
+      <input type="hidden" name="_subject" value="Comandă nouă - M.S.A Handmade Decor" />
       <input type="hidden" name="_template" value="table" />
       <input type="hidden" name="_captcha" value="false" />
-      <!-- Auto-reply către client -->
+
+      <!-- Auto-reply către client (mesajul din e-mailul de confirmare) -->
       <input type="hidden" name="_autoresponse"
              value="Mulțumim pentru comandă! Am primit solicitarea ta și revenim în scurt timp cu confirmarea. — M.S.A Handmade Decor" />
-      <!-- CC: vom completa dinamic cu emailul clientului din JS -->
+
+      <!-- CC: completăm dinamic cu e-mailul clientului din JS -->
       <input type="hidden" name="_cc" id="order_cc" value="" />
-      <!-- Reply-To: îl setăm din JS cu emailul clientului -->
+      <!-- Reply-To: setăm din JS cu e-mailul clientului -->
       <input type="hidden" name="_replyto" id="order_replyto" value="" />
-      <!-- aici JS va pune rezumatul comenzii -->
+
+      <!-- aici JS va pune rezumatul comenzii (produse + total + date livrare) -->
       <textarea id="order_message" name="message" hidden></textarea>
 
       <div class="radio-group">
         <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
-        <label style="margin-left:16px"><input type="radio" name="tip" value="pj"> Persoană juridică</label>
+        <label><input type="radio" name="tip" value="pj"> Persoană juridică</label>
       </div>
 
       <div class="form-row">
         <label>Nume
-          <input type="text" name="nume" required />
+          <input type="text" name="nume" required>
         </label>
         <label>Prenume
-          <input type="text" name="prenume" required />
+          <input type="text" name="prenume" required>
         </label>
       </div>
 
       <div class="form-row">
         <label>Email
-          <input type="email" name="email" required />
+          <input type="email" name="email" required>
         </label>
         <label>Telefon
-          <input type="tel" name="telefon" required />
+          <input type="tel" name="telefon" required>
         </label>
       </div>
 
       <div class="form-row">
         <label>Județ
-          <input type="text" name="judet" required />
+          <input type="text" name="judet" required>
         </label>
         <label>Oraș
-          <input type="text" name="oras" required />
+          <input type="text" name="oras" required>
         </label>
       </div>
 
       <div class="form-row">
         <label>Cod poștal
-          <input type="text" name="codpostal" required />
+          <input type="text" name="codpostal" required>
         </label>
         <label>Adresă
-          <input type="text" name="adresa" required />
+          <input type="text" name="adresa" required>
         </label>
       </div>
 
-      <!-- doar pentru Persoană juridică -->
-      <div class="form-row" id="pj-fields" style="display:none">
+      <!-- Câmpuri extra pentru Persoană juridică -->
+      <div class="form-row" id="pj-fields">
         <label>Denumire firmă
-          <input type="text" name="firma" />
+          <input type="text" name="firma">
         </label>
         <label>CUI
-          <input type="text" name="cui" />
+          <input type="text" name="cui">
         </label>
       </div>
 
       <div class="form-row">
         <label>Mențiuni (opțional)
-          <textarea name="mentiuni" rows="3" placeholder="Culoare/variantă dorită, interval livrare, etc."></textarea>
+          <textarea name="mentiuni" rows="3"></textarea>
         </label>
       </div>
 
@@ -109,24 +112,88 @@
     </form>
   </main>
 
-  <footer class="site-footer">
-    © <span id="y"></span> M.S.A Handmade Decor — Toate drepturile rezervate.
-  </footer>
-
   <script src="cart.js"></script>
   <script>
-    // anul din footer
-    document.getElementById('y').textContent = new Date().getFullYear();
+    // arată/ascunde câmpurile pentru PJ
+    document.querySelectorAll('input[name="tip"]').forEach(r => {
+      r.addEventListener('change', () => {
+        const pj = document.querySelector('input[name="tip"][value="pj"]').checked;
+        document.getElementById('pj-fields').style.display = pj ? 'flex' : 'none';
+      });
+    });
+    document.getElementById('pj-fields').style.display =
+      document.querySelector('input[name="tip"][value="pj"]').checked ? 'flex' : 'none';
 
-    // arată / ascunde câmpurile PJ
-    function togglePJ(){
-      const isPJ = document.querySelector('input[name="tip"][value="pj"]').checked;
-      const box = document.getElementById('pj-fields');
-      box.style.display = isPJ ? 'flex' : 'none';
-      box.querySelectorAll('input').forEach(i => i.required = isPJ);
-    }
-    document.querySelectorAll('input[name="tip"]').forEach(r => r.addEventListener('change', togglePJ));
-    togglePJ();
+    // Înainte de trimitere: punem în textarea rezumatul comenzii + setăm CC & Reply-To
+    document.getElementById('order-form').addEventListener('submit', function (e) {
+      // dacă vrei să vezi local ce se trimite, lasă preventDefault, altfel comentează următoarea linie
+      // e.preventDefault();
+
+      const form = e.target;
+      const cart = (function () {
+        try { return JSON.parse(localStorage.getItem('msa_cart_v1')) || []; } catch { return []; }
+      })();
+
+      if (!cart.length) {
+        alert('Coșul este gol.');
+        e.preventDefault();
+        return false;
+      }
+
+      const nume = form.nume.value.trim();
+      const prenume = form.prenume.value.trim();
+      const email = form.email.value.trim();
+      const telefon = form.telefon.value.trim();
+      const judet = form.judet.value.trim();
+      const oras = form.oras.value.trim();
+      const codpostal = form.codpostal.value.trim();
+      const adresa = form.adresa.value.trim();
+      const tip = form.tip.value; // pf / pj
+      const firma = form.firma.value.trim() || '';
+      const cui = form.cui.value.trim() || '';
+      const mentiuni = form.mentiuni.value.trim();
+
+      // validare minimă
+      if (!nume || !prenume || !email || !telefon || !judet || !oras || !codpostal || !adresa) {
+        alert('Te rog completează toate câmpurile obligatorii.');
+        e.preventDefault();
+        return false;
+      }
+
+      // calcule
+      const subtotal = cart.reduce((s, p) => s + p.price * (p.qty || 1), 0);
+      const shipping = 17;
+      const total = subtotal + shipping;
+
+      const itemsText = cart
+        .map(p => `${p.name} × ${p.qty || 1} — ${p.price} RON`)
+        .join('%0A');
+
+      // mesajul care ajunge în mail
+      const body =
+`Tip client: ${tip === 'pj' ? 'Persoană juridică' : 'Persoană fizică'}
+${tip === 'pj' ? `Firmă: ${firma}\nCUI: ${cui}\n` : ''}Nume: ${nume} ${prenume}
+Email: ${email}
+Telefon: ${telefon}
+Adresă: ${adresa}, ${oras}, ${judet}, ${codpostal}
+
+Produse:
+${decodeURIComponent(itemsText)}
+
+Subtotal: ${subtotal} RON
+Livrare: ${shipping} RON
+TOTAL: ${total} RON
+
+Mențiuni: ${mentiuni || '—'}`;
+
+      document.getElementById('order_message').value = body;
+
+      // clientul primește CC + reply-to ca să poată răspunde
+      document.getElementById('order_cc').value = email;
+      document.getElementById('order_replyto').value = email;
+
+      // coșul se golește la pagina de mulțumire (multumesc.html)
+    });
   </script>
 </body>
 </html>
