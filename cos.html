@@ -10,14 +10,17 @@
   <link rel="stylesheet" href="styles.css" />
 
   <style>
-    .container{max-width:920px;margin:0 auto;padding:24px}
+    .container{max-width:960px;margin:0 auto;padding:24px}
     .totals{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}
     .pill{background:#f3f4f6;border-radius:999px;padding:8px 12px}
-    .item{display:grid;grid-template-columns:72px 1fr auto auto;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #eee}
+    .muted{color:#6b7280}
+    .list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
+    .item{display:grid;grid-template-columns:72px 1fr auto auto;gap:12px;align-items:center;background:#fff;border-radius:14px;box-shadow:0 6px 18px rgba(0,0,0,.06);padding:12px}
     .item img{width:72px;height:72px;border-radius:10px;object-fit:cover;background:#fafafa}
+    .name{font-weight:600}
     .qty{display:flex;align-items:center;gap:6px}
-    .qty input{width:56px;padding:6px;border:1px solid #ddd;border-radius:8px;text-align:center}
-    .btn{background:#111827;color:#fff;border:0;border-radius:10px;padding:12px 16px;cursor:pointer}
+    .qty input{width:56px;padding:8px;border:1px solid #e5e7eb;border-radius:10px;text-align:center}
+    .btn{background:#111827;color:#fff;border:0;border-radius:10px;padding:10px 14px;cursor:pointer}
     .btn.secondary{background:#e5e7eb;color:#111827}
     form{display:grid;gap:12px;margin-top:18px}
     fieldset{border:1px solid #e5e7eb;border-radius:12px;padding:12px}
@@ -26,8 +29,9 @@
     .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     @media(max-width:640px){.item{grid-template-columns:72px 1fr auto;grid-auto-rows:min-content}}
   </style>
-  <!-- EmailJS SDK (obligatoriu pentru trimitere) -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+  <!-- EmailJS SDK (obligatoriu) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
   <header class="header">
@@ -44,12 +48,21 @@
     <p><a href="produse.html">← Înapoi la produse</a></p>
 
     <div class="totals">
-      <span class="pill">Subtotal: <strong id="subtot">0 RON</strong></span>
-      <span class="pill">Livrare: <strong id="shipping">17 RON</strong></span>
-      <span class="pill">Total: <strong id="total">0 RON</strong></span>
+      <span class="pill">Subtotal: <strong id="subtot">0.00 RON</strong></span>
+      <span class="pill">Livrare: <strong id="shipping">17.00 RON</strong></span>
+      <span class="pill">Reducere: <strong id="discount-line">0.00 RON</strong></span>
+      <span class="pill">Total: <strong id="total">0.00 RON</strong></span>
     </div>
 
-    <ul id="cart-list" style="list-style:none;padding:0;margin:0"></ul>
+    <!-- cod reducere -->
+    <div style="margin:12px 0 20px">
+      <label for="discount">Cod de reducere (ex: REDUCERE10 / REDUCERE15)</label>
+      <input id="discount" name="discount" placeholder="Introdu codul" style="padding:10px;border:1px solid #ccc;border-radius:8px;width:240px;">
+      <button type="button" class="btn secondary" id="apply-discount">Aplică</button>
+      <span class="muted" id="discount-status"></span>
+    </div>
+
+    <ul id="cart-list" class="list"></ul>
 
     <form id="order-form">
       <fieldset>
@@ -59,52 +72,24 @@
       </fieldset>
 
       <div class="row">
-        <div>
-          <label for="nume">Nume</label>
-          <input id="nume" name="nume" required />
-        </div>
-        <div>
-          <label for="prenume">Prenume</label>
-          <input id="prenume" name="prenume" required />
-        </div>
+        <div><label>Nume</label><input name="nume" required /></div>
+        <div><label>Prenume</label><input name="prenume" required /></div>
       </div>
-
       <div class="row">
-        <div>
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" required />
-        </div>
-        <div>
-          <label for="telefon">Telefon</label>
-          <input id="telefon" name="telefon" required />
-        </div>
+        <div><label>Email</label><input name="email" type="email" required /></div>
+        <div><label>Telefon</label><input name="telefon" required /></div>
       </div>
-
       <div class="row">
-        <div>
-          <label for="judet">Județ</label>
-          <input id="judet" name="judet" required />
-        </div>
-        <div>
-          <label for="oras">Oraș</label>
-          <input id="oras" name="oras" required />
-        </div>
+        <div><label>Județ</label><input name="judet" required /></div>
+        <div><label>Oraș</label><input name="oras" required /></div>
       </div>
-
       <div class="row">
-        <div>
-          <label for="codpostal">Cod poștal</label>
-          <input id="codpostal" name="codpostal" required />
-        </div>
-        <div>
-          <label for="adresa">Adresă</label>
-          <input id="adresa" name="adresa" required />
-        </div>
+        <div><label>Cod poștal</label><input name="codpostal" required /></div>
+        <div><label>Adresă</label><input name="adresa" required /></div>
       </div>
-
       <div>
-        <label for="mentiuni">Mențiuni (opțional)</label>
-        <textarea id="mentiuni" name="mentiuni" rows="4"></textarea>
+        <label>Mențiuni (opțional)</label>
+        <textarea name="mentiuni" rows="4"></textarea>
       </div>
 
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px">
@@ -122,64 +107,75 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Randează coșul în pagină
     function renderCart(){
       const list = (window.MSACart?.readCart?.() || []);
       const ul = document.getElementById('cart-list');
       ul.innerHTML = '';
 
-      list.forEach((it, idx)=>{
-        const li = document.createElement('li');
-        li.className = 'item';
+      if (!list.length){
+        ul.innerHTML = '<li class="muted">Coșul este gol.</li>';
+      } else {
+        list.forEach((it, idx)=>{
+          const li = document.createElement('li');
+          li.className = 'item';
 
-        const img = document.createElement('img');
-        img.src = it.image || 'logo.png';
-        img.alt = it.name || '';
-        li.appendChild(img);
+          const img = document.createElement('img');
+          img.src = it.image || 'logo.png';
+          img.alt = it.name || '';
+          li.appendChild(img);
 
-        const title = document.createElement('div');
-        title.innerHTML = `<div style="font-weight:600">${it.name || 'Produs'}</div><div>${(Number(it.price)||0).toFixed(2)} RON</div>`;
-        li.appendChild(title);
+          const title = document.createElement('div');
+          title.innerHTML = `<div class="name">${it.name || 'Produs'}</div><div class="muted">${(Number(it.price)||0).toFixed(2)} RON</div>`;
+          li.appendChild(title);
 
-        const qty = document.createElement('div');
-        qty.className = 'qty';
-        const minus = document.createElement('button');
-        minus.type='button'; minus.className='btn secondary'; minus.textContent='−';
-        minus.onclick=()=>{ MSACart.decreaseQty(idx); renderCart(); };
+          const qty = document.createElement('div');
+          qty.className = 'qty';
+          const minus = document.createElement('button');
+          minus.type='button'; minus.className='btn secondary'; minus.textContent='−';
+          minus.onclick=()=>{ MSACart.decreaseQty(idx); setTimeout(renderCart,50); };
 
-        const input = document.createElement('input');
-        input.type='number'; input.min='1'; input.value=it.qty||1;
-        input.onchange=()=>{ MSACart.setQty(idx, parseInt(input.value,10)||1); renderCart(); };
+          const input = document.createElement('input');
+          input.type='number'; input.min='1'; input.value=it.qty||1;
+          input.onchange=()=>{ MSACart.setQty(idx, parseInt(input.value,10)||1); setTimeout(renderCart,50); };
 
-        const plus = document.createElement('button');
-        plus.type='button'; plus.className='btn secondary'; plus.textContent='+';
-        plus.onclick=()=>{ MSACart.increaseQty(idx); renderCart(); };
+          const plus = document.createElement('button');
+          plus.type='button'; plus.className='btn secondary'; plus.textContent='+';
+          plus.onclick=()=>{ MSACart.increaseQty(idx); setTimeout(renderCart,50); };
 
-        qty.append(minus,input,plus);
-        li.appendChild(qty);
+          qty.append(minus,input,plus);
+          li.appendChild(qty);
 
-        const del = document.createElement('button');
-        del.type='button'; del.className='btn secondary'; del.textContent='Șterge';
-        del.onclick=()=>{ MSACart.removeFromCart(idx); renderCart(); };
-        li.appendChild(del);
+          const del = document.createElement('button');
+          del.type='button'; del.className='btn secondary'; del.textContent='Șterge';
+          del.onclick=()=>{ MSACart.removeFromCart(idx); setTimeout(renderCart,50); };
+          li.appendChild(del);
 
-        ul.appendChild(li);
-      });
+          ul.appendChild(li);
+        });
+      }
 
-      // totaluri
       const t = MSACart.computeTotals(list);
       document.getElementById('subtot').textContent = `${t.subtotal.toFixed(2)} RON`;
       document.getElementById('shipping').textContent = `${t.shipping.toFixed(2)} RON`;
+      document.getElementById('discount-line').textContent = `−${t.reducere.toFixed(2)} RON`;
       document.getElementById('total').textContent = `${t.total.toFixed(2)} RON`;
 
-      // badge
       MSACart.updateCartCountBadge();
     }
     renderCart();
 
     document.getElementById('clear').onclick = ()=>{ MSACart.clearCart(); renderCart(); };
 
-    // submit
+    // aplicare reducere
+    document.getElementById('apply-discount').onclick = ()=>{
+      const code = document.getElementById('discount').value;
+      const pct = MSACart.applyDiscount(code); // întoarce procentul
+      const s = document.getElementById('discount-status');
+      s.textContent = pct ? `Reducere aplicată: ${pct}%` : 'Cod invalid sau neactiv.';
+      renderCart();
+    };
+
+    // submit comandă
     document.getElementById('order-form').addEventListener('submit', async (e)=>{
       e.preventDefault();
       try{
