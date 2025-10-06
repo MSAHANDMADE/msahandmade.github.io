@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MSA Handmade - Lumânări și decorațiuni artizanale</title>
-  <link rel="canonical" href="https://msahandmade.ro/" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MSA Handmade – Lumânări și decorațiuni artizanale</title>
+  <link rel="canonical" href="https://msahandmade.ro/">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="header">
@@ -13,23 +13,26 @@
       <a href="index.html" aria-current="page">Acasă</a>
       <a href="produse.html">Produse</a>
       <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart">🛒 <span id="cart-count"></span></a>
+      <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
     </nav>
   </header>
 
-  <main class="home-hero">
-    <img src="logo.png" alt="MSA Handmade">
-    <!-- restul conținutului paginii tale -->
+  <main class="home-hero" style="text-align:center;">
+    <img src="logo.png" alt="MSA Handmade" style="max-width:300px; width:80%; height:auto;">
+    <div style="text-align:center; margin-top:20px;">
+      <a href="produse.html" class="btn"
+         style="display:inline-block; background:#111827; color:#fff; padding:10px 20px; border-radius:8px; text-decoration:none;">
+         Vezi produse
+      </a>
+    </div>
   </main>
 
-  <footer class="footer">
+  <footer class="footer" style="text-align:center; margin-top:40px;">
     <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
-  <script src="script.js"></script>
   <script>
-    // setare an curent în footer
-    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
