@@ -2,8 +2,27 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MSA Handmade — Coș</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coș — MSA Handmade</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Finalizează comanda MSA Handmade. Verifică produsele din coș și completează datele de livrare." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://msahandmade.ro/cos.html" />
+  <link rel="alternate" href="https://msahandmade.ro/cos.html" hreflang="ro" />
+
+  <!-- OG/Twitter -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="MSA Handmade" />
+  <meta property="og:title" content="Coș — MSA Handmade" />
+  <meta property="og:description" content="Verifică produsele și plasează comanda." />
+  <meta property="og:url" content="https://msahandmade.ro/cos.html" />
+  <meta property="og:image" content="https://msahandmade.ro/logo.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Coș — MSA Handmade" />
+  <meta name="twitter:description" content="Verifică produsele și plasează comanda." />
+  <meta name="twitter:image" content="https://msahandmade.ro/logo.png" />
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -16,143 +35,167 @@
     </nav>
   </header>
 
-  <main class="cart-wrap">
-    <div class="cart-head">
-      <div>
-        <h2>Coșul tău</h2>
-        <p style="margin:6px 0 0">
-          <a href="produse.html" style="text-decoration:none;font-weight:700">← Înapoi la produse</a>
-        </p>
-      </div>
-      <div class="totals" id="totals" style="display:none">
-        <div>Subtotal: <span id="t-sub">0</span> RON</div>
-        <div>Livrare: <span id="t-ship">17</span> RON</div>
-        <div>Total: <span id="t-total">0</span> RON</div>
-      </div>
+  <main class="container" style="max-width:900px;margin:24px auto">
+    <h1>Coșul tău</h1>
+    <p><a href="produse.html">← Înapoi la produse</a></p>
+
+    <div id="totals" style="display:flex;gap:12px;flex-wrap:wrap;margin:12px 0">
+      <div class="pill"><strong>Subtotal:</strong> <span id="subttl">0 RON</span></div>
+      <div class="pill"><strong>Livrare:</strong> <span id="ship">17 RON</span></div>
+      <div class="pill"><strong>Total:</strong> <span id="ttl">0 RON</span></div>
     </div>
 
-    <div id="cart-empty" style="display:none;color:#6b7280;margin:14px 0">Coșul este gol.</div>
-    <div id="cart-list"></div>
+    <div id="items"></div>
 
-    <section class="checkout" id="checkout-box" style="display:none">
-      <div class="radio-set" role="radiogroup" aria-label="Tip client">
-        <label class="radio-pill"><input type="radio" name="tip" value="Persoană fizică" checked> Persoană fizică</label>
-        <label class="radio-pill"><input type="radio" name="tip" value="Persoană juridică"> Persoană juridică</label>
+    <hr style="margin:24px 0" />
+
+    <form id="orderForm">
+      <fieldset style="margin-bottom:12px">
+        <legend>Tip client</legend>
+        <label><input type="radio" name="tip" value="Persoană fizică" checked /> Persoană fizică</label>
+        <label style="margin-left:16px"><input type="radio" name="tip" value="Persoană juridică" /> Persoană juridică</label>
+      </fieldset>
+
+      <div class="row"><label>Nume</label><input name="nume" required /></div>
+      <div class="row"><label>Prenume</label><input name="prenume" required /></div>
+      <div class="row"><label>Email</label><input name="email" type="email" required /></div>
+      <div class="row"><label>Telefon</label><input name="telefon" required /></div>
+      <div class="row"><label>Județ</label><input name="judet" required /></div>
+      <div class="row"><label>Oraș</label><input name="oras" required /></div>
+      <div class="row"><label>Cod poștal</label><input name="codpostal" required /></div>
+      <div class="row"><label>Adresă</label><input name="adresa" required /></div>
+      <div class="row"><label>Mențiuni (opțional)</label><textarea name="mentiuni" rows="4"></textarea></div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
+        <button type="button" id="clearBtn" class="btn btn-outline">Golește coșul</button>
+        <button type="submit" class="btn">Plasează comanda</button>
       </div>
-
-      <form id="order-form" class="form-grid">
-        <div class="field"><label>Nume</label><input name="nume" required></div>
-        <div class="field"><label>Prenume</label><input name="prenume" required></div>
-        <div class="field"><label>Email</label><input type="email" name="email" required></div>
-        <div class="field"><label>Telefon</label><input name="telefon" required></div>
-        <div class="field"><label>Județ</label><input name="judet" required></div>
-        <div class="field"><label>Oraș</label><input name="oras" required></div>
-        <div class="field"><label>Cod poștal</label><input name="codpostal" required></div>
-        <div class="field"><label>Adresă</label><input name="adresa" required></div>
-        <div class="field" style="grid-column:1/-1"><label>Mențiuni (opțional)</label><textarea name="mentiuni" rows="3"></textarea></div>
-
-        <div style="grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap">
-          <button type="button" id="clear-cart" class="btn-secondary">Golește coșul</button>
-          <button type="submit" class="btn" id="place-order">Plasează comanda</button>
-        </div>
-      </form>
-
-      <div id="order-status" class="status info"></div>
-    </section>
+      <p id="orderStatus" style="margin-top:10px"></p>
+    </form>
   </main>
 
   <footer class="footer">
     <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
-  <!-- EmailJS înainte de cart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <!-- EmailJS pentru trimitere comenzi -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <!-- Script-urile tale globale -->
   <script src="script.js"></script>
   <script src="cart.js"></script>
 
   <script>
-    function renderCart() {
-      const api = window.MSACart;
-      if (!api) return;
+    // Cheile tale (după cum apar în contul EmailJS)
+    const EMAILJS_PUBLIC = "iSadfb7-TV_89l_6k";
+    const EMAILJS_SERVICE = "service_ix0zpp7";
+    const EMAILJS_TEMPLATE_ADMIN = "template_13qpqtt";   // către tine
+    const EMAILJS_TEMPLATE_CLIENT = "template_9yctwor";  // către client
 
-      const list = document.getElementById("cart-list");
-      const empty = document.getElementById("cart-empty");
-      const totals = document.getElementById("totals");
-      const box = document.getElementById("checkout-box");
-      const form = document.getElementById("order-form");
-      const status = document.getElementById("order-status");
+    if (window.emailjs && typeof emailjs.init === "function") {
+      try { emailjs.init(EMAILJS_PUBLIC); } catch(e){}
+    }
 
-      const cart = api.readCart();
-      list.innerHTML = "";
+    // Helpers DOM pentru elementele din coș
+    function renderCart(){
+      if (!window.MSACart) return;
+      const list = MSACart.readCart();
+      const itemsEl = document.getElementById('items');
+      itemsEl.innerHTML = "";
 
-      if (!cart.length) {
-        empty.style.display = "block";
-        totals.style.display = "none";
-        box.style.display = "none";
-        return;
+      if (!list.length){
+        itemsEl.innerHTML = "<p>Coșul este gol.</p>";
+      } else {
+        list.forEach(it=>{
+          const row = document.createElement('div');
+          row.className = "cart-row";
+          row.innerHTML = `
+            <img src="${it.image}" alt="${it.name}" class="thumb" />
+            <div class="grow">
+              <div class="title">${it.name}</div>
+              <div class="price">${it.price} RON</div>
+            </div>
+            <div class="qty">
+              <button type="button" class="minus">−</button>
+              <input value="${it.qty||1}" aria-label="Cantitate" readonly />
+              <button type="button" class="plus">+</button>
+            </div>
+            <div class="line-total">${(it.price*(it.qty||1)).toFixed(2)} RON</div>
+            <button type="button" class="remove">Șterge</button>
+          `;
+          // acțiuni
+          row.querySelector('.minus').onclick = ()=>{ MSACart.decreaseQty(it.id); refresh(); };
+          row.querySelector('.plus').onclick  = ()=>{ MSACart.increaseQty(it.id); refresh(); };
+          row.querySelector('.remove').onclick= ()=>{ MSACart.removeFromCart(it.id); refresh(); };
+          itemsEl.appendChild(row);
+        });
       }
 
-      empty.style.display = "none";
-      totals.style.display = "flex";
-      box.style.display = "block";
-
-      cart.forEach(it => {
-        const row = document.createElement("div");
-        row.className = "cart-row";
-        row.innerHTML = `
-          <img src="${it.image}" alt="${it.name}">
-          <div>
-            <div style="font-weight:800">${it.name}</div>
-            <div class="qty">
-              <button type="button" class="qty-btn" data-act="minus" data-id="${it.id}">–</button>
-              <input class="qty-input" type="number" min="0" step="1" value="${it.qty}" data-id="${it.id}">
-              <button type="button" class="qty-btn" data-act="plus" data-id="${it.id}">+</button>
-            </div>
-          </div>
-          <div style="font-weight:700">${it.price} RON</div>
-          <button class="btn-danger" data-del="${it.id}">Șterge</button>
-        `;
-        list.appendChild(row);
-      });
-
-      const { subtotal, shipping, total } = api.computeTotals(cart);
-      document.getElementById("t-sub").textContent = subtotal;
-      document.getElementById("t-ship").textContent = shipping;
-      document.getElementById("t-total").textContent = total;
-
-      list.querySelectorAll("[data-del]").forEach(b=>{
-        b.onclick = ()=>{ api.removeFromCart(b.dataset.del); renderCart(); };
-      });
-      list.querySelectorAll(".qty-btn").forEach(b=>{
-        b.onclick = ()=>{
-          const id = b.dataset.id;
-          b.dataset.act==="plus" ? api.increaseQty(id) : api.decreaseQty(id);
-          renderCart();
-        };
-      });
-      list.querySelectorAll(".qty-input").forEach(inp=>{
-        inp.onchange = ()=>{ api.setQty(inp.dataset.id, inp.value); renderCart(); };
-      });
-
-      document.getElementById("clear-cart").onclick = ()=>{ api.clearCart(); renderCart(); };
-
-      form.onsubmit = async (e)=>{
-        e.preventDefault();
-        status.className = "status info";
-        status.textContent = "Se trimite comanda…";
-        try{
-          await api.submitOrder(new FormData(form));
-          status.className = "status ok";
-          status.textContent = "Comanda a fost trimisă cu succes!";
-          setTimeout(()=>{ location.href="multumesc.html"; }, 900);
-        }catch(err){
-          status.className = "status err";
-          status.textContent = "Eroare la trimitere: " + (err?.text || err?.message || "verifică EmailJS");
-          console.error(err);
-        }
-      };
+      const t = MSACart.computeTotals(list);
+      document.getElementById('subttl').textContent = `${t.subtotal.toFixed(2)} RON`;
+      document.getElementById('ship').textContent   = `${t.shipping.toFixed(2)} RON`;
+      document.getElementById('ttl').textContent    = `${t.total.toFixed(2)} RON`;
     }
-    document.addEventListener("DOMContentLoaded", renderCart);
+
+    function refresh(){
+      renderCart();
+      if (window.MSACart && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge();
+    }
+
+    // Golire coș
+    document.getElementById('clearBtn').addEventListener('click', ()=>{
+      if (!window.MSACart) return;
+      MSACart.clearCart();
+      refresh();
+    });
+
+    // Trimitere comandă via EmailJS (folosește MSACart.submitOrder dacă îl ai în cart.js)
+    document.getElementById('orderForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const status = document.getElementById('orderStatus');
+      status.style.color = "";
+      status.textContent = "Procesez comanda...";
+
+      try{
+        if (window.MSACart && typeof MSACart.submitOrder === "function"){
+          // Dacă ai deja implementat în cart.js trimiterea dublă (către tine + client)
+          const ok = await MSACart.submitOrder(new FormData(this));
+          if (!ok) throw new Error("submitOrder a eșuat");
+        } else {
+          // fallback simplu: trimitem o singură notificare către tine
+          const list = (MSACart && MSACart.readCart()) || [];
+          if (!list.length) throw new Error("Coșul este gol");
+
+          const produse = list.map(i=>`${i.name} × ${i.qty||1} (${i.price} RON)`).join("\n");
+          const payload = {
+            order_id: `${Date.now()}-${Math.floor(Math.random()*1000)}`,
+            tip: this.tip.value,
+            nume: this.nume.value,
+            prenume: this.prenume.value,
+            email: this.email.value,
+            telefon: this.telefon.value,
+            judet: this.judet.value,
+            oras: this.oras.value,
+            codpostal: this.codpostal.value,
+            adresa: this.adresa.value,
+            mentiuni: this.mentiuni.value || "",
+            produse: produse
+          };
+          await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE_ADMIN, payload);
+          if (MSACart) MSACart.clearCart();
+        }
+
+        status.style.color = "green";
+        status.textContent = "Comanda a fost trimisă! Mulțumim! Vei primi un email de confirmare.";
+        this.reset();
+        refresh();
+      }catch(err){
+        status.style.color = "crimson";
+        status.textContent = "Eroare la trimitere. Verifică datele și încearcă din nou.";
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', refresh);
   </script>
 </body>
 </html>
