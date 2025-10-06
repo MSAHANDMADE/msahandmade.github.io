@@ -1,253 +1,223 @@
-/* MSA Handmade – cart.js (versiune completă, stabilă, 2025) */
+/* MSA Handmade — cart.js (unic pentru coș + reduceri + EmailJS) */
 (function () {
-  const STORAGE_KEY = 'msa_cart';
-  const DISCOUNT_KEY = 'msa_discount';
-  const SHIPPING = 17;
+  // ===== Config general =====
+  const STORAGE_KEY   = "msa_cart";
+  const DISCOUNT_KEY  = "msa_discount";
+  const SHIPPING      = 17; // RON (curier)
 
-  // === EmailJS ===
-  const PUBLIC_KEY = 'SAdfb7_TV_89L_Gk';
-  const SERVICE_ID = 'service_ix0zpp7';
-  const TEMPLATE_ADMIN = 'template_13qpqtt';
-  const TEMPLATE_CLIENT = 'template_9ytcwor';
+  // ===== EmailJS (din contul tău) =====
+  const PUBLIC_KEY    = "iSadfb7-TV_89l_6k";
+  const SERVICE_ID    = "service_ix0zpp7";
+  const TEMPLATE_ADMIN  = "template_13qpqtt"; // către tine
+  const TEMPLATE_CLIENT = "template_9yctwor"; // confirmare către client
 
+  // Init EmailJS dacă există SDK-ul
   if (window.emailjs && typeof emailjs.init === "function") {
-    try { emailjs.init(PUBLIC_KEY); } catch (e) { console.error(e); }
+    try { emailjs.init(PUBLIC_KEY); } catch (e) {}
   }
 
-  // === LocalStorage helpers ===
+  // ===== Helpers LocalStorage =====
   const readCart = () => {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+    catch (_) { return []; }
   };
-  const saveCart = (list) => localStorage.setItem(STORAGE_KEY, JSON.stringify(list || []));
-  const readDiscount = () => {
-    try { return JSON.parse(localStorage.getItem(DISCOUNT_KEY) || '{"code":"","pct":0}'); }
-    catch { return { code: '', pct: 0 }; }
+  const saveCart = (list) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list || []));
   };
-  const saveDiscount = (obj) => localStorage.setItem(DISCOUNT_KEY, JSON.stringify(obj || { code: '', pct: 0 }));
 
-  // === Badge ===
+  const readDiscount = () => {
+    try { return JSON.parse(localStorage.getItem(DISCOUNT_KEY) || "{\"pct\":0}"); }
+    catch (_) { return { pct: 0 }; }
+  };
+  const saveDiscount = (obj) => {
+    localStorage.setItem(DISCOUNT_KEY, JSON.stringify(obj || { pct: 0 }));
+  };
+
+  // ===== Badge (numărul din coș) =====
   function updateCartCountBadge() {
     const list = readCart();
     const count = list.reduce((s, i) => s + (i.qty || 1), 0);
-    const el1 = document.getElementById('cart-count');
-    const el2 = document.getElementById('cart-count-fab');
-    if (el1) el1.textContent = count;
-    if (el2) el2.textContent = count;
+    const b1 = document.getElementById("cart-count");
+    const b2 = document.getElementById("cart-count-fab");
+    if (b1) b1.textContent = count;
+    if (b2) b2.textContent = count;
   }
 
-  // === CRUD ===
+  // ===== CRUD coș =====
   function addToCart({ id, name, price, image }) {
     if (!id) return;
     const list = readCart();
     const i = list.findIndex(p => p.id === id);
-    if (i >= 0) list[i].qty += 1;
-    else list.push({ id, name, price: Number(price) || 0, image, qty: 1 });
+    if (i >= 0) {
+      list[i].qty = (list[i].qty || 1) + 1;
+    } else {
+      list.push({
+        id,
+        name: name || "",
+        price: Number(price) || 0,
+        image: image || "",
+        qty: 1
+      });
+    }
     saveCart(list);
     updateCartCountBadge();
+    document.dispatchEvent(new CustomEvent("msa:cart:changed"));
   }
 
-  function removeFromCart(id) {
-    const list = readCart().filter(p => p.id !== id);
-    saveCart(list);
-    updateCartCountBadge();
-    renderCart();
+  function _getByIndexOrId(indexOrId) {
+    const list = readCart();
+    if (typeof indexOrId === "number") {
+      return { list, idx: indexOrId };
+    }
+    const idx = list.findIndex(p => p.id === indexOrId);
+    return { list, idx };
+  }
+
+  function removeFromCart(indexOrId) {
+    const { list, idx } = _getByIndexOrId(indexOrId);
+    if (idx >= 0) {
+      list.splice(idx, 1);
+      saveCart(list);
+      updateCartCountBadge();
+      document.dispatchEvent(new CustomEvent("msa:cart:changed"));
+    }
   }
 
   function clearCart() {
-    localStorage.removeItem(STORAGE_KEY);
+    saveCart([]);
     updateCartCountBadge();
-    renderCart();
+    document.dispatchEvent(new CustomEvent("msa:cart:changed"));
   }
 
-  window.MSACart = { addToCart, readCart, clearCart };
-
-  // === Reduceri ===
-  function applyDiscount(code) {
-    const validCodes = [
-      { code: 'MSA10', pct: 10 },
-      { code: 'MSA15', pct: 15 },
-      { code: 'MSA20', pct: 20 },
-    ];
-    const found = validCodes.find(c => c.code.toLowerCase() === code.toLowerCase());
-    if (found) {
-      saveDiscount(found);
-      alert(`Reducerea de ${found.pct}% a fost aplicată!`);
-    } else {
-      saveDiscount({ code: '', pct: 0 });
-      alert('Cod invalid.');
+  function increaseQty(indexOrId) {
+    const { list, idx } = _getByIndexOrId(indexOrId);
+    if (idx >= 0) {
+      list[idx].qty = (list[idx].qty || 1) + 1;
+      saveCart(list);
+      updateCartCountBadge();
+      document.dispatchEvent(new CustomEvent("msa:cart:changed"));
     }
-    renderCart();
+  }
+
+  function decreaseQty(indexOrId) {
+    const { list, idx } = _getByIndexOrId(indexOrId);
+    if (idx >= 0) {
+      const q = (list[idx].qty || 1) - 1;
+      if (q <= 0) list.splice(idx, 1); else list[idx].qty = q;
+      saveCart(list);
+      updateCartCountBadge();
+      document.dispatchEvent(new CustomEvent("msa:cart:changed"));
+    }
+  }
+
+  function setQty(indexOrId, v) {
+    const { list, idx } = _getByIndexOrId(indexOrId);
+    if (idx >= 0) {
+      const q = Math.max(1, parseInt(v, 10) || 1);
+      list[idx].qty = q;
+      saveCart(list);
+      updateCartCountBadge();
+      document.dispatchEvent(new CustomEvent("msa:cart:changed"));
+    }
+  }
+
+  // ===== Totale & reduceri =====
+  function computeTotals(items) {
+    const list = Array.isArray(items) ? items : readCart();
+    const subtotal = list.reduce((s, i) => s + (Number(i.price) || 0) * (i.qty || 1), 0);
+    const discount = readDiscount();               // { pct: 0..100 }
+    const pct = Math.min(100, Math.max(0, Number(discount.pct) || 0));
+    const discountValue = subtotal * pct / 100;
+    const shipping = list.length ? SHIPPING : 0;
+    const total = Math.max(0, subtotal - discountValue) + shipping;
+    return { subtotal, shipping, pct, discountValue, total };
+  }
+
+  function applyDiscountPct(pct) {
+    const p = Math.min(100, Math.max(0, Number(pct) || 0));
+    saveDiscount({ pct: p });
+    document.dispatchEvent(new CustomEvent("msa:cart:changed"));
+    return computeTotals();
   }
 
   function clearDiscount() {
-    saveDiscount({ code: '', pct: 0 });
-    renderCart();
+    saveDiscount({ pct: 0 });
+    document.dispatchEvent(new CustomEvent("msa:cart:changed"));
+    return computeTotals();
   }
 
-  // === Render coș ===
-  function renderCart() {
-    const container = document.getElementById('cart-items');
-    const elSubtotal = document.getElementById('subtotal-amount');
-    const elDiscPct = document.getElementById('discount-pct');
-    const elDiscAmount = document.getElementById('discount-amount');
-    const elShip = document.getElementById('shipping-amount');
-    const elTotal = document.getElementById('total-amount');
-    const elDiscInfo = document.getElementById('discount-info');
+  // ===== Submit comandă (EmailJS) =====
+  /**
+   * @param {string|HTMLFormElement} formRef - id-ul formularului sau elementul <form>
+   * @returns {Promise<boolean>}
+   */
+  async function submitOrder(formRef) {
+    const items = readCart();
+    if (!items.length) throw new Error("Empty cart");
 
-    const list = readCart();
-    const discount = readDiscount();
-
-    if (container) container.innerHTML = '';
-
-    if (!list.length) {
-      if (container) container.innerHTML = '<p>Coșul tău este gol.</p>';
-      if (elSubtotal) elSubtotal.textContent = '0.00 RON';
-      if (elDiscPct) elDiscPct.textContent = '';
-      if (elDiscAmount) elDiscAmount.textContent = '—';
-      if (elShip) elShip.textContent = '0.00 RON';
-      if (elTotal) elTotal.textContent = '0.00 RON';
-      if (elDiscInfo) elDiscInfo.textContent = 'Fără reducere';
-      updateCartCountBadge();
-      return;
+    if (!window.emailjs || typeof emailjs.send !== "function") {
+      throw new Error("EmailJS missing");
     }
 
-    // listează produsele
-    if (container) {
-      list.forEach(p => {
-        const item = document.createElement('div');
-        item.className = 'cart-item';
-        item.innerHTML = `
-          <img src="${p.image}" alt="${p.name}">
-          <div class="info">
-            <h4>${p.name}</h4>
-            <p>${p.price} RON × ${p.qty}</p>
-          </div>
-          <button class="remove" data-id="${p.id}">Șterge</button>
-        `;
-        container.appendChild(item);
-      });
-      container.querySelectorAll('.remove').forEach(b => {
-        b.addEventListener('click', () => removeFromCart(b.dataset.id));
-      });
+    // Acceptă fie id, fie element
+    const formEl = (typeof formRef === "string")
+      ? document.getElementById(formRef)
+      : formRef;
+
+    if (!formEl || !formEl.tagName || formEl.tagName.toLowerCase() !== "form") {
+      throw new Error("FormData: parameter 1 is not of type HTMLFormElement");
     }
 
-    // calcule
-    const subtotal = list.reduce((s, i) => s + i.price * i.qty, 0);
-    const reducere = discount.pct ? subtotal * (discount.pct / 100) : 0;
-    const shipping = SHIPPING;
-    const total = subtotal - reducere + shipping;
+    const fd = new FormData(formEl);
+    const client = Object.fromEntries(fd.entries());
 
-    if (elSubtotal) elSubtotal.textContent = `${subtotal.toFixed(2)} RON`;
-    if (elDiscPct) elDiscPct.textContent = discount.pct ? `(${discount.pct}%)` : '';
-    if (elDiscAmount) elDiscAmount.textContent = discount.pct ? `- ${reducere.toFixed(2)} RON` : '—';
-    if (elShip) elShip.textContent = `${shipping.toFixed(2)} RON`;
-    if (elTotal) elTotal.textContent = `${total.toFixed(2)} RON`;
-    if (elDiscInfo) {
-      elDiscInfo.textContent = discount.pct
-        ? `Reducere aplicată: ${discount.code} (${discount.pct}%)`
-        : 'Fără reducere';
-    }
+    // Conținut produse (pt. email)
+    const produse = items.map(i => `${i.name} × ${i.qty} (${i.price} RON)`).join("\n");
+    const totals = computeTotals(items);
+    const order_id = `${Date.now()}-${Math.floor(Math.random()*1e5)}`;
 
-    updateCartCountBadge();
-  }
-
-  // === Submit comandă ===
-  async function submitOrder(form) {
-    if (!form) throw new Error("Formular lipsă");
-
-    const cart = readCart();
-    if (!cart.length) { alert("Coșul este gol!"); return false; }
-
-    const data = new FormData(form);
-    const discount = readDiscount();
-    const itemsHtml = cart.map(i => `${i.name} (${i.qty}×${i.price} RON)`).join('\n');
-    const subtotal = cart.reduce((s, i) => s + i.qty * i.price, 0);
-    const reducere = discount.pct ? subtotal * discount.pct / 100 : 0;
-    const totalFinal = subtotal - reducere + SHIPPING;
-
-    const params = {
-      client_email: data.get("email"),
-      client_name: `${data.get("nume")} ${data.get("prenume")}`,
-      client_phone: data.get("telefon"),
-      client_address: data.get("adresa"),
-      client_city: data.get("oras"),
-      client_judet: data.get("judet"),
-      client_codpostal: data.get("codpostal"),
-      client_tip: data.get("tip"),
-      client_mentiuni: data.get("mentiuni") || "-",
-      order_items: itemsHtml,
-      order_total: totalFinal.toFixed(2) + " RON",
-      order_discount: discount.pct ? discount.pct + "%" : "—",
+    // Payload comun
+    const common = {
+      order_id,
+      tip: client.tip || "Persoană fizică",
+      nume: client.nume || "",
+      prenume: client.prenume || "",
+      email: client.email || "",
+      telefon: client.telefon || "",
+      judet: client.judet || "",
+      oras: client.oras || "",
+      codpostal: client.codpostal || "",
+      adresa: client.adresa || "",
+      mentiuni: client.mentiuni || "",
+      reducere_pct: totals.pct.toString(),
+      produse,
+      subtotal: totals.subtotal.toFixed(2),
+      livrare: totals.shipping.toFixed(2),
+      total: totals.total.toFixed(2)
     };
 
-    await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, params);
-    await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, params);
+    // Trimite la tine
+    await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, common);
+    // Trimite clientului
+    if (common.email) {
+      await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, common);
+    }
 
-    clearCart();
+    clearCart();           // golește coșul
+    clearDiscount();       // resetează reducerea
     return true;
   }
 
-  // === Inițializări ===
-  document.addEventListener("DOMContentLoaded", () => {
-    updateCartCountBadge();
-    renderCart();
+  // ===== Expunere API global =====
+  window.MSACart = {
+    readCart, saveCart,
+    addToCart, removeFromCart, clearCart,
+    increaseQty, decreaseQty, setQty,
+    computeTotals, applyDiscountPct, clearDiscount,
+    submitOrder,
+    updateCartCountBadge
+  };
 
-    const form = document.getElementById("order-form");
-    if (form) {
-      let sending = false;
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        if (sending) return;
-        sending = true;
-        const btn = form.querySelector('button[type="submit"]');
-        const old = btn ? btn.textContent : "";
-        if (btn) { btn.disabled = true; btn.textContent = "Se trimite..."; }
-        try {
-          const ok = await submitOrder(form);
-          if (ok) window.location.href = "multumesc.html";
-          else alert("Eroare la trimitere.");
-        } catch (err) {
-          console.error(err);
-          alert("Eroare la trimitere: " + (err.message || "necunoscută"));
-        } finally {
-          sending = false;
-          if (btn) { btn.disabled = false; btn.textContent = old; }
-        }
-      });
-    }
-
-    const discountBtn = document.getElementById("apply-discount");
-    if (discountBtn) discountBtn.addEventListener("click", () => {
-      const code = (document.getElementById("discount-code") || {}).value?.trim() || "";
-      applyDiscount(code);
-    });
-
-    const clearBtn = document.getElementById("clear-cart");
-    if (clearBtn) clearBtn.addEventListener("click", clearCart);
-
-    const clearDisc = document.getElementById("clear-discount");
-    if (clearDisc) clearDisc.addEventListener("click", clearDiscount);
-  });
-
-  // === Butoane Adaugă în coș (pe orice pagină) ===
-  document.addEventListener("click", function (e) {
-    const btn = e.target.closest(".add-to-cart");
-    if (!btn) return;
-
-    const d = btn.dataset;
-    if (!d || !d.id) return;
-
-    if (window.MSACart && typeof MSACart.addToCart === "function") {
-      MSACart.addToCart({
-        id: d.id,
-        name: d.name,
-        price: Number(d.price),
-        image: d.image
-      });
-    }
-
-    const old = btn.textContent;
-    btn.textContent = "Adăugat!";
-    setTimeout(() => (btn.textContent = old || "Adaugă în coș"), 900);
-  }, true);
+  // ===== Init badge la încărcare pagină =====
+  document.addEventListener("DOMContentLoaded", updateCartCountBadge);
 })();
