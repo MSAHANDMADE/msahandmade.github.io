@@ -2,8 +2,9 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MSA Handmade — Acasă</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MSA Handmade - Lumânări și decorațiuni artizanale</title>
+  <link rel="canonical" href="https://msahandmade.ro/" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,21 +13,23 @@
       <a href="index.html" aria-current="page">Acasă</a>
       <a href="produse.html">Produse</a>
       <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
+      <a href="cos.html" class="cart">🛒 <span id="cart-count"></span></a>
     </nav>
   </header>
 
   <main class="home-hero">
     <img src="logo.png" alt="MSA Handmade">
-    <h1 class="site-title">MSA Handmade</h1>
-    <p class="site-tag">Cadouri pictate cu drag</p>
-    <a class="btn-main" href="produse.html">⭐ Vezi produsele</a>
+    <!-- restul conținutului paginii tale -->
   </main>
 
   <footer class="footer">
-    <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
+    <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    // setare an curent în footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
