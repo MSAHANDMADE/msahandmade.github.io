@@ -20,27 +20,25 @@
   <meta property="og:url" content="https://msahandmade.ro/produse.html" />
   <meta property="og:image" content="https://msahandmade.ro/logo.png" />
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Produse — MSA Handmade" />
-  <meta name="twitter:description" content="Lumânări din ceară naturală de soia și decorațiuni handmade." />
-  <meta name="twitter:image" content="https://msahandmade.ro/logo.png" />
-
   <link rel="stylesheet" href="styles.css" />
 
   <style>
     .products {
       display: grid;
-      gap: 18px;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      padding: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 24px;
+      padding: 30px;
     }
     .card {
       background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-      padding: 14px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      padding: 18px;
       text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
     }
     .card img {
       width: 100%;
@@ -52,24 +50,30 @@
     .card h3 {
       font-size: 18px;
       margin: 10px 0 6px;
+      color: #222;
     }
     .price {
       font-weight: 600;
-      margin-left: 6px;
+      color: #333;
     }
     .add-to-cart {
       display: inline-block;
       background: #111827;
       color: #fff;
-      border: 0;
+      border: none;
       border-radius: 10px;
-      padding: 10px 14px;
+      padding: 10px 16px;
       cursor: pointer;
+      transition: background 0.3s;
     }
+    .add-to-cart:hover {
+      background: #1f2937;
+    }
+    /* Lightbox */
     #lightbox {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0,0,0,0.85);
       display: none;
       align-items: center;
       justify-content: center;
@@ -87,6 +91,7 @@
       border: 0;
       border-radius: 10px;
       padding: 8px 10px;
+      background: #fff;
       cursor: pointer;
     }
   </style>
@@ -106,69 +111,69 @@
 
     <ul class="products">
       <li class="card">
-        <img src="images/images.peisajiarna.jpg" alt="Peisaj de iarnă">
+        <img src="images/peisajiarna.jpg" alt="Peisaj de iarnă">
         <h3>Peisaj de iarnă <span class="price">99 RON</span></h3>
-        <button class="add-to-cart" data-id="peisajiarna" data-name="Peisaj de iarnă" data-price="99" data-image="images/images.peisajiarna.jpg">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="peisajiarna" data-name="Peisaj de iarnă" data-price="99" data-image="images/peisajiarna.jpg">Adaugă în coș</button>
       </li>
 
       <li class="card">
-        <img src="images/images.peisaj.jpg" alt="Peisaj">
+        <img src="images/peisaj.jpg" alt="Peisaj">
         <h3>Peisaj <span class="price">99 RON</span></h3>
-        <button class="add-to-cart" data-id="peisaj" data-name="Peisaj" data-price="99" data-image="images/images.peisaj.jpg">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="peisaj" data-name="Peisaj" data-price="99" data-image="images/peisaj.jpg">Adaugă în coș</button>
       </li>
 
       <li class="card">
-        <img src="images/images.indragostitii.jpg" alt="Îndrăgostiți">
+        <img src="images/indragostiti.jpg" alt="Îndrăgostiți">
         <h3>Îndrăgostiți <span class="price">99 RON</span></h3>
-        <button class="add-to-cart" data-id="indragostitii" data-name="Îndrăgostiți" data-price="99" data-image="images/images.indragostitii.jpg">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="indragostiti" data-name="Îndrăgostiți" data-price="99" data-image="images/indragostiti.jpg">Adaugă în coș</button>
       </li>
 
       <li class="card">
-        <img src="images/images.buchet.jpg" alt="Buchet">
+        <img src="images/buchet.jpg" alt="Buchet">
         <h3>Buchet <span class="price">29 RON</span></h3>
-        <button class="add-to-cart" data-id="buchet" data-name="Buchet" data-price="29" data-image="images/images.buchet.jpg">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="buchet" data-name="Buchet" data-price="29" data-image="images/buchet.jpg">Adaugă în coș</button>
       </li>
 
       <li class="card">
-        <img src="images/images.crin.jpg" alt="Crin">
+        <img src="images/crin.jpg" alt="Crin">
         <h3>Crin <span class="price">33 RON</span></h3>
-        <button class="add-to-cart" data-id="crin" data-name="Crin" data-price="33" data-image="images/images.crin.jpg">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="crin" data-name="Crin" data-price="33" data-image="images/crin.jpg">Adaugă în coș</button>
       </li>
 
       <li class="card">
-        <img src="images/images.dans.jpg" alt="Dans">
+        <img src="images/dans.jpg" alt="Dans">
         <h3>Dans <span class="price">33 RON</span></h3>
-        <button class="add-to-cart" data-id="dans" data-name="Dans" data-price="33" data-image="images/images.dans.jpg">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="dans" data-name="Dans" data-price="33" data-image="images/dans.jpg">Adaugă în coș</button>
       </li>
 
       <li class="card">
-        <img src="images/images.inger.jpg" alt="Înger">
+        <img src="images/inger.jpg" alt="Înger">
         <h3>Înger <span class="price">33 RON</span></h3>
-        <button class="add-to-cart" data-id="inger" data-name="Înger" data-price="33" data-image="images/images.inger.jpg">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="inger" data-name="Înger" data-price="33" data-image="images/inger.jpg">Adaugă în coș</button>
       </li>
 
       <li class="card">
-        <img src="images/images.logodna.jpg" alt="Logodnă">
+        <img src="images/logodna.jpg" alt="Logodnă">
         <h3>Logodnă <span class="price">33 RON</span></h3>
-        <button class="add-to-cart" data-id="logodna" data-name="Logodnă" data-price="33" data-image="images/images.logodna.jpg">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="logodna" data-name="Logodnă" data-price="33" data-image="images/logodna.jpg">Adaugă în coș</button>
       </li>
 
       <li class="card">
-        <img src="images/images.sarut.jpg" alt="Sărut">
+        <img src="images/sarut.jpg" alt="Sărut">
         <h3>Sărut <span class="price">33 RON</span></h3>
-        <button class="add-to-cart" data-id="sarut" data-name="Sărut" data-price="33" data-image="images/images.sarut.jpg">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="sarut" data-name="Sărut" data-price="33" data-image="images/sarut.jpg">Adaugă în coș</button>
       </li>
 
       <li class="card">
-        <img src="images/images.flori.jpg" alt="Flori">
+        <img src="images/flori.jpg" alt="Flori">
         <h3>Flori <span class="price">33 RON</span></h3>
-        <button class="add-to-cart" data-id="flori" data-name="Flori" data-price="33" data-image="images/images.flori.jpg">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="flori" data-name="Flori" data-price="33" data-image="images/flori.jpg">Adaugă în coș</button>
       </li>
 
       <li class="card">
-        <img src="lumanare_floarea-soarelui.png" alt="Lumânare Floarea-Soarelui">
+        <img src="images/lumanare_floarea-soarelui.png" alt="Lumânare Floarea-Soarelui">
         <h3>Lumânare Floarea-Soarelui <span class="price">33 RON</span></h3>
-        <button class="add-to-cart" data-id="floarea-soarelui" data-name="Lumânare Floarea-Soarelui" data-price="33" data-image="lumanare_floarea-soarelui.png">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="floarea-soarelui" data-name="Lumânare Floarea-Soarelui" data-price="33" data-image="images/lumanare_floarea-soarelui.png">Adaugă în coș</button>
       </li>
     </ul>
   </main>
@@ -187,39 +192,45 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    function refreshCartCount(){
-      try{
-        if(!window.MSACart || !window.MSACart.readCart) return;
+    function refreshCartCount() {
+      try {
+        if (!window.MSACart || !window.MSACart.readCart) return;
         const list = window.MSACart.readCart();
-        const count = list.reduce((s,i)=> s + (i.qty||1), 0);
+        const count = list.reduce((s, i) => s + (i.qty || 1), 0);
         const el = document.getElementById("cart-count");
-        if(el) el.textContent = count;
-      }catch(e){}
+        if (el) el.textContent = count;
+      } catch (e) {}
     }
     refreshCartCount();
 
-    document.querySelectorAll(".add-to-cart").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".add-to-cart").forEach(btn => {
+      btn.addEventListener("click", () => {
         const d = btn.dataset;
-        if(window.MSACart && typeof MSACart.addToCart==="function"){
-          MSACart.addToCart({id:d.id,name:d.name,price:Number(d.price),image:d.image});
+        if (window.MSACart && typeof MSACart.addToCart === "function") {
+          MSACart.addToCart({
+            id: d.id,
+            name: d.name,
+            price: Number(d.price),
+            image: d.image
+          });
         }
-        btn.textContent="Adăugat!";
-        setTimeout(()=>btn.textContent="Adaugă în coș",1000);
+        btn.textContent = "Adăugat!";
+        setTimeout(() => btn.textContent = "Adaugă în coș", 1000);
         refreshCartCount();
       });
     });
 
-    const box=document.getElementById("lightbox");
-    const img=box.querySelector("img");
-    const close=document.getElementById("lb-close");
-    function openLight(src,alt){img.src=src;img.alt=alt||"";box.style.display="flex";}
-    function closeLight(){box.style.display="none";img.src="";}
-    document.querySelectorAll(".products img").forEach(el=>{
-      el.addEventListener("click",()=>openLight(el.src,el.alt));
+    const box = document.getElementById("lightbox");
+    const img = box.querySelector("img");
+    document.querySelectorAll(".card img").forEach(el => {
+      el.addEventListener("click", () => {
+        img.src = el.src;
+        img.alt = el.alt;
+        box.style.display = "flex";
+      });
     });
-    close.addEventListener("click",closeLight);
-    box.addEventListener("click",e=>{if(e.target===box)closeLight();});
+    document.getElementById("lb-close").addEventListener("click", () => box.style.display = "none");
+    box.addEventListener("click", e => { if (e.target === box) box.style.display = "none"; });
   </script>
 </body>
 </html>
