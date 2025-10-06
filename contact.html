@@ -2,208 +2,113 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — MSA Handmade</title>
 
-  <title>Contact – MSA Handmade</title>
-  <meta name="description" content="Contactează MSA Handmade pentru comenzi personalizate: lumânări din ceară naturală, decorațiuni artizanale și cadouri cu suflet." />
-  <meta name="keywords" content="contact, MSA Handmade, lumânări handmade, decorațiuni artizanale, comenzi personalizate" />
+  <!-- SEO -->
+  <meta name="description" content="Contactează MSA Handmade pentru comenzi personalizate de lumânări și decorațiuni handmade." />
+  <meta name="keywords" content="contact, MSA Handmade, lumânări handmade, comenzi personalizate, decorațiuni handmade" />
   <meta name="robots" content="index, follow" />
 
   <!-- Canonical + hreflang -->
   <link rel="canonical" href="https://msahandmade.ro/contact.html" />
   <link rel="alternate" href="https://msahandmade.ro/contact.html" hreflang="ro" />
 
-  <!-- Open Graph / Facebook -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="MSA Handmade" />
-  <meta property="og:title" content="Contact – MSA Handmade" />
-  <meta property="og:description" content="Scrie-ne pentru comenzi personalizate și detalii despre lumânări handmade și decorațiuni artizanale." />
+  <meta property="og:title" content="Contact — MSA Handmade" />
+  <meta property="og:description" content="Ai întrebări sau vrei o comandă personalizată? Scrie-ne!" />
   <meta property="og:url" content="https://msahandmade.ro/contact.html" />
   <meta property="og:image" content="https://msahandmade.ro/logo.png" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Contact – MSA Handmade" />
-  <meta name="twitter:description" content="Scrie-ne pentru comenzi personalizate și detalii despre lumânări handmade și decorațiuni artizanale." />
+  <meta name="twitter:title" content="Contact — MSA Handmade" />
+  <meta name="twitter:description" content="Ai întrebări sau vrei o comandă personalizată? Scrie-ne!" />
   <meta name="twitter:image" content="https://msahandmade.ro/logo.png" />
 
-  <!-- JSON-LD Organization -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "MSA Handmade",
-    "url": "https://msahandmade.ro/",
-    "logo": "https://msahandmade.ro/logo.png",
-    "contactPoint": [{
-      "@type": "ContactPoint",
-      "telephone": "+40 747 246 241",
-      "contactType": "customer service",
-      "areaServed": "RO",
-      "availableLanguage": ["ro"]
-    }],
-    "sameAs": [
-      "https://facebook.com/MSAHandmadeDecor",
-      "https://wa.me/40747246241"
-    ]
-  }
-  </script>
-
-  <!-- CSS global -->
   <link rel="stylesheet" href="styles.css" />
-
-  <!-- Stiluri prietenoase doar pentru pagina de contact -->
-  <style>
-    :root {
-      --brand:#111827;      /* bleumarin închis (ca pe site) */
-      --brand-2:#0f172a;    /* nuanță pentru hover */
-      --text:#111827;
-      --muted:#6b7280;
-      --bg:#f8fafc;
-      --card:#ffffff;
-      --ring:rgba(17,24,39,.08);
-      --shadow:0 6px 20px rgba(0,0,0,.06);
-      --radius:14px;
-    }
-    body { background: var(--bg); }
-    .wrap {
-      max-width: 960px;
-      margin: 20px auto 40px;
-      padding: 0 16px;
-    }
-    .contact-card{
-      background: var(--card);
-      box-shadow: var(--shadow);
-      border-radius: var(--radius);
-      padding: 22px;
-      border:1px solid var(--ring);
-    }
-    .contact-card h1{
-      font-size: clamp(22px, 3.2vw, 32px);
-      margin: 0 0 8px;
-      color: var(--brand);
-      letter-spacing:.2px;
-    }
-    .subtitle{
-      color: var(--muted);
-      margin: 0 0 18px;
-      font-size: 15px;
-    }
-    .contact-list{ display: grid; gap: 14px; }
-    .item{
-      display:flex; align-items:flex-start; gap:12px;
-      padding:12px 10px; border-radius:12px;
-      transition: background .15s ease;
-    }
-    .item:hover{ background: #f3f4f6; }
-    .item strong{ display:block; color: var(--text); }
-    .item a{
-      color: var(--brand);
-      text-decoration: none;
-      border-bottom: 1px dashed rgba(17,24,39,.25);
-      transition: color .15s ease, border-color .15s ease;
-      word-break: break-word;
-    }
-    .item a:hover{
-      color: var(--brand-2);
-      border-color: rgba(17,24,39,.5);
-    }
-    .cta-row{
-      display:flex; gap:10px; flex-wrap:wrap; margin-top: 6px;
-    }
-    .btn{
-      display:inline-block;
-      background: var(--brand);
-      color:#fff; text-decoration:none;
-      padding: 10px 16px; border-radius: 12px;
-      font-weight:600;
-      box-shadow: 0 3px 12px rgba(17,24,39,.15);
-      transition: transform .06s ease, background .12s ease;
-    }
-    .btn:hover{ background: var(--brand-2); transform: translateY(-1px); }
-    .btn.outline{
-      background:#fff; color: var(--brand);
-      border:1px solid var(--ring);
-      box-shadow:none;
-    }
-    .btn.outline:hover{ background:#f8fafc; }
-    .muted-note{
-      margin-top:18px; color:var(--muted); font-size:14px;
-    }
-    /* Header fix mic spacing */
-    header.header{ background:#fff; border-bottom:1px solid var(--ring); }
-    nav.nav a{ text-decoration:none; }
-  </style>
 </head>
-
 <body>
-  <!-- HEADER comun -->
   <header class="header">
-    <nav class="nav" style="max-width:960px;margin:0 auto;padding:12px 16px;display:flex;gap:16px;align-items:center;">
+    <nav class="nav">
       <a href="index.html">Acasă</a>
       <a href="produse.html">Produse</a>
-      <a href="contact.html" aria-current="page" style="font-weight:700;">Contact</a>
-      <a href="cos.html" class="cart" style="margin-left:auto">🛒 <span id="cart-count">0</span></a>
+      <a href="contact.html" aria-current="page">Contact</a>
+      <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
     </nav>
   </header>
 
-  <div class="wrap">
-    <section class="contact-card" role="region" aria-labelledby="ttl">
-      <h1 id="ttl">Contact</h1>
-      <p class="subtitle">Suntem aici pentru comenzi personalizate, întrebări sau idei noi. Scrie-ne cu încredere!</p>
+  <main class="contact-box" style="max-width:760px;margin:32px auto;padding:24px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.05)">
+    <h2 style="margin-bottom:10px">Contact</h2>
+    <p style="line-height:1.7">Ne găsești pe email, WhatsApp sau Facebook. Sau trimite-ne rapid un mesaj cu formularul de mai jos.</p>
 
-      <div class="contact-list">
-        <div class="item">
-          <div>
-            <strong>Email</strong>
-            <a href="mailto:msahandmade.contact@gmail.com" aria-label="Trimite email către MSA Handmade">
-              msahandmade.contact@gmail.com
-            </a>
-          </div>
-        </div>
+    <div class="contact-info" style="margin:16px 0 24px">
+      <p><strong>Email:</strong> msahandmade.contact@gmail.com</p>
+      <p><strong>Telefon:</strong> 0747 246 241</p>
+      <p><strong>WhatsApp:</strong> <a href="https://wa.me/40747246241" target="_blank" rel="noopener">deschide conversația</a></p>
+      <p><strong>Facebook:</strong> <a href="https://facebook.com/MSAHandmadeDecor" target="_blank" rel="noopener">MSA Handmade</a></p>
+    </div>
 
-        <div class="item">
-          <div>
-            <strong>Telefon</strong>
-            <a href="tel:+40747246241" aria-label="Sună la MSA Handmade">0747 246 241</a>
-            <div class="cta-row">
-              <a class="btn" href="tel:+40747246241">Sună acum</a>
-              <a class="btn outline" href="sms:+40747246241">Trimite SMS</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="item">
-          <div>
-            <strong>WhatsApp</strong>
-            <a href="https://wa.me/40747246241" target="_blank" rel="noopener noreferrer" aria-label="Deschide conversația WhatsApp">
-              Deschide conversația
-            </a>
-          </div>
-        </div>
-
-        <div class="item">
-          <div>
-            <strong>Facebook</strong>
-            <a href="https://facebook.com/MSAHandmadeDecor" target="_blank" rel="noopener noreferrer" aria-label="Pagina de Facebook MSA Handmade">
-              MSA Handmade
-            </a>
-          </div>
-        </div>
+    <form id="contactForm">
+      <div class="row">
+        <label>Nume</label>
+        <input name="name" type="text" required />
       </div>
+      <div class="row">
+        <label>Email</label>
+        <input name="email" type="email" required />
+      </div>
+      <div class="row">
+        <label>Mesaj</label>
+        <textarea name="message" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="btn">Trimite mesajul</button>
+      <p id="contactStatus" style="margin-top:10px"></p>
+    </form>
+  </main>
 
-      <p class="muted-note">Program flexibil & răspundem cât putem de repede. Mulțumim! ✨</p>
-    </section>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="footer" style="text-align:center; margin: 24px 0 32px; color:#6b7280;">
+  <footer class="footer">
     <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
+  <!-- EmailJS (necesar pentru formularul de contact) -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <!-- script-urile tale comune -->
+  <script src="script.js"></script>
+  <script src="cart.js"></script>
+
   <script>
-    // anul din footer
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // EmailJS config — folosește exact cheile tale
+    const EMAILJS_PUBLIC = "iSadfb7-TV_89l_6k";
+    const EMAILJS_SERVICE = "service_ix0zpp7";
+    const EMAILJS_TEMPLATE_CONTACT = "template_13qpqtt";
+
+    if (window.emailjs && typeof emailjs.init === "function") {
+      try { emailjs.init(EMAILJS_PUBLIC); } catch(e){}
+    }
+
+    document.getElementById('contactForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const status = document.getElementById('contactStatus');
+      status.textContent = "Trimit...";
+      try{
+        const data = {
+          from_name: this.name.value,
+          reply_to: this.email.value,
+          message: this.message.value
+        };
+        await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE_CONTACT, data);
+        status.style.color = "green";
+        status.textContent = "Mulțumim! Ți-am primit mesajul.";
+        this.reset();
+      }catch(err){
+        status.style.color = "crimson";
+        status.textContent = "Eroare la trimitere. Încearcă din nou.";
+      }
+    });
   </script>
 </body>
 </html>
