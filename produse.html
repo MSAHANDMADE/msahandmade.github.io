@@ -155,5 +155,22 @@
     }
     document.addEventListener("DOMContentLoaded", bindAddButtons);
   </script>
+<script>
+  // Face toate imaginile din lista de produse să se deschidă în filă nouă
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.products img').forEach(function (img) {
+      // Evită dublarea dacă rerulezi codul
+      if (img.parentElement && img.parentElement.tagName.toLowerCase() === 'a') return;
+
+      const a = document.createElement('a');
+      a.href = img.getAttribute('src');        // deschide originalul
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      img.style.cursor = 'zoom-in';
+      img.parentNode.insertBefore(a, img);
+      a.appendChild(img);
+    });
+  });
+</script>
 </body>
 </html>
