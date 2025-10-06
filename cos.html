@@ -2,98 +2,250 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coș – MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coșul tău — MSA Handmade</title>
 
-  <!-- IMPORTANT: SDK EmailJS (rezolvă „EmailJS indisponibil”) -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <!-- SEO basic -->
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://msahandmade.ro/cos.html"/>
+
+  <link rel="stylesheet" href="styles.css"/>
+
+  <style>
+    .wrap{max-width:980px;margin:32px auto;padding:0 16px}
+    .totals{display:grid;gap:12px;margin-bottom:18px}
+    .pill{display:inline-block;background:#f3f4f6;border-radius:12px;padding:10px 14px;font-weight:600}
+    .cart-card{display:flex;gap:14px;align-items:center;justify-content:space-between;border:1px solid #eee;border-radius:16px;padding:12px 14px;margin:10px 0}
+    .cart-left{display:flex;gap:12px;align-items:center}
+    .cart-left img{width:80px;height:80px;object-fit:cover;border-radius:12px}
+    .name{font-size:18px;font-weight:700}
+    .price{color:#374151;font-weight:600}
+    .qty{display:flex;gap:8px;align-items:center}
+    .qty button{width:36px;height:36px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-size:18px}
+    .qty input{width:56px;text-align:center;height:36px;border:1px solid #e5e7eb;border-radius:10px}
+    .danger{background:#fee2e2;border:0;border-radius:10px;padding:8px 12px}
+    .box{background:#f9fafb;border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin-top:18px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media (max-width:720px){ .grid2{grid-template-columns:1fr} .cart-card{flex-direction:column;align-items:flex-start} }
+    .actions{display:flex;gap:12px;margin-top:18px}
+    .btn{background:#111827;color:#fff;border:0;border-radius:12px;padding:12px 18px;font-weight:600}
+    .btn.gray{background:#9ca3af}
+    fieldset{border:1px solid #e5e7eb;border-radius:14px;padding:14px}
+    legend{padding:0 6px;font-weight:700}
+    label{font-weight:600}
+    .radio-row{display:flex;gap:24px;align-items:center}
+  </style>
 </head>
 <body>
-  <header class="header">
-    <nav class="nav">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
-    </nav>
-  </header>
+<header class="header">
+  <nav class="nav">
+    <a href="index.html">Acasă</a>
+    <a href="produse.html">Produse</a>
+    <a href="contact.html">Contact</a>
+    <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
+  </nav>
+</header>
 
-  <main class="cart-page" style="max-width:960px;margin:40px auto;padding:0 16px;">
-    <h1>Coșul tău</h1>
+<main class="wrap">
+  <h1>Coșul tău</h1>
 
-    <!-- Totaluri -->
-    <div class="totals" style="display:grid;gap:10px;margin:18px 0;">
-      <div><strong>Subtotal:</strong> <span id="subtotal">0.00</span> RON</div>
-      <div><strong>Reducere:</strong> <span id="discount-amount">0.00</span> RON</div>
-      <div><strong>Livrare:</strong> <span id="shipping">17.00</span> RON</div>
-      <div><strong>Total:</strong> <span id="total">17.00</span> RON</div>
+  <!-- Totaluri -->
+  <div class="totals">
+    <div class="pill">Subtotal: <span id="subtot">0.00</span> RON</div>
+    <div class="pill">Reducere: <span id="disc">0.00</span> RON</div>
+    <div class="pill">Livrare: <span id="ship">17.00</span> RON</div>
+    <div class="pill">Total: <span id="grand">17.00</span> RON</div>
+  </div>
+
+  <!-- Info reduceri -->
+  <div class="box">
+    <strong>Reduceri automate</strong>
+    <ul style="margin:8px 0 0 18px;line-height:1.7">
+      <li>≥ 200 RON → reducere 10%</li>
+      <li>≥ 300 RON → reducere 15% + <strong>livrare gratuită</strong></li>
+      <li>≥ 400 RON → reducere 20%</li>
+    </ul>
+    <small>Reducerea se aplică la subtotal (fără livrare).</small>
+  </div>
+
+  <!-- Lista produse -->
+  <div id="items"></div>
+
+  <!-- Formular -->
+  <form id="order-form" class="box">
+    <fieldset style="margin-bottom:14px">
+      <legend>Tip client</legend>
+      <div class="radio-row">
+        <label><input type="radio" name="tip" value="Persoană fizică" checked/> Persoană fizică</label>
+        <label><input type="radio" name="tip" value="Persoană juridică"/> Persoană juridică</label>
+      </div>
+    </fieldset>
+
+    <div class="grid2">
+      <div>
+        <label for="nume">Nume</label>
+        <input id="nume" name="nume" required class="input" />
+      </div>
+      <div>
+        <label for="prenume">Prenume</label>
+        <input id="prenume" name="prenume" required class="input" />
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required class="input" />
+      </div>
+      <div>
+        <label for="telefon">Telefon</label>
+        <input id="telefon" name="telefon" required class="input" />
+      </div>
+      <div>
+        <label for="judet">Județ</label>
+        <input id="judet" name="judet" required class="input" />
+      </div>
+      <div>
+        <label for="oras">Oraș</label>
+        <input id="oras" name="oras" required class="input" />
+      </div>
+      <div>
+        <label for="codpostal">Cod poștal</label>
+        <input id="codpostal" name="codpostal" required class="input" />
+      </div>
+      <div>
+        <label for="adresa">Adresă</label>
+        <input id="adresa" name="adresa" required class="input" />
+      </div>
+      <div style="grid-column:1/-1">
+        <label for="mentiuni">Mențiuni (opțional)</label>
+        <textarea id="mentiuni" name="mentiuni" rows="3" class="input"></textarea>
+      </div>
     </div>
 
-    <!-- Reduceri (IDs exact cum le citește cart.js) -->
-    <section class="discount-box" style="margin:18px 0;padding:16px;border-radius:12px;background:#f7f7f9;">
-      <label for="discount-select"><strong>Reducere (%):</strong></label>
-      <select id="discount-select" style="width:100%;padding:10px;border-radius:10px;margin-top:8px;">
-        <option value="0">0%</option>
-        <option value="10">10%</option>
-        <option value="15">15%</option>
-        <option value="20">20%</option>
-      </select>
-      <button id="apply-discount" class="btn" style="margin-top:12px;">Aplică</button>
-      <p style="margin-top:6px;color:#555;">Reducerea se aplică la subtotal (fără livrare).</p>
-    </section>
+    <div class="actions">
+      <button type="button" id="clear" class="btn gray">Golește coșul</button>
+      <button type="submit" class="btn">Plasează comanda</button>
+    </div>
+  </form>
+</main>
 
-    <!-- Lista produse în coș -->
-    <div id="cart-items" style="display:flex;flex-direction:column;gap:14px;"></div>
+<footer class="footer" style="text-align:center;margin-top:30px;padding:20px;color:#666">
+  <small>&copy; <span id="year"></span> — MSA Handmade.</small>
+</footer>
 
-    <!-- Formular comandă -->
-    <form id="order-form" style="margin-top:20px;">
-      <fieldset style="border:1px solid #eee;border-radius:12px;padding:14px;">
-        <legend><strong>Tip client</strong></legend>
-        <label style="margin-right:20px;">
-          <input type="radio" name="tip_client" value="Persoană fizică" checked /> Persoană fizică
-        </label>
-        <label>
-          <input type="radio" name="tip_client" value="Persoană juridică" /> Persoană juridică
-        </label>
-      </fieldset>
+<!-- Cart logic -->
+<script src="cart.js"></script>
+<script>
+  // anul curent
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-      <div class="form-grid" style="display:grid;gap:12px;margin-top:14px;">
-        <input name="nume"        placeholder="Nume"        required />
-        <input name="prenume"     placeholder="Prenume"     required />
-        <input name="email"       placeholder="Email"       type="email" required />
-        <input name="telefon"     placeholder="Telefon"     required />
-        <input name="judet"       placeholder="Județ"       required />
-        <input name="oras"        placeholder="Oraș"        required />
-        <input name="codpostal"   placeholder="Cod poștal"  required />
-        <input name="adresa"      placeholder="Adresă"      required />
-        <textarea name="mentiuni" placeholder="Mențiuni (opțional)" rows="4"></textarea>
-      </div>
+  // helpers pentru coș (folosește MSACart dacă există)
+  const STORAGE_KEY = 'msa_cart';
+  const SHIPPING_BASE = 17;
 
-      <div style="display:flex;gap:12px;margin-top:16px;">
-        <button type="button" id="clear-cart" class="btn-secondary">Golește coșul</button>
-        <button type="submit" class="btn">Plasează comanda</button>
-      </div>
-    </form>
-  </main>
+  function readCart() {
+    if (window.MSACart && typeof MSACart.readCart === 'function') return MSACart.readCart();
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e){ return []; }
+  }
+  function saveCart(list) {
+    if (window.MSACart && typeof MSACart.saveCart === 'function') return MSACart.saveCart(list);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list||[]));
+  }
 
-  <footer class="footer" style="text-align:center;margin-top:40px;padding:20px;color:#666;">
-    <small>&copy; <span id="year"></span> — MSA Handmade.</small>
-  </footer>
+  function refreshBadge() {
+    const list = readCart();
+    const c = Array.isArray(list) ? list.reduce((s,i)=>s+(i.qty||1),0) : 0;
+    const el = document.getElementById('cart-count');
+    if (el) el.textContent = c;
+  }
 
-  <!-- Logica de coș -->
-  <script src="cart.js"></script>
+  function computeTotals(list) {
+    const subtotal = list.reduce((s,i)=> s + (Number(i.price)||0)*(Number(i.qty)||1), 0);
+    let pct = 0, shipping = SHIPPING_BASE;
+    if (subtotal >= 400) pct = 20;
+    else if (subtotal >= 300) { pct = 15; shipping = 0; }
+    else if (subtotal >= 200) pct = 10;
+    const discount = +(subtotal * pct / 100).toFixed(2);
+    const total = +(subtotal - discount + shipping).toFixed(2);
+    return {subtotal:+subtotal.toFixed(2), discount, shipping, total, pct};
+  }
 
-  <script>
-    // anul curent
-    document.getElementById('year').textContent = new Date().getFullYear();
+  function fmt(n){ return (Number(n)||0).toFixed(2); }
 
-    // refresh badge coș
-    try {
-      const list = (window.MSACart && typeof MSACart.readCart==='function') ? MSACart.readCart() : [];
-      const count = Array.isArray(list) ? list.reduce((s,i)=>s+(i.qty||1),0) : 0;
-      const el = document.getElementById('cart-count'); if (el) el.textContent = count;
-    } catch(_) {}
-  </script>
+  function render() {
+    const list = readCart();
+    const mount = document.getElementById('items');
+    mount.innerHTML = '';
+
+    if (!list.length) {
+      mount.innerHTML = '<p>Coșul tău este gol.</p>';
+    } else {
+      list.forEach((p,idx)=>{
+        const card = document.createElement('div');
+        card.className = 'cart-card';
+        card.innerHTML = `
+          <div class="cart-left">
+            <img src="${p.image||'logo.png'}" alt="${p.name||''}">
+            <div>
+              <div class="name">${p.name||''}</div>
+              <div class="price">${fmt(p.price)} RON</div>
+            </div>
+          </div>
+          <div class="qty">
+            <button data-act="dec">−</button>
+            <input type="number" min="1" value="${p.qty||1}">
+            <button data-act="inc">+</button>
+            <button class="danger" data-act="del">Șterge</button>
+          </div>
+        `;
+        // bindings
+        const input = card.querySelector('input');
+        card.querySelector('[data-act="inc"]').onclick = ()=>{ input.value = Number(input.value||1)+1; input.dispatchEvent(new Event('change')); };
+        card.querySelector('[data-act="dec"]').onclick = ()=>{ input.value = Math.max(1, Number(input.value||1)-1); input.dispatchEvent(new Event('change')); };
+        card.querySelector('[data-act="del"]').onclick = ()=>{
+          const l = readCart(); l.splice(idx,1); saveCart(l); render();
+        };
+        input.onchange = ()=>{
+          const l = readCart(); l[idx].qty = Math.max(1, Number(input.value||1)); saveCart(l); render();
+        };
+        mount.appendChild(card);
+      });
+    }
+
+    const t = computeTotals(readCart());
+    document.getElementById('subtot').textContent = fmt(t.subtotal);
+    document.getElementById('disc').textContent   = fmt(t.discount);
+    document.getElementById('ship').textContent   = fmt(t.shipping);
+    document.getElementById('grand').textContent  = fmt(t.total);
+    refreshBadge();
+  }
+
+  // clear cart
+  document.getElementById('clear').addEventListener('click', ()=>{
+    saveCart([]); render();
+  });
+
+  // submit
+  document.getElementById('order-form').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const list = readCart();
+    if (!list.length) { alert('Coșul este gol.'); return; }
+
+    // dacă există implementarea din cart.js, o folosim
+    if (window.MSACart && typeof MSACart.submitOrder === 'function') {
+      try {
+        const ok = await MSACart.submitOrder(new FormData(e.currentTarget));
+        if (ok) window.location.href = 'multumesc.html';
+      } catch(err) {
+        alert('Eroare la trimitere comanda.');
+      }
+      return;
+    }
+
+    // fallback – fără EmailJS
+    alert('EmailJS indisponibil. Te rog verifică integrarea din cart.js.');
+  });
+
+  // init
+  document.addEventListener('DOMContentLoaded', ()=>{ render(); });
+</script>
 </body>
 </html>
