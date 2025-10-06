@@ -1,10 +1,10 @@
-/* MSA Handmade – cart.js (coș, reduceri, trimitere corectă) */
+/* MSA Handmade – cart.js (versiune completă, stabilă, 2025) */
 (function () {
   const STORAGE_KEY = 'msa_cart';
   const DISCOUNT_KEY = 'msa_discount';
   const SHIPPING = 17;
 
-  // EmailJS
+  // === EmailJS ===
   const PUBLIC_KEY = 'SAdfb7_TV_89L_Gk';
   const SERVICE_ID = 'service_ix0zpp7';
   const TEMPLATE_ADMIN = 'template_13qpqtt';
@@ -45,19 +45,20 @@
     saveCart(list);
     updateCartCountBadge();
   }
+
   function removeFromCart(id) {
     const list = readCart().filter(p => p.id !== id);
     saveCart(list);
     updateCartCountBadge();
     renderCart();
   }
+
   function clearCart() {
     localStorage.removeItem(STORAGE_KEY);
     updateCartCountBadge();
     renderCart();
   }
 
-  // Expose minimal API pentru pag. produse
   window.MSACart = { addToCart, readCart, clearCart };
 
   // === Reduceri ===
@@ -70,18 +71,20 @@
     const found = validCodes.find(c => c.code.toLowerCase() === code.toLowerCase());
     if (found) {
       saveDiscount(found);
+      alert(`Reducerea de ${found.pct}% a fost aplicată!`);
     } else {
       saveDiscount({ code: '', pct: 0 });
       alert('Cod invalid.');
     }
     renderCart();
   }
+
   function clearDiscount() {
     saveDiscount({ code: '', pct: 0 });
     renderCart();
   }
 
-  // === Render coș (cos.html) ===
+  // === Render coș ===
   function renderCart() {
     const container = document.getElementById('cart-items');
     const elSubtotal = document.getElementById('subtotal-amount');
@@ -131,18 +134,18 @@
     // calcule
     const subtotal = list.reduce((s, i) => s + i.price * i.qty, 0);
     const reducere = discount.pct ? subtotal * (discount.pct / 100) : 0;
-    const shipping = SHIPPING; // aplicăm mereu, fiind comenzi livrate
+    const shipping = SHIPPING;
     const total = subtotal - reducere + shipping;
 
-    // scrie pe ecran
     if (elSubtotal) elSubtotal.textContent = `${subtotal.toFixed(2)} RON`;
     if (elDiscPct) elDiscPct.textContent = discount.pct ? `(${discount.pct}%)` : '';
     if (elDiscAmount) elDiscAmount.textContent = discount.pct ? `- ${reducere.toFixed(2)} RON` : '—';
     if (elShip) elShip.textContent = `${shipping.toFixed(2)} RON`;
     if (elTotal) elTotal.textContent = `${total.toFixed(2)} RON`;
     if (elDiscInfo) {
-      elDiscInfo.textContent = discount.pct ? `Reducere aplicată: ${discount.code} (${discount.pct}%)`
-                                            : 'Fără reducere';
+      elDiscInfo.textContent = discount.pct
+        ? `Reducere aplicată: ${discount.code} (${discount.pct}%)`
+        : 'Fără reducere';
     }
 
     updateCartCountBadge();
@@ -184,7 +187,7 @@
     return true;
   }
 
-  // === Hookează formularul & butoanele ===
+  // === Inițializări ===
   document.addEventListener("DOMContentLoaded", () => {
     updateCartCountBadge();
     renderCart();
@@ -225,4 +228,26 @@
     const clearDisc = document.getElementById("clear-discount");
     if (clearDisc) clearDisc.addEventListener("click", clearDiscount);
   });
+
+  // === Butoane Adaugă în coș (pe orice pagină) ===
+  document.addEventListener("click", function (e) {
+    const btn = e.target.closest(".add-to-cart");
+    if (!btn) return;
+
+    const d = btn.dataset;
+    if (!d || !d.id) return;
+
+    if (window.MSACart && typeof MSACart.addToCart === "function") {
+      MSACart.addToCart({
+        id: d.id,
+        name: d.name,
+        price: Number(d.price),
+        image: d.image
+      });
+    }
+
+    const old = btn.textContent;
+    btn.textContent = "Adăugat!";
+    setTimeout(() => (btn.textContent = old || "Adaugă în coș"), 900);
+  }, true);
 })();
