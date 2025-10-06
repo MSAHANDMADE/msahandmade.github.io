@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Produse – MSA Handmade | Lumânări din ceară naturală & decorațiuni</title>
-  <meta name="description" content="Descoperă colecția MSA Handmade: lumânări artizanale din ceară naturală și decorațiuni realizate manual. Piese unicat, perfecte pentru cadou sau decor.">
-  <meta name="keywords" content="lumânări handmade, ceară naturală, decoratiuni artizanale, cadouri handmade, MSA Handmade">
-  <meta name="robots" content="index,follow">
+  <title>Produse – MSA Handmade | Lumânări artizanale și decorațiuni naturale</title>
 
-  <!-- Canonical + hreflang -->
-  <link rel="canonical" href="https://msahandmade.ro/produse.html">
-  <link rel="alternate" href="https://msahandmade.ro/produse.html" hreflang="ro">
+  <!-- SEO -->
+  <meta name="description" content="Descoperă colecția MSA Handmade: lumânări artizanale din ceară naturală de soia și decorațiuni realizate manual. Cadouri cu suflet, perfecte pentru orice ocazie." />
+  <meta name="keywords" content="lumânări handmade, ceară naturală, lumânări soia, decorațiuni handmade, MSA Handmade, cadouri artizanale, lumânări parfumate" />
+  <meta name="robots" content="index, follow" />
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="MSA Handmade">
-  <meta property="og:title" content="Produse – MSA Handmade">
-  <meta property="og:description" content="Lumânări artizanale din ceară naturală și decorațiuni realizate manual.">
-  <meta property="og:url" content="https://msahandmade.ro/produse.html">
-  <meta property="og:image" content="https://msahandmade.ro/logo.png">
+  <!-- Canonical -->
+  <link rel="canonical" href="https://msahandmade.ro/produse.html" />
+  <link rel="alternate" href="https://msahandmade.ro/produse.html" hreflang="ro" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ro_RO" />
+  <meta property="og:site_name" content="MSA Handmade" />
+  <meta property="og:title" content="Produse – MSA Handmade" />
+  <meta property="og:description" content="Lumânări artizanale și decorațiuni handmade realizate cu grijă din ceară naturală de soia." />
+  <meta property="og:url" content="https://msahandmade.ro/produse.html" />
+  <meta property="og:image" content="https://msahandmade.ro/logo.png" />
 
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Produse – MSA Handmade">
-  <meta name="twitter:description" content="Lumânări artizanale din ceară naturală și decorațiuni handmade.">
-  <meta name="twitter:image" content="https://msahandmade.ro/logo.png">
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Produse – MSA Handmade" />
+  <meta name="twitter:description" content="Descoperă lumânările handmade și decorațiunile MSA, create manual cu pasiune." />
+  <meta name="twitter:image" content="https://msahandmade.ro/logo.png" />
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- HEADER comun -->
   <header class="header">
     <nav class="nav">
       <a href="index.html">Acasă</a>
@@ -41,135 +42,163 @@
     </nav>
   </header>
 
-  <!-- coș mic flotant -->
-  <a class="fab-cart" href="cos.html" aria-label="Deschide coșul">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="9" cy="21" r="1"></circle>
-      <circle cx="20" cy="21" r="1"></circle>
-      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-    </svg>
-    <span class="badge" id="cart-count-fab">0</span>
-  </a>
-
   <main>
-    <h2 style="text-align:center;margin:20px 0">Produsele noastre</h2>
-    <ul class="products">
+    <h1 style="text-align:center; margin:25px 0; color:#111;">Produsele noastre</h1>
+    <p style="text-align:center; max-width:700px; margin:0 auto 30px; color:#555; font-size:18px;">
+      Fiecare lumânare MSA Handmade este creată manual, din ceară naturală de soia, cu atenție la detalii și dragoste pentru frumos. 🕯️✨
+    </p>
 
+    <ul class="products">
+      <!-- Peisaj de iarnă -->
       <li class="card">
-        <img src="images/images.peisajiarna.jpg" alt="Peisaj de iarnă">
-        <h3>Peisaj de iarnă</h3><span class="price">99 RON</span>
+        <img src="images/images.peisajiarna.jpg" alt="Lumânare Peisaj de iarnă">
+        <h3>Peisaj de iarnă</h3>
+        <p class="description">Magia iernii surprinsă într-o lumânare artizanală elegantă. ❄️</p>
+        <span class="price">99 RON</span>
         <button class="add-to-cart" data-id="peisajiarna" data-name="Peisaj de iarnă" data-price="99" data-image="images/images.peisajiarna.jpg">Adaugă în coș</button>
       </li>
 
+      <!-- Peisaj -->
       <li class="card">
-        <img src="images/images_peisaj.jpg" alt="Peisaj">
-        <h3>Peisaj</h3><span class="price">99 RON</span>
-        <button class="add-to-cart" data-id="peisaj" data-name="Peisaj" data-price="99" data-image="images/images_peisaj.jpg">Adaugă în coș</button>
+        <img src="images/images.peisaj.jpg" alt="Lumânare Peisaj">
+        <h3>Peisaj</h3>
+        <p class="description">Peisaj liniștit, turnat manual, pentru un decor cald și relaxant.</p>
+        <span class="price">99 RON</span>
+        <button class="add-to-cart" data-id="peisaj" data-name="Peisaj" data-price="99" data-image="images/images.peisaj.jpg">Adaugă în coș</button>
       </li>
 
+      <!-- Îndrăgostiții -->
       <li class="card">
-        <img src="images/images.indragostiti.jpg" alt="Îndrăgostiți">
-        <h3>Îndrăgostiți</h3><span class="price">99 RON</span>
-        <button class="add-to-cart" data-id="indragostiti" data-name="Îndrăgostiți" data-price="99" data-image="images/images.indragostiti.jpg">Adaugă în coș</button>
+        <img src="images/images.indragostitii.jpg" alt="Lumânare Îndrăgostiții">
+        <h3>Îndrăgostiții</h3>
+        <p class="description">Simbol al iubirii și conexiunii — un cadou romantic. ❤️</p>
+        <span class="price">99 RON</span>
+        <button class="add-to-cart" data-id="indragostitii" data-name="Îndrăgostiții" data-price="99" data-image="images/images.indragostitii.jpg">Adaugă în coș</button>
       </li>
 
+      <!-- Buchet -->
       <li class="card">
-        <img src="images/images_buchet.jpg" alt="Buchet">
-        <h3>Buchet</h3><span class="price">29 RON</span>
+        <img src="images/images_buchet.jpg" alt="Lumânare Buchet">
+        <h3>Buchet</h3>
+        <p class="description">Un buchet floral turnat în ceară — delicat și vesel.</p>
+        <span class="price">29 RON</span>
         <button class="add-to-cart" data-id="buchet" data-name="Buchet" data-price="29" data-image="images/images_buchet.jpg">Adaugă în coș</button>
       </li>
 
+      <!-- Crin -->
       <li class="card">
-        <img src="images/images.crin.jpg" alt="Crin">
-        <h3>Crin</h3><span class="price">33 RON</span>
-        <button class="add-to-cart" data-id="crin" data-name="Crin" data-price="33" data-image="images/images.crin.jpg">Adaugă în coș</button>
+        <img src="images/images_crin.jpg" alt="Lumânare Crin">
+        <h3>Crin</h3>
+        <p class="description">Eleganța crinului, modelată în ceară naturală.</p>
+        <span class="price">33 RON</span>
+        <button class="add-to-cart" data-id="crin" data-name="Crin" data-price="33" data-image="images/images_crin.jpg">Adaugă în coș</button>
       </li>
 
+      <!-- Dans -->
       <li class="card">
-        <img src="images/images.dans.jpg" alt="Dans">
-        <h3>Dans</h3><span class="price">33 RON</span>
-        <button class="add-to-cart" data-id="dans" data-name="Dans" data-price="33" data-image="images/images.dans.jpg">Adaugă în coș</button>
+        <img src="images/images_dans.jpg" alt="Lumânare Dans">
+        <h3>Dans</h3>
+        <p class="description">Mișcare și grație — o piesă cu energie pozitivă.</p>
+        <span class="price">33 RON</span>
+        <button class="add-to-cart" data-id="dans" data-name="Dans" data-price="33" data-image="images/images_dans.jpg">Adaugă în coș</button>
       </li>
 
+      <!-- Înger -->
       <li class="card">
-        <img src="images/images.inger.jpg" alt="Înger">
-        <h3>Înger</h3><span class="price">33 RON</span>
-        <button class="add-to-cart" data-id="inger" data-name="Înger" data-price="33" data-image="images/images.inger.jpg">Adaugă în coș</button>
+        <img src="images/images_inger.jpg" alt="Lumânare Înger">
+        <h3>Înger</h3>
+        <p class="description">Un simbol de protecție și lumină.</p>
+        <span class="price">33 RON</span>
+        <button class="add-to-cart" data-id="inger" data-name="Înger" data-price="33" data-image="images/images_inger.jpg">Adaugă în coș</button>
       </li>
 
+      <!-- Logodnă -->
       <li class="card">
-        <img src="images/images.logodna.jpg" alt="Logodnă">
-        <h3>Logodnă</h3><span class="price">33 RON</span>
-        <button class="add-to-cart" data-id="logodna" data-name="Logodnă" data-price="33" data-image="images/images.logodna.jpg">Adaugă în coș</button>
+        <img src="images/images_logodna.jpg" alt="Lumânare Logodnă">
+        <h3>Logodnă</h3>
+        <p class="description">Momentul „DA”, surprins într-o lumânare elegantă.</p>
+        <span class="price">33 RON</span>
+        <button class="add-to-cart" data-id="logodna" data-name="Logodnă" data-price="33" data-image="images/images_logodna.jpg">Adaugă în coș</button>
       </li>
 
+      <!-- Sărut -->
       <li class="card">
-        <img src="images/images.sarut.jpg" alt="Sărut">
-        <h3>Sărut</h3><span class="price">33 RON</span>
-        <button class="add-to-cart" data-id="sarut" data-name="Sărut" data-price="33" data-image="images/images.sarut.jpg">Adaugă în coș</button>
+        <img src="images/images_sarut.jpg" alt="Lumânare Sărut">
+        <h3>Sărut</h3>
+        <p class="description">Un gest tandru, modelat cu migală în ceară.</p>
+        <span class="price">33 RON</span>
+        <button class="add-to-cart" data-id="sarut" data-name="Sărut" data-price="33" data-image="images/images_sarut.jpg">Adaugă în coș</button>
       </li>
 
+      <!-- Flori -->
       <li class="card">
-        <img src="images/images_flori.jpg" alt="Flori">
-        <h3>Flori</h3><span class="price">33 RON</span>
+        <img src="images/images_flori.jpg" alt="Lumânare Flori">
+        <h3>Flori</h3>
+        <p class="description">Flori delicate pentru un plus de culoare în decor.</p>
+        <span class="price">33 RON</span>
         <button class="add-to-cart" data-id="flori" data-name="Flori" data-price="33" data-image="images/images_flori.jpg">Adaugă în coș</button>
       </li>
+
+      <!-- Floarea-Soarelui -->
       <li class="card">
-      <img src="images/lumanare_floarea-soarelui.png" alt="Lumânare Floarea-Soarelui">
-      <h3>Lumânare Floarea-Soarelui</h3>
-      <p class="description">Lumânare handmade cu floarea-soarelui — un detaliu plin de căldură și culoare, perfect pentru cadouri sau decor 🌻</p>
-      <span class="price">33 RON</span>
-      <button class="add-to-cart" 
-          data-id="floarea-soarelui" 
-          data-name="Lumânare Floarea-Soarelui" 
-          data-price="33" 
-          data-image="images/lumanare_floarea-soarelui.png">
-    Adaugă în coș
-  </button>
-</li>
+        <img src="images/lumanare_floarea-soarelui.png" alt="Lumânare Floarea-Soarelui">
+        <h3>Lumânare Floarea-Soarelui</h3>
+        <p class="description">Un detaliu plin de căldură și culoare, perfect pentru cadouri sau decor. 🌻</p>
+        <span class="price">33 RON</span>
+        <button class="add-to-cart"
+          data-id="floarea-soarelui"
+          data-name="Lumânare Floarea-Soarelui"
+          data-price="33"
+          data-image="images/lumanare_floarea-soarelui.png">Adaugă în coș</button>
+      </li>
     </ul>
   </main>
 
   <footer class="footer">
-    <small>&copy; <span id="year"></span> — MSA Handmade.</small>
+    <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
   </footer>
 
   <script src="script.js"></script>
   <script src="cart.js"></script>
   <script>
-    function bindAddButtons(){
-      document.querySelectorAll(".add-to-cart").forEach(btn=>{
-        if(btn._msaBound) return;
+    function bindAddButtons() {
+      document.querySelectorAll(".add-to-cart").forEach((btn) => {
+        if (btn._msaBound) return;
         btn._msaBound = true;
-        btn.addEventListener("click", function(){
+
+        btn.addEventListener("click", function () {
           const d = this.dataset;
           window.MSACart.addToCart({
-            id: d.id, name: d.name, price: Number(d.price), image: d.image
+            id: d.id,
+            name: d.name,
+            price: Number(d.price),
+            image: d.image
           });
-          const old=this.textContent;
-          this.textContent="Adăugat!";
-          setTimeout(()=>{ this.textContent=old; }, 900);
+          const old = this.textContent;
+          this.textContent = "Adăugat!";
+          setTimeout(() => { this.textContent = old; }, 900);
         });
       });
     }
-    document.addEventListener("DOMContentLoaded", bindAddButtons);
-  </script>
-  // Face toate imaginile din lista de produse să se deschidă în filă nouă
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.products img').forEach(function (img) {
-      // Evită dublarea dacă rerulezi codul
-      if (img.parentElement && img.parentElement.tagName.toLowerCase() === 'a') return;
 
-      const a = document.createElement('a');
-      a.href = img.getAttribute('src');        // deschide originalul
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      img.style.cursor = 'zoom-in';
-      img.parentNode.insertBefore(a, img);
-      a.appendChild(img);
+    document.addEventListener("DOMContentLoaded", function () {
+      bindAddButtons();
+
+      // imaginile se deschid într-o filă nouă
+      document.querySelectorAll(".products img").forEach(function (img) {
+        if (img.parentElement && img.parentElement.tagName.toLowerCase() === "a") return;
+        const a = document.createElement("a");
+        a.href = img.getAttribute("src");
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        img.style.cursor = "zoom-in";
+        img.parentNode.insertBefore(a, img);
+        a.appendChild(img);
+      });
+
+      const y = document.getElementById("year");
+      if (y) y.textContent = new Date().getFullYear();
     });
-  });
-</script>
+  </script>
 </body>
 </html>
