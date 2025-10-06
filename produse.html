@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Produse — MSA Handmade</title>
 
-  <!-- SEO pentru Google -->
-  <meta name="description" content="MSA Handmade - Lumânări și decorațiuni artizanale realizate manual din ceară naturală de soia. Alege cadouri unice create cu drag și pasiune." />
+  <!-- SEO -->
+  <meta name="description" content="MSA Handmade - Lumânări și decorațiuni artizanale din ceară naturală de soia. Cadouri unice, create cu drag." />
   <meta name="keywords" content="lumânări handmade, decorațiuni artizanale, ceară naturală, MSA Handmade, cadouri handmade" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://msahandmade.ro/produse.html" />
 
-  <!-- Open Graph pentru Facebook -->
+  <!-- Open Graph -->
   <meta property="og:title" content="Produse — MSA Handmade" />
-  <meta property="og:description" content="Descoperă colecția noastră de lumânări și decorațiuni handmade din ceară naturală." />
+  <meta property="og:description" content="Descoperă colecția noastră de lumânări și decorațiuni handmade." />
   <meta property="og:image" content="https://msahandmade.ro/logo.png" />
   <meta property="og:url" content="https://msahandmade.ro/produse.html" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Produse — MSA Handmade" />
-  <meta name="twitter:description" content="Descoperă colecția noastră de lumânări handmade din ceară naturală." />
+  <meta name="twitter:description" content="Lumânări din ceară naturală de soia și decorațiuni handmade." />
   <meta name="twitter:image" content="https://msahandmade.ro/logo.png" />
 
   <link rel="stylesheet" href="styles.css" />
@@ -39,7 +39,6 @@
     <h1 style="text-align:center; margin:40px 0;">Produsele noastre</h1>
 
     <ul class="products">
-
       <li class="card">
         <img src="images/images.peisajiarna.jpg" alt="Peisaj de iarnă">
         <h3>Peisaj de iarnă <span class="price">99 RON</span></h3>
@@ -47,9 +46,9 @@
       </li>
 
       <li class="card">
-        <img src="images/images.peisaj.jpg" alt="Peisaj">
+        <img src="images/images_peisaj.jpg" alt="Peisaj">
         <h3>Peisaj <span class="price">99 RON</span></h3>
-        <button class="add-to-cart" data-id="peisaj" data-name="Peisaj" data-price="99" data-image="images/images.peisaj.jpg">Adaugă în coș</button>
+        <button class="add-to-cart" data-id="peisaj" data-name="Peisaj" data-price="99" data-image="images/images_peisaj.jpg">Adaugă în coș</button>
       </li>
 
       <li class="card">
@@ -105,7 +104,6 @@
         <h3>Lumânare Floarea-Soarelui <span class="price">33 RON</span></h3>
         <button class="add-to-cart" data-id="floarea-soarelui" data-name="Lumânare Floarea-Soarelui" data-price="33" data-image="lumanare_floarea-soarelui.png">Adaugă în coș</button>
       </li>
-
     </ul>
   </main>
 
@@ -116,16 +114,16 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Zoom imagine produs
+    // Deschide imaginea mare într-un tab nou
     document.querySelectorAll(".products img").forEach(img => {
       img.addEventListener("click", () => {
         const win = window.open("", "_blank");
-        win.document.write(`<img src="${img.src}" style="width:100%;height:auto;">`);
+        win.document.write(`<img src="${img.src}" style="width:100%;height:auto">`);
       });
     });
   </script>
 
-  <!-- Scripturile pentru coș -->
+  <!-- coș -->
   <script src="cart.js"></script>
   <script src="script.js"></script>
 </body>
