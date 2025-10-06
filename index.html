@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>MSA Handmade – Lumânări și decorațiuni artizanale</title>
 
-  <!-- Meta descriere SEO -->
-  <meta name="description" content="MSA Handmade – Lumânări artizanale din ceară naturală de soia și decorațiuni handmade. Fiecare creație aduce magie, culoare și lumină în casa ta.">
-  <meta name="keywords" content="lumânări handmade, decorațiuni, ceară naturală, MSA Handmade, cadouri artizanale, flori de ceară, lumânări parfumate">
+  <!-- SEO -->
+  <meta name="description" content="MSA Handmade: lumânări artizanale din ceară naturală de soia și decorațiuni realizate manual, cu drag. Cadouri personalizate, mici serii, atenție la detalii." />
+  <meta name="keywords" content="lumânări handmade, ceară naturală, decorațiuni artizanale, cadouri handmade, MSA Handmade, lumânări soia" />
+  <meta name="robots" content="index, follow" />
 
-  <link rel="canonical" href="https://msahandmade.ro/">
-  <link rel="stylesheet" href="styles.css">
+  <!-- Canonical + hreflang (evită dublurile) -->
+  <link rel="canonical" href="https://msahandmade.ro/" />
+  <link rel="alternate" href="https://msahandmade.ro/" hreflang="ro" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="MSA Handmade" />
+  <meta property="og:title" content="MSA Handmade – Lumânări și decorațiuni artizanale" />
+  <meta property="og:description" content="Descoperă colecția noastră de lumânări din ceară naturală și decorațiuni lucrate manual, perfecte pentru cadouri." />
+  <meta property="og:url" content="https://msahandmade.ro/" />
+  <meta property="og:image" content="https://msahandmade.ro/logo.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MSA Handmade – Lumânări și decorațiuni artizanale" />
+  <meta name="twitter:description" content="Lumânări din ceară naturală de soia și decorațiuni handmade, create cu grijă." />
+  <meta name="twitter:image" content="https://msahandmade.ro/logo.png" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
+
+  <!-- HEADER -->
   <header class="header">
     <nav class="nav">
       <a href="index.html" aria-current="page">Acasă</a>
@@ -23,33 +44,39 @@
     </nav>
   </header>
 
+  <!-- HERO -->
   <main class="home-hero" style="text-align:center; padding:40px 20px;">
-    <img src="logo.png" alt="MSA Handmade" style="max-width:300px; width:80%; height:auto;">
+    <img src="logo.png" alt="MSA Handmade" style="max-width:300px; width:80%; height:auto;" />
 
     <h1 style="margin-top:25px; font-size:26px; color:#333;">
       Magie și lumină într-un singur loc
     </h1>
 
     <p style="margin-top:15px; font-size:18px; color:#444; max-width:600px; margin-left:auto; margin-right:auto;">
-      Descoperă colecții de <strong>lumânări artizanale</strong> și 
-      <strong>decorațiuni handmade</strong> create cu drag din materiale naturale.  
-      Fiecare piesă MSA Handmade poartă un strop de suflet, culoare și bucurie. 🌸
+      Descoperă colecția de <strong>lumânări artizanale</strong> și
+      <strong>decorațiuni handmade</strong>, create cu drag din materiale naturale.
+      Fiecare piesă MSA Handmade poartă un strop de suflet, culoare și bucurie. 🌼
     </p>
 
     <div style="margin-top:25px;">
       <a href="produse.html" class="btn"
-         style="display:inline-block; background:#111827; color:#fff; padding:12px 24px; border-radius:10px; text-decoration:none; font-weight:500; transition:0.3s;">
-         Vezi produsele
+         style="display:inline-block; background:#111827; color:#fff; padding:12px 24px; border-radius:10px; text-decoration:none;">
+        Vezi produsele
       </a>
     </div>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer" style="text-align:center; margin-top:40px; padding:20px; color:#666; font-size:14px;">
     <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
   </footer>
 
+  <!-- JS (anul + coș) -->
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+  <!-- IMPORTANT: aceste două fișiere trebuie să existe în root-ul proiectului -->
+  <script src="script.js"></script>
+  <script src="cart.js"></script>
 </body>
 </html>
