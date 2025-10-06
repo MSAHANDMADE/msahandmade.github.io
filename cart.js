@@ -1,147 +1,109 @@
-/* MSA Handmade — cart.js (versiune stabilă) */
+/* MSA Handmade — cart.js */
 (function () {
-  const STORAGE_KEY = "msa_cart";
+  const STORAGE_KEY = 'msa_cart';
   const SHIPPING = 17;
 
-  // EmailJS (cheile tale din screenshot)
-  const PUBLIC_KEY  = "iSadfb7-TV_89l_6k";
-  const SERVICE_ID  = "service_ix0zpp7";
-  const TEMPLATE_ADMIN  = "template_13qpqtt";  // către tine
-  const TEMPLATE_CLIENT = "template_9yctwor";  // către client
+  // EmailJS keys (din screenshot-urile tale)
+  const PUBLIC_KEY = 'iSadfb7-TV_89l_6k';
+  const SERVICE_ID = 'service_ix0zpp7';
+  const TEMPLATE_ADMIN = 'template_13qpqtt';
+  const TEMPLATE_CLIENT = 'template_9yctwor';
 
-  if (window.emailjs && typeof emailjs.init === "function") {
-    try { emailjs.init(PUBLIC_KEY); } catch(_) {}
+  // init EmailJS dacă există SDK-ul
+  if (window.emailjs && typeof emailjs.init === 'function') {
+    try { emailjs.init(PUBLIC_KEY); } catch(e){}
   }
 
-  /* --- storage --- */
+  // storage
   const readCart = () => {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
-    catch { return []; }
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    } catch { return []; }
   };
-  const saveCart = (list) => localStorage.setItem(STORAGE_KEY, JSON.stringify(list || []));
+  const saveCart = (list) => localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
 
-  /* --- badge --- */
+  // badge
   function updateCartCountBadge() {
     const list = readCart();
     const count = list.reduce((s, i) => s + (i.qty || 1), 0);
-    const b1 = document.getElementById("cart-count");
-    const b2 = document.getElementById("cart-count-fab");
+    const b1 = document.getElementById('cart-count');
+    const b2 = document.getElementById('cart-count-fab');
     if (b1) b1.textContent = count;
     if (b2) b2.textContent = count;
   }
 
-  /* --- CRUD --- */
+  // CRUD
   function addToCart({ id, name, price, image }) {
-    if (!id) return;
     const list = readCart();
     const i = list.findIndex(p => p.id === id);
-    if (i >= 0) {
-      list[i].qty = (list[i].qty || 1) + 1;
-      // dacă n-am avut imagine/denumire/preț, completează acum
-      list[i].name  = list[i].name  || name  || "";
-      list[i].price = Number(list[i].price ?? price ?? 0);
-      list[i].image = list[i].image || image || "";
-    } else {
-      list.push({
-        id,
-        name: name || "",
-        price: Number(price || 0),
-        image: image || "",
-        qty: 1
-      });
-    }
-    saveCart(list);
-    updateCartCountBadge();
-    document.dispatchEvent(new CustomEvent("msa:added", { detail: { id, name } }));
-  }
-
-  function removeFromCart(id) {
-    const list = readCart().filter(p => p.id !== id);
+    if (i > -1) list[i].qty = (list[i].qty || 1) + 1;
+    else list.push({ id, name, price: Number(price) || 0, image, qty: 1 });
     saveCart(list); updateCartCountBadge();
   }
-
+  function removeFromCart(index) { const list = readCart(); list.splice(index,1); saveCart(list); updateCartCountBadge(); }
   function clearCart() { saveCart([]); updateCartCountBadge(); }
+  function increaseQty(index){ const list=readCart(); (list[index].qty = (list[index].qty||1)+1); saveCart(list); }
+  function decreaseQty(index){ const list=readCart(); list[index].qty=(list[index].qty||1)-1; if(list[index].qty<1) list[index].qty=1; saveCart(list); }
+  function setQty(index, v){ const list=readCart(); list[index].qty = v<1?1:v; saveCart(list); }
 
-  function increaseQty(id) {
-    const list = readCart(); const it = list.find(p => p.id === id);
-    if (it) { it.qty = (it.qty || 1) + 1; saveCart(list); updateCartCountBadge(); }
-  }
-  function decreaseQty(id) {
-    const list = readCart(); const it = list.find(p => p.id === id);
-    if (it) {
-      it.qty = Math.max(1, (it.qty || 1) - 1);
-      saveCart(list); updateCartCountBadge();
-    }
-  }
-  function setQty(id, v) {
-    v = parseInt(v, 10); if (isNaN(v) || v < 1) v = 1;
-    const list = readCart(); const it = list.find(p => p.id === id);
-    if (it) { it.qty = v; saveCart(list); updateCartCountBadge(); }
+  function computeTotals(list){
+    const subtotal = list.reduce((s,i)=> s + (Number(i.price)||0) * (i.qty||1), 0);
+    const shipping = list.length ? SHIPPING : 0;
+    const total = subtotal + shipping;
+    return { subtotal, shipping, total };
   }
 
-  function computeTotals(list) {
-    const subtotal = (list || readCart()).reduce(
-      (s, i) => s + Number(i.price || 0) * (i.qty || 1), 0
-    );
-    const shipping = (list && list.length) ? SHIPPING : 0;
-    return { subtotal, shipping, total: subtotal + shipping };
-  }
-
-  /* --- submit via EmailJS --- */
-  async function submitOrder(formData) {
+  // Submit comandă cu EmailJS
+  async function submitOrder(formData){
     const items = readCart();
-    if (!items.length) throw new Error("Coșul este gol.");
-    if (!window.emailjs) throw new Error("EmailJS indisponibil.");
+    if (!items.length) throw new Error('Coșul este gol.');
 
-    const produse = items
-      .map(i => `${i.name} × ${i.qty} — ${Number(i.price).toFixed(2)} RON`)
-      .join("\n");
+    if (!window.emailjs || typeof emailjs.send !== 'function') {
+      throw new Error('EmailJS nu este inițializat (verifică scriptul din cos.html).');
+    }
+
     const t = computeTotals(items);
+    const produse = items.map(i => `${i.name} × ${i.qty} @ ${i.price} RON`).join('\n');
 
     const data = Object.fromEntries(formData.entries());
-    const order_id = `${Date.now()}-${Math.floor(Math.random() * 100000)}`;
+    const order_id = `${Date.now()}-${Math.floor(Math.random()*100000)}`;
 
     const payload = {
       order_id,
-      tip: data.tip || "Persoană fizică",
-      nume: (data.nume || "").trim(),
-      prenume: (data.prenume || "").trim(),
-      email: (data.email || "").trim(),
-      telefon: (data.telefon || "").trim(),
-      judet: (data.judet || "").trim(),
-      oras: (data.oras || "").trim(),
-      codpostal: (data.codpostal || "").trim(),
-      adresa: (data.adresa || "").trim(),
-      mentiuni: (data.mentiuni || "").trim(),
+      tip: data.tip || 'Persoană fizică',
+      nume: data.nume || '',
+      prenume: data.prenume || '',
+      email: data.email || '',
+      telefon: data.telefon || '',
+      judet: data.judet || '',
+      oras: data.oras || '',
+      codpostal: data.codpostal || '',
+      adresa: data.adresa || '',
+      mentiuni: data.mentiuni || '',
       produse,
-      subtotal: t.subtotal.toFixed(2) + " RON",
-      livrare: t.shipping.toFixed(2) + " RON",
-      total: t.total.toFixed(2) + " RON"
+      subtotal: t.subtotal.toFixed(2),
+      livrare: t.shipping.toFixed(2),
+      total: t.total.toFixed(2)
     };
 
-    // 1) către tine
+    // către tine
     await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, payload);
-    // 2) confirmare către client (dacă are email)
-    if (payload.email) {
-      await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, { ...payload, to_email: payload.email });
-    }
+    // către client
+    await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, payload);
 
     clearCart();
     return true;
   }
 
-  /* expune API global */
+  // expune API
   window.MSACart = {
     readCart, saveCart,
     addToCart, removeFromCart, clearCart,
     increaseQty, decreaseQty, setQty,
-    computeTotals, submitOrder,
-    updateCartCountBadge
+    computeTotals, updateCartCountBadge,
+    submitOrder
   };
 
-  // inițializează badge la încărcare
-  document.addEventListener("DOMContentLoaded", updateCartCountBadge);
-  window.addEventListener("storage", (e) => {
-    if (e.key === STORAGE_KEY) updateCartCountBadge();
-  });
+  // init badge pe fiecare pagină
+  document.addEventListener('DOMContentLoaded', updateCartCountBadge);
 })();
