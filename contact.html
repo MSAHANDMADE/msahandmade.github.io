@@ -9,11 +9,28 @@
   <link rel="canonical" href="https://msahandmade.ro/contact.html">
 
   <!-- SEO meta -->
-  <meta name="description" content="Contactează MSA Handmade pentru comenzi personalizate, lumânări și decorațiuni artizanale. Răspundem cu drag la orice întrebare.">
+  <meta name="description" content="Contactează MSA Handmade pentru comenzi personalizate de lumânări și decorațiuni artizanale.">
   <meta name="keywords" content="contact, msa handmade, lumânări, decorațiuni, comenzi personalizate">
 
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .contact-box {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .contact-box h2 { margin-bottom: 10px; text-align: center; }
+    .contact-info p { line-height: 1.8; font-size: 16px; }
+    .contact-info strong { color: #111827; }
+    .contact-info a { color: #1d4ed8; text-decoration: none; }
+    .contact-info a:hover { text-decoration: underline; }
+  </style>
 </head>
+
 <body>
   <header class="header">
     <nav class="nav">
@@ -27,17 +44,19 @@
   <main class="contact-box">
     <h2>Contact</h2>
     <div class="contact-info">
-      <p><strong>Email:</strong> msahandmade.contact@gmail.com</p>
-      <p><strong>Telefon:</strong> +40 7xx xxx xxx</p>
-      <p><strong>WhatsApp:</strong> <a href="https://wa.me/40xxxxxxxxx" target="_blank">deschide conversația</a></p>
+      <p><strong>Email:</strong> <a href="mailto:msahandmade.contact@gmail.com">msahandmade.contact@gmail.com</a></p>
+      <p><strong>Telefon:</strong> <a href="tel:+40747246241">0747 246 241</a></p>
+      <p><strong>WhatsApp:</strong> <a href="https://wa.me/40747246241" target="_blank">deschide conversația</a></p>
       <p><strong>Facebook:</strong> <a href="#" target="_blank">MSA Handmade</a></p>
     </div>
   </main>
 
-  <footer class="footer">
+  <footer class="footer" style="text-align:center; margin-top:40px;">
     <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
