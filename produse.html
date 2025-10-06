@@ -3,138 +3,250 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Produse – MSA Handmade</title>
 
-  <!-- SEO -->
-  <meta name="description" content="Descoperă colecția MSA Handmade: lumânări artizanale din ceară naturală de soia, cu flori și designuri unice. Cadouri handmade pline de culoare și suflet.">
-  <meta name="keywords" content="lumânări handmade, ceară naturală, decorațiuni artizanale, cadouri, MSA Handmade, lumânări parfumate">
+  <title>Produse – MSA Handmade | Lumânări din ceară naturală & decorațiuni</title>
+  <meta name="description" content="Descoperă colecția MSA Handmade: lumânări artizanale din ceară naturală și decorațiuni realizate manual. Piese perfecte pentru cadou sau decor.">
+  <meta name="keywords" content="lumânări handmade, decorațiuni artizanale, ceară naturală, MSA Handmade, cadouri handmade">
   <meta name="robots" content="index, follow">
 
-  <!-- Canonical -->
+  <!-- Canonical + hreflang -->
   <link rel="canonical" href="https://msahandmade.ro/produse.html">
+  <link rel="alternate" href="https://msahandmade.ro/produse.html" hreflang="ro">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Produse – MSA Handmade">
+  <meta property="og:description" content="Lumânări artizanale din ceară naturală și decorațiuni realizate manual.">
+  <meta property="og:url" content="https://msahandmade.ro/produse.html">
+  <meta property="og:image" content="https://msahandmade.ro/logo.png">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Produse – MSA Handmade">
+  <meta name="twitter:description" content="Lumânări artizanale din ceară naturală și decorațiuni handmade.">
+  <meta name="twitter:image" content="https://msahandmade.ro/logo.png">
+
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
+  <!-- HEADER -->
   <header class="header">
     <nav class="nav">
       <a href="index.html">Acasă</a>
       <a href="produse.html" aria-current="page">Produse</a>
       <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart"><span id="cart-count">0</span></a>
+      <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
     </nav>
   </header>
 
-  <main class="products">
-    <h2 style="text-align:center; margin:30px 0;">Lumânări artizanale MSA Handmade</h2>
+  <main style="max-width:1000px;margin:0 auto;padding:20px;">
+    <h1 style="text-align:center;margin:10px 0 20px;">Produsele noastre</h1>
 
-    <ul class="product-list">
-
-      <li class="product">
-        <img src="images/images.peisajiarna.jpg" alt="Lumânare Peisaj de iarnă">
-        <h3>Lumânare Peisaj de iarnă</h3>
-        <p>Lumânare decorativă cu peisaj de iarnă – aduce liniște și magie în orice casă. ❄️</p>
-        <p><strong>99 RON</strong></p>
-        <button class="add-to-cart" data-id="peisajiarna" data-name="Peisaj de iarnă" data-price="99" data-image="images/images.peisajiarna.jpg">Adaugă în coș</button>
+    <ul class="products" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;list-style:none;padding:0;margin:0;">
+      <!-- Peisaj de iarnă -->
+      <li class="product" style="background:#fff;border:1px solid #e8edf2;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);">
+        <img src="images.peisajiarna.jpg" alt="Peisaj de iarnă" style="width:100%;display:block;">
+        <div style="padding:14px;">
+          <h3 style="margin:0 0 6px;">Peisaj de iarnă</h3>
+          <p style="margin:0 0 8px;color:#555;">Tablou din ceară cu texturi și contraste reci.</p>
+          <p style="margin:0 0 10px;"><strong>99 RON</strong></p>
+          <button class="add-to-cart"
+                  data-id="peisajiarna"
+                  data-name="Peisaj de iarnă"
+                  data-price="99"
+                  data-image="images.peisajiarna.jpg">Adaugă în coș</button>
+        </div>
       </li>
 
-      <li class="product">
-        <img src="images/images_peisaj.jpg" alt="Lumânare Peisaj">
-        <h3>Lumânare Peisaj</h3>
-        <p>Peisaj natural sculptat în ceară – un decor plin de calm și armonie. 🌿</p>
-        <p><strong>99 RON</strong></p>
-        <button class="add-to-cart" data-id="peisaj" data-name="Peisaj" data-price="99" data-image="images/images_peisaj.jpg">Adaugă în coș</button>
+      <!-- Peisaj -->
+      <li class="product" style="background:#fff;border:1px solid #e8edf2;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);">
+        <img src="images_peisaj.jpg" alt="Peisaj" style="width:100%;display:block;">
+        <div style="padding:14px;">
+          <h3 style="margin:0 0 6px;">Peisaj</h3>
+          <p style="margin:0 0 8px;color:#555;">Compoziție liniștitoare, lucrată manual.</p>
+          <p style="margin:0 0 10px;"><strong>99 RON</strong></p>
+          <button class="add-to-cart"
+                  data-id="peisaj"
+                  data-name="Peisaj"
+                  data-price="99"
+                  data-image="images_peisaj.jpg">Adaugă în coș</button>
+        </div>
       </li>
 
-      <li class="product">
-        <img src="images/images.indragostitii.jpg" alt="Lumânare Îndrăgostiții">
-        <h3>Lumânare Îndrăgostiții</h3>
-        <p>O lumânare romantică, perfectă pentru cupluri. 💞</p>
-        <p><strong>49 RON</strong></p>
-        <button class="add-to-cart" data-id="indragostitii" data-name="Îndrăgostiții" data-price="49" data-image="images/images.indragostitii.jpg">Adaugă în coș</button>
+      <!-- Îndrăgostiții -->
+      <li class="product" style="background:#fff;border:1px solid #e8edf2;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);">
+        <img src="images.indragostitii.jpg" alt="Îndrăgostiții" style="width:100%;display:block;">
+        <div style="padding:14px;">
+          <h3 style="margin:0 0 6px;">Îndrăgostiții</h3>
+          <p style="margin:0 0 8px;color:#555;">Piesă romantică, perfectă pentru cupluri.</p>
+          <p style="margin:0 0 10px;"><strong>99 RON</strong></p>
+          <button class="add-to-cart"
+                  data-id="indragostitii"
+                  data-name="Îndrăgostiții"
+                  data-price="99"
+                  data-image="images.indragostitii.jpg">Adaugă în coș</button>
+        </div>
       </li>
 
-      <li class="product">
-        <img src="images/images_buchet.jpg" alt="Lumânare Buchet">
-        <h3>Lumânare Buchet</h3>
-        <p>Lumânare elegantă cu flori colorate – un strop de primăvară în orice zi. 🌸</p>
-        <p><strong>29 RON</strong></p>
-        <button class="add-to-cart" data-id="buchet" data-name="Buchet" data-price="29" data-image="images/images_buchet.jpg">Adaugă în coș</button>
+      <!-- Buchet -->
+      <li class="product" style="background:#fff;border:1px solid #e8edf2;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);">
+        <img src="images_buchet.jpg" alt="Buchet" style="width:100%;display:block;">
+        <div style="padding:14px;">
+          <h3 style="margin:0 0 6px;">Buchet</h3>
+          <p style="margin:0 0 8px;color:#555;">Buchet floral din ceară, lucrat manual.</p>
+          <p style="margin:0 0 10px;"><strong>29 RON</strong></p>
+          <button class="add-to-cart"
+                  data-id="buchet"
+                  data-name="Buchet"
+                  data-price="29"
+                  data-image="images_buchet.jpg">Adaugă în coș</button>
+        </div>
       </li>
 
-      <li class="product">
-        <img src="images/images.crin.jpg" alt="Lumânare Crin">
-        <h3>Lumânare Crin</h3>
-        <p>Un design fin și luminos, cu flori de crin în relief. 🤍</p>
-        <p><strong>33 RON</strong></p>
-        <button class="add-to-cart" data-id="crin" data-name="Crin" data-price="33" data-image="images/images.crin.jpg">Adaugă în coș</button>
+      <!-- Crin -->
+      <li class="product" style="background:#fff;border:1px solid #e8edf2;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);">
+        <img src="images.crin.jpg" alt="Crin" style="width:100%;display:block;">
+        <div style="padding:14px;">
+          <h3 style="margin:0 0 6px;">Crin</h3>
+          <p style="margin:0 0 8px;color:#555;">Eleganță în detalii fine din ceară.</p>
+          <p style="margin:0 0 10px;"><strong>33 RON</strong></p>
+          <button class="add-to-cart"
+                  data-id="crin"
+                  data-name="Crin"
+                  data-price="33"
+                  data-image="images.crin.jpg">Adaugă în coș</button>
+        </div>
       </li>
 
-      <li class="product">
-        <img src="images/images_dans.jpg" alt="Lumânare Dans">
-        <h3>Lumânare Dans</h3>
-        <p>Inspirată de eleganța dansului, o piesă artistică din ceară. 💃</p>
-        <p><strong>39 RON</strong></p>
-        <button class="add-to-cart" data-id="dans" data-name="Dans" data-price="39" data-image="images/images_dans.jpg">Adaugă în coș</button>
+      <!-- Dans -->
+      <li class="product" style="background:#fff;border:1px solid #e8edf2;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);">
+        <img src="images.dans.jpg" alt="Dans" style="width:100%;display:block;">
+        <div style="padding:14px;">
+          <h3 style="margin:0 0 6px;">Dans</h3>
+          <p style="margin:0 0 8px;color:#555;">Mișcare și ritm surprinse în ceară.</p>
+          <p style="margin:0 0 10px;"><strong>33 RON</strong></p>
+          <button class="add-to-cart"
+                  data-id="dans"
+                  data-name="Dans"
+                  data-price="33"
+                  data-image="images.dans.jpg">Adaugă în coș</button>
+        </div>
       </li>
 
-      <li class="product">
-        <img src="images/images.inger.jpg" alt="Lumânare Înger">
-        <h3>Lumânare Înger</h3>
-        <p>Un simbol al purității și protecției, modelată manual. 👼</p>
-        <p><strong>45 RON</strong></p>
-        <button class="add-to-cart" data-id="inger" data-name="Înger" data-price="45" data-image="images/images.inger.jpg">Adaugă în coș</button>
+      <!-- Înger -->
+      <li class="product" style="background:#fff;border:1px solid #e8edf2;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);">
+        <img src="images.inger.jpg" alt="Înger" style="width:100%;display:block;">
+        <div style="padding:14px;">
+          <h3 style="margin:0 0 6px;">Înger</h3>
+          <p style="margin:0 0 8px;color:#555;">Un simbol al protecției și liniștii.</p>
+          <p style="margin:0 0 10px;"><strong>33 RON</strong></p>
+          <button class="add-to-cart"
+                  data-id="inger"
+                  data-name="Înger"
+                  data-price="33"
+                  data-image="images.inger.jpg">Adaugă în coș</button>
+        </div>
       </li>
 
-      <li class="product">
-        <img src="images/images.logodna.jpg" alt="Lumânare Logodnă">
-        <h3>Lumânare Logodnă</h3>
-        <p>Ideală pentru evenimente speciale sau cadouri personalizate. 💍</p>
-        <p><strong>55 RON</strong></p>
-        <button class="add-to-cart" data-id="logodna" data-name="Logodnă" data-price="55" data-image="images/images.logodna.jpg">Adaugă în coș</button>
+      <!-- Logodnă -->
+      <li class="product" style="background:#fff;border:1px solid #e8edf2;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);">
+        <img src="images.logodna.jpg" alt="Logodnă" style="width:100%;display:block;">
+        <div style="padding:14px;">
+          <h3 style="margin:0 0 6px;">Logodnă</h3>
+          <p style="margin:0 0 8px;color:#555;">Un cadou elegant pentru momente speciale.</p>
+          <p style="margin:0 0 10px;"><strong>33 RON</strong></p>
+          <button class="add-to-cart"
+                  data-id="logodna"
+                  data-name="Logodnă"
+                  data-price="33"
+                  data-image="images.logodna.jpg">Adaugă în coș</button>
+        </div>
       </li>
 
-      <li class="product">
-        <img src="images/images.sarut.jpg" alt="Lumânare Sărut">
-        <h3>Lumânare Sărut</h3>
-        <p>Un model romantic și elegant, perfect pentru decoruri intime. 💋</p>
-        <p><strong>39 RON</strong></p>
-        <button class="add-to-cart" data-id="sarut" data-name="Sărut" data-price="39" data-image="images/images.sarut.jpg">Adaugă în coș</button>
+      <!-- Sărut -->
+      <li class="product" style="background:#fff;border:1px solid #e8edf2;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);">
+        <img src="images.sarut.jpg" alt="Sărut" style="width:100%;display:block;">
+        <div style="padding:14px;">
+          <h3 style="margin:0 0 6px;">Sărut</h3>
+          <p style="margin:0 0 8px;color:#555;">Emoție și căldură în ceară sculptată.</p>
+          <p style="margin:0 0 10px;"><strong>33 RON</strong></p>
+          <button class="add-to-cart"
+                  data-id="sarut"
+                  data-name="Sărut"
+                  data-price="33"
+                  data-image="images.sarut.jpg">Adaugă în coș</button>
+        </div>
       </li>
 
-      <li class="product">
-        <img src="images/images_flori.jpg" alt="Lumânare Flori">
-        <h3>Lumânare Flori</h3>
-        <p>O explozie de culori și forme florale din ceară naturală. 🌷</p>
-        <p><strong>33 RON</strong></p>
-        <button class="add-to-cart" data-id="flori" data-name="Flori" data-price="33" data-image="images/images_flori.jpg">Adaugă în coș</button>
+      <!-- Flori -->
+      <li class="product" style="background:#fff;border:1px solid #e8edf2;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);">
+        <img src="images_flori.jpg" alt="Flori" style="width:100%;display:block;">
+        <div style="padding:14px;">
+          <h3 style="margin:0 0 6px;">Flori</h3>
+          <p style="margin:0 0 8px;color:#555;">Detalii florale viu colorate.</p>
+          <p style="margin:0 0 10px;"><strong>33 RON</strong></p>
+          <button class="add-to-cart"
+                  data-id="flori"
+                  data-name="Flori"
+                  data-price="33"
+                  data-image="images_flori.jpg">Adaugă în coș</button>
+        </div>
       </li>
 
-      <li class="product">
-        <img src="images/lumanare_floarea-soarelui.png" alt="Lumânare Floarea Soarelui">
-        <h3>Lumânare Floarea-Soarelui</h3>
-        <p>Un detaliu luminos și plin de viață — aduce soarele în orice cameră. 🌻</p>
-        <p><strong>33 RON</strong></p>
-        <button class="add-to-cart" data-id="floarea-soarelui" data-name="Floarea-Soarelui" data-price="33" data-image="images/lumanare_floarea-soarelui.png">Adaugă în coș</button>
+      <!-- Floarea-Soarelui -->
+      <li class="product" style="background:#fff;border:1px solid #e8edf2;border-radius:14px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06);">
+        <img src="lumanare_floarea-soarelui.png" alt="Lumânare Floarea-Soarelui" style="width:100%;display:block;">
+        <div style="padding:14px;">
+          <h3 style="margin:0 0 6px;">Lumânare Floarea-Soarelui</h3>
+          <p style="margin:0 0 8px;color:#555;">Un detaliu plin de căldură și culoare.</p>
+          <p style="margin:0 0 10px;"><strong>33 RON</strong></p>
+          <button class="add-to-cart"
+                  data-id="floarea-soarelui"
+                  data-name="Lumânare Floarea-Soarelui"
+                  data-price="33"
+                  data-image="lumanare_floarea-soarelui.png">Adaugă în coș</button>
+        </div>
       </li>
-
     </ul>
   </main>
 
-  <footer class="footer">
-    <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
+  <!-- FOOTER -->
+  <footer class="footer" style="text-align:center;margin-top:30px;padding:20px;color:#667;">
+    <small>© <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
+  <!-- JS existente -->
   <script src="script.js"></script>
   <script src="cart.js"></script>
+
+  <!-- Leagă butoanele Add to cart (fallback, dacă nu e deja în script.js) -->
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+    (function(){
+      function bindAddButtons(){
+        document.querySelectorAll(".add-to-cart").forEach(function(btn){
+          if(btn._msaBound) return; btn._msaBound = true;
+          btn.addEventListener("click", function(){
+            const d = this.dataset;
+            if(window.MSACart && typeof window.MSACart.addToCart === "function"){
+              window.MSACart.addToCart({
+                id: d.id, name: d.name, price: Number(d.price), image: d.image
+              });
+            }
+            const old = this.textContent;
+            this.textContent = "Adăugat!";
+            setTimeout(()=>{ this.textContent = old; }, 900);
+          });
+        });
+      }
+      document.addEventListener("DOMContentLoaded", bindAddButtons);
+    })();
   </script>
 
-  <!-- Deschidere imagine în filă nouă -->
+  <!-- Click pe imagine = deschide poza mare în filă nouă -->
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      document.querySelectorAll('.product img').forEach(function (img) {
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll('.products img').forEach(function (img) {
+        if (img.parentElement && img.parentElement.tagName.toLowerCase() === 'a') return;
         const a = document.createElement('a');
         a.href = img.getAttribute('src');
         a.target = '_blank';
@@ -145,5 +257,7 @@
       });
     });
   </script>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
