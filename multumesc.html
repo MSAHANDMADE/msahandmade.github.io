@@ -2,12 +2,13 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mulțumim — MSA Handmade</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     .thanks{max-width:700px;margin:40px auto;padding:20px;text-align:center}
     .thanks h1{font-size:32px}
+    .btn-main{display:inline-block;background:#111827;color:#fff;padding:10px 16px;border-radius:10px;text-decoration:none}
   </style>
 </head>
 <body>
@@ -21,18 +22,27 @@
   </header>
 
   <main class="thanks">
-    <h1>Mulțumim pentru comandă! 💛</h1>
+    <h1>Mulțumim pentru comandă! 🥰</h1>
     <p>Ți-am trimis un email de confirmare. Te vom contacta în curând.</p>
     <p>
-      <a href="produse.html" class="btn-main" style="margin:8px">Înapoi la produse</a>
-      <a href="index.html" class="btn-main" style="margin:8px;background:#0f766e">Înapoi acasă</a>
+      <a href="produse.html" class="btn-main" style="margin:8px;">Înapoi la produse</a>
+      <a href="index.html" class="btn-main" style="margin:8px;background:#0f766e;">Înapoi acasă</a>
     </p>
   </main>
 
-  <footer class="footer">
+  <footer class="footer" style="text-align:center;margin-top:40px;padding:20px;color:#666;">
     <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    // Badge coș (va fi 0 pentru că l-am golit)
+    try{
+      const list = JSON.parse(localStorage.getItem("msa_cart")||"[]");
+      const count = list.reduce((s,i)=> s + (i.qty||1), 0);
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = count;
+    }catch(_){}
+  </script>
 </body>
 </html>
