@@ -4,31 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Produse — MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="styles.css">
   <style>
-    .wrap{max-width:1100px;margin:0 auto;padding:16px}
-    header nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    header nav a{margin-right:14px}
-    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:18px}
-    .card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.06)}
-    .thumb{width:100%;aspect-ratio:4/3;object-fit:cover}
-    .body{padding:14px}
-    .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-    .price{font-weight:700}
-    .btn{display:block;width:100%;background:#0a2230;color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700}
-    .cart{display:inline-flex;align-items:center;gap:6px}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+    header .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+    .cart{display:inline-flex;gap:6px;align-items:center}
     #cart-count{font-weight:700}
+    h1{font-size:2.2rem;margin:10px 0 6px}
+
+    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin:16px 0 28px}
+    .card{background:#fff;border-radius:14px;box-shadow:0 8px 20px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column}
+    .thumb{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;display:block}
+    .body{padding:12px;display:flex;flex-direction:column;gap:10px}
+    .top{display:flex;justify-content:space-between;align-items:center}
+    .top h3{margin:0;font-size:1.05rem}
+    .price{font-weight:700}
+    .btn{width:100%;padding:12px;border:none;border-radius:10px;background:#0a2230;color:#fff;font-weight:700}
+    .btn[disabled]{opacity:.6}
+    @media (max-width:480px){
+      .cards{grid-template-columns:1fr;gap:12px}
+      .thumb{max-height:220px}
+      h1{font-size:1.8rem}
+    }
+
+    /* toast mic în colț */
+    #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:#0a2230;color:#fff;padding:10px 14px;border-radius:999px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9999}
+    #toast.show{opacity:1}
+
+    /* lightbox simplu */
+    #lb{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9998}
+    #lb img{max-width:95vw;max-height:90vh;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
   </style>
 </head>
 <body>
 <header class="wrap">
-  <nav>
+  <nav class="nav">
     <div>
       <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="contact.html">Contact</a>
+      <a href="produse.html" style="margin-left:14px">Produse</a>
+      <a href="contact.html" style="margin-left:14px">Contact</a>
     </div>
-    <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
+    <a class="cart" href="cos.html">🛒 <span id="cart-count">0</span></a>
   </nav>
 </header>
 
@@ -36,127 +52,119 @@
   <h1>Produsele noastre</h1>
 
   <section class="cards">
-
     <!-- Buchet 29 -->
     <article class="card">
-      <img class="thumb" src="images/buchet.jpg" alt="Buchet" loading="lazy">
+      <img class="thumb" src="images/buchet.jpg" data-full="images/buchet.jpg" alt="Buchet" loading="lazy">
       <div class="body">
         <div class="top"><h3>Buchet</h3><span class="price">29 RON</span></div>
         <button class="btn add-to-cart"
-          data-id="buchet" data-name="Buchet" data-price="29" data-image="images/buchet.jpg">
-          Adaugă în coș
-        </button>
+          data-id="buchet" data-name="Buchet"
+          data-price="29" data-image="images/buchet.jpg">Adaugă în coș</button>
       </div>
     </article>
 
     <!-- Sărut 33 -->
     <article class="card">
-      <img class="thumb" src="images/sarut.jpg" alt="Sărut" loading="lazy">
+      <img class="thumb" src="images/sarut.jpg" data-full="images/sarut.jpg" alt="Sărut" loading="lazy">
       <div class="body">
         <div class="top"><h3>Sărut</h3><span class="price">33 RON</span></div>
         <button class="btn add-to-cart"
-          data-id="sarut" data-name="Sărut" data-price="33" data-image="images/sarut.jpg">
-          Adaugă în coș
-        </button>
+          data-id="sarut" data-name="Sărut"
+          data-price="33" data-image="images/sarut.jpg">Adaugă în coș</button>
       </div>
     </article>
 
     <!-- Crin 33 -->
     <article class="card">
-      <img class="thumb" src="images/crin.jpg" alt="Crin" loading="lazy">
+      <img class="thumb" src="images/crin.jpg" data-full="images/crin.jpg" alt="Crin" loading="lazy">
       <div class="body">
         <div class="top"><h3>Crin</h3><span class="price">33 RON</span></div>
         <button class="btn add-to-cart"
-          data-id="crin" data-name="Crin" data-price="33" data-image="images/crin.jpg">
-          Adaugă în coș
-        </button>
+          data-id="crin" data-name="Crin"
+          data-price="33" data-image="images/crin.jpg">Adaugă în coș</button>
       </div>
     </article>
 
     <!-- Dans 33 -->
     <article class="card">
-      <img class="thumb" src="images/dans.jpg" alt="Dans" loading="lazy">
+      <img class="thumb" src="images/dans.jpg" data-full="images/dans.jpg" alt="Dans" loading="lazy">
       <div class="body">
         <div class="top"><h3>Dans</h3><span class="price">33 RON</span></div>
         <button class="btn add-to-cart"
-          data-id="dans" data-name="Dans" data-price="33" data-image="images/dans.jpg">
-          Adaugă în coș
-        </button>
+          data-id="dans" data-name="Dans"
+          data-price="33" data-image="images/dans.jpg">Adaugă în coș</button>
       </div>
     </article>
 
-    <!-- Îndrăgostiți 99 -->
+    <!-- Îndrăgostiții 99 -->
     <article class="card">
-      <img class="thumb" src="images/indragostiti.jpg" alt="Îndrăgostiți" loading="lazy">
+      <img class="thumb" src="images/indragostitii.jpg" data-full="images/indragostitii.jpg" alt="Îndrăgostiții" loading="lazy">
       <div class="body">
-        <div class="top"><h3>Îndrăgostiți</h3><span class="price">99 RON</span></div>
+        <div class="top"><h3>Îndrăgostiții</h3><span class="price">99 RON</span></div>
         <button class="btn add-to-cart"
-          data-id="indragostiti" data-name="Îndrăgostiți" data-price="99" data-image="images/indragostiti.jpg">
-          Adaugă în coș
-        </button>
-      </div>
-    </article>
-
-    <!-- Peisaj 99 -->
-    <article class="card">
-      <img class="thumb" src="images/peisaj.jpg" alt="Peisaj" loading="lazy">
-      <div class="body">
-        <div class="top"><h3>Peisaj</h3><span class="price">99 RON</span></div>
-        <button class="btn add-to-cart"
-          data-id="peisaj" data-name="Peisaj" data-price="99" data-image="images/peisaj.jpg">
-          Adaugă în coș
-        </button>
+          data-id="indragostitii" data-name="Îndrăgostiții"
+          data-price="99" data-image="images/indragostitii.jpg">Adaugă în coș</button>
       </div>
     </article>
 
     <!-- Peisaj de iarnă 99 -->
     <article class="card">
-      <img class="thumb" src="images/peisaj_iarna.jpg" alt="Peisaj de iarnă" loading="lazy">
+      <img class="thumb" src="images/peisaj_iarna.jpg" data-full="images/peisaj_iarna.jpg" alt="Peisaj de iarnă" loading="lazy">
       <div class="body">
         <div class="top"><h3>Peisaj de iarnă</h3><span class="price">99 RON</span></div>
         <button class="btn add-to-cart"
-          data-id="peisaj-iarna" data-name="Peisaj de iarnă" data-price="99" data-image="images/peisaj_iarna.jpg">
-          Adaugă în coș
-        </button>
+          data-id="peisaj_iarna" data-name="Peisaj de iarnă"
+          data-price="99" data-image="images/peisaj_iarna.jpg">Adaugă în coș</button>
       </div>
     </article>
 
+    <!-- Peisaj 99 -->
+    <article class="card">
+      <img class="thumb" src="images/peisaj.jpg" data-full="images/peisaj.jpg" alt="Peisaj" loading="lazy">
+      <div class="body">
+        <div class="top"><h3>Peisaj</h3><span class="price">99 RON</span></div>
+        <button class="btn add-to-cart"
+          data-id="peisaj" data-name="Peisaj"
+          data-price="99" data-image="images/peisaj.jpg">Adaugă în coș</button>
+      </div>
+    </article>
   </section>
 </main>
 
-<footer class="wrap" style="text-align:center;margin-top:30px;color:#666">
+<footer class="wrap" style="text-align:center;margin:24px 0;color:#666">
   <small>&copy; <span id="year"></span> — MSA Handmade.</small>
 </footer>
 
+<div id="toast">Adăugat în coș</div>
+<div id="lb"><img id="lbimg" alt=""></div>
+
 <script src="cart.js"></script>
 <script>
+  // anul
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Un singur listener global (fără dubluri)
-  document.addEventListener('click', (e) => {
+  // buton unic add-to-cart + toast
+  const toast = document.getElementById('toast');
+  document.addEventListener('click', (e)=>{
+    // lightbox
+    const ph = e.target.closest('.thumb');
+    if (ph){ document.getElementById('lbimg').src = ph.dataset.full || ph.src; document.getElementById('lb').style.display='flex'; }
+
     const btn = e.target.closest('.add-to-cart');
     if (!btn) return;
     e.preventDefault();
-
-    if (!window.MSACart) { alert('Coș indisponibil'); return; }
-
+    if (!window.MSACart){ alert('Coș indisponibil'); return; }
     MSACart.addToCart({
-      id: btn.dataset.id,
-      name: btn.dataset.name,
-      price: Number(btn.dataset.price),
-      image: btn.dataset.image
+      id: btn.dataset.id, name: btn.dataset.name,
+      price: Number(btn.dataset.price), image: btn.dataset.image
     });
-
-    const old = btn.textContent;
-    btn.textContent = 'Adăugat!';
-    btn.disabled = true;
-    setTimeout(()=>{ btn.textContent = old; btn.disabled = false; }, 800);
+    const old = btn.textContent; btn.textContent='Adăugat!'; btn.disabled=true;
+    toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'), 900);
+    setTimeout(()=>{ btn.textContent=old; btn.disabled=false }, 800);
   });
+  document.getElementById('lb').addEventListener('click', ()=>{ document.getElementById('lb').style.display='none'; document.getElementById('lbimg').src=''; });
 
-  // afișăm badge-ul coșului
-  document.addEventListener('DOMContentLoaded', ()=>{
-    if (window.MSACart && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge();
-  });
+  document.addEventListener('DOMContentLoaded', ()=> MSACart?.updateCartCountBadge?.());
 </script>
 </body>
 </html>
