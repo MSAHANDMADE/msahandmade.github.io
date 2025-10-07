@@ -160,12 +160,14 @@
       `;
 
       // 2) Trimite la CLIENT
-      await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, {
-        to_email: formData.get("email"),
-        order_id: orderId,
-        nume: formData.get("nume"),
-        proforma_html
-      });
+      // 2) Trimite la CLIENT
+await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, {
+  to_email: formData.get("email"),
+  order_id: orderId,
+  nume: formData.get("nume"),
+  html_proforma: proforma_html // <- schimbat numele variabilei!
+});
+    
 
       // 3) Trimite la ADMIN
       await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, {
