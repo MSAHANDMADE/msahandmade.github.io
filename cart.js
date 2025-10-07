@@ -1,21 +1,22 @@
-/* MSA Handmade — Coș + reduceri + EmailJS + proformă */
+/* MSA Handmade — coș + reduceri + livrare + EmailJS + proformă */
 (function () {
   // === CONFIG ===
   const STORAGE_KEY = 'msa_cart';
   const SHIPPING_BASE = 17;
 
-  // EmailJS
-  const PUBLIC_KEY      = 'iSadfb7-TV_89l_6k';    // user/public key
-  const SERVICE_ID      = 'service_ix0zpp7';      // service id
-  const TEMPLATE_ADMIN  = 'template_13qpqtt';     // template admin
-  const TEMPLATE_CLIENT = 'template_9yctwor';     // template client
-
-  // adresa ta de admin (folosită în template-ul de admin via {{to_email}})
+  // EmailJS – cheile/ID-urile tale (exact cum le ai în prezent)
+  const PUBLIC_KEY      = 'iSadfb7-TV_89l_6k';
+  const SERVICE_ID      = 'service_ix0zpp7';
+  const TEMPLATE_ADMIN  = 'template_13qpqtt'; // către ADMIN (tu)
+  const TEMPLATE_CLIENT = 'template_9yctwor'; // către CLIENT (conține {{{html_proforma}}})
   const ADMIN_EMAIL     = 'msahandmade.contact@gmail.com';
 
-  if (window.emailjs && emailjs.init) { try{ emailjs.init(PUBLIC_KEY); }catch(_){} }
+  // Inițializează EmailJS dacă SDK-ul e încărcat (în cos.html ai <script src="...email.min.js">)
+  if (window.emailjs && typeof emailjs.init === 'function') {
+    try { emailjs.init(PUBLIC_KEY); } catch (e) {}
+  }
 
-  // === STORAGE ===
+  // === LOCAL STORAGE (cart) ===
   const readCart = () => {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
     catch { return []; }
@@ -27,7 +28,9 @@
     const list  = readCart();
     const count = list.reduce((s,i)=> s + (parseInt(i.qty)||1), 0);
     const b1 = document.getElementById('cart-count');
+    const b2 = document.getElementById('cart-count-fab');
     if (b1) b1.textContent = count;
+    if (b2) b2.textContent = count;
   }
 
   // === CRUD ===
@@ -38,7 +41,8 @@
     price = Number(price)||0;
     if (idx > -1) list[idx].qty = (parseInt(list[idx].qty)||1) + 1;
     else list.push({ id, name: name||'', price, image: image||'', qty: 1 });
-    saveCart(list); updateCartCountBadge();
+    saveCart(list);
+    updateCartCountBadge();
   }
   function removeFromCart(indexOrId) {
     const list = readCart();
@@ -72,7 +76,7 @@
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 
-  // === RENDER pe cos.html (dacă există containerul) ===
+  // === RENDER (cos.html) ===
   function render() {
     const list  = readCart();
     const mount = document.getElementById('items');
@@ -86,9 +90,11 @@
         const card = document.createElement('div');
         card.className = 'cart-card';
         card.innerHTML = `
-          <div class="cart-left"><img src="${p.image||'logo.png'}" alt="${esc(p.name||'')}"></div>
+          <div class="cart-left">
+            <img src="${p.image||'logo.png'}" alt="${esc(p.name)}">
+          </div>
           <div class="cart-mid">
-            <div class="name">${esc(p.name||'')}</div>
+            <div class="name">${esc(p.name)}</div>
             <div class="price">${fmt(p.price)} RON</div>
             <div class="qty">
               <button data-act="dec" aria-label="Scade">−</button>
@@ -98,11 +104,17 @@
             </div>
           </div>
         `;
+
         const input = card.querySelector('input');
         card.querySelector('[data-act="inc"]').onclick = ()=>{ input.value = Number(input.value||1)+1; input.dispatchEvent(new Event('change')); };
         card.querySelector('[data-act="dec"]').onclick = ()=>{ input.value = Math.max(1, Number(input.value||1)-1); input.dispatchEvent(new Event('change')); };
         card.querySelector('[data-act="del"]').onclick = ()=>{ removeFromCart(idx); render(); };
-        input.addEventListener('change', ()=>{ setQty(idx, input.value); refreshTotals(); });
+
+        input.addEventListener('change', ()=>{
+          setQty(idx, input.value);
+          refreshTotals();
+        });
+
         mount.appendChild(card);
       });
     }
@@ -119,11 +131,41 @@
     updateCartCountBadge();
   }
 
-  // === PROFORMĂ HTML (injectată în mail) ===
+  // === PROFORMĂ (HTML injectat în mailul clientului) ===
   function makeProformaHTML(data, list, totals, orderId){
+    const firma = {
+      denumire:'Stoica Mihaela – Persoană Fizică Autorizată',
+      cui:'52197623',
+      regcom:'F2025026596007',
+      adresa:'Str. Generalului nr. 10, Bl. 1, Sc. 1, Ap. 2, Bragadiru, IF',
+      iban:'RO71 ROIN 4021 V44X 12E1 65BQ',
+      banca:'Salt Bank'
+    };
+
+    const clientBlock = (()=>{
+      const tip = data.tip || 'Persoană fizică';
+      if (tip === 'Persoană juridică') {
+        return `
+          <div><strong>Client (PJ)</strong></div>
+          <div>${esc(data.firma)}</div>
+          <div>CUI: ${esc(data.cui)}</div>
+          <div>Reg. Com.: ${esc(data.regcom)}</div>
+          <div>Persoană de contact: ${esc(data.nume)} ${esc(data.prenume)}</div>
+          <div>Email: ${esc(data.email)} · Tel: ${esc(data.telefon)}</div>
+          <div>Adresă: ${esc(data.adresa)}, ${esc(data.oras)}, ${esc(data.judet)} ${esc(data.codpostal)}</div>
+        `;
+      }
+      return `
+        <div><strong>Client (PF)</strong></div>
+        <div>${esc(data.nume)} ${esc(data.prenume)}</div>
+        <div>Email: ${esc(data.email)} · Tel: ${esc(data.telefon)}</div>
+        <div>Adresă: ${esc(data.adresa)}, ${esc(data.oras)}, ${esc(data.judet)} ${esc(data.codpostal)}</div>
+      `;
+    })();
+
     const rows = list.map(i=>`
       <tr>
-        <td style="padding:6px 8px;border-bottom:1px solid #eee;">${esc(i.name||'')}</td>
+        <td style="padding:6px 8px;border-bottom:1px solid #eee;">${esc(i.name)}</td>
         <td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:center;">${Number(i.qty)||1}</td>
         <td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right;">${fmt(i.price)} RON</td>
         <td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right;">${fmt((Number(i.price)||0)*(Number(i.qty)||1))} RON</td>
@@ -131,8 +173,27 @@
     `).join('');
 
     return `
-      <h3 style="margin:0 0 6px 0">Proformă #${orderId}</h3>
-      <div style="color:#555">${new Date().toLocaleString('ro-RO')}</div>
+    <div style="font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,Arial;max-width:720px;margin:18px auto;padding:16px;border:1px solid #eee;border-radius:10px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <h3 style="margin:0 0 6px 0">MSA Handmade</h3>
+          <div style="color:#666">
+            ${firma.denumire}<br>
+            CUI: ${firma.cui} · Reg. Com.: ${firma.regcom}<br>
+            IBAN: ${firma.iban} · ${firma.banca}<br>
+            ${firma.adresa}
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div><strong>Proformă:</strong> #${orderId}</div>
+          <div style="color:#666">${new Date().toLocaleString('ro-RO')}</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:24px;margin:10px 0">
+        <div style="flex:1">${clientBlock}</div>
+      </div>
+
       <table style="width:100%;border-collapse:collapse;margin-top:10px">
         <thead>
           <tr>
@@ -149,49 +210,55 @@
           <tr><td colspan="3" style="text-align:right;padding:6px 8px">Livrare</td><td style="text-align:right;padding:6px 8px">${fmt(totals.shipping)} RON</td></tr>
           <tr><td colspan="3" style="text-align:right;padding:10px 8px;font-weight:700;border-top:2px solid #222">TOTAL</td><td style="text-align:right;padding:10px 8px;font-weight:700;border-top:2px solid #222">${fmt(totals.total)} RON</td></tr>
         </tfoot>
-      </table>`;
+      </table>
+      <div style="margin-top:10px;color:#666;font-size:12px">* Proforma nu ține loc de factură. Factura fiscală va fi emisă la expedierea comenzii.</div>
+    </div>`;
   }
 
-  // === SUBMIT ORDER (apelată din cos.html) ===
+  // === SUBMIT ORDER (apelat din cos.html) ===
   async function submitOrder(formElOrFormData) {
     const list = readCart();
-    if (!list.length) throw new Error('Coș gol');
+    if (!list.length) throw new Error('Cos gol');
 
-    const fd = (formElOrFormData instanceof FormData) ? formElOrFormData : new FormData(formElOrFormData);
+    const fd = (formElOrFormData instanceof FormData)
+      ? formElOrFormData
+      : new FormData(formElOrFormData);
+
     const data = Object.fromEntries(fd.entries());
     const totals = computeTotals(list);
     const orderId = Math.random().toString(36).slice(2,7).toUpperCase();
 
-    // text produse pt admin
+    // proforma html pentru client
+    const html_proforma = makeProformaHTML(data, list, totals, orderId);
+
+    // text produse pentru admin
     const produseText = list.map(i =>
       `• ${i.name} x ${i.qty} = ${fmt((Number(i.price)||0)*(Number(i.qty)||1))} RON`
     ).join('\n');
 
-    // html proformă
-    const html_proforma = makeProformaHTML(data, list, totals, orderId);
-
-    // Asigură EmailJS
     if (!window.emailjs) throw new Error('EmailJS indisponibil');
 
-    // 1) Client (confirmare + proformă)
+    // 1) CLIENT (Order Confirmation + proformă)
     await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, {
-      to_email: data.email,         // << IMPORTANT
+      to_email: data.email || '',   // << IMPORTANT: template are {{to_email}}
       order_id: orderId,
       nume: data.nume || '',
-      html_proforma                 // << template must have {{{html_proforma}}}
+      html_proforma,                // << template are {{{html_proforma}}}
     });
 
-    // 2) Admin (detalii comandă)
+    // 2) ADMIN (detalii comandă)
     await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, {
-      to_email: ADMIN_EMAIL,        // << IMPORTANT
+      to_email: ADMIN_EMAIL,        // << IMPORTANT: template are {{to_email}}
       order_id: orderId,
-      nume: `${data.nume||''} ${data.prenume||''}`,
-      email: data.email||'',
-      telefon: data.telefon||'',
-      judet: data.judet||'',
-      oras: data.oras||'',
-      codpostal: data.codpostal||'',
-      adresa: data.adresa||'',
+      tip: data.tip || 'Persoană fizică',
+      nume: data.nume || '',
+      prenume: data.prenume || '',
+      email: data.email || '',
+      telefon: data.telefon || '',
+      judet: data.judet || '',
+      oras: data.oras || '',
+      codpostal: data.codpostal || '',
+      adresa: data.adresa || '',
       produse: produseText,
       subtotal: fmt(totals.subtotal),
       livrare: fmt(totals.shipping),
@@ -200,7 +267,7 @@
     });
 
     clearCart();
-    try{ window.location.href = 'multumesc.html'; }catch(_){}
+    try { window.location.href = 'multumesc.html'; } catch {}
     return true;
   }
 
@@ -209,10 +276,9 @@
     readCart, saveCart,
     addToCart, removeFromCart, clearCart, setQty,
     computeTotals, render, submitOrder,
-    updateCartCountBadge
   };
 
-  // auto init
+  // auto-init
   document.addEventListener('DOMContentLoaded', ()=>{
     updateCartCountBadge();
     if (document.getElementById('items')) render();
