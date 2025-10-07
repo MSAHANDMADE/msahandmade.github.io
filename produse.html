@@ -117,49 +117,37 @@
       </li>
     </ul>
   </main>
+<footer class="footer" style="text-align:center;margin-top:40px;padding:20px;color:#666">
+  <small>&copy; <span id="year"></span> — MSA Handmade.</small>
+</footer>
 
-  <footer class="footer" style="text-align:center;margin-top:40px;padding:20px;color:#666;">
-    <small>&copy; <span id="year"></span> — MSA Handmade.</small>
-  </footer>
+<!-- === Scripturi === -->
+<script src="cart.js"></script>
+<script src="script.js"></script>
 
-  <!-- IMPORTANT: coș -->
-  <script src="cart.js"></script>
+<script>
+  // anul curent în footer
+  document.getElementById("year").textContent = new Date().getFullYear();
 
-  <!-- Binding add-to-cart + badge coș -->
-  <script>
-    // anul curent
-    document.getElementById('year').textContent = new Date().getFullYear();
+  // butoanele Adaugă în coș
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".add-to-cart");
+    if (!btn || !window.MSACart) return;
 
-    // contor coș la încărcare
-    function refreshCartCount(){
-      try {
-        const list = (window.MSACart && MSACart.readCart) ? MSACart.readCart() : [];
-        const count = list.reduce((s,i)=>s+(i.qty||1),0);
-        const el = document.getElementById('cart-count');
-        if (el) el.textContent = count;
-      } catch(_) {}
-    }
-    refreshCartCount();
+    const d = {
+      id: btn.dataset.id,
+      name: btn.dataset.name,
+      price: Number(btn.dataset.price),
+      image: btn.dataset.image
+    };
+    MSACart.addToCart(d);
 
-    // delegare click pentru toate butoanele .add-to-cart (funcționează sigur)
-    document.addEventListener('click', function (e) {
-      const btn = e.target.closest('.add-to-cart');
-      if (!btn) return;
-      const d = btn.dataset;
-      if (window.MSACart && typeof MSACart.addToCart === 'function') {
-        MSACart.addToCart({
-          id: d.id,
-          name: d.name,
-          price: Number(d.price),
-          image: d.image
-        });
-        // feedback + badge
-        const old = btn.textContent;
-        btn.textContent = 'Adăugat!';
-        setTimeout(()=>btn.textContent = old, 900);
-        refreshCartCount();
-      }
-    });
-  </script>
+    // feedback + actualizare badge
+    const old = btn.textContent;
+    btn.textContent = "Adăugat!";
+    setTimeout(() => (btn.textContent = old), 1000);
+  });
+</script>
 </body>
 </html>
+  
