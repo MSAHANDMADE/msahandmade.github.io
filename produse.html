@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Produse — MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="styles.css">
   <style>
     .wrap{max-width:1000px;margin:0 auto;padding:0 16px}
-    header{position:sticky;top:0;background:#fff;z-index:20;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+    header{position:sticky;top:0;background:#fff;z-index:10;box-shadow:0 2px 6px rgba(0,0,0,.05)}
     .nav{display:flex;justify-content:space-between;align-items:center;padding:10px 0}
     .nav a{margin:0 8px;color:#111;text-decoration:none;font-weight:600}
+    .nav a:hover{color:#0a2230}
     .cart{display:flex;align-items:center;gap:6px}
     #cart-count{font-weight:700}
     h1{text-align:center;margin:22px 0}
@@ -40,7 +41,6 @@
   <h1>Produsele noastre</h1>
 
   <section class="grid">
-    <!-- Buchet 29 -->
     <article class="card">
       <img src="images/buchet.jpg" alt="Buchet">
       <div class="body">
@@ -49,7 +49,6 @@
       </div>
     </article>
 
-    <!-- Crin 33 -->
     <article class="card">
       <img src="images/crin.jpg" alt="Crin">
       <div class="body">
@@ -58,7 +57,6 @@
       </div>
     </article>
 
-    <!-- Dans 33 -->
     <article class="card">
       <img src="images/dans.jpg" alt="Dans">
       <div class="body">
@@ -67,7 +65,6 @@
       </div>
     </article>
 
-    <!-- Flori 33 -->
     <article class="card">
       <img src="images/flori.jpg" alt="Flori">
       <div class="body">
@@ -76,7 +73,6 @@
       </div>
     </article>
 
-    <!-- Îndrăgostiții 99 -->
     <article class="card">
       <img src="images/indragostitii.jpg" alt="Îndrăgostiții">
       <div class="body">
@@ -85,7 +81,6 @@
       </div>
     </article>
 
-    <!-- Înger 33 -->
     <article class="card">
       <img src="images/inger.jpg" alt="Înger">
       <div class="body">
@@ -94,7 +89,6 @@
       </div>
     </article>
 
-    <!-- Logodnă 33 -->
     <article class="card">
       <img src="images/logodna.jpg" alt="Logodnă">
       <div class="body">
@@ -103,7 +97,6 @@
       </div>
     </article>
 
-    <!-- Peisaj 99 -->
     <article class="card">
       <img src="images/peisaj.jpg" alt="Peisaj">
       <div class="body">
@@ -112,7 +105,6 @@
       </div>
     </article>
 
-    <!-- Peisaj de iarnă 99 -->
     <article class="card">
       <img src="images/peisajiarna.jpg" alt="Peisaj de iarnă">
       <div class="body">
@@ -121,7 +113,6 @@
       </div>
     </article>
 
-    <!-- Sărut 33 -->
     <article class="card">
       <img src="images/sarut.jpg" alt="Sărut">
       <div class="body">
@@ -136,35 +127,34 @@
   <small>&copy; <span id="year"></span> — MSA Handmade.</small>
 </footer>
 
+<!-- Încărcăm întâi cart.js -->
+<script src="cart.js"></script>
+
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  function loadScript(src){
-    return new Promise((resolve,reject)=>{
-      const s=document.createElement('script');
-      s.src=src; s.async=true;
-      s.onload=resolve; s.onerror=()=>reject(new Error('cart.js nu s-a încărcat'));
-      document.head.appendChild(s);
-    });
-  }
   function bindButtons(){
     document.querySelectorAll('.add').forEach(btn=>{
-      if(btn.dataset.bound) return;
-      btn.dataset.bound='1';
-      btn.addEventListener('click', (e)=>{
+      btn.addEventListener('click', e=>{
         e.preventDefault(); e.stopPropagation();
-        if(!window.MSACart || !MSACart.addToCart){ alert('Coș indisponibil'); return; }
+        if(!window.MSACart){ alert('Coș indisponibil'); return; }
         MSACart.addToCart({
           id:btn.dataset.id,
           name:btn.dataset.name,
           price:Number(btn.dataset.price),
           image:btn.dataset.image
         });
-        const old=btn.textContent; btn.textContent='Adăugat!'; setTimeout(()=>btn.textContent=old,900);
+        const old=btn.textContent;
+        btn.textContent='Adăugat!';
+        setTimeout(()=>btn.textContent=old,1000);
       });
     });
   }
-  loadScript('cart.js').then(bindButtons).finally(()=>setTimeout(bindButtons,600));
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    if(window.MSACart){ bindButtons(); }
+    else{ setTimeout(bindButtons, 800); } // fallback dacă se încarcă mai lent
+  });
 </script>
 </body>
 </html>
