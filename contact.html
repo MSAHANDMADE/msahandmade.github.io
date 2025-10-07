@@ -1,184 +1,65 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact — MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    .wrap{max-width:900px;margin:24px auto;padding:0 16px}
-    .box{background:#fff;border-radius:12px;padding:18px 20px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
-    .contact-grid{display:grid;gap:18px}
-    @media (min-width:700px){.contact-grid{grid-template-columns:1.05fr .95fr}}
-    .list p{margin:.35rem 0}
-    .list a{color:#0f766e;text-decoration:none}
-    .list a:hover{text-decoration:underline}
-    .input{width:100%;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;font-size:16px}
-    textarea.input{min-height:140px;resize:vertical}
-    .btn{display:inline-block;background:#0f172a;color:#fff;padding:12px 22px;border-radius:12px;text-decoration:none;border:0;cursor:pointer}
-    .btn.gray{background:#64748b}
-    .muted{color:#666}
-    .header .nav{display:flex;gap:16px;align-items:center}
-    .nav a{text-decoration:none;color:#111}
-    .nav .cart{margin-left:auto}
-    .pill{display:inline-block;background:#f3f4f6;border-radius:20px;padding:6px 10px;font-size:12px}
-    .promo-bar{display:none}
-    .footer{margin-top:36px;text-align:center;color:#666}
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - MSA Handmade</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <nav>
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="contact.html" class="active">Contact</a>
+      <a href="cos.html" class="cart-link">🛒 <span id="cart-count">0</span></a>
+    </nav>
+  </header>
 
-<header class="header">
-  <nav class="nav">
-    <a href="index.html">Acasă</a>
-    <a href="produse.html">Produse</a>
-    <a href="contact.html" aria-current="page">Contact</a>
-    <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
-  </nav>
-</header>
+  <main class="container">
+    <h1>Contact</h1>
 
-<main class="wrap">
-  <h1>Contact</h1>
-
-  <div class="contact-grid">
-    <!-- Coloana stânga: date de contact -->
-    <section class="box list">
-      <p class="muted" style="margin-top:0">
-        Ne găsești pe email, WhatsApp, Facebook sau Instagram. Sau trimite-ne un mesaj rapid din formular.
-      </p>
-
-      <p><strong>Email:</strong> <a href="mailto:msahandmade.contact@gmail.com">msahandmade.contact@gmail.com</a></p>
-      <p><strong>Telefon:</strong> <a href="tel:0747246241">0747 246 241</a></p>
+    <div class="contact-info">
       <p>
-        <strong>WhatsApp:</strong>
-        <a href="https://wa.me/40747246241" target="_blank" rel="noopener">deschide conversația</a>
+        Ne găsești pe email, WhatsApp, Facebook sau Instagram.  
+        Sau trimite-ne un mesaj rapid din formular.
       </p>
+
       <p>
-        <strong>Facebook:</strong>
-        <a href="https://www.facebook.com/MSAHandmade" target="_blank" rel="noopener">MSA Handmade</a>
+        <strong>Email:</strong> <a href="mailto:msahandmade.contact@gmail.com">msahandmade.contact@gmail.com</a><br>
+        <strong>Telefon:</strong> <a href="tel:0747246241">0747 246 241</a><br>
+        <strong>WhatsApp:</strong> <a href="https://wa.me/40747246241" target="_blank">deschide conversația</a><br>
+        <strong>Facebook:</strong> <a href="https://www.facebook.com/profile.php?id=61581609329255" target="_blank">MSA Handmade</a><br>
+        <strong>Instagram:</strong> <a href="https://www.instagram.com/msahandmadedecor" target="_blank">@msahandmadedecor</a>
       </p>
-      <p>
-        <strong>Instagram:</strong>
-        <a href="https://www.instagram.com/msahandmade/" target="_blank" rel="noopener">@msahandmade</a>
+
+      <p class="program">
+        Program răspuns: L-V 09:00–18:00
       </p>
+    </div>
 
-      <hr style="border:none;border-top:1px solid #eee;margin:14px 0" />
+    <form id="contact-form">
+      <label for="name">Nume</label>
+      <input type="text" id="name" name="name" required>
 
-      <p class="pill">Program răspuns: L-V 09:00–18:00</p>
-    </section>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
 
-    <!-- Coloana dreapta: formular -->
-    <section class="box">
-      <form id="contact-form" novalidate>
-        <div style="display:grid;gap:12px">
-          <div>
-            <label for="name">Nume</label>
-            <input id="name" name="name" class="input" required />
-          </div>
-          <div>
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" class="input" required />
-          </div>
-          <div>
-            <label for="phone">Telefon (opțional)</label>
-            <input id="phone" name="phone" class="input" />
-          </div>
-          <div>
-            <label for="message">Mesaj</label>
-            <textarea id="message" name="message" class="input" required></textarea>
-          </div>
-        </div>
+      <label for="telefon">Telefon (opțional)</label>
+      <input type="text" id="telefon" name="telefon">
 
-        <div style="display:flex;gap:10px;align-items:center;margin-top:14px">
-          <button type="button" id="clear" class="btn gray">Golește</button>
-          <button type="submit" class="btn">Trimite mesajul</button>
-          <span id="send-state" class="muted" style="margin-left:8px"></span>
-        </div>
-      </form>
-    </section>
-  </div>
-</main>
+      <label for="mesaj">Mesaj</label>
+      <textarea id="mesaj" name="mesaj" rows="5" required></textarea>
 
-<footer class="footer">
-  <small>&copy; <span id="year"></span> — MSA Handmade.</small>
-</footer>
+      <button type="submit">Trimite mesajul</button>
+    </form>
+  </main>
 
-<!-- EmailJS SDK (browser) -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<!-- Coș + utilitare -->
-<script src="cart.js"></script>
+  <footer>
+    <p>&copy; 2025 MSA Handmade Decor. Toate drepturile rezervate.</p>
+  </footer>
 
-<script>
-  // === Setări generale ===
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  // badge coș (dacă există MSACart din cart.js)
-  try {
-    const list = (window.MSACart && typeof MSACart.readCart === 'function')
-      ? MSACart.readCart() : [];
-    const count = Array.isArray(list) ? list.reduce((s,i)=> s + (parseInt(i.qty)||1), 0) : 0;
-    const el = document.getElementById('cart-count');
-    if (el) el.textContent = count;
-  } catch(_) {}
-
-  // === EmailJS ===
-  // Cheile tale (cele pe care le-ai confirmat deja)
-  const PUBLIC_KEY      = 'iSadfb7-TV_89l_6k';
-  const SERVICE_ID      = 'service_ix0zpp7';
-  const TEMPLATE_ADMIN  = 'template_13qpqtt';
-
-  // inițializează EmailJS (dacă SDK-ul e încărcat)
-  if (window.emailjs && typeof emailjs.init === 'function') {
-    try { emailjs.init(PUBLIC_KEY); } catch(e){ /* ignore */ }
-  }
-
-  // Golește formular
-  document.getElementById('clear').addEventListener('click', () => {
-    document.getElementById('contact-form').reset();
-    document.getElementById('send-state').textContent = '';
-  });
-
-  // Trimite mesajul
-  document.getElementById('contact-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const state = document.getElementById('send-state');
-    state.textContent = 'Se trimite…';
-
-    const name    = document.getElementById('name').value.trim();
-    const email   = document.getElementById('email').value.trim();
-    const phone   = document.getElementById('phone').value.trim();
-    const message = document.getElementById('message').value.trim();
-
-    if (!name || !email || !message) {
-      state.textContent = '';
-      alert('Te rog completează Nume, Email și Mesaj.');
-      return;
-    }
-
-    // parametrii trimiși către template-ul EmailJS
-    const params = {
-      site: 'msahandmade.ro',
-      from_name: name,
-      reply_to: email,
-      phone: phone,
-      message: message
-    };
-
-    try {
-      if (!(window.emailjs && typeof emailjs.send === 'function')) {
-        throw new Error('EmailJS indisponibil');
-      }
-      await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, params);
-      state.textContent = '';
-      alert('Mulțumim! Mesajul a fost trimis. ❤️');
-      e.target.reset();
-    } catch (err) {
-      state.textContent = '';
-      alert('Eroare la trimitere. Te rog încearcă din nou sau scrie-ne direct pe email/WhatsApp.');
-      console.error(err);
-    }
-  });
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script src="js/contact.js"></script>
 </body>
 </html>
