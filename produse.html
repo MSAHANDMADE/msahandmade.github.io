@@ -1,35 +1,30 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Produse — MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css"/>
   <style>
-    .wrap{max-width:1000px;margin:0 auto;padding:0 16px;}
-    header{background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.05);position:sticky;top:0;z-index:10;}
-    nav.nav{display:flex;justify-content:space-between;align-items:center;padding:10px 0;}
-    nav.nav a{text-decoration:none;color:#222;font-weight:600;margin:0 8px;}
-    nav.nav a:hover{color:#0a2230;}
-    .cart{display:flex;align-items:center;gap:6px;}
-    #cart-count{font-weight:700;}
-    main.wrap{margin-top:24px;}
-    h1{text-align:center;margin-bottom:20px;}
-    section.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;}
-    .card{background:#fff;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column;transition:.25s transform;}
-    .card:hover{transform:translateY(-3px);}
-    .card img{width:100%;aspect-ratio:1/1;object-fit:cover;}
-    .card .body{padding:10px 14px;display:flex;flex-direction:column;flex:1;}
-    .card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-    .card h3{font-size:1.1rem;margin:0;}
-    .price{font-weight:700;color:#0a2230;}
-    .btn{background:#0a2230;color:#fff;border:none;border-radius:10px;padding:8px;font-weight:600;cursor:pointer;margin-top:auto;}
-    .btn:hover{background:#133b55;}
-    footer{margin-top:30px;padding:20px;text-align:center;color:#666;}
+    .wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+    header{position:sticky;top:0;background:#fff;z-index:20;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+    .nav{display:flex;justify-content:space-between;align-items:center;padding:10px 0}
+    .nav a{margin:0 8px;color:#111;text-decoration:none;font-weight:600}
+    .cart{display:flex;align-items:center;gap:6px}
+    #cart-count{font-weight:700}
+    h1{text-align:center;margin:22px 0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+    .card{background:#fff;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column}
+    .card img{width:100%;aspect-ratio:1/1;object-fit:cover}
+    .body{padding:12px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+    .top{display:flex;justify-content:space-between;align-items:center}
+    .top h3{margin:0;font-size:1.1rem}
+    .price{font-weight:800;color:#0a2230}
+    .btn{margin-top:auto;background:#0a2230;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer}
+    footer{margin-top:28px;text-align:center;color:#666;padding:20px 0}
   </style>
 </head>
 <body>
-
 <header>
   <nav class="nav wrap">
     <div>
@@ -43,57 +38,97 @@
 
 <main class="wrap">
   <h1>Produsele noastre</h1>
-  <section class="grid">
 
-    <!-- === Produse === -->
+  <section class="grid">
+    <!-- Buchet 29 -->
     <article class="card">
       <img src="images/buchet.jpg" alt="Buchet">
       <div class="body">
-        <div class="top"><h3>Buchet</h3><span class="price">55 RON</span></div>
-        <button class="btn add-to-cart" data-id="buchet" data-name="Buchet" data-price="55" data-image="images/buchet.jpg">Adaugă în coș</button>
+        <div class="top"><h3>Buchet</h3><span class="price">29 RON</span></div>
+        <button class="btn add" data-id="buchet" data-name="Buchet" data-price="29" data-image="images/buchet.jpg">Adaugă în coș</button>
       </div>
     </article>
 
+    <!-- Crin 33 -->
     <article class="card">
       <img src="images/crin.jpg" alt="Crin">
       <div class="body">
         <div class="top"><h3>Crin</h3><span class="price">33 RON</span></div>
-        <button class="btn add-to-cart" data-id="crin" data-name="Crin" data-price="33" data-image="images/crin.jpg">Adaugă în coș</button>
+        <button class="btn add" data-id="crin" data-name="Crin" data-price="33" data-image="images/crin.jpg">Adaugă în coș</button>
       </div>
     </article>
 
+    <!-- Dans 33 -->
     <article class="card">
-      <img src="images/peisaj.jpg" alt="Peisaj de iarnă">
+      <img src="images/dans.jpg" alt="Dans">
       <div class="body">
-        <div class="top"><h3>Peisaj de iarnă</h3><span class="price">99 RON</span></div>
-        <button class="btn add-to-cart" data-id="peisaj" data-name="Peisaj de iarnă" data-price="99" data-image="images/peisaj.jpg">Adaugă în coș</button>
+        <div class="top"><h3>Dans</h3><span class="price">33 RON</span></div>
+        <button class="btn add" data-id="dans" data-name="Dans" data-price="33" data-image="images/dans.jpg">Adaugă în coș</button>
       </div>
     </article>
 
+    <!-- Flori 33 -->
     <article class="card">
-      <img src="images/sarut.jpg" alt="Sărut">
+      <img src="images/flori.jpg" alt="Flori">
       <div class="body">
-        <div class="top"><h3>Sărut</h3><span class="price">129 RON</span></div>
-        <button class="btn add-to-cart" data-id="sarut" data-name="Sărut" data-price="129" data-image="images/sarut.jpg">Adaugă în coș</button>
+        <div class="top"><h3>Flori</h3><span class="price">33 RON</span></div>
+        <button class="btn add" data-id="flori" data-name="Flori" data-price="33" data-image="images/flori.jpg">Adaugă în coș</button>
       </div>
     </article>
 
+    <!-- Îndrăgostiții 99 -->
     <article class="card">
       <img src="images/indragostitii.jpg" alt="Îndrăgostiții">
       <div class="body">
         <div class="top"><h3>Îndrăgostiții</h3><span class="price">99 RON</span></div>
-        <button class="btn add-to-cart" data-id="indragostitii" data-name="Îndrăgostiții" data-price="99" data-image="images/indragostitii.jpg">Adaugă în coș</button>
+        <button class="btn add" data-id="indragostitii" data-name="Îndrăgostiții" data-price="99" data-image="images/indragostitii.jpg">Adaugă în coș</button>
       </div>
     </article>
 
+    <!-- Înger 33 -->
     <article class="card">
-      <img src="images/pastel.jpg" alt="Pastel">
+      <img src="images/inger.jpg" alt="Înger">
       <div class="body">
-        <div class="top"><h3>Pastel</h3><span class="price">79 RON</span></div>
-        <button class="btn add-to-cart" data-id="pastel" data-name="Pastel" data-price="79" data-image="images/pastel.jpg">Adaugă în coș</button>
+        <div class="top"><h3>Înger</h3><span class="price">33 RON</span></div>
+        <button class="btn add" data-id="inger" data-name="Înger" data-price="33" data-image="images/inger.jpg">Adaugă în coș</button>
       </div>
     </article>
 
+    <!-- Logodnă 33 -->
+    <article class="card">
+      <img src="images/logodna.jpg" alt="Logodnă">
+      <div class="body">
+        <div class="top"><h3>Logodnă</h3><span class="price">33 RON</span></div>
+        <button class="btn add" data-id="logodna" data-name="Logodnă" data-price="33" data-image="images/logodna.jpg">Adaugă în coș</button>
+      </div>
+    </article>
+
+    <!-- Peisaj 99 -->
+    <article class="card">
+      <img src="images/peisaj.jpg" alt="Peisaj">
+      <div class="body">
+        <div class="top"><h3>Peisaj</h3><span class="price">99 RON</span></div>
+        <button class="btn add" data-id="peisaj" data-name="Peisaj" data-price="99" data-image="images/peisaj.jpg">Adaugă în coș</button>
+      </div>
+    </article>
+
+    <!-- Peisaj de iarnă 99 -->
+    <article class="card">
+      <img src="images/peisajiarna.jpg" alt="Peisaj de iarnă">
+      <div class="body">
+        <div class="top"><h3>Peisaj de iarnă</h3><span class="price">99 RON</span></div>
+        <button class="btn add" data-id="peisajiarna" data-name="Peisaj de iarnă" data-price="99" data-image="images/peisajiarna.jpg">Adaugă în coș</button>
+      </div>
+    </article>
+
+    <!-- Sărut 33 -->
+    <article class="card">
+      <img src="images/sarut.jpg" alt="Sărut">
+      <div class="body">
+        <div class="top"><h3>Sărut</h3><span class="price">33 RON</span></div>
+        <button class="btn add" data-id="sarut" data-name="Sărut" data-price="33" data-image="images/sarut.jpg">Adaugă în coș</button>
+      </div>
+    </article>
   </section>
 </main>
 
@@ -101,39 +136,35 @@
   <small>&copy; <span id="year"></span> — MSA Handmade.</small>
 </footer>
 
-<!-- === Scripturi === -->
-<script src="cart.js" defer></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  function bindCartButtons(){
-    document.querySelectorAll('.add-to-cart').forEach(btn=>{
-      if (btn.dataset.bound) return;
-      btn.dataset.bound = "1";
-      btn.addEventListener('click', e=>{
+  function loadScript(src){
+    return new Promise((resolve,reject)=>{
+      const s=document.createElement('script');
+      s.src=src; s.async=true;
+      s.onload=resolve; s.onerror=()=>reject(new Error('cart.js nu s-a încărcat'));
+      document.head.appendChild(s);
+    });
+  }
+  function bindButtons(){
+    document.querySelectorAll('.add').forEach(btn=>{
+      if(btn.dataset.bound) return;
+      btn.dataset.bound='1';
+      btn.addEventListener('click', (e)=>{
         e.preventDefault(); e.stopPropagation();
-        if (!window.MSACart || !MSACart.addToCart){
-          alert('Coș indisponibil');
-          return;
-        }
+        if(!window.MSACart || !MSACart.addToCart){ alert('Coș indisponibil'); return; }
         MSACart.addToCart({
-          id: btn.dataset.id,
-          name: btn.dataset.name,
-          price: Number(btn.dataset.price),
-          image: btn.dataset.image
+          id:btn.dataset.id,
+          name:btn.dataset.name,
+          price:Number(btn.dataset.price),
+          image:btn.dataset.image
         });
-        const old = btn.textContent;
-        btn.textContent = 'Adăugat!';
-        setTimeout(()=> btn.textContent = old, 900);
+        const old=btn.textContent; btn.textContent='Adăugat!'; setTimeout(()=>btn.textContent=old,900);
       });
     });
   }
-
-  // Așteaptă încărcarea completă a cart.js
-  window.addEventListener('load', ()=>{
-    bindCartButtons();
-    setTimeout(bindCartButtons, 500);
-  });
+  loadScript('cart.js').then(bindButtons).finally(()=>setTimeout(bindButtons,600));
 </script>
 </body>
 </html>
