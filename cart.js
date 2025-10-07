@@ -1,28 +1,27 @@
-/* MSA Handmade — coș + reduceri + EmailJS + proformă */
+/* MSA Handmade — cart + reduceri + livrare + EmailJS + proformă */
 (function () {
-  // ===== CONFIG =====
+  // === CONFIG ===
   const STORAGE_KEY = 'msa_cart';
   const SHIPPING_BASE = 17;
 
-  // EmailJS (cheile tale)
+  // EmailJS
   const PUBLIC_KEY      = 'iSadfb7-TV_89l_6k';
   const SERVICE_ID      = 'service_ix0zpp7';
-  const TEMPLATE_ADMIN  = 'template_13qpqtt'; // către tine
-  const TEMPLATE_CLIENT = 'template_9yctwor'; // către client
+  const TEMPLATE_ADMIN  = 'template_13qpqtt';
+  const TEMPLATE_CLIENT = 'template_9yctwor';
 
-  // Inițializează EmailJS dacă SDK este încărcat (în cos.html înainte de acest fișier)
   if (window.emailjs && typeof emailjs.init === 'function') {
     try { emailjs.init(PUBLIC_KEY); } catch(e){}
   }
 
-  // ===== STORAGE =====
+  // === STORAGE ===
   const readCart = () => {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
     catch { return []; }
   };
   const saveCart = (list) => localStorage.setItem(STORAGE_KEY, JSON.stringify(list || []));
 
-  // ===== BADGE =====
+  // === BADGE ===
   function updateCartCountBadge() {
     const list  = readCart();
     const count = list.reduce((s,i)=> s + (parseInt(i.qty)||1), 0);
@@ -30,7 +29,7 @@
     if (b1) b1.textContent = count;
   }
 
-  // ===== CRUD =====
+  // === CRUD ===
   function addToCart({id, name, price, image}) {
     if (!id) return;
     const list = readCart();
@@ -39,7 +38,6 @@
     if (idx > -1) list[idx].qty = (parseInt(list[idx].qty)||1) + 1;
     else list.push({ id, name: name||'', price, image: image||'', qty: 1 });
     saveCart(list); updateCartCountBadge();
-    alert('Produs adăugat în coș!');
   }
   function removeFromCart(indexOrId) {
     const list = readCart();
@@ -56,20 +54,21 @@
     }
   }
 
-  // ===== TOTALS =====
+  // === TOTALS ===
   function computeTotals(list) {
     const subtotal = list.reduce((s,i)=> s + (Number(i.price)||0)*(Number(i.qty)||1), 0);
     let pct = 0, shipping = SHIPPING_BASE;
     if (subtotal >= 400) pct = 20;
     else if (subtotal >= 300) { pct = 15; shipping = 0; }
     else if (subtotal >= 200) pct = 10;
+
     const discount = +(subtotal * pct / 100).toFixed(2);
     const total    = +((subtotal - discount + shipping)).toFixed(2);
     return { subtotal:+subtotal.toFixed(2), discount, shipping:+shipping.toFixed(2), total, pct };
   }
   const fmt = (n)=> (Number(n)||0).toFixed(2);
 
-  // ===== RENDER (pentru cos.html) =====
+  // === RENDER pentru cos.html ===
   function render() {
     const list  = readCart();
     const mount = document.getElementById('items');
@@ -83,13 +82,11 @@
         const card = document.createElement('div');
         card.className = 'cart-card';
         card.innerHTML = `
-          <div class="cart-left">
-            <img src="${p.image||'logo.png'}" alt="${p.name||''}">
-          </div>
-          <div class="cart-mid">
-            <div class="name">${p.name||''}</div>
-            <div class="price">${fmt(p.price)} RON</div>
-            <div class="qty">
+          <img src="${p.image||'logo.png'}" alt="${p.name||''}">
+          <div style="flex:1">
+            <div style="font-weight:700">${p.name||''}</div>
+            <div style="color:#444">${fmt(p.price)} RON</div>
+            <div class="qty" style="margin-top:6px">
               <button data-act="dec">−</button>
               <input type="number" min="1" value="${p.qty||1}">
               <button data-act="inc">+</button>
@@ -107,7 +104,6 @@
     }
     refreshTotals();
   }
-
   function refreshTotals() {
     const t = computeTotals(readCart());
     const put = (id,val)=>{ const el=document.getElementById(id); if(el) el.textContent = val; };
@@ -118,7 +114,7 @@
     updateCartCountBadge();
   }
 
-  // ===== PROFORMĂ (HTML) =====
+  // === PROFORMA ===
   function makeProformaHTML(data, list, totals, orderId){
     const firma = {
       denumire:'Stoica Mihaela – Persoană Fizică Autorizată',
@@ -204,14 +200,13 @@
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 
-  // ===== SUBMIT ORDER (apelat din cos.html) =====
+  // === SUBMIT ORDER ===
   async function submitOrder(formElOrFormData) {
     const list = readCart();
-    if (!list.length) throw new Error('Cos gol');
+    if (!list.length) throw new Error('Coșul este gol');
 
     const fd = (formElOrFormData instanceof FormData)
-      ? formElOrFormData
-      : new FormData(formElOrFormData);
+      ? formElOrFormData : new FormData(formElOrFormData);
 
     const data = Object.fromEntries(fd.entries());
     const totals = computeTotals(list);
@@ -222,57 +217,51 @@
     } catch {}
 
     const produseText = list.map(i =>
-      `• ${i.name} x ${i.qty} = ${(Number(i.price)||0*(Number(i.qty)||1)).toFixed(2)} RON`
+      `• ${i.name} x ${i.qty} = ${fmt((Number(i.price)||0)*(Number(i.qty)||1))} RON`
     ).join('\n');
 
     const proforma_html = makeProformaHTML(data, list, totals, orderId);
 
-    const adminVars = {
-      tip: data.tip || 'Persoană fizică',
-      nume: data.nume || '',
-      prenume: data.prenume || '',
-      email: data.email || '',
-      telefon: data.telefon || '',
-      judet: data.judet || '',
-      oras: data.oras || '',
-      codpostal: data.codpostal || '',
-      adresa: data.adresa || '',
-      produse: produseText,
-      subtotal: fmt(totals.subtotal),
-      livrare: fmt(totals.shipping),
-      total: fmt(totals.total),
-      mentiuni: data.mentiuni || '',
-      order_id: orderId,
-      // îl trimit și ție, e util
-      proforma_html
-    };
-
-    const clientVars = {
-      to_email: data.email || '',
-      nume: data.nume || '',
-      order_id: orderId,
-      // denumirea exactă pe care ai pus-o în EmailJS:
-      html_proforma: proforma_html
-    };
-
     if (!window.emailjs) throw new Error('EmailJS indisponibil');
 
-    await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, clientVars);
-    await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN,  adminVars);
+    try {
+      // Client (confirmare + proformă)
+      await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, {
+        to_email: data.email || '',
+        nume: data.nume || '',
+        order_id: orderId,
+        html_proforma: proforma_html
+      });
+
+      // Admin (detalii comanda)
+      await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, {
+        to_email: 'msahandmade.contact@gmail.com',
+        order_id: orderId,
+        nume: data.nume || '',
+        produse: produseText,
+        subtotal: fmt(totals.subtotal),
+        livrare: fmt(totals.shipping),
+        total: fmt(totals.total),
+        mentiuni: data.mentiuni || ''
+      });
+    } catch(err) {
+      console.error('EmailJS error:', err);
+      throw err;
+    }
 
     clearCart();
     try { window.location.href = 'multumesc.html'; } catch {}
     return true;
   }
 
-  // ===== EXPOSE =====
+  // === EXPOSE ===
   window.MSACart = {
     readCart, saveCart,
     addToCart, removeFromCart, clearCart, setQty,
     computeTotals, render, submitOrder,
+    updateCartCountBadge
   };
 
-  // ===== AUTO =====
   document.addEventListener('DOMContentLoaded', ()=>{
     updateCartCountBadge();
     if (document.getElementById('items')) render();
