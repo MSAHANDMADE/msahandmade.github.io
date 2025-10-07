@@ -1,4 +1,4 @@
-/* MSA Handmade — coș + reduceri + livrare + EmailJS + proformă (v2) */
+/* MSA Handmade — Coș + reduceri + livrare + EmailJS + proformă finală */
 (function () {
   // === CONFIG ===
   const STORAGE_KEY = 'msa_cart';
@@ -8,7 +8,7 @@
   const PUBLIC_KEY      = 'iSadfb7-TV_89l_6k';
   const SERVICE_ID      = 'service_ix0zpp7';
   const TEMPLATE_ADMIN  = 'template_13qpqtt';  // către tine
-  const TEMPLATE_CLIENT = 'template_9yctwor';  // către client (conține {{{html_proforma}}})
+  const TEMPLATE_CLIENT = 'template_9yctwor';  // către client
   const ADMIN_EMAIL     = 'msahandmade.contact@gmail.com';
 
   if (window.emailjs && typeof emailjs.init === 'function') {
@@ -52,12 +52,12 @@
     if (idx>-1){ list[idx].qty = Math.max(1, Number(v)||1); saveCart(list); updateCartCountBadge(); }
   }
 
-  // === TOTALURI (corect: livrare 0 la ≥300) ===
+  // === TOTALURI (livrare 0 la ≥300) ===
   function computeTotals(list){
     const subtotal = list.reduce((s,i)=> s + (Number(i.price)||0)*(Number(i.qty)||1), 0);
     let pct = 0, shipping = SHIPPING_BASE;
 
-    if (subtotal >= 400) { pct = 20; shipping = 0; }   // << fix: 0 lei și la ≥400
+    if (subtotal >= 400) { pct = 20; shipping = 0; }
     else if (subtotal >= 300) { pct = 15; shipping = 0; }
     else if (subtotal >= 200) { pct = 10; }
 
@@ -68,7 +68,7 @@
   const fmt = n => (Number(n)||0).toFixed(2);
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 
-  // === RENDER coș (cos.html) ===
+  // === RENDER COȘ ===
   function render(){
     const list = readCart();
     const mount = document.getElementById('items');
@@ -114,7 +114,7 @@
     updateCartCountBadge();
   }
 
-  // === PROFORMĂ — design îmbunătățit ===
+  // === PROFORMĂ (3 coloane: EU, NR COM, CLIENT) ===
   function makeProformaHTML(data, list, totals, orderId){
     const firma = {
       denumire:'Stoica Mihaela – Persoană Fizică Autorizată',
@@ -126,41 +126,42 @@
     };
 
     const clientPF = `
-      <div style="line-height:1.45">
-        <div style="font-weight:600">Client (PF)</div>
+      <div style="line-height:1.5">
+        <div style="font-weight:700;margin-bottom:4px">Client (PF)</div>
         <div>${esc(data.nume)} ${esc(data.prenume)}</div>
-        <div>Email: <a href="mailto:${esc(data.email)}" style="color:#0b62"> ${esc(data.email)}</a> · Tel: ${esc(data.telefon)}</div>
+        <div>Email: <a href="mailto:${esc(data.email)}" style="color:#0b62">${esc(data.email)}</a></div>
+        <div>Tel: ${esc(data.telefon)}</div>
         <div>Adresă: ${esc(data.adresa)}, ${esc(data.oras)}, ${esc(data.judet)} ${esc(data.codpostal)}</div>
       </div>`;
 
     const clientPJ = `
-      <div style="line-height:1.45">
-        <div style="font-weight:600">Client (PJ)</div>
+      <div style="line-height:1.5">
+        <div style="font-weight:700;margin-bottom:4px">Client (PJ)</div>
         <div>${esc(data.firma||'')}</div>
         <div>CUI: ${esc(data.cui||'')} · Reg. Com.: ${esc(data.regcom||'')}</div>
         <div>Persoană de contact: ${esc(data.nume)} ${esc(data.prenume)}</div>
-        <div>Email: <a href="mailto:${esc(data.email)}" style="color:#0b62">${esc(data.email)}</a> · Tel: ${esc(data.telefon)}</div>
+        <div>Email: <a href="mailto:${esc(data.email)}" style="color:#0b62">${esc(data.email)}</a></div>
+        <div>Tel: ${esc(data.telefon)}</div>
         <div>Adresă: ${esc(data.adresa)}, ${esc(data.oras)}, ${esc(data.judet)} ${esc(data.codpostal)}</div>
       </div>`;
-
     const clientBlock = (data.tip === 'Persoană juridică') ? clientPJ : clientPF;
 
     const rows = list.map(i=>{
       const line = (Number(i.price)||0)*(Number(i.qty)||1);
       return `
         <tr>
-          <td style="padding:8px 10px;border-bottom:1px solid #eee">${esc(i.name)}</td>
+          <td style="padding:8px 10px;border-bottom:1px solid #eee">${esc(i.name||'')}</td>
           <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:center">${Number(i.qty)||1}</td>
-          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;white-space:nowrap">${fmt(i.price)} RON</td>
-          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;white-space:nowrap">${fmt(line)} RON</td>
+          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right">${fmt(i.price)} RON</td>
+          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right">${fmt(line)} RON</td>
         </tr>`;
     }).join('');
 
     return `
     <div style="font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,Arial;max-width:760px;margin:16px auto;padding:14px;border:1px solid #eaeaea;border-radius:12px;background:#fff">
-      <div style="display:flex;justify-content:space-between;gap:16px;margin-bottom:12px">
-        <div style="min-width:280px">
-          <div style="font-size:18px;font-weight:700;margin-bottom:4px">MSA Handmade</div>
+      <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap">
+        <div style="flex:1 1 240px;min-width:240px">
+          <div style="font-size:18px;font-weight:700;margin-bottom:6px">MSA Handmade</div>
           <div style="color:#666;line-height:1.5">
             ${firma.denumire}<br>
             CUI: ${firma.cui} · Reg. Com.: ${firma.regcom}<br>
@@ -168,14 +169,16 @@
             ${firma.adresa}
           </div>
         </div>
-        <div style="text-align:right">
-          <div style="font-weight:700">Proformă: <span style="font-family:monospace">#${orderId}</span></div>
-          <div style="color:#666">${new Date().toLocaleString('ro-RO')}</div>
-        </div>
-      </div>
 
-      <div style="display:flex;gap:24px;margin:12px 0">
-        <div style="flex:1">${clientBlock}</div>
+        <div style="flex:0 0 180px;min-width:180px;text-align:center;border:1px solid #eee;border-radius:10px;padding:10px">
+          <div style="font-weight:700;margin-bottom:6px">Proformă</div>
+          <div style="font-family:monospace;font-weight:700">#${orderId}</div>
+          <div style="color:#666;margin-top:6px">${new Date().toLocaleString('ro-RO')}</div>
+        </div>
+
+        <div style="flex:1 1 240px;min-width:240px;text-align:right">
+          ${clientBlock}
+        </div>
       </div>
 
       <table style="width:100%;border-collapse:collapse;margin-top:8px">
