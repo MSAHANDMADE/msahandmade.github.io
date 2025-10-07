@@ -1,119 +1,233 @@
-/* ====== Reset mic ====== */
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-img{max-width:100%;display:block}
+/* === GLOBAL === */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f9f9f9;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+.hidden { display: none; }
 
-/* ====== Navbar comun ====== */
-.header{
-  position: sticky; top:0; z-index:60;
-  background:#ffffff; border-bottom:1px solid #e5e7eb;
+/* === CONTAINERS === */
+.wrap {
+  max-width: 960px;
+  margin: 24px auto;
+  padding: 0 16px;
 }
-.nav{
-  max-width:1100px; margin:0 auto; padding:12px 16px;
-  display:flex; gap:18px; align-items:center; justify-content:flex-start;
-}
-.nav a{
-  color:#111827; text-decoration:none; font-weight:700;
-  padding:8px 10px; border-radius:10px;
-}
-.nav a:hover{ background:#f3f4f6; }
-.nav a[aria-current="page"]{ background:#111827; color:#fff; }
-
-/* ====== Footer ====== */
-.footer{ padding:20px; text-align:center; color:#6b7280 }
-
-/* ====== Acasă (hero) ====== */
-.home-hero{
-  min-height:72vh; display:flex; flex-direction:column; align-items:center;
-  justify-content:center; gap:18px; padding:24px; text-align:center;
-}
-.home-hero img{ width:280px; height:auto; }
-.site-title{ font-size:44px; margin:0; }
-.site-tag{ color:#6b7280; font-size:18px; margin:0 0 8px; }
-.btn-main{
-  background:#111827; color:#fff; padding:14px 22px; border-radius:14px;
-  font-weight:800; text-decoration:none; font-size:18px;
-}
-.btn-main:hover{ opacity:.92 }
-
-/* ====== Produse (listă) ====== */
-.products{
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px; padding:20px; max-width:1100px; margin:0 auto 30px;
-}
-.card{
-  background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,.04); text-align:center;
-}
-.card img{ width:100%; height:220px; object-fit:cover; border-radius:10px; }
-.card h3{ margin:10px 0 6px; }
-.price{ font-weight:800; margin-bottom:10px; display:block }
-.add-to-cart{
-  background:#111827; color:#fff; border:none; padding:10px 14px;
-  border-radius:12px; font-weight:800; cursor:pointer;
-}
-.add-to-cart:hover{ opacity:.92 }
-
-/* coș mic flotant pe Produse */
-.fab-cart{
-  position: fixed; right:14px; top:14px; z-index:70;
-  display:inline-flex; align-items:center; gap:8px;
-  padding:9px 12px; border-radius:999px; background:#111827; color:#fff;
-  text-decoration:none; font-weight:800; box-shadow:0 10px 24px rgba(0,0,0,.18);
-}
-.fab-cart svg{ width:22px; height:22px; display:block }
-.fab-cart .badge{
-  min-width:18px; text-align:center; font-size:12px;
-  background:#fff; color:#111827; border-radius:999px; padding:2px 6px;
+.box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+  margin-top: 16px;
 }
 
-/* ====== Coș ====== */
-.cart-wrap{max-width:900px;margin:0 auto;padding:20px}
-.cart-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.totals{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
-.totals > div{background:#f8fafc;border:1px solid #e5e7eb;padding:8px 12px;border-radius:12px;font-weight:700}
-.cart-row{display:grid;grid-template-columns:72px 1fr auto auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #edf2f7}
-.cart-row img{width:72px;height:56px;object-fit:cover;border-radius:10px}
-.qty{display:inline-flex;gap:8px;align-items:center;margin-top:6px}
-.qty-btn{width:32px;height:32px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font-weight:800;cursor:pointer}
-.qty-input{width:56px;text-align:center;border:1px solid #e5e7eb;border-radius:10px;padding:6px}
-.btn{background:#111827;color:#fff;border:none;padding:12px 18px;border-radius:14px;font-weight:800;cursor:pointer}
-.btn:hover{opacity:.92}
-.btn-danger{background:#ef4444;color:#fff;border:none;padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer}
-.btn-secondary{background:#9ca3af;color:#fff;border:none;padding:10px 14px;border-radius:12px;font-weight:800;cursor:pointer}
-.checkout{margin-top:20px}
-.radio-set{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 12px}
-.radio-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #e5e7eb;border-radius:999px;padding:8px 12px;background:#fff;font-weight:700}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:720px){.cart-row{grid-template-columns:64px 1fr auto auto}.form-grid{grid-template-columns:1fr}}
-.field label{font-weight:700;color:#1f2937;margin-bottom:6px;display:block}
-.field input,.field textarea{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#f8fafc}
-.status{margin-top:10px;font-weight:800}
-.status.ok{color:#065f46}.status.err{color:#b91c1c}.status.info{color:#6b7280}
-/* Thumbnail mai mare în coș */
-.cart-card .thumb{
-  width:120px;
-  height:120px;
-  object-fit:cover;
-  border-radius:12px;
-  cursor:zoom-in;
+/* === HEADER & NAV === */
+.header {
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+  margin-top: 8px;
+}
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  padding: 14px;
+}
+.nav a {
+  color: #0b1c22;
+  font-weight: 600;
+}
+.nav a.active {
+  color: #d9c28a;
+}
+.cart {
+  position: relative;
+}
+#cart-count {
+  background: #d9c28a;
+  color: #0b1c22;
+  border-radius: 50%;
+  padding: 3px 7px;
+  font-size: 12px;
+  margin-left: 3px;
 }
 
-/* Lightbox pentru zoom imagine */
-.lightbox{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.85);
-  display:flex; align-items:center; justify-content:center;
-  z-index:9999;
+/* === PROMO BAR === */
+.promo-bar {
+  background: #0f2b23;
+  color: #d9c28a;
+  padding: 8px 14px;
+  text-align: center;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+  font-weight: 600;
 }
-.lightbox[hidden]{ display:none; }
-.lightbox img{
-  max-width:90vw; max-height:90vh;
-  border-radius:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
+
+/* === HERO === */
+.hero {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0,0,0,.08);
+  margin-top: 24px;
 }
-.lightbox .close{
-  position:absolute; top:16px; right:20px;
-  font-size:32px; line-height:1; color:#fff;
-  cursor:pointer; user-select:none;
+.hero-img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  filter: brightness(0.7);
+}
+.hero-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  text-align: center;
+}
+.hero-text h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+.hero-text h1 span {
+  color: #d9c28a;
+}
+.hero-text p {
+  margin-bottom: 18px;
+}
+.btn {
+  background: #d9c28a;
+  color: #0f2b23;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.btn:hover {
+  background: #c1aa72;
+}
+
+/* === PRODUSE === */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.card h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+.card .price {
+  font-weight: 700;
+}
+.add-to-cart {
+  width: 100%;
+  background: #0b1c22;
+  color: #fff;
+  border: none;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.add-to-cart:hover {
+  background: #13373d;
+}
+
+/* === COȘ === */
+.cart-card {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+.cart-left img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.cart-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cart-right input {
+  width: 60px;
+  text-align: center;
+}
+.qty, .danger {
+  padding: .5rem .8rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+}
+.danger {
+  background: #fee;
+  border-color: #fbb;
+  color: #b00;
+}
+
+/* === FORME === */
+.input {
+  width: 100%;
+  padding: .6rem .8rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+.radio-row {
+  display: flex;
+  gap: 18px;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.btn.gray {
+  background: #e7e7e7;
+  color: #333;
+}
+
+/* === FOOTER === */
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+.footer .social {
+  margin-top: 10px;
+}
+.footer .social img {
+  width: 24px;
+  margin: 0 8px;
+  filter: brightness(0) invert(0.4);
 }
