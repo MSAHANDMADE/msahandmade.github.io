@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proformă — MSA Handmade</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .wrap{max-width:900px;margin:24px auto;padding:0 16px}
+  .box{background:#fff;border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+  .head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
+  .muted{color:#666}
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th,td{border-bottom:1px solid #eee;padding:10px 6px;text-align:left}
+  tfoot td{font-weight:700}
+  .actions{display:flex;gap:10px;margin-top:16px}
+  @media print{ .actions, .nav, .promo-bar { display:none } .box{box-shadow:none} }
+</style>
+</head>
+<body>
+<div class="promo-bar">✨ Reduceri până la <b>20%</b> + <b>livrare gratuită</b> de la 300 RON.</div>
+
+<header class="header">
+  <nav class="nav">
+    <a href="index.html">Acasă</a>
+    <a href="produse.html">Produse</a>
+    <a href="contact.html">Contact</a>
+    <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <h1>Proformă</h1>
+  <div class="box" id="pf"></div>
+</main>
+
+<footer class="footer" style="text-align:center;margin-top:30px;padding:20px;color:#666">
+  <small>&copy; <span id="year"></span> — MSA Handmade.</small>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// citește ultima comandă
+const data = JSON.parse(localStorage.getItem('msa_last_order')||'null');
+
+const pf = document.getElementById('pf');
+if(!data){
+  pf.innerHTML = '<p class="muted">Nu există o comandă recentă. Plasează o comandă și revino pentru proformă.</p>';
+} else {
+  // date firmă — personalizează aici
+  const firma = {
+    denumire: 'MSA Handmade',
+    cui: 'RO12345678',
+    regcom: 'J00/0000/2025',
+    adresa: 'Str. Exemplu nr. 1, Bragadiru, IF',
+    cont: 'RO00BANK0000000000',
+    banca: 'Banca Exemplu'
+  };
+
+  const c = data.client || {};
+  const t = data.totals || {subtotal:0, discount:0, shipping:0, total:0, pct:0};
+  const items = (data.items||[]).map(i=>`
+    <tr>
+      <td>${escapeHtml(i.name||'Produs')}</td>
+      <td>${Number(i.qty||1)}</td>
+      <td>${Number(i.price||0).toFixed(2)} RON</td>
+      <td>${(Number(i.price||0)*Number(i.qty||1)).toFixed(2)} RON</td>
+    </tr>
+  `).join('');
+
+  pf.innerHTML = `
+    <div class="head">
+      <div>
+        <h3 style="margin:0">MSA Handmade</h3>
+        <div class="muted">
+          ${firma.adresa}<br>
+          CUI: ${firma.cui} | Reg. Com.: ${firma.regcom}<br>
+          IBAN: ${firma.cont} — ${firma.banca}
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div><strong>Proformă:</strong> ${data.id}</div>
+        <div class="muted">${new Date(data.ts).toLocaleString('ro-RO')}</div>
+      </div>
+    </div>
+
+    <div style="margin:8px 0 14px">
+      <strong>Client</strong><br>
+      ${c.tip === 'Persoană juridică'
+        ? (escapeHtml(c.firma||'') + '<br>CUI: ' + escapeHtml(c.cui||'') + '<br>Reg. Com.: ' + escapeHtml(c.regcom||''))
+        : (escapeHtml(c.nume||'') + ' ' + escapeHtml(c.prenume||''))
+      }<br>
+      ${escapeHtml(c.email||'')} · ${escapeHtml(c.telefon||'')}<br>
+      ${escapeHtml(c.adresa||'')} · ${escapeHtml(c.oras||'')} · ${escapeHtml(c.judet||'')} · ${escapeHtml(c.codpostal||'')}
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Produs</th><th>Cant.</th><th>Preț</th><th>Total</th></tr>
+      </thead>
+      <tbody>${items}</tbody>
+      <tfoot>
+        <tr><td colspan="3" style="text-align:right">Subtotal</td><td>${(+t.subtotal).toFixed(2)} RON</td></tr>
+        <tr><td colspan="3" style="text-align:right">Reducere (${Number(t.pct||0)}%)</td><td>-${(+t.discount).toFixed(2)} RON</td></tr>
+        <tr><td colspan="3" style="text-align:right">Livrare</td><td>${(+t.shipping).toFixed(2)} RON</td></tr>
+        <tr><td colspan="3" style="text-align:right">Total</td><td>${(+t.total).toFixed(2)} RON</td></tr>
+      </tfoot>
+    </table>
+
+    <div class="actions">
+      <button onclick="window.print()" class="btn" style="background:#111827;color:#fff;border-radius:10px;padding:10px 14px;border:0;cursor:pointer">Tipărește / PDF</button>
+      <a href="index.html" class="btn" style="background:#0f766e;color:#fff;border-radius:10px;padding:10px 14px;text-decoration:none">Înapoi acasă</a>
+    </div>
+    <p class="muted" style="margin-top:10px">* Aceasta este o proformă (fără semnătură/ștampilă). Factura fiscală o vei emite tu.</p>
+  `;
+}
+
+function escapeHtml(s){ return (s||'').replace(/[&<>"]/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m])); }
+</script>
+</body>
+</html>
