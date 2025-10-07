@@ -3,31 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coș — MSA Handmade</title>
+  <title>Coș – MSA Handmade</title>
   <link rel="stylesheet" href="styles.css" />
-  <style>
-    .wrap{max-width:980px;margin:32px auto;padding:0 16px}
-    .totals{display:grid;gap:12px;margin-bottom:18px}
-    .pill{background:#f3f4f6;border-radius:12px;padding:12px 14px;font-weight:600}
-    .box{background:#f9fafb;border:1px solid #eee;border-radius:14px;padding:16px;margin:18px 0}
-    .cart-card{display:grid;grid-template-columns:96px 1fr;gap:16px;border-bottom:1px solid #eee;padding:16px 0}
-    .cart-card img{width:96px;height:96px;object-fit:cover;border-radius:12px;background:#fff}
-    .cart-mid h3{margin:0 0 6px 0;font-size:18px}
-    .price{color:#4b5563;margin-bottom:10px}
-    .qty-row{display:flex;gap:8px;align-items:center}
-    .btn-qty{width:42px;height:40px;border-radius:10px;border:1px solid #e5e7eb;background:#fff;font-size:18px}
-    .qty{width:72px;height:40px;border:1px solid #e5e7eb;border-radius:10px;text-align:center}
-    .btn-del{margin-left:8px;background:#fee2e2;border:0;border-radius:10px;padding:10px 12px}
-    .actions{display:flex;gap:12px;margin-top:16px}
-    .btn{background:#111827;color:#fff;border:0;border-radius:12px;padding:12px 18px;font-weight:600}
-    .btn.gray{background:#9ca3af;color:#111827}
-    fieldset{border:1px solid #e5e7eb;border-radius:12px;padding:14px}
-    .radio-row{display:flex;gap:24px;align-items:center}
-    .input{width:100%;height:44px;border:1px solid #e5e7eb;border-radius:10px;padding:0 12px}
-    label{display:block;margin:10px 0 6px;font-weight:600}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    @media (max-width:720px){.grid{grid-template-columns:1fr}}
-  </style>
 </head>
 <body>
 <header class="header">
@@ -44,19 +21,19 @@
 
   <!-- Totaluri -->
   <div class="totals">
-    <div class="pill">Subtotal: <span id="subtot">0.00 RON</span></div>
-    <div class="pill">Reducere: <span id="disc">0.00 RON</span></div>
-    <div class="pill">Livrare: <span id="ship">17.00 RON</span></div>
-    <div class="pill">Total: <span id="grand">17.00 RON</span></div>
+    <div class="pill">Subtotal: <span id="subtot">0.00</span> RON</div>
+    <div class="pill">Reducere: <span id="disc">0.00</span> RON</div>
+    <div class="pill">Livrare: <span id="ship">17.00</span> RON</div>
+    <div class="pill">Total: <span id="grand">17.00</span> RON</div>
   </div>
 
   <!-- Info reduceri -->
   <div class="box">
     <strong>Reduceri automate</strong>
-    <ul style="margin:8px 0 0 18px; line-height:1.7">
-      <li>&ge; 200 RON → reducere 10%</li>
-      <li>&ge; 300 RON → reducere 15% + <strong>livrare gratuită</strong></li>
-      <li>&ge; 400 RON → reducere 20% + <strong>livrare gratuită</strong></li>
+    <ul style="margin:8px 0 0 18px;line-height:1.7">
+      <li>≥ 200 RON → reducere 10%</li>
+      <li>≥ 300 RON → reducere 15% + <strong>livrare gratuită</strong></li>
+      <li>≥ 400 RON → reducere 20% + livrare gratuită</li>
     </ul>
     <small>Reducerea se aplică la subtotal (fără livrare).</small>
   </div>
@@ -64,16 +41,17 @@
   <!-- Lista produse -->
   <div id="items"></div>
 
-  <!-- Formular comandă -->
-  <form id="order-form" class="box" novalidate>
+  <!-- Formular -->
+  <form id="order-form" class="box">
     <fieldset style="margin-bottom:14px">
       <legend>Tip client</legend>
       <div class="radio-row">
-        <label><input type="radio" name="tip" value="fizica" checked> Persoană fizică</label>
-        <label><input type="radio" name="tip" value="juridica"> Persoană juridică</label>
+        <label><input type="radio" name="tip" value="Persoană fizică" checked> Persoană fizică</label>
+        <label><input type="radio" name="tip" value="Persoană juridică"> Persoană juridică</label>
       </div>
     </fieldset>
 
+    <!-- PF / PJ câmpuri comune -->
     <div class="grid">
       <div>
         <label for="nume">Nume</label>
@@ -103,33 +81,38 @@
         <label for="codpostal">Cod poștal</label>
         <input id="codpostal" name="codpostal" required class="input" />
       </div>
-      <div>
+      <div class="grid-column-1">
         <label for="adresa">Adresă</label>
         <input id="adresa" name="adresa" required class="input" />
       </div>
     </div>
 
-    <!-- Extra pentru Persoană juridică -->
-    <div id="pj-extra" style="display:none; margin-top:12px">
-      <div class="grid">
+    <!-- Doar pentru PJ -->
+    <div id="pj-fields" class="box muted" style="display:none; margin-top:14px">
+      <strong>Date firmă (pentru persoană juridică)</strong>
+      <div class="grid" style="margin-top:10px">
         <div>
-          <label for="firma">Denumire firmă</label>
-          <input id="firma" name="firma" class="input" />
+          <label for="denumire">Denumire firmă</label>
+          <input id="denumire" name="denumire" class="input" />
         </div>
         <div>
           <label for="cui">CUI</label>
           <input id="cui" name="cui" class="input" />
         </div>
         <div>
-          <label for="regcom">Nr. Registrul Comerțului</label>
+          <label for="regcom">Nr. în Reg. Com.</label>
           <input id="regcom" name="regcom" class="input" />
+        </div>
+        <div class="grid-column-1">
+          <label for="cont">IBAN</label>
+          <input id="cont" name="cont" class="input" />
         </div>
       </div>
     </div>
 
-    <div style="margin-top:12px">
+    <div class="grid-column-1">
       <label for="mentiuni">Mențiuni (opțional)</label>
-      <textarea id="mentiuni" name="mentiuni" rows="3" class="input" style="height:auto"></textarea>
+      <textarea id="mentiuni" name="mentiuni" rows="3" class="input"></textarea>
     </div>
 
     <div class="actions">
@@ -139,16 +122,53 @@
   </form>
 </main>
 
+<!-- Lightbox imagine mare -->
+<div id="img-preview" class="lightbox" hidden>
+  <span class="close" aria-label="Închide">×</span>
+  <img id="img-big" src="" alt="">
+</div>
+
 <footer class="footer" style="text-align:center;margin-top:30px;padding:20px;color:#666">
   <small>&copy; <span id="year"></span> — MSA Handmade.</small>
 </footer>
 
-<!-- DOAR aceste două scripturi! -->
+<!-- EmailJS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<!-- Logica coșului -->
 <script src="cart.js"></script>
+
 <script>
-  // anul curent (mic utilitar, nu afectează coșul)
+  // anul curent
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // arată/ascunde câmpurile PJ în funcție de radio
+  document.addEventListener('change', (e)=>{
+    if (e.target.name === 'tip') {
+      const pj = document.getElementById('pj-fields');
+      pj.style.display = (e.target.value === 'Persoană juridică') ? '' : 'none';
+    }
+  });
+
+  // lightbox pentru zoom imagine
+  (function(){
+    const lb  = document.getElementById('img-preview');
+    const big = document.getElementById('img-big');
+
+    document.addEventListener('click',(e)=>{
+      const img = e.target.closest('.cart-card .thumb');
+      if (!img) return;
+      big.src = img.src;
+      lb.hidden = false;
+    });
+    lb.addEventListener('click',(e)=>{
+      if (e.target === lb || e.target.classList.contains('close')) {
+        lb.hidden = true; big.src='';
+      }
+    });
+    document.addEventListener('keydown',(e)=>{
+      if (e.key === 'Escape') { lb.hidden = true; big.src=''; }
+    });
+  })();
 </script>
 </body>
 </html>
