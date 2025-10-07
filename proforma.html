@@ -6,117 +6,175 @@
 <title>Proformă — MSA Handmade</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-  .wrap{max-width:900px;margin:24px auto;padding:0 16px}
-  .box{background:#fff;border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
-  .head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
-  .muted{color:#666}
-  table{width:100%;border-collapse:collapse;margin-top:12px}
-  th,td{border-bottom:1px solid #eee;padding:10px 6px;text-align:left}
+  :root{
+    --ink:#111827; --muted:#6b7280; --card:#ffffff; --bg:#f6f7fb;
+    --gold:#d4af37; --gold-soft:#ffd36b; --border:#e5e7eb;
+  }
+  html,body{background:var(--bg); color:var(--ink); font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";}
+  .wrap{max-width:900px;margin:28px auto;padding:0 16px}
+  .pf-card{background:var(--card); border-radius:14px; padding:24px; box-shadow:0 6px 18px rgba(0,0,0,.06)}
+  h1{font-size:26px; text-align:center; margin:0 0 18px}
+  .headerline{display:flex; justify-content:space-between; gap:18px; align-items:flex-start; flex-wrap:wrap; margin-bottom:14px}
+  .brand{display:flex; gap:12px; align-items:center}
+  .brand img{width:64px;height:64px;object-fit:contain; border-radius:12px; background:#fff}
+  .firm{line-height:1.45}
+  .muted{color:var(--muted)}
+  .docmeta{text-align:right; line-height:1.5}
+  .promo-bar{position:sticky;top:0;z-index:1000;background:#0b1320;color:var(--gold);text-align:center;padding:10px 14px;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+  .promo-bar b{color:var(--gold-soft)}
+  table{width:100%; border-collapse:collapse; margin-top:10px}
+  th,td{padding:10px 8px; border-bottom:1px solid var(--border); text-align:left; font-size:15px}
+  th{font-weight:700}
   tfoot td{font-weight:700}
-  .actions{display:flex;gap:10px;margin-top:16px}
-  @media print{ .actions, .nav, .promo-bar { display:none } .box{box-shadow:none} }
+  .totals td{text-align:right}
+  .actions{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap}
+  .btn{background:#111827;color:#fff;border:0;border-radius:10px;padding:10px 14px;cursor:pointer;text-decoration:none;font-weight:600}
+  .btn.alt{background:#0f766e}
+  .note{font-size:13px; color:var(--muted); margin-top:10px}
+  nav.nav{display:flex; gap:10px; justify-content:center; margin:10px 0 0}
+  nav.nav a{color:#111827; text-decoration:none}
+  @media print{
+    .promo-bar, nav.nav, .actions { display:none !important; }
+    body{background:#fff}
+    .pf-card{box-shadow:none}
+  }
 </style>
 </head>
 <body>
+
+<!-- Bara promo (opțional) -->
 <div class="promo-bar">✨ Reduceri până la <b>20%</b> + <b>livrare gratuită</b> de la 300 RON.</div>
 
-<header class="header">
+<header>
   <nav class="nav">
     <a href="index.html">Acasă</a>
     <a href="produse.html">Produse</a>
     <a href="contact.html">Contact</a>
-    <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
+    <a href="cos.html">🛒 Coș</a>
   </nav>
 </header>
 
 <main class="wrap">
   <h1>Proformă</h1>
-  <div class="box" id="pf"></div>
+  <section id="pf" class="pf-card"></section>
 </main>
 
-<footer class="footer" style="text-align:center;margin-top:30px;padding:20px;color:#666">
-  <small>&copy; <span id="year"></span> — MSA Handmade.</small>
+<footer style="text-align:center;margin-top:28px;padding:18px;color:#666">
+  <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
 </footer>
 
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// citește ultima comandă
-const data = JSON.parse(localStorage.getItem('msa_last_order')||'null');
+// ---- Citește ultima comandă salvată de cart.js ----
+const data = JSON.parse(localStorage.getItem('msa_last_order') || 'null');
+const mount = document.getElementById('pf');
 
-const pf = document.getElementById('pf');
 if(!data){
-  pf.innerHTML = '<p class="muted">Nu există o comandă recentă. Plasează o comandă și revino pentru proformă.</p>';
+  mount.innerHTML = '<p class="muted">Nu există o comandă recentă. Plasează o comandă și revino pentru proformă.</p>';
 } else {
-  // date firmă — personalizează aici
+  // === Date firmă (PFA neplătitor de TVA) ===
   const firma = {
-    denumire: 'MSA Handmade',
-    cui: 'RO12345678',
-    regcom: 'J00/0000/2025',
-    adresa: 'Str. Exemplu nr. 1, Bragadiru, IF',
-    cont: 'RO00BANK0000000000',
-    banca: 'Banca Exemplu'
+    denumire: 'Stoica Mihaela — Persoană Fizică Autorizată',
+    cui: '52197623',
+    regcom: 'F2025026596007',
+    adresa: 'Str. Generalului nr. 10, bl. 1, sc. 1, ap. 2, Bragadiru, Ilfov',
+    cont: 'RO71 ROIN 4021 V44X 12E1 65BQ',
+    banca: 'Salt Bank',
+    tva: 'Neplătitor de TVA'
   };
 
   const c = data.client || {};
   const t = data.totals || {subtotal:0, discount:0, shipping:0, total:0, pct:0};
-  const items = (data.items||[]).map(i=>`
+  const items = (data.items || []);
+
+  // rânduri produse
+  const rows = items.map(i => `
     <tr>
-      <td>${escapeHtml(i.name||'Produs')}</td>
-      <td>${Number(i.qty||1)}</td>
-      <td>${Number(i.price||0).toFixed(2)} RON</td>
-      <td>${(Number(i.price||0)*Number(i.qty||1)).toFixed(2)} RON</td>
+      <td>${esc(i.name || 'Produs')}</td>
+      <td>${num(i.qty || 1)}</td>
+      <td>${money(i.price || 0)} RON</td>
+      <td>${money((i.price || 0) * (i.qty || 1))} RON</td>
     </tr>
   `).join('');
 
-  pf.innerHTML = `
-    <div class="head">
-      <div>
-        <h3 style="margin:0">MSA Handmade</h3>
-        <div class="muted">
-          ${firma.adresa}<br>
-          CUI: ${firma.cui} | Reg. Com.: ${firma.regcom}<br>
-          IBAN: ${firma.cont} — ${firma.banca}
+  // client block pentru PF vs PJ (ambele acoperite)
+  const clientBlock = (c.tip && (c.tip.toLowerCase().includes('juridic')))
+    ? `
+      <strong>${esc(c.firma || '')}</strong><br>
+      CUI: ${esc(c.cui || '')}<br>
+      Reg. Com.: ${esc(c.regcom || '')}<br>
+      ${esc(c.nume || '')} ${esc(c.prenume || '')}<br>
+      ${esc(c.email || '')} · ${esc(c.telefon || '')}<br>
+      ${esc(c.adresa || '')}, ${esc(c.oras || '')}, ${esc(c.judet || '')}, ${esc(c.codpostal || '')}
+    `
+    : `
+      <strong>${esc(c.nume || '')} ${esc(c.prenume || '')}</strong><br>
+      ${esc(c.email || '')} · ${esc(c.telefon || '')}<br>
+      ${esc(c.adresa || '')}, ${esc(c.oras || '')}, ${esc(c.judet || '')}, ${esc(c.codpostal || '')}
+    `;
+
+  mount.innerHTML = `
+    <div class="headerline">
+      <div class="brand">
+        <img src="logo.png" alt="MSA Handmade logo" onerror="this.style.display='none'">
+        <div class="firm">
+          <div style="font-size:18px; font-weight:800">MSA Handmade</div>
+          <div class="muted">Lumânări & decorațiuni artizanale</div>
         </div>
       </div>
-      <div style="text-align:right">
-        <div><strong>Proformă:</strong> ${data.id}</div>
-        <div class="muted">${new Date(data.ts).toLocaleString('ro-RO')}</div>
+      <div class="docmeta">
+        <div><strong>Proformă:</strong> ${esc(data.id || ('MSA-'+Date.now()))}</div>
+        <div class="muted">${new Date(data.ts || Date.now()).toLocaleString('ro-RO')}</div>
       </div>
     </div>
 
-    <div style="margin:8px 0 14px">
-      <strong>Client</strong><br>
-      ${c.tip === 'Persoană juridică'
-        ? (escapeHtml(c.firma||'') + '<br>CUI: ' + escapeHtml(c.cui||'') + '<br>Reg. Com.: ' + escapeHtml(c.regcom||''))
-        : (escapeHtml(c.nume||'') + ' ' + escapeHtml(c.prenume||''))
-      }<br>
-      ${escapeHtml(c.email||'')} · ${escapeHtml(c.telefon||'')}<br>
-      ${escapeHtml(c.adresa||'')} · ${escapeHtml(c.oras||'')} · ${escapeHtml(c.judet||'')} · ${escapeHtml(c.codpostal||'')}
+    <div style="display:flex; gap:18px; justify-content:space-between; flex-wrap:wrap; border:1px solid var(--border); border-radius:12px; padding:14px; background:#fff">
+      <div>
+        <strong>${esc(firma.denumire)}</strong><br>
+        <span class="muted">
+          ${esc(firma.adresa)}<br>
+          CUI: ${esc(firma.cui)} · Reg. Com.: ${esc(firma.regcom)}<br>
+          IBAN: ${esc(firma.cont)} — ${esc(firma.banca)}<br>
+          ${esc(firma.tva)}
+        </span>
+      </div>
+      <div>
+        <strong>Client</strong><br>
+        <span class="muted">${clientBlock}</span>
+      </div>
     </div>
 
     <table>
       <thead>
-        <tr><th>Produs</th><th>Cant.</th><th>Preț</th><th>Total</th></tr>
+        <tr>
+          <th>Produs</th>
+          <th>Cant.</th>
+          <th>Preț</th>
+          <th>Total</th>
+        </tr>
       </thead>
-      <tbody>${items}</tbody>
-      <tfoot>
-        <tr><td colspan="3" style="text-align:right">Subtotal</td><td>${(+t.subtotal).toFixed(2)} RON</td></tr>
-        <tr><td colspan="3" style="text-align:right">Reducere (${Number(t.pct||0)}%)</td><td>-${(+t.discount).toFixed(2)} RON</td></tr>
-        <tr><td colspan="3" style="text-align:right">Livrare</td><td>${(+t.shipping).toFixed(2)} RON</td></tr>
-        <tr><td colspan="3" style="text-align:right">Total</td><td>${(+t.total).toFixed(2)} RON</td></tr>
+      <tbody>${rows}</tbody>
+      <tfoot class="totals">
+        <tr><td colspan="3">Subtotal</td><td>${money(t.subtotal)} RON</td></tr>
+        <tr><td colspan="3">Reducere (${num(t.pct)}%)</td><td>-${money(t.discount)} RON</td></tr>
+        <tr><td colspan="3">Livrare</td><td>${money(t.shipping)} RON</td></tr>
+        <tr><td colspan="3">TOTAL</td><td>${money(t.total)} RON</td></tr>
       </tfoot>
     </table>
 
     <div class="actions">
-      <button onclick="window.print()" class="btn" style="background:#111827;color:#fff;border-radius:10px;padding:10px 14px;border:0;cursor:pointer">Tipărește / PDF</button>
-      <a href="index.html" class="btn" style="background:#0f766e;color:#fff;border-radius:10px;padding:10px 14px;text-decoration:none">Înapoi acasă</a>
+      <button class="btn" onclick="window.print()">💾 Tipărește / PDF</button>
+      <a class="btn alt" href="index.html">🏠 Înapoi acasă</a>
     </div>
-    <p class="muted" style="margin-top:10px">* Aceasta este o proformă (fără semnătură/ștampilă). Factura fiscală o vei emite tu.</p>
+
+    <p class="note">* Aceasta este o proformă (fără semnătură sau ștampilă). Factura fiscală va fi emisă ulterior.</p>
   `;
 }
 
-function escapeHtml(s){ return (s||'').replace(/[&<>"]/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m])); }
+function money(n){ return (+n||0).toFixed(2); }
+function num(n){ return (+n||0); }
+function esc(s){ return (String(s||'')).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
 </script>
 </body>
 </html>
