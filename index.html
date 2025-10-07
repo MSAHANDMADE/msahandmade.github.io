@@ -1,54 +1,53 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MSA Handmade — Acasă</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <!-- Bara promo -->
-  <div class="promo-bar">
-    🎉 Reduceri până la <b>20%</b> + <b>livrare gratuită</b> de la <b>300 RON</b>.
-  </div>
+<div class="promo">🎉 Reduceri până la <b>20%</b> + <b>livrare gratuită</b> de la <b>300 RON</b>.</div>
 
-  <!-- Meniu -->
-  <header class="header">
-    <nav class="nav">
-      <a href="index.html" class="active">Acasă</a>
+<header class="header">
+  <nav class="nav wrap">
+    <div class="left">
+      <a href="index.html">Acasă</a>
       <a href="produse.html">Produse</a>
       <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
-    </nav>
-  </header>
-
-  <
-
-  <footer class="footer">
-    <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
-    <div class="social">
-      <a href="https://instagram.com" target="_blank">
-        <img src="images/instagram.svg" alt="Instagram" />
-      </a>
-      <a href="https://facebook.com" target="_blank">
-        <img src="images/facebook.svg" alt="Facebook" />
-      </a>
     </div>
-  </footer>
+    <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
+  </nav>
+</header>
 
-  <script src="cart.js"></script>
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-    if (window.MSACart) MSACart.updateCartCountBadge();
-  </script>
-</body>
-</html>
 <main class="wrap">
-  <section style="display:grid;place-items:center;gap:14px;padding:40px 0;text-align:center">
-    <img src="logo.png" alt="MSA Handmade" style="width:140px;height:auto;display:block;filter: drop-shadow(0 6px 18px rgba(0,0,0,.08));" />
-    <h1 style="margin:8px 0 0">Bun venit la MSA Handmade</h1>
-    <p style="color:#666;max-width:600px;margin:0">Lumânări și decorațiuni artizanale, făcute cu grijă. Profită de reduceri și livrare gratuită de la 300 RON.</p>
-    <p style="margin-top:8px"><a class="btn" href="produse.html">Vezi produsele</a></p>
+  <section class="hero">
+    <div class="box">
+      <img class="logo" src="logo.png" alt="MSA Handmade Decor">
+      <div>
+        <h1 style="text-align:center">Bun venit la MSA Handmade</h1>
+        <p class="lead" style="text-align:center">
+          Lumânări și decorațiuni artizanale, făcute cu grijă. Profită de reduceri
+          și livrare gratuită de la 300 RON.
+        </p>
+      </div>
+      <div><a href="produse.html" class="btn">Vezi produsele</a></div>
+    </div>
   </section>
 </main>
+
+<footer class="footer">
+  <div class="socials">
+    <a href="https://facebook.com" target="_blank"><img src="images/facebook.svg" alt="Facebook"></a>
+    <a href="https://instagram.com" target="_blank"><img src="images/instagram.svg" alt="Instagram"></a>
+  </div>
+  <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
+</footer>
+
+<script src="cart.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.addEventListener('DOMContentLoaded', ()=>{ if (window.MSACart) MSACart.readCart(); });
+</script>
+</body>
+</html>
