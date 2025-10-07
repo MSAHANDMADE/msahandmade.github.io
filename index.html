@@ -3,82 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MSA Handmade — Lumânări și decorațiuni artizanale</title>
-
-  <!-- SEO -->
-  <meta name="description" content="MSA Handmade: lumânări artizanale din ceară naturală de soia și decorațiuni handmade, create cu grijă în serii mici. Cadouri cu suflet, ambalate frumos." />
-  <meta name="keywords" content="lumânări handmade, ceară naturală, decorațiuni artizanale, cadouri handmade, MSA Handmade" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://msahandmade.ro/" />
-  <link rel="alternate" hreflang="ro" href="https://msahandmade.ro/" />
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="MSA Handmade" />
-  <meta property="og:title" content="MSA Handmade — Lumânări și decorațiuni artizanale" />
-  <meta property="og:description" content="Descoperă lumânări din ceară naturală de soia și decorațiuni handmade, perfecte pentru cadouri și decor." />
-  <meta property="og:url" content="https://msahandmade.ro/" />
-  <meta property="og:image" content="https://msahandmade.ro/logo.png" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="MSA Handmade — Lumânări și decorațiuni artizanale" />
-  <meta name="twitter:description" content="Lumânări de soia și decorațiuni realizate manual, ambalate gata de oferit." />
-  <meta name="twitter:image" content="https://msahandmade.ro/logo.png" />
-
+  <title>MSA Handmade — Acasă</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-  <!-- HEADER -->
+  <!-- Bara promo -->
+  <div class="promo-bar">
+    🎉 Reduceri până la <b>20%</b> + <b>livrare gratuită</b> de la <b>300 RON</b>.
+  </div>
+
+  <!-- Meniu -->
   <header class="header">
     <nav class="nav">
-      <a href="index.html" aria-current="page">Acasă</a>
+      <a href="index.html" class="active">Acasă</a>
       <a href="produse.html">Produse</a>
       <a href="contact.html">Contact</a>
       <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
     </nav>
   </header>
 
-  <!-- HERO -->
-  <main class="home-hero" style="text-align:center; padding:40px 20px;">
-    <img src="logo.png" alt="MSA Handmade" style="max-width:300px; width:80%; height:auto;" />
+  <main class="wrap">
+    <section class="hero">
+      <img src="images/peisaj.jpg" alt="Banner MSA Handmade" class="hero-img" />
+      <div class="hero-text">
+        <h1>Bun venit la <span>MSA Handmade</span></h1>
+        <p>Cadouri, lumânări și decorațiuni realizate manual, cu grijă și pasiune.</p>
+        <a href="produse.html" class="btn">Vezi produsele</a>
+      </div>
+    </section>
 
-    <h1 style="margin-top:22px; font-size:26px; color:#333;">
-      Magie și lumină într-un singur loc
-    </h1>
-
-    <p style="margin:14px auto 0; font-size:18px; color:#444; max-width:620px;">
-      Descoperă colecția noastră de <strong>lumânări artizanale</strong> din ceară naturală de soia
-      și <strong>decorațiuni handmade</strong>, create cu grijă din materiale naturale. Fiecare piesă
-      MSA Handmade poartă un strop de suflet, culoare și bucurie. 🌼
-    </p>
-
-    <div style="margin-top:26px;">
-      <a href="produse.html" class="btn" style="display:inline-block; background:#111827; color:#fff; padding:12px 24px; border-radius:10px; text-decoration:none;">
-        Vezi produsele
-      </a>
-    </div>
+    <section class="about box">
+      <h2>Despre noi</h2>
+      <p>
+        La <strong>MSA Handmade</strong> găsești creații unice, confecționate manual
+        cu atenție la detalii. Fiecare produs este făcut cu dragoste și bucurie,
+        pentru a aduce zâmbete celor dragi.
+      </p>
+    </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer" style="text-align:center; margin-top:40px; padding:20px; color:#666;">
+  <footer class="footer">
     <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
+    <div class="social">
+      <a href="https://instagram.com" target="_blank">
+        <img src="images/instagram.svg" alt="Instagram" />
+      </a>
+      <a href="https://facebook.com" target="_blank">
+        <img src="images/facebook.svg" alt="Facebook" />
+      </a>
+    </div>
   </footer>
 
-  <!-- IMPORTANT: doar cart.js aici -->
   <script src="cart.js"></script>
   <script>
-    // anul curent
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // badge coș (funcționează pe orice pagină)
-    try {
-      const list = (window.MSACart && typeof MSACart.readCart === 'function')
-        ? MSACart.readCart() : [];
-      const count = Array.isArray(list) ? list.reduce((s, i) => s + (i.qty || 1), 0) : 0;
-      const el = document.getElementById('cart-count');
-      if (el) el.textContent = count;
-    } catch (e) {}
+    document.getElementById("year").textContent = new Date().getFullYear();
+    if (window.MSACart) MSACart.updateCartCountBadge();
   </script>
 </body>
 </html>
