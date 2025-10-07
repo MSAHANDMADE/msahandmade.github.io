@@ -1,24 +1,22 @@
-<!-- pune-l ca /cart.js în rădăcina repo-ului -->
-<script>
-// MSA Handmade — coș + reduceri automate + livrare + EmailJS
+/* MSA Handmade — coș + reduceri automate + livrare gratuită + EmailJS  */
+/* Un singur „adevăr” pentru coșul de cumpărături. */
+
 (function () {
   // === CONFIG ===
-  const STORAGE_KEY   = 'msa_cart';
-  const LAST_ORDER    = 'msa_last_order';
+  const STORAGE_KEY = 'msa_cart';
   const SHIPPING_BASE = 17;
 
-  // Reduceri automate (în funcție de SUBTOTAL, fără livrare)
-  function computeTotals(list) {
-    const subtotal = list.reduce((s,i)=> s + (Number(i.price)||0)*(Number(i.qty)||1), 0);
-    let pct = 0, shipping = SHIPPING_BASE;
+  // EmailJS (cheile tale)
+  const PUBLIC_KEY = 'iSadfb7-TV_89l_6k';
+  const SERVICE_ID = 'service_ix0zpp7';
+  const TEMPLATE_ADMIN = 'template_13qpqtt'; // către tine
+  const TEMPLATE_CLIENT = 'template_9yctwor'; // către client
 
-    if (subtotal >= 400) { pct = 20; }
-    else if (subtotal >= 300) { pct = 15; shipping = 0; }
-    else if (subtotal >= 200) { pct = 10; }
-
-    const discount = +(subtotal * pct / 100);
-    const total    = +(subtotal - discount + shipping);
-    return { subtotal, discount, shipping, total, pct };
+  // === EmailJS init (SDK-ul e încărcat în cos.html) ===
+  function initEmailJS() {
+    if (window.emailjs && typeof emailjs.init === 'function') {
+      try { emailjs.init(PUBLIC_KEY); } catch (e) {}
+    }
   }
 
   // === STORAGE ===
@@ -27,168 +25,188 @@
     catch { return []; }
   }
   function saveCart(list) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list||[]));
-  }
-  function setLastOrder(payload){
-    try { localStorage.setItem(LAST_ORDER, JSON.stringify(payload)); } catch {}
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list || []));
   }
 
-  // === BADGE ===
+  // === BADGE (numărul din coș) ===
   function updateCartCountBadge() {
     const list = readCart();
-    const count = list.reduce((s,i)=> s + (parseInt(i.qty)||1), 0);
+    const count = Array.isArray(list) ? list.reduce((s,i)=>s+(parseInt(i.qty)||1),0) : 0;
     const b1 = document.getElementById('cart-count');
     const b2 = document.getElementById('cart-count-fab');
     if (b1) b1.textContent = count;
     if (b2) b2.textContent = count;
   }
 
-  // === CRUD ===
-  function addToCart({ id, name, price, image }) {
+  // === CRUD coș ===
+  function addToCart({id, name, price, image}) {
     if (!id) return;
     const list = readCart();
-    const i = list.findIndex(p => p.id === id);
+    const idx = list.findIndex(p => p.id === id);
     price = Number(price)||0;
-    if (i>-1) list[i].qty = (parseInt(list[i].qty)||1) + 1;
-    else list.push({ id, name: name||'', price, image:image||'', qty: 1 });
-    saveCart(list); updateCartCountBadge();
+    if (idx > -1) list[idx].qty = (parseInt(list[idx].qty)||1) + 1;
+    else list.push({id, name: name||'', price, image: image||'', qty: 1});
+    saveCart(list);
+    updateCartCountBadge();
   }
   function removeFromCart(indexOrId) {
     const list = readCart();
-    const idx  = (typeof indexOrId==='number') ? indexOrId : list.findIndex(p=>p.id===indexOrId);
-    if (idx>-1) { list.splice(idx,1); saveCart(list); updateCartCountBadge(); }
+    const idx = (typeof indexOrId==='number') ? indexOrId : list.findIndex(p=>p.id===indexOrId);
+    if (idx>-1){ list.splice(idx,1); saveCart(list); updateCartCountBadge(); }
   }
-  function clearCart() { saveCart([]); updateCartCountBadge(); }
+  function clearCart(){ saveCart([]); updateCartCountBadge(); }
   function setQty(indexOrId, v){
     const list = readCart();
-    const idx  = (typeof indexOrId==='number') ? indexOrId : list.findIndex(p=>p.id===indexOrId);
-    if (idx>-1) {
+    const idx = (typeof indexOrId==='number') ? indexOrId : list.findIndex(p=>p.id===indexOrId);
+    if (idx>-1){
       const q = Math.max(1, Number(v)||1);
       list[idx].qty = q;
-      saveCart(list); updateCartCountBadge();
+      saveCart(list);
+      updateCartCountBadge();
     }
   }
 
-  // === EMAILJS ===
-  // Cheile tale (cele pe care le-ai confirmat)
-  const PUBLIC_KEY     = 'iSadfb7-TV_89l_6k';
-  const SERVICE_ID     = 'service_ix0zpp7';
-  const TEMPLATE_ADMIN = 'template_13qpqtt';  // către tine
-  const TEMPLATE_CLIENT= 'template_9yctwor';   // către client
+  // === TOTALE + reduceri ===
+  function computeTotals(list) {
+    const subtotal = list.reduce((s,i)=> s + (Number(i.price)||0)*(Number(i.qty)||1), 0);
+    let pct = 0, shipping = SHIPPING_BASE;
 
-  // Pornește SDK (dar doar dacă îl ai inclus în cos.html)
-  function emailOk() {
-    return (window.emailjs && typeof emailjs.init === 'function');
-  }
-  function emailInit() {
-    try { emailjs.init(PUBLIC_KEY); } catch {}
+    if (subtotal >= 400) pct = 20;
+    else if (subtotal >= 300) { pct = 15; shipping = 0; }
+    else if (subtotal >= 200) pct = 10;
+
+    const discount = +(subtotal * pct / 100).toFixed(2);
+    const total = +((subtotal - discount + shipping).toFixed(2));
+    return { subtotal:+subtotal.toFixed(2), discount, shipping, total, pct };
   }
 
-  /**
-   * Submit comanda (primește form elementul din cos.html)
-   * Trimite două mailuri: către tine (admin) și către client (confirmare).
-   */
+  // === RENDER pentru cos.html ===
+  function fmt(n){ return (Number(n)||0).toFixed(2); }
+
+  function renderCartInto(mountId='items'){
+    const list = readCart();
+    const mount = document.getElementById(mountId);
+    if (!mount) return;
+
+    // golim
+    mount.innerHTML = '';
+
+    if (!list.length) {
+      mount.innerHTML = '<p>Coșul tău este gol.</p>';
+    } else {
+      list.forEach((p,idx)=>{
+        const card = document.createElement('div');
+        card.className = 'cart-card';
+        card.innerHTML = `
+          <div class="cart-left">
+            <img src="${p.image||'logo.png'}" alt="${p.name||''}">
+          </div>
+          <div class="cart-mid">
+            <div class="name">${p.name||''}</div>
+            <div class="price">${fmt(p.price)} RON</div>
+          </div>
+          <div class="cart-right">
+            <button class="qty" data-act="dec">-</button>
+            <input type="number" min="1" value="${p.qty||1}">
+            <button class="qty" data-act="inc">+</button>
+            <button class="danger" data-act="del">Șterge</button>
+          </div>
+        `;
+        // bind-uri
+        const input = card.querySelector('input');
+        card.querySelector('[data-act="inc"]').onclick = ()=>{ input.value = Number(input.value||1)+1; input.dispatchEvent(new Event('change')); };
+        card.querySelector('[data-act="dec"]').onclick = ()=>{ input.value = Math.max(1, Number(input.value||1)-1); input.dispatchEvent(new Event('change')); };
+        card.querySelector('[data-act="del"]').onclick = ()=>{ removeFromCart(idx); renderCartInto(mountId); refreshTotals(); };
+
+        input.addEventListener('change', ()=>{
+          setQty(idx, input.value);
+          refreshTotals();
+        });
+
+        mount.appendChild(card);
+      });
+    }
+  }
+
+  function refreshTotals(){
+    const t = computeTotals(readCart());
+    const set = (id, val)=>{ const el = document.getElementById(id); if (el) el.textContent = val; };
+    set('subtot', fmt(t.subtotal));
+    set('disc', fmt(t.discount));
+    set('ship', fmt(t.shipping));
+    set('grand', fmt(t.total));
+    updateCartCountBadge();
+  }
+
+  // === Submit comanda cu EmailJS (apel din cos.html) ===
   async function submitOrder(formEl) {
-    if (!formEl) throw new Error('Form invalid');
+    if (!window.emailjs){ alert('EmailJS indisponibil.'); return false; }
+
+    initEmailJS();
 
     const list = readCart();
-    if (!list.length) throw new Error('Coșul este gol.');
-
-    // culegem datele din formular
-    const fd = new FormData(formEl);
-    const data = Object.fromEntries(fd.entries());
-    // normalizări
-    data.tip       = data.tip || 'Persoană fizică';
-    data.nume      = (data.nume||'').trim();
-    data.prenume   = (data.prenume||'').trim();
-    data.email     = (data.email||'').trim();
-    data.telefon   = (data.telefon||'').trim();
-    data.judet     = (data.judet||'').trim();
-    data.oras      = (data.oras||'').trim();
-    data.codpostal = (data.codpostal||'').trim();
-    data.adresa    = (data.adresa||'').trim();
-    data.mentiuni  = (data.mentiuni||'').trim();
-    // PJ extra
-    data.cui       = (data.cui||'').trim();
-    data.regcom    = (data.regcom||'').trim();
-    data.denumire  = (data.denumire||'').trim();
-
-    // atașăm produsele + totalurile
     const totals = computeTotals(list);
-    data.items = list;
+    const data = Object.fromEntries(new FormData(formEl).entries());
+    const orderId = (''+Date.now()).slice(-5);
 
-    // păstrăm o copie local (pentru proforma.html)
-    setLastOrder({
-      id: Date.now().toString(36).slice(-5).toUpperCase(),
-      ts: Date.now(),
-      tip: data.tip,
-      nume: data.nume,
-      prenume: data.prenume,
-      email: data.email,
-      telefon: data.telefon,
-      judet: data.judet,
-      oras: data.oras,
-      codpostal: data.codpostal,
-      adresa: data.adresa,
-      mentiuni: data.mentiuni,
-      cui: data.cui, regcom: data.regcom, denumire: data.denumire,
-      items: list,
-      subtotal: +totals.subtotal.toFixed(2),
-      discount: +totals.discount.toFixed(2),
-      shipping: +totals.shipping.toFixed(2),
-      total: +totals.total.toFixed(2),
-      pct: totals.pct
-    });
+    // HTML produse pentru email
+    const produseHtml = list.map(i=>`${i.name} × ${i.qty} — ${fmt(i.price*i.qty)} RON`).join('<br>');
 
-    // pregătim variabilele pentru EmailJS (trebuie să se potrivească cu {{...}} din template)
-    const produseText = list.map(i => `• ${i.name} × ${i.qty} = ${(i.price*i.qty).toFixed(2)} RON`).join('\n');
-
-    const adminVars = {
+    const adminParams = {
       site: 'msahandmade.ro',
-      tip: data.tip,
-      nume: data.nume + (data.prenume ? ' ' + data.prenume : ''),
-      email: data.email,
-      telefon: data.telefon,
-      judet: data.judet,
-      oras: data.oras,
-      codpostal: data.codpostal,
-      adresa: data.adresa,
-      cui: data.cui,
-      regcom: data.regcom,
-      denumire: data.denumire,
-      produse: produseText,
-      subtotal: totals.subtotal.toFixed(2),
-      shipping: totals.shipping.toFixed(2),
-      total: totals.total.toFixed(2),
-      mentiuni: data.mentiuni || '-'
+      tip: data.tip || 'Persoană fizică',
+      nume: data.nume||'',
+      prenume: data.prenume||'',
+      email: data.email||'',
+      telefon: data.telefon||'',
+      judet: data.judet||'',
+      oras: data.oras||'',
+      codpostal: data.codpostal||'',
+      adresa: data.adresa||'',
+      mentiuni: data.mentiuni||'',
+      produse: produseHtml,
+      subtotal: fmt(totals.subtotal),
+      livrare: fmt(totals.shipping),
+      total: fmt(totals.total),
+      order_id: orderId
     };
 
-    const clientVars = {
-      nume: data.nume || 'client',
-      total: totals.total.toFixed(2),
-      site: 'msahandmade.ro'
+    const clientParams = {
+      email: data.email||'',
+      nume: data.nume||'',
+      order_id: orderId
     };
 
-    // trimitem mailurile
-    if (emailOk()) emailInit();
-    if (!emailOk()) throw new Error('EmailJS indisponibil');
+    try {
+      // email către tine
+      await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, adminParams);
+      // email către client
+      if (clientParams.email) {
+        await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, clientParams);
+      }
 
-    await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, adminVars);
-    await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, clientVars);
+      // salvez comanda pt. proformă
+      localStorage.setItem('msa_last_order', JSON.stringify({
+        id: orderId, ts: Date.now(), client: data, items: list, totals
+      }));
 
-    // după success: golim coșul + redirect
-    clearCart();
-    window.location.href = 'multumesc.html';
+      clearCart();
+      window.location.href = 'multumesc.html';
+      return true;
+    } catch (e) {
+      console.error(e);
+      alert('Eroare la trimitere comanda.');
+      return false;
+    }
   }
 
-  // expunem API global (folosit în produse.html & cos.html)
+  // === EXPUNERE GLOBALĂ ===
   window.MSACart = {
-    readCart, saveCart, computeTotals,
-    addToCart, removeFromCart, clearCart, setQty,
-    submitOrder, updateCartCountBadge
+    readCart, saveCart, addToCart, removeFromCart, clearCart,
+    setQty, computeTotals, renderCartInto, refreshTotals, submitOrder,
+    updateCartCountBadge
   };
 
-  // actualizează badge la încărcare
+  // init mic
   document.addEventListener('DOMContentLoaded', updateCartCountBadge);
 })();
-</script>
