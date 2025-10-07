@@ -6,156 +6,44 @@
   <title>Produse — MSA Handmade</title>
   <link rel="stylesheet" href="styles.css"/>
   <style>
-    :root { --ink:#0a2230; --bg:#fafafa; }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
-    .wrap{max-width:1000px;margin:0 auto;padding:0 16px}
-
-    /* Header compact, itemele apropiate */
-    header{position:sticky;top:0;background:#fff;z-index:20;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-    .nav{display:flex;justify-content:space-between;align-items:center;padding:10px 0}
-    .nav-links{display:flex;gap:14px}
-    .nav a{color:#111;text-decoration:none;font-weight:700}
-    .cart-link{display:inline-flex;align-items:center;gap:6px}
-
-    h1{font-size:40px;margin:20px 0 10px}
-
-    /* Cards */
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:20px 0 40px}
-    .card{background:#fff;border-radius:16px;box-shadow:0 8px 22px rgba(0,0,0,.08);overflow:hidden}
-    .card img{width:100%;height:340px;object-fit:cover;display:block;cursor:zoom-in}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    header nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    header nav a{margin-right:14px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:18px}
+    .card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.06)}
+    .thumb{width:100%;aspect-ratio:4/3;object-fit:cover}
     .body{padding:14px}
-    .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-    .top h3{margin:0}
-    .price{font-weight:800}
-    .btn{width:100%;padding:12px 16px;border:none;border-radius:12px;background:#0a2230;color:#fff;font-weight:800;cursor:pointer}
-    .btn:active{transform:translateY(1px)}
-    @media (max-width:760px){ .grid{grid-template-columns:1fr} .card img{height:280px} }
-
-    /* Lightbox simplu */
-    #lb{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center}
-    #lb img{max-width:92vw;max-height:92vh}
+    .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .price{font-weight:700}
+    .btn{display:block;width:100%;background:#0a2230;color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700}
+    .cart{display:inline-flex;align-items:center;gap:6px}
+    #cart-count{font-weight:700}
   </style>
 </head>
 <body>
-<header>
-  <nav class="nav wrap">
-    <div class="nav-links">
+<header class="wrap">
+  <nav>
+    <div>
       <a href="index.html">Acasă</a>
       <a href="produse.html">Produse</a>
       <a href="contact.html">Contact</a>
     </div>
-    <a href="cos.html" class="cart-link">🛒 <span id="cart-count">0</span></a>
+    <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
   </nav>
 </header>
 
 <main class="wrap">
   <h1>Produsele noastre</h1>
 
-  <section class="grid">
+  <section class="cards">
+
     <!-- Buchet 29 -->
     <article class="card">
-      <img src="images/buchet.jpg" alt="Buchet" data-full="images/buchet.jpg" class="zoom"/>
+      <img class="thumb" src="images/buchet.jpg" alt="Buchet" loading="lazy">
       <div class="body">
         <div class="top"><h3>Buchet</h3><span class="price">29 RON</span></div>
         <button class="btn add-to-cart"
-                data-id="buchet" data-name="Buchet" data-price="29" data-image="images/buchet.jpg">
-          Adaugă în coș
-        </button>
-      </div>
-    </article>
-
-    <!-- Crin 33 -->
-    <article class="card">
-      <img src="images/crin.jpg" alt="Crin" data-full="images/crin.jpg" class="zoom"/>
-      <div class="body">
-        <div class="top"><h3>Crin</h3><span class="price">33 RON</span></div>
-        <button class="btn add-to-cart"
-                data-id="crin" data-name="Crin" data-price="33" data-image="images/crin.jpg">
-          Adaugă în coș
-        </button>
-      </div>
-    </article>
-
-    <!-- Dans 33 -->
-    <article class="card">
-      <img src="images/dans.jpg" alt="Dans" data-full="images/dans.jpg" class="zoom"/>
-      <div class="body">
-        <div class="top"><h3>Dans</h3><span class="price">33 RON</span></div>
-        <button class="btn add-to-cart"
-                data-id="dans" data-name="Dans" data-price="33" data-image="images/dans.jpg">
-          Adaugă în coș
-        </button>
-      </div>
-    </article>
-
-    <!-- Flori 33 -->
-    <article class="card">
-      <img src="images/flori.jpg" alt="Flori" data-full="images/flori.jpg" class="zoom"/>
-      <div class="body">
-        <div class="top"><h3>Flori</h3><span class="price">33 RON</span></div>
-        <button class="btn add-to-cart"
-                data-id="flori" data-name="Flori" data-price="33" data-image="images/flori.jpg">
-          Adaugă în coș
-        </button>
-      </div>
-    </article>
-
-    <!-- Îndrăgostiți 99 (ATENȚIE: indragostiti.jpg CU un singur „i”) -->
-    <article class="card">
-      <img src="images/indragostiti.jpg" alt="Îndrăgostiți" data-full="images/indragostiti.jpg" class="zoom"/>
-      <div class="body">
-        <div class="top"><h3>Îndrăgostiți</h3><span class="price">99 RON</span></div>
-        <button class="btn add-to-cart"
-                data-id="indragostiti" data-name="Îndrăgostiți" data-price="99" data-image="images/indragostiti.jpg">
-          Adaugă în coș
-        </button>
-      </div>
-    </article>
-
-    <!-- Înger 33 -->
-    <article class="card">
-      <img src="images/inger.jpg" alt="Înger" data-full="images/inger.jpg" class="zoom"/>
-      <div class="body">
-        <div class="top"><h3>Înger</h3><span class="price">33 RON</span></div>
-        <button class="btn add-to-cart"
-                data-id="inger" data-name="Înger" data-price="33" data-image="images/inger.jpg">
-          Adaugă în coș
-        </button>
-      </div>
-    </article>
-
-    <!-- Logodna 33 -->
-    <article class="card">
-      <img src="images/logodna.jpg" alt="Logodnă" data-full="images/logodna.jpg" class="zoom"/>
-      <div class="body">
-        <div class="top"><h3>Logodnă</h3><span class="price">33 RON</span></div>
-        <button class="btn add-to-cart"
-                data-id="logodna" data-name="Logodnă" data-price="33" data-image="images/logodna.jpg">
-          Adaugă în coș
-        </button>
-      </div>
-    </article>
-
-    <!-- Peisaj 99 -->
-    <article class="card">
-      <img src="images/peisaj.jpg" alt="Peisaj" data-full="images/peisaj.jpg" class="zoom"/>
-      <div class="body">
-        <div class="top"><h3>Peisaj</h3><span class="price">99 RON</span></div>
-        <button class="btn add-to-cart"
-                data-id="peisaj" data-name="Peisaj" data-price="99" data-image="images/peisaj.jpg">
-          Adaugă în coș
-        </button>
-      </div>
-    </article>
-
-    <!-- Peisaj de iarnă 99 -->
-    <article class="card">
-      <img src="images/peisajiarna.jpg" alt="Peisaj de iarnă" data-full="images/peisajiarna.jpg" class="zoom"/>
-      <div class="body">
-        <div class="top"><h3>Peisaj de iarnă</h3><span class="price">99 RON</span></div>
-        <button class="btn add-to-cart"
-                data-id="peisajiarna" data-name="Peisaj de iarnă" data-price="99" data-image="images/peisajiarna.jpg">
+          data-id="buchet" data-name="Buchet" data-price="29" data-image="images/buchet.jpg">
           Adaugă în coș
         </button>
       </div>
@@ -163,67 +51,112 @@
 
     <!-- Sărut 33 -->
     <article class="card">
-      <img src="images/sarut.jpg" alt="Sărut" data-full="images/sarut.jpg" class="zoom"/>
+      <img class="thumb" src="images/sarut.jpg" alt="Sărut" loading="lazy">
       <div class="body">
         <div class="top"><h3>Sărut</h3><span class="price">33 RON</span></div>
         <button class="btn add-to-cart"
-                data-id="sarut" data-name="Sărut" data-price="33" data-image="images/sarut.jpg">
+          data-id="sarut" data-name="Sărut" data-price="33" data-image="images/sarut.jpg">
           Adaugă în coș
         </button>
       </div>
     </article>
+
+    <!-- Crin 33 -->
+    <article class="card">
+      <img class="thumb" src="images/crin.jpg" alt="Crin" loading="lazy">
+      <div class="body">
+        <div class="top"><h3>Crin</h3><span class="price">33 RON</span></div>
+        <button class="btn add-to-cart"
+          data-id="crin" data-name="Crin" data-price="33" data-image="images/crin.jpg">
+          Adaugă în coș
+        </button>
+      </div>
+    </article>
+
+    <!-- Dans 33 -->
+    <article class="card">
+      <img class="thumb" src="images/dans.jpg" alt="Dans" loading="lazy">
+      <div class="body">
+        <div class="top"><h3>Dans</h3><span class="price">33 RON</span></div>
+        <button class="btn add-to-cart"
+          data-id="dans" data-name="Dans" data-price="33" data-image="images/dans.jpg">
+          Adaugă în coș
+        </button>
+      </div>
+    </article>
+
+    <!-- Îndrăgostiți 99 -->
+    <article class="card">
+      <img class="thumb" src="images/indragostiti.jpg" alt="Îndrăgostiți" loading="lazy">
+      <div class="body">
+        <div class="top"><h3>Îndrăgostiți</h3><span class="price">99 RON</span></div>
+        <button class="btn add-to-cart"
+          data-id="indragostiti" data-name="Îndrăgostiți" data-price="99" data-image="images/indragostiti.jpg">
+          Adaugă în coș
+        </button>
+      </div>
+    </article>
+
+    <!-- Peisaj 99 -->
+    <article class="card">
+      <img class="thumb" src="images/peisaj.jpg" alt="Peisaj" loading="lazy">
+      <div class="body">
+        <div class="top"><h3>Peisaj</h3><span class="price">99 RON</span></div>
+        <button class="btn add-to-cart"
+          data-id="peisaj" data-name="Peisaj" data-price="99" data-image="images/peisaj.jpg">
+          Adaugă în coș
+        </button>
+      </div>
+    </article>
+
+    <!-- Peisaj de iarnă 99 -->
+    <article class="card">
+      <img class="thumb" src="images/peisaj_iarna.jpg" alt="Peisaj de iarnă" loading="lazy">
+      <div class="body">
+        <div class="top"><h3>Peisaj de iarnă</h3><span class="price">99 RON</span></div>
+        <button class="btn add-to-cart"
+          data-id="peisaj-iarna" data-name="Peisaj de iarnă" data-price="99" data-image="images/peisaj_iarna.jpg">
+          Adaugă în coș
+        </button>
+      </div>
+    </article>
+
   </section>
 </main>
 
-<footer class="wrap" style="text-align:center;margin:28px 0;color:#666">
+<footer class="wrap" style="text-align:center;margin-top:30px;color:#666">
   <small>&copy; <span id="year"></span> — MSA Handmade.</small>
 </footer>
 
-<!-- Coș -->
 <script src="cart.js"></script>
-
-<!-- Lightbox + bind butoane -->
 <script>
-  // an curent
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // lightbox simplu
-  const lb = document.createElement('div'); lb.id='lb';
-  lb.innerHTML = '<img alt=""><!-- -->';
-  document.body.appendChild(lb);
-  lb.addEventListener('click', ()=> lb.style.display='none');
+  // Un singur listener global (fără dubluri)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.add-to-cart');
+    if (!btn) return;
+    e.preventDefault();
 
-  document.querySelectorAll('img.zoom').forEach(img=>{
-    img.addEventListener('click', ()=>{
-      const full = img.getAttribute('data-full') || img.src;
-      lb.querySelector('img').src = full;
-      lb.style.display = 'flex';
+    if (!window.MSACart) { alert('Coș indisponibil'); return; }
+
+    MSACart.addToCart({
+      id: btn.dataset.id,
+      name: btn.dataset.name,
+      price: Number(btn.dataset.price),
+      image: btn.dataset.image
     });
+
+    const old = btn.textContent;
+    btn.textContent = 'Adăugat!';
+    btn.disabled = true;
+    setTimeout(()=>{ btn.textContent = old; btn.disabled = false; }, 800);
   });
 
-  function bindCartButtons(){
-    document.querySelectorAll('.add-to-cart').forEach(btn=>{
-      btn.addEventListener('click', e=>{
-        e.preventDefault(); e.stopPropagation();
-        if (!window.MSACart){ alert('Coș indisponibil'); return; }
-        MSACart.addToCart({
-          id: btn.dataset.id,
-          name: btn.dataset.name,
-          price: Number(btn.dataset.price),
-          image: btn.dataset.image
-        });
-        // feedback scurt
-        const old = btn.textContent;
-        btn.textContent = 'Adăugat!';
-        setTimeout(()=> btn.textContent = old, 900);
-      }, {passive:false});
-    });
-  }
-
-  // rulează IMEDIAT
-  bindCartButtons();
-  // și după ce se încarcă DOM-ul (fallback mobil)
-  document.addEventListener('DOMContentLoaded', bindCartButtons);
+  // afișăm badge-ul coșului
+  document.addEventListener('DOMContentLoaded', ()=>{
+    if (window.MSACart && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge();
+  });
 </script>
 </body>
 </html>
