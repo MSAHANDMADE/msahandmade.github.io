@@ -6,32 +6,41 @@
   <title>Coș — MSA Handmade</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    .wrap{max-width:900px;margin:24px auto;padding:0 16px}
-    header nav{display:flex;align-items:center;justify-content:space-between}
-    .cart{display:inline-flex;align-items:center;gap:6px}
+    .wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+    header .nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+    .cart{display:inline-flex;gap:6px;align-items:center}
     #cart-count{font-weight:700}
-    .box{background:#fff;border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
-    .cart-card{display:flex;gap:16px;padding:12px 8px;border-bottom:1px solid #eee}
-    .cart-card img{width:82px;height:82px;object-fit:cover;border-radius:10px}
-    .qty{display:flex;align-items:center;gap:8px}
-    .qty button{min-width:32px;height:32px;border-radius:8px;border:1px solid #ddd;background:#f8f8f8}
+    .box{background:#fff;border-radius:14px;box-shadow:0 8px 20px rgba(0,0,0,.06);padding:16px}
+    .cart-card{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #eee}
+    .cart-card img{width:80px;height:80px;object-fit:cover;border-radius:10px}
+    .cart-mid{flex:1}
+    .qty{display:flex;gap:8px;align-items:center;margin-top:6px}
+    .qty button{min-width:32px;height:32px;border:1px solid #ddd;border-radius:8px;background:#f8f8f8}
     .qty input{width:64px;height:32px;border:1px solid #ddd;border-radius:8px;padding:0 8px}
     .danger{background:#ffe9e9;border-color:#ffc9c9}
-    .totals{margin-top:16px;display:grid;gap:8px}
-    .totals .row{display:flex;justify-content:space-between}
-    .totals .grand{border-top:2px solid #222;padding-top:10px;font-weight:800}
-    .btn{background:#0a2230;color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700}
+
+    .totals{display:grid;gap:8px}
+    .row{display:flex;justify-content:space-between}
+    .grand{border-top:2px solid #222;padding-top:10px;font-weight:800}
+
+    .input{width:100%;height:40px;border:1px solid #ddd;border-radius:10px;padding:0 10px}
+    textarea.input{height:auto;padding:10px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:640px){ .grid{grid-template-columns:1fr} .box{padding:14px} }
+
+    fieldset{border:1px solid #ddd;border-radius:12px;padding:12px}
+    legend{padding:0 6px}
+    .btn{background:#0a2230;color:#fff;border:none;border-radius:10px;padding:12px 16px;font-weight:700}
     .btn.gray{background:#f2f2f2;color:#111}
-    .hidden{display:none}
   </style>
 </head>
 <body>
 <header class="wrap">
-  <nav>
+  <nav class="nav">
     <div>
       <a href="index.html">Acasă</a>
-      <a href="produse.html" style="margin-left:12px">Produse</a>
-      <a href="contact.html" style="margin-left:12px">Contact</a>
+      <a href="produse.html" style="margin-left:14px">Produse</a>
+      <a href="contact.html" style="margin-left:14px">Contact</a>
     </div>
     <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
   </nav>
@@ -45,14 +54,12 @@
   <div class="box" style="margin-top:14px">
     <strong>Totaluri</strong>
     <div class="totals">
-      <div class="row"><span>Subtotal</span> <span id="subtot">0.00</span> RON</div>
-      <div class="row"><span>Reducere</span> <span id="disc">0.00</span> RON</div>
-      <div class="row"><span>Livrare</span> <span id="ship">17.00</span> RON</div>
-      <div class="row grand"><span>Total</span> <span id="grand">17.00</span> RON</div>
+      <div class="row"><span>Subtotal</span><span id="subtot">0.00</span> RON</div>
+      <div class="row"><span>Reducere</span><span id="disc">0.00</span> RON</div>
+      <div class="row"><span>Livrare</span><span id="ship">17.00</span> RON</div>
+      <div class="row grand"><span>Total</span><span id="grand">17.00</span> RON</div>
     </div>
-    <small style="color:#666;display:block;margin-top:6px">
-      Reduceri automate: ≥200 RON −10%, ≥300 RON −15% + livrare gratuită, ≥400 RON −20%.
-    </small>
+    <small style="display:block;margin-top:6px;color:#666">Reduceri automate: ≥200 RON −10%, ≥300 RON −15% + livrare gratuită, ≥400 RON −20%.</small>
   </div>
 
   <form id="order-form" class="box" style="margin-top:14px">
@@ -62,68 +69,63 @@
       <label style="margin-left:16px"><input type="radio" name="tip" value="Persoană juridică"> Persoană juridică</label>
     </fieldset>
 
-    <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div><label>Nume<input id="nume" name="nume" required class="input"></label></div>
-      <div><label>Prenume<input id="prenume" name="prenume" required class="input"></label></div>
-      <div><label>Email<input id="email" name="email" type="email" required class="input"></label></div>
-      <div><label>Telefon<input id="telefon" name="telefon" required class="input"></label></div>
-      <div><label>Județ<input id="judet" name="judet" required class="input"></label></div>
-      <div><label>Oraș<input id="oras" name="oras" required class="input"></label></div>
-      <div><label>Cod poștal<input id="codpostal" name="codpostal" required class="input"></label></div>
-      <div style="grid-column:1/-1"><label>Adresă<input id="adresa" name="adresa" required class="input"></label></div>
-      <div style="grid-column:1/-1"><label>Mențiuni (opțional)<textarea id="mentiuni" name="mentiuni" rows="3" class="input"></textarea></label></div>
+    <div class="grid">
+      <div><label>Nume</label><input class="input" name="nume" required></div>
+      <div><label>Prenume</label><input class="input" name="prenume" required></div>
+      <div><label>Email</label><input class="input" name="email" type="email" required></div>
+      <div><label>Telefon</label><input class="input" name="telefon" required></div>
+      <div><label>Județ</label><input class="input" name="judet" required></div>
+      <div><label>Oraș</label><input class="input" name="oras" required></div>
+      <div><label>Cod poștal</label><input class="input" name="codpostal" required></div>
+      <div style="grid-column:1 / -1"><label>Adresă</label><input class="input" name="adresa" required></div>
+      <div style="grid-column:1 / -1"><label>Mențiuni (opțional)</label><textarea class="input" rows="3" name="mentiuni"></textarea></div>
     </div>
 
-    <div id="pj" class="hidden" style="margin-top:10px">
+    <div id="pj-fields" style="margin-top:10px;display:none">
       <hr style="margin:10px 0">
       <strong>Persoană juridică</strong>
-      <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-        <div><label>Firmă<input id="firma" name="firma" class="input"></label></div>
-        <div><label>CUI<input id="cui" name="cui" class="input"></label></div>
-        <div style="grid-column:1/-1"><label>Reg. Com.<input id="regcom" name="regcom" class="input"></label></div>
+      <div class="grid" style="margin-top:8px">
+        <div><label>Firmă</label><input class="input" name="firma"></div>
+        <div><label>CUI</label><input class="input" name="cui"></div>
+        <div style="grid-column:1 / -1"><label>Reg. Com.</label><input class="input" name="regcom"></div>
       </div>
     </div>
 
-    <div style="display:flex;gap:10px;margin-top:14px">
+    <div style="display:flex;gap:10px;margin-top:16px">
       <button type="button" id="clear" class="btn gray">Golește coșul</button>
-      <button type="submit" class="btn">Plasează comanda</button>
+      <button class="btn" type="submit">Plasează comanda</button>
     </div>
   </form>
 </main>
 
-<footer class="wrap" style="text-align:center;margin-top:30px;color:#666">
+<footer class="wrap" style="text-align:center;margin:24px 0;color:#666">
   <small>&copy; <span id="year"></span> — MSA Handmade.</small>
 </footer>
 
-<!-- EmailJS ÎNAINTE de cart.js -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script src="cart.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
   document.addEventListener('change',(e)=>{
-    if(e.target.name==='tip'){
-      document.getElementById('pj').classList.toggle('hidden', e.target.value!=='Persoană juridică');
+    if (e.target.name==='tip'){
+      document.getElementById('pj-fields').style.display =
+        e.target.value==='Persoană juridică' ? 'block':'none';
     }
   });
 
-  document.addEventListener('DOMContentLoaded', ()=>{
-    if (window.MSACart?.render) MSACart.render();
-  });
+  document.getElementById('clear').addEventListener('click', ()=>{ MSACart.clearCart(); MSACart.render(); });
 
-  document.getElementById('clear').addEventListener('click', ()=>{
-    if (window.MSACart){ MSACart.clearCart(); MSACart.render(); }
-  });
+  document.addEventListener('DOMContentLoaded', ()=> MSACart.render());
 
   document.getElementById('order-form').addEventListener('submit', async (e)=>{
     e.preventDefault();
-    if (!window.MSACart){ alert('Coș indisponibil'); return; }
     const list = MSACart.readCart();
     if (!list.length){ alert('Coșul este gol.'); return; }
     try{
       await MSACart.submitOrder(new FormData(e.target));
     }catch(err){
-      alert('Eroare la trimiterea comenzii: ' + (err?.text || err?.message || 'necunoscută'));
+      alert('Eroare la trimitere comenzii.');
     }
   });
 </script>
