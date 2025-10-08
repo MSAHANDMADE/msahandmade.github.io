@@ -6,18 +6,15 @@
   <title>Produse — MSA Handmade</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* layout curat și compact pe mobil */
     .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px}
-    .nav a{margin:0 8px}
     .wrap{max-width:980px;margin:0 auto;padding:0 16px}
-    h1{font-size:clamp(28px,4.5vw,48px);margin:18px 0}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-    .card{grid-column:span 12;background:#fff;border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,.06);overflow:hidden}
-    @media (min-width:680px){.card{grid-column:span 6}}
+    .card{grid-column:span 12;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);overflow:hidden}
+    @media(min-width:720px){.card{grid-column:span 6}}
+    @media(min-width:1024px){.card{grid-column:span 4}}
     .thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
-    .body{padding:12px}
+    .body{padding:12px 14px}
     .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .top h3{margin:0}
     .price{font-weight:700}
     .btn{width:100%;margin-top:10px;padding:12px;border:0;border-radius:10px;background:#0a2230;color:#fff;font-weight:700}
   </style>
@@ -34,34 +31,36 @@
 
 <main class="wrap">
   <h1>Produsele noastre</h1>
-
   <section class="grid" id="prod-list"></section>
 </main>
 
-<!-- EmailJS SDK (dacă te bazezi pe proformă în alte pagini) -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<!-- Coșul -->
 <script src="cart.js"></script>
 
 <script>
-  // ===== LISTA OFICIALĂ DE PRODUSE =====
+  // ===== LISTA OFICIALĂ (ordonată: 5 → 11 → 33 → 99) =====
   const PRODUCTS = [
-    // 29 RON
-    { id:'buchet', name:'Buchet', price:29, image:'images/buchet.jpg' },
+    // 5 RON
+    { id: 'ingeras',    name: 'Îngeraș',         price: 5,  image: 'images/ingeras.png' },
+    { id: 'floricele',  name: 'Floricele',       price: 5,  image: 'images/floricele.png' },
 
-    // 33 RON (restul)
-    { id:'crin', name:'Crin', price:33, image:'images/crin.jpg' },
-    { id:'dans', name:'Dans', price:33, image:'images/dans.jpg' },
-    { id:'sarut', name:'Sărut', price:33, image:'images/sarut.jpg' },
-    { id:'flori', name:'Flori', price:33, image:'images/flori.jpg' },
-    { id:'inger', name:'Înger', price:33, image:'images/inger.jpg' },
-    { id:'logodna', name:'Logodnă', price:33, image:'images/logodna.jpg' },
-    { id:'floarea-soarelui', name:'Floarea-soarelui', price:33, image:'images/lumanare_floarea-soarelui.png' },
+    // 11 RON
+    { id: 'family',     name: 'Family',          price: 11, image: 'images/family.png' },
+
+    // 33 RON
+    { id: 'isus',       name: 'Iisus',           price: 33, image: 'images/isus.png' },
+    { id: 'buchet',     name: 'Buchet',          price: 29, image: 'images/buchet.jpg' },  // dacă vrei 33, schimbă price
+    { id: 'crin',       name: 'Crin',            price: 33, image: 'images/crin.jpg' },
+    { id: 'dans',       name: 'Dans',            price: 33, image: 'images/dans.jpg' },
+    { id: 'flori',      name: 'Flori',           price: 33, image: 'images/flori.jpg' },
+    { id: 'inger',      name: 'Înger',           price: 33, image: 'images/inger.jpg' },
+    { id: 'logodna',    name: 'Logodnă',         price: 33, image: 'images/logodna.jpg' },
+    { id: 'floarea-soarelui', name: 'Floarea-soarelui', price: 33, image: 'images/lumanare_floarea-soarelui.png' },
 
     // 99 RON
-    { id:'peisaj', name:'Peisaj', price:99, image:'images/peisaj.jpg' },
-    { id:'peisajiarna', name:'Peisaj de iarnă', price:99, image:'images/peisajiarna.jpg' },
-    { id:'indragostiti', name:'Îndrăgostiți', price:99, image:'images/indragostiti.jpg' },
+    { id: 'peisaj',     name: 'Peisaj',          price: 99, image: 'images/peisaj.jpg' },
+    { id: 'peisajiarna',name: 'Peisaj de iarnă', price: 99, image: 'images/peisajiarna.jpg' },
+    { id: 'indragostiti', name: 'Îndrăgostiți',  price: 99, image: 'images/indragostiti.jpg' },
   ];
 
   // ===== RENDER =====
@@ -80,35 +79,30 @@
     `).join('');
   }
 
-  // ===== BIND (o singură dată, fără pop-up-uri enervante) =====
+  // ===== BIND (o singură dată) =====
   (function bindOnce(){
     if (window.__MSA_BOUND__) return;
     window.__MSA_BOUND__ = true;
 
     function bind(){
-      // render înainte ca să existe butoane
       renderProducts();
-
       document.querySelectorAll('.add').forEach(btn=>{
         btn.addEventListener('click', (e)=>{
           e.preventDefault();
-          if (!window.MSACart) return; // cart.js încă nu e gata
+          if (!window.MSACart) return;
           MSACart.addToCart({
-            id: btn.dataset.id,
+            id:   btn.dataset.id,
             name: btn.dataset.name,
             price: Number(btn.dataset.price || 0),
             image: btn.dataset.image
           });
-          // feedback discret
           const old = btn.textContent; btn.textContent = 'Adăugat!';
           setTimeout(()=> btn.textContent = old, 700);
         });
       });
-
       MSACart?.updateCartCountBadge?.();
     }
 
-    // imediat + după 80ms dacă cart.js vine mai lent
     document.addEventListener('DOMContentLoaded', bind);
     setTimeout(bind, 80);
   })();
