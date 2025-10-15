@@ -65,3 +65,45 @@ h1,h2,h3{line-height:1.2;margin:10px 0}
 @media (min-width:1024px){
   .card{grid-column:span 4}
 }
+/* ====== NAV FIX: linkurile + cos pe un singur rand ====== */
+.header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
+.header .left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.header .left a {
+  text-decoration: none;
+  padding: 6px 0;
+  font-weight: 500;
+}
+
+/* Coșul de cumpărături */
+.cart-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f7f7f7;
+}
+
+/* Ajustări pe telefoane */
+@media (max-width: 420px) {
+  .header .left {
+    gap: 10px;
+  }
+  .header .left a {
+    font-size: 15px;
+  }
+}
