@@ -1,28 +1,126 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MSA Handmade — Acasă</title>
-  <link rel="stylesheet" href="styles.css">
-  <!-- FIX MENIU: CSS inline ca să bată orice cache -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Despre — MSA Handmade</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Povestea MSA Handmade — o lume plină de emoție, lumină și pasiune, născută din dragostea pentru lucrul manual.">
+
   <style>
-    .header .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .header .left{display:flex;align-items:center;gap:18px;white-space:nowrap}
-    .header .left a{padding:6px 0;font-weight:500;text-decoration:none}
-    .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f7f7f7}
-    @media (max-width:420px){.header .left{gap:10px}.header .left a{font-size:15px}}
+    body {
+      background-color: #fff8f6;
+      color: #333;
+      font-family: "Poppins", sans-serif;
+      line-height: 1.7;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background: #fff;
+      padding: 10px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    nav.wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 900px;
+      margin: auto;
+      padding: 0 16px;
+    }
+
+    nav a {
+      color: #222;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #b44d4d;
+    }
+
+    .cart-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: #f7dede;
+      border-radius: 999px;
+      font-size: 14px;
+    }
+
+    main.wrap {
+      background: #fff;
+      max-width: 820px;
+      margin: 40px auto 70px;
+      padding: 40px 28px;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+      color: #b44d4d;
+    }
+
+    p {
+      margin-bottom: 16px;
+      font-size: 17px;
+    }
+
+    b, strong {
+      color: #b44d4d;
+    }
+
+    i {
+      color: #b47777;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px 10px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .heart {
+      color: #f9b500;
+      font-size: 20px;
+    }
+
+    /* ===== Apariție fină ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+      main.wrap {
+        padding: 30px 18px;
+      }
+      p {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
-<body>
-  <div class="promo">🎉 Reduceri până la <b>20%</b> + <b>livrare gratuită</b> de la <b>300 RON</b>.</div>
 
-  <header class="header">
+<body>
+  <header>
     <nav class="wrap">
       <div class="left">
         <a href="index.html">Acasă</a>
         <a href="produse.html">Produse</a>
-        <a href="despre.html">Despre</a>
         <a href="contact.html">Contact</a>
       </div>
       <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
@@ -30,31 +128,51 @@
   </header>
 
   <main class="wrap">
-    <section class="hero">
-      <div class="box">
-        <img class="logo" src="logo.png" alt="MSA Handmade Decor">
-        <h1 style="text-align:center">Bun venit la MSA Handmade</h1>
-        <p class="lead" style="text-align:center">
-          Lumânări și decorațiuni artizanale, făcute cu grijă.
-          Profită de reduceri și livrare gratuită de la 300 RON.
-        </p>
-        <div><a href="produse.html" class="btn">Vezi produsele</a></div>
-      </div>
-    </section>
+    <h1 class="reveal">Povestea MSA Handmade</h1>
+
+    <p class="reveal"><b>MSA Handmade</b> a pornit din dorința unei mame de a fi aproape de copilul ei — 
+    ideal ar fi fost <b>27 din 24 de ore</b> — și din iubirea pentru lucrurile făcute pe îndelete, cu mâna și cu inima.</p>
+
+    <p class="reveal">Universul meu s-a deschis pe o masă mică, lângă o fereastră. 
+    În aer, miros de ceară caldă. Liniște. Un fitil, o matriță, o notă scrisă pe fugă.
+    Fiecare probă era ca o gură de oxigen: 
+    materialele se așezau, culorile se împrieteneau, iar din mâini ieșeau forme blânde. 
+    Acolo mi-am dat seama că nu e doar un hobby, ci <i>lumea mea</i>.</p>
+
+    <p class="reveal">Întâi au fost piese simple, apoi au început să apară <b>decoruri cu suflet</b>: 
+    povești turnate în ceară, compoziții delicate, mici fragmente de bucurie care luminează o casă și o zi.</p>
+
+    <p class="reveal">Primul meu decor — <i>„Îndrăgostiții”</i> — a ajuns acolo unde trebuia. 
+    De atunci, știu că <b>din umbră mă va susține mereu</b>: 
+    un semn al începutului, un sprijin cald și tăcut, inspirația care mă împinge să merg mai departe.</p>
+
+    <p class="reveal">Au urmat ceramica, ipsosul și idei care prind viață pe măsură ce cresc și eu. 
+    În atelier e mereu un strop de magie: o lumină care cade frumos pe piese, o textură nouă, 
+    un detaliu care schimbă totul. Lucrez, învăț și respir creativitate.</p>
+
+    <p class="reveal"><b>Îndrăzniți să visați.</b> Pașii mici construiesc drumuri mari. 
+    Nu renunțați când devine greu — acolo se încheagă povestea, 
+    cu inima plină și zâmbetul sincer.</p>
+
+    <p class="reveal">Mulțumesc fiecărui om care a ales MSA Handmade și a făcut parte din această călătorie. 
+    Vă îmbrățișez cu drag. <span class="heart">💛</span></p>
   </main>
 
-  <footer class="footer">
-    <div class="socials">
-      <a href="https://facebook.com" target="_blank"><img src="images/facebook.svg" alt="Facebook"></a>
-      <a href="https://instagram.com" target="_blank"><img src="images/instagram.svg" alt="Instagram"></a>
-    </div>
-    <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
+  <footer>
+    &copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.
   </footer>
 
-  <script src="cart.js"></script>
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-    document.addEventListener('DOMContentLoaded', ()=>{ if (window.MSACart) MSACart.readCart(); });
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Fade-in magic ✨
+    const els = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('show'); }
+      });
+    }, {threshold: 0.1});
+    els.forEach(el=>io.observe(el));
   </script>
 </body>
 </html>
