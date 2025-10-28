@@ -4,66 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Coș — MSA Handmade</title>
-
-  <!-- STILURI LOCALE: totul inline -->
+  <link rel="stylesheet" href="styles.css">
   <style>
-    :root{--ink:#111;--muted:#666;--brand:#0a2230;--soft:#f7f7f7;--card:#fff}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;color:var(--ink);background:#fff}
-    .promo{background:#0f3a2e;color:#fff;text-align:center;font-weight:700;padding:8px}
-    .promo b{color:#ffd}
-    /* NAV */
-    #main-nav{display:flex;justify-content:center;gap:14px;align-items:center;padding:12px}
+    /* container */
+    .wrap{max-width:900px;margin:20px auto;padding:0 16px}
+    .box{background:#fff;border-radius:14px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+
+    /* nav unificat */
+    #main-nav{display:flex;justify-content:center;gap:15px;flex-wrap:nowrap}
     #main-nav a{text-decoration:none;color:#333;font-weight:500;padding:6px 10px}
     #main-nav a:hover{color:#d12b4a}
-    .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--soft)}
-    /* LAYOUT */
-    .wrap{max-width:980px;margin:0 auto;padding:0 16px}
-    h1{font-size:clamp(28px,4vw,40px);margin:18px 0}
-    .box{background:var(--card);border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,.06);padding:16px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    @media (max-width:700px){.grid{grid-template-columns:1fr}}
-    /* listă coș (MSACart o populează) */
-    .totals{margin-top:8px;display:grid;gap:6px}
-    .row{display:flex;justify-content:space-between}
-    .grand{border-top:2px solid #222;padding-top:10px;font-weight:800}
-    .btn{background:var(--brand);color:#fff;border:none;border-radius:10px;padding:12px 14px;font-weight:800}
+    .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f7f7f7}
+
+    /* totaluri */
+    .totals{margin-top:12px;display:grid;gap:6px}
+    .totals .row{display:flex;justify-content:space-between}
+    .totals .grand{border-top:2px solid #222;padding-top:10px;font-weight:800}
+
+    /* formular */
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:620px){ .grid{grid-template-columns:1fr} }
+    .btn{background:#0a2230;color:#fff;border:none;border-radius:10px;padding:12px 14px;font-weight:700}
     .btn.gray{background:#f2f2f2;color:#111}
-    footer{text-align:center;padding:20px 10px;font-size:14px;color:#666;border-top:1px solid #eee;background:#fafafa;margin-top:28px}
-    footer .socials{display:flex;justify-content:center;gap:10px;margin-bottom:8px}
-    footer .socials img{width:24px;height:24px}
-    footer .legal a{color:#555;text-decoration:none;margin:0 6px}
-    footer .legal a:hover{color:#d12b4a}
-    input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font:inherit}
-    label{display:block;font-weight:600;margin:6px 0 4px}
-    fieldset{border:1px solid #eee;padding:10px;border-radius:10px}
-    legend{padding:0 6px;color:#333}
+
+    /* ====== FIX layout coș (thumb mic + rând curat) ====== */
+    #items > *{
+      display:flex !important;
+      align-items:flex-start !important;
+      gap:12px !important;
+      border-bottom:1px solid #eee !important;
+      padding:10px !important;
+    }
+    #items img{
+      width:82px !important;
+      height:82px !important;
+      object-fit:cover !important;
+      border-radius:10px !important;
+      flex:0 0 82px !important;
+    }
+    #items .name, #items h3{margin:0 !important; font-size:16px !important; line-height:1.2 !important;}
+    #items .price{font-weight:700 !important;}
+    #items .controls, #items .qty{display:flex !important; gap:8px !important; align-items:center !important;}
+
+    /* footer */
+    footer{text-align:center;padding:20px 10px;font-size:14px;color:#666;border-top:1px solid #ddd;background:#fafafa}
+    footer .socials{margin-bottom:10px}
+    footer .socials img{width:24px;height:24px;margin:0 5px}
+    footer .legal-nav a{margin:0 5px;color:#555;text-decoration:none}
+    footer .legal-nav a:hover{color:#d12b4a}
   </style>
 
+  <!-- librării -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script src="cart.js"></script>
 </head>
 <body>
 
+  <!-- bară promo -->
   <div class="promo">
-    Reduceri până la <b>-20%</b> · Livrare gratuită de la <b>300 RON</b>
+    <b>Reduceri până la -20%</b> · <b>Livrare gratuită</b> de la <b>300 RON</b>
   </div>
 
-  <nav id="main-nav">
-    <a href="index.html">Acasă</a>
-    <a href="produse.html">Produse</a>
-    <a href="despre.html">Despre</a>
-    <a href="contact.html">Contact</a>
-    <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
-  </nav>
+  <!-- nav -->
+  <header class="header">
+    <nav id="main-nav">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="despre.html">Despre</a>
+      <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
+    </nav>
+  </header>
 
   <main class="wrap">
     <h1>Coșul tău</h1>
 
-    <!-- Lista produse (umplută de MSACart.render) -->
+    <!-- lista produse -->
     <div id="items" class="box"></div>
 
-    <!-- Totaluri -->
+    <!-- totaluri -->
     <div class="box" style="margin-top:14px">
       <strong>Totaluri</strong>
       <div class="totals">
@@ -77,7 +96,7 @@
       </small>
     </div>
 
-    <!-- Formular comandă -->
+    <!-- formular comandă -->
     <form id="order-form" class="box" style="margin-top:14px">
       <fieldset style="margin-bottom:10px">
         <legend>Tip client</legend>
@@ -87,25 +106,25 @@
       </fieldset>
 
       <div class="grid">
-        <div><label>Nume<input name="nume" required></label></div>
-        <div><label>Prenume<input name="prenume" required></label></div>
-        <div><label>Email<input type="email" name="email" required></label></div>
-        <div><label>Telefon<input name="telefon" required></label></div>
-        <div><label>Județ<input name="judet" required></label></div>
-        <div><label>Oraș<input name="oras" required></label></div>
-        <div><label>Cod poștal<input name="codpostal" required></label></div>
-        <div style="grid-column:1/-1"><label>Adresă<input name="adresa" required></label></div>
-        <div style="grid-column:1/-1"><label>Mențiuni (opțional)<textarea name="mentiuni" rows="3"></textarea></label></div>
+        <div><label>Nume<input class="input" name="nume" required></label></div>
+        <div><label>Prenume<input class="input" name="prenume" required></label></div>
+        <div><label>Email<input class="input" type="email" name="email" required></label></div>
+        <div><label>Telefon<input class="input" name="telefon" required></label></div>
+        <div><label>Județ<input class="input" name="judet" required></label></div>
+        <div><label>Oraș<input class="input" name="oras" required></label></div>
+        <div><label>Cod poștal<input class="input" name="codpostal" required></label></div>
+        <div style="grid-column:1/-1"><label>Adresă<input class="input" name="adresa" required></label></div>
+        <div style="grid-column:1/-1"><label>Mențiuni (opțional)<textarea class="input" name="mentiuni" rows="3"></textarea></label></div>
       </div>
 
-      <!-- câmpuri PJ -->
+      <!-- date firmă -->
       <div id="pj" style="display:none;margin-top:10px">
         <hr>
         <strong>Persoană juridică</strong>
         <div class="grid" style="margin-top:8px">
-          <div><label>Firmă<input name="firma"></label></div>
-          <div><label>CUI<input name="cui"></label></div>
-          <div style="grid-column:1/-1"><label>Reg. Com.<input name="regcom"></label></div>
+          <div><label>Firmă<input class="input" name="firma"></label></div>
+          <div><label>CUI<input class="input" name="cui"></label></div>
+          <div style="grid-column:1/-1"><label>Reg. Com.<input class="input" name="regcom"></label></div>
         </div>
       </div>
 
@@ -116,24 +135,26 @@
     </form>
   </main>
 
+  <!-- footer -->
   <footer>
     <div class="socials">
       <a href="https://facebook.com" target="_blank"><img src="images/facebook.svg" alt="Facebook"></a>
       <a href="https://instagram.com" target="_blank"><img src="images/instagram.svg" alt="Instagram"></a>
     </div>
-    <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
-    <div class="legal">
+    <small>&copy; <span id="year"></span> – MSA Handmade. Toate drepturile rezervate.</small>
+    <nav class="legal-nav">
       <a href="termeni.html">Termeni & Condiții</a> ·
       <a href="confidentialitate.html">Confidențialitate</a> ·
       <a href="cookies.html">Cookies</a> ·
       <a href="retur.html">Retur</a>
-    </div>
+    </nav>
   </footer>
 
   <script>
+    // anul curent
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // comutarea câmpurilor PJ
+    // comutare secțiune PJ
     document.addEventListener('change', (e)=>{
       if (e.target.name === 'tip') {
         document.getElementById('pj').style.display =
@@ -141,15 +162,18 @@
       }
     });
 
-    // randare + butoane
+    // randează coșul + butoane
     document.addEventListener('DOMContentLoaded', ()=>{
       if (window.MSACart?.render) MSACart.render();
-      document.getElementById('clear').addEventListener('click', ()=>{
-        MSACart.clearCart(); MSACart.render();
-      });
+      const clearBtn = document.getElementById('clear');
+      if (clearBtn){
+        clearBtn.addEventListener('click', ()=>{
+          MSACart.clearCart(); MSACart.render();
+        });
+      }
     });
 
-    // submit
+    // trimite comanda
     document.getElementById('order-form').addEventListener('submit', async (e)=>{
       e.preventDefault();
       const list = MSACart.readCart();
@@ -157,9 +181,27 @@
       try{
         await MSACart.submitOrder(new FormData(e.target));
       }catch(err){
-        alert('Eroare la trimiterea comenzii: ' + (err?.message||''));  
+        alert('Eroare la trimiterea comenzii: ' + (err?.message||''));
       }
     });
+
+    // ---- FIX layout coș chiar și după re-randări ----
+    const fixCartLayout = () => {
+      document.querySelectorAll('#items img').forEach(img=>{
+        img.style.width='82px'; img.style.height='82px';
+        img.style.objectFit='cover'; img.style.borderRadius='10px';
+      });
+      document.querySelectorAll('#items > *').forEach(row=>{
+        row.style.display='flex';
+        row.style.alignItems='flex-start';
+        row.style.gap='12px';
+        row.style.borderBottom='1px solid #eee';
+        row.style.padding='10px';
+      });
+    };
+    document.addEventListener('DOMContentLoaded', fixCartLayout);
+    const mo = new MutationObserver(fixCartLayout);
+    mo.observe(document.getElementById('items'), {childList:true, subtree:true});
   </script>
 </body>
 </html>
