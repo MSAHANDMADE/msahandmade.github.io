@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Politica de Cookie-uri - MSA Handmade</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header>
+  <h1>Politica de Cookie-uri</h1>
+</header>
 
+<main>
+  <section>
+    <h2>1. Ce sunt cookie-urile?</h2>
+    <p>Cookie-urile sunt fișiere text de mici dimensiuni salvate automat pe dispozitivul tău atunci când vizitezi un site. Ele ajută la funcționarea corectă a site-ului, la analizarea traficului și la îmbunătățirea experienței utilizatorului.</p>
+  </section>
+
+  <section>
+    <h2>2. Tipuri de cookie-uri utilizate</h2>
+    <ul>
+      <li><strong>Cookie-uri necesare</strong> – esențiale pentru funcționarea site-ului (de exemplu, pentru formulare și navigare).</li>
+      <li><strong>Cookie-uri de analiză</strong> – ne ajută să înțelegem cum este folosit site-ul (ex. Google Analytics).</li>
+      <li><strong>Cookie-uri de marketing</strong> – folosite doar dacă utilizatorul își dă acordul, pentru reclame personalizate sau integrare social media.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3. Scopul folosirii cookie-urilor</h2>
+    <ul>
+      <li>Funcționarea optimă a paginilor și a coșului de cumpărături</li>
+      <li>Analiza vizitelor anonime pentru îmbunătățirea serviciilor</li>
+      <li>Reținerea preferințelor de limbă sau afișare</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>4. Consimțământul utilizatorului</h2>
+    <p>La prima vizită pe site, utilizatorul primește o notificare privind utilizarea cookie-urilor. Continuarea navigării reprezintă acceptul utilizării cookie-urilor conform acestei politici.</p>
+  </section>
+
+  <section>
+    <h2>5. Dezactivarea cookie-urilor</h2>
+    <p>Poți controla și/sau șterge cookie-urile oricând din setările browserului tău. Atenție — dezactivarea acestora poate afecta funcționalitatea site-ului.</p>
+  </section>
+
+  <section>
+    <h2>6. Contact</h2>
+    <p>Pentru orice întrebări privind această politică, ne poți contacta la:
+      <a href="mailto:msahandmade.contact@gmail.com">msahandmade.contact@gmail.com</a>.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 MSA Handmade |
+    <a href="termeni.html">Termeni &amp; Condiții</a> |
+    <a href="confidentialitate.html">Confidențialitate</a> |
+    <a href="cookies.html">Cookies</a> |
+    <a href="retur.html">Retur</a>
+  </p>
+</footer>
+
+<!-- Banner simplu de consimțământ pentru cookies -->
+<div id="cookie-banner" style="position:fixed;bottom:0;width:100%;background:#222;color:#fff;padding:10px;text-align:center;z-index:999;">
+  <p>Folosim cookie-uri pentru funcționarea optimă a site-ului. Continuarea navigării implică acceptul tău. 
+    <button onclick="acceptCookies()" style="margin-left:10px;padding:5px 15px;">Accept</button>
+  </p>
+</div>
+
+<script>
+function acceptCookies() {
+  document.getElementById("cookie-banner").style.display = "none";
+  localStorage.setItem("cookiesAccepted", "true");
+}
+if (localStorage.getItem("cookiesAccepted") === "true") {
+  document.getElementById("cookie-banner").style.display = "none";
+}
+</script>
+
+</body>
+</html>
