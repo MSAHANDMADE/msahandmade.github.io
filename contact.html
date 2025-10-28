@@ -1,208 +1,142 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Contact — MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css" />
+
+  <!-- STILURI LOCALE: nu trebuie să modifici styles.css -->
   <style>
-    /* nav & footer – la fel ca pe index */
-    #main-nav{display:flex;justify-content:center;gap:15px;flex-wrap:nowrap}
+    :root{--ink:#111;--muted:#666;--brand:#0a2230;--soft:#f7f7f7;--card:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;color:var(--ink);background:#fff}
+    .promo{background:#0f3a2e;color:#fff;text-align:center;font-weight:700;padding:8px}
+    .promo b{color:#ffd}
+    /* NAV */
+    #main-nav{display:flex;justify-content:center;gap:14px;align-items:center;padding:12px}
     #main-nav a{text-decoration:none;color:#333;font-weight:500;padding:6px 10px}
     #main-nav a:hover{color:#d12b4a}
-    .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f7f7f7}
-    footer{text-align:center;padding:20px 10px;font-size:14px;color:#666;border-top:1px solid #ddd;background:#fafafa}
-    footer .socials{margin-bottom:10px}
-    footer .socials img{width:24px;height:24px;margin:0 5px}
-    footer .legal-nav a{margin:0 5px;color:#555;text-decoration:none}
-    footer .legal-nav a:hover{color:#d12b4a}
-
-    /* layout contact */
+    .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--soft)}
+    /* PAGE */
     .wrap{max-width:980px;margin:0 auto;padding:0 16px}
-    .contact-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}
-    @media(min-width:900px){.contact-grid{grid-template-columns: 1fr 1fr}}
-
-    .card{background:#fff;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.06);padding:18px}
-    .card h2{margin:0 0 8px}
-    .list{display:grid;gap:10px;margin-top:10px}
-    .item{display:flex;gap:10px;align-items:flex-start}
-    .item b{min-width:92px;display:inline-block}
-    .item a{color:#0a2230;text-decoration:none}
-    .item a:hover{color:#d12b4a;text-decoration:underline}
-
-    /* form */
-    form{display:grid;gap:12px;margin-top:8px}
-    label{font-weight:600}
-    input, textarea{
-      width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;background:#fff;
-      font:inherit
-    }
-    textarea{min-height:120px;resize:vertical}
-    .btn{
-      padding:12px 14px;border:0;border-radius:10px;background:#0a2230;color:#fff;font-weight:800;
-      cursor:pointer
-    }
-    .btn:disabled{opacity:.6;cursor:not-allowed}
-    .note{font-size:.92rem;color:#555;margin-top:6px}
-    .success,.error{padding:10px;border-radius:10px}
-    .success{background:#e8f7ed;color:#1b6b3a}
-    .error{background:#fdeaea;color:#8a1c1c}
+    h1{font-size:clamp(28px,4vw,40px);margin:18px 0}
+    .card{background:var(--card);border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,.06);padding:18px}
+    .lead{color:#444}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
+    label{display:block;font-weight:600;margin:6px 0 4px}
+    input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font:inherit}
+    textarea{resize:vertical}
+    .btn{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:12px 16px;font-weight:800}
+    .muted{color:var(--muted)}
+    .break{overflow-wrap:anywhere;word-break:break-word}
+    /* FOOTER */
+    footer{text-align:center;padding:20px 10px;font-size:14px;color:#666;border-top:1px solid #eee;background:#fafafa;margin-top:28px}
+    footer .socials{display:flex;justify-content:center;gap:10px;margin-bottom:8px}
+    footer .socials img{width:24px;height:24px}
+    footer .legal a{color:#555;text-decoration:none;margin:0 6px}
+    footer .legal a:hover{color:#d12b4a}
   </style>
 </head>
 <body>
 
-  <!-- promo bar (opțional) -->
+  <!-- bara promo -->
   <div class="promo">
-    <b>Reduceri până la -20%</b> · <b>Livrare gratuită</b> de la <b>300 RON</b>
+    Reduceri până la <b>-20%</b> · Livrare gratuită de la <b>300 RON</b>
   </div>
 
-  <!-- NAV unificat -->
-  <header class="header">
-    <nav id="main-nav">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="despre.html">Despre</a>
-      <a href="contact.html"><strong>Contact</strong></a>
-      <a href="cos.html" class="cart-pill" aria-label="Vezi coșul">🛒 <span id="cart-count">0</span></a>
-    </nav>
-  </header>
+  <!-- nav unificat -->
+  <nav id="main-nav">
+    <a href="index.html">Acasă</a>
+    <a href="produse.html">Produse</a>
+    <a href="despre.html">Despre</a>
+    <a href="contact.html"><strong>Contact</strong></a>
+    <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
+  </nav>
 
   <main class="wrap">
     <h1>Contact</h1>
 
-    <div class="contact-grid">
-      <!-- CARD: date de contact -->
-      <section class="card">
-        <h2>Scrie-ne sau sună-ne</h2>
-        <p class="note">Răspundem de luni până vineri, 09:00–18:00. Pentru comenzi personalizate, descrie pe scurt ce îți dorești.</p>
+    <!-- CARD INFO -->
+    <section class="card" style="margin-bottom:16px">
+      <h2 style="margin:0 0 8px">Scrie-ne sau sună-ne</h2>
+      <p class="lead" style="margin:0 0 12px">
+        Răspundem de luni până vineri, 09:00–18:00.  
+        Pentru comenzi personalizate, descrie pe scurt ce îți dorești.
+      </p>
 
-        <div class="list">
-          <div class="item">
-            <b>Email</b>
-            <a href="mailto:msahandmade.contact@gmail.com">msahandmade.contact@gmail.com</a>
-          </div>
-
-          <div class="item">
-            <b>Facebook</b>
-            <a href="https://www.facebook.com/profile.php?id=61586109329255" target="_blank" rel="noopener">MSA Handmade</a>
-          </div>
-
-          <div class="item">
-            <b>Instagram</b>
-            <a href="https://www.instagram.com/msahandmadedecor" target="_blank" rel="noopener">@msahandmadedecor</a>
-          </div>
-
-          <!-- completează când vrei -->
-          <div class="item">
-            <b>WhatsApp</b>
-            <a href="#" title="Completează link-ul wa.me când ai numărul final">Deschide conversația</a>
-          </div>
+      <div class="grid">
+        <div>
+          <p><strong>Email:</strong><br>
+            <a class="break" href="mailto:msahandmade.contact@gmail.com">
+              msahandmade.contact@gmail.com
+            </a>
+          </p>
+          <p><strong>Facebook:</strong><br>
+            <a href="https://www.facebook.com/profile.php?id=61586109239525" target="_blank">MSA Handmade</a>
+          </p>
         </div>
-      </section>
+        <div>
+          <p><strong>Instagram:</strong><br>
+            <a href="https://www.instagram.com/msahandmadedecor" target="_blank">@msahandmadedecor</a>
+          </p>
+          <p><strong>WhatsApp:</strong><br>
+            <a href="https://wa.me/40747264241" target="_blank">Deschide conversația</a>
+          </p>
+        </div>
+      </div>
+    </section>
 
-      <!-- CARD: formular -->
-      <section class="card">
-        <h2>Trimite mesaj</h2>
-        <form id="contact-form">
+    <!-- FORMULAR -->
+    <section class="card">
+      <h2 style="margin:0 0 8px">Trimite mesaj</h2>
+      <form id="contact-form">
+        <div class="grid">
           <div>
             <label for="name">Nume</label>
-            <input id="name" name="name" type="text" required />
+            <input id="name" name="name" required />
           </div>
           <div>
             <label for="email">Email</label>
             <input id="email" name="email" type="email" required />
           </div>
-          <div>
+          <div style="grid-column:1/-1">
             <label for="telefon">Telefon (opțional)</label>
-            <input id="telefon" name="telefon" type="text" />
+            <input id="telefon" name="telefon" />
           </div>
-          <div>
+          <div style="grid-column:1/-1">
             <label for="mesaj">Mesaj</label>
-            <textarea id="mesaj" name="mesaj" required></textarea>
+            <textarea id="mesaj" name="mesaj" rows="5" required></textarea>
           </div>
-
-          <button class="btn" id="sendBtn" type="submit">Trimite mesajul</button>
-          <p class="note">Prin trimitere, ești de acord cu <a href="confidentialitate.html">politica de confidențialitate</a>.</p>
-
-          <div id="status" aria-live="polite"></div>
-        </form>
-      </section>
-    </div>
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn" type="submit">Trimite mesajul</button>
+          <p class="muted" style="margin-top:6px">Primești răspuns pe email în cel mai scurt timp.</p>
+        </div>
+      </form>
+    </section>
   </main>
 
   <!-- FOOTER -->
   <footer>
     <div class="socials">
-      <a href="https://facebook.com" target="_blank" rel="noopener">
-        <img src="images/facebook.svg" alt="Facebook">
-      </a>
-      <a href="https://instagram.com" target="_blank" rel="noopener">
-        <img src="images/instagram.svg" alt="Instagram">
-      </a>
+      <a href="https://facebook.com" target="_blank"><img src="images/facebook.svg" alt="Facebook"></a>
+      <a href="https://instagram.com" target="_blank"><img src="images/instagram.svg" alt="Instagram"></a>
     </div>
-
-    <small>&copy; <span id="year"></span> – MSA Handmade. Toate drepturile rezervate.</small>
-
-    <nav class="legal-nav">
+    <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
+    <div class="legal">
       <a href="termeni.html">Termeni & Condiții</a> ·
       <a href="confidentialitate.html">Confidențialitate</a> ·
       <a href="cookies.html">Cookies</a> ·
       <a href="retur.html">Retur</a>
-    </nav>
+    </div>
   </footer>
 
-  <!-- EmailJS (dacă ai cheile setate deja) -->
+  <!-- emailjs + script mic pentru an -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script src="cart.js"></script>
   <script>
-    // anul + badge coș
     document.getElementById('year').textContent = new Date().getFullYear();
-    if (window.MSACart && typeof MSACart.updateCartCountBadge === 'function') {
-      MSACart.updateCartCountBadge();
-    }
-
-    // ====== FORM: EmailJS (înlocuiește cu cheile tale dacă nu le ai setate) ======
-    // emailjs.init('PUBLIC_KEY'); // <-- dacă e nevoie
-
-    const form = document.getElementById('contact-form');
-    const statusBox = document.getElementById('status');
-    const sendBtn = document.getElementById('sendBtn');
-
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      statusBox.textContent = '';
-      statusBox.className = '';
-      sendBtn.disabled = true; sendBtn.textContent = 'Se trimite...';
-
-      // dacă ai un contact.js deja, poți păstra acela. Aici trimit generic:
-      try{
-        // Exemplu: emailjs.send('service_id','template_id', {...})
-        // Comentează/demontează dacă folosești altă rută serverless
-        // await emailjs.send('SERVICE_ID','TEMPLATE_ID', {
-        //   from_name: form.name.value,
-        //   from_email: form.email.value,
-        //   phone: form.telefon.value,
-        //   message: form.mesaj.value
-        // });
-
-        // fallback: trimitem pe mailto (deschide clientul de mail) – util dacă nu ai configurat EmailJS
-        const body =
-          `Nume: ${form.name.value}%0D%0A`+
-          `Email: ${form.email.value}%0D%0A`+
-          `Telefon: ${form.telefon.value || '-'}%0D%0A`+
-          `Mesaj:%0D%0A${encodeURIComponent(form.mesaj.value)}`;
-        window.location.href = `mailto:msahandmade.contact@gmail.com?subject=Mesaj de pe site&body=${body}`;
-
-        statusBox.textContent = 'Mulțumim! Mesajul a fost inițiat. Dacă nu s-a deschis emailul, scrie-ne direct.';
-        statusBox.className = 'success';
-        form.reset();
-      }catch(err){
-        statusBox.textContent = 'Ups, nu am putut trimite. Încearcă din nou sau scrie direct pe email.';
-        statusBox.className = 'error';
-      }finally{
-        sendBtn.disabled = false; sendBtn.textContent = 'Trimite mesajul';
-      }
-    });
   </script>
+  <script src="contact.js"></script>
 </body>
 </html>
