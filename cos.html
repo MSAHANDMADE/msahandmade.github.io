@@ -1,41 +1,33 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Coș — MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .wrap{max-width:900px;margin:20px auto;padding:0 16px}
-    .box{background:#fff;border-radius:14px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.06)}
-    #main-nav{display:flex;justify-content:center;gap:15px;flex-wrap:nowrap}
-    #main-nav a{text-decoration:none;color:#333;font-weight:500;padding:6px 10px}
-    #main-nav a:hover{color:#d12b4a}
-    .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f7f7f7}
-    footer{text-align:center;padding:20px 10px;font-size:14px;color:#666;border-top:1px solid #ddd;background:#fafafa}
-    footer .socials{margin-bottom:10px}
-    footer .socials img{width:24px;height:24px;margin:0 5px}
-    footer .legal-nav a{margin:0 5px;color:#555;text-decoration:none}
-    footer .legal-nav a:hover{color:#d12b4a}
-  </style>
+
+  <!-- Stiluri globale ale site-ului -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- EmailJS și coșul -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script src="cart.js"></script>
 </head>
-
 <body>
 
-  <!-- Bara promoțională -->
+  <!-- Promo bar -->
   <div class="promo">
     <b>Reduceri până la -20%</b> · <b>Livrare gratuită</b> de la <b>300 RON</b>
   </div>
 
   <!-- NAV unificat -->
   <header class="header">
-    <nav id="main-nav">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="despre.html">Despre</a>
-      <a href="contact.html">Contact</a>
+    <nav id="main-nav" class="wrap">
+      <div class="left">
+        <a href="index.html">Acasă</a>
+        <a href="produse.html">Produse</a>
+        <a href="despre.html">Despre</a>
+        <a href="contact.html">Contact</a>
+      </div>
       <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
     </nav>
   </header>
@@ -46,8 +38,8 @@
     <!-- Lista produse -->
     <div id="items" class="box"></div>
 
-    <!-- Totaluri SUB lista -->
-    <div class="box" style="margin-top:14px">
+    <!-- Totaluri -->
+    <div class="box">
       <strong>Totaluri</strong>
       <div class="totals">
         <div class="row"><span>Subtotal</span> <span id="subtot">0.00</span> RON</div>
@@ -60,9 +52,9 @@
       </small>
     </div>
 
-    <!-- Formular -->
-    <form id="order-form" class="box" style="margin-top:14px">
-      <fieldset style="margin-bottom:10px">
+    <!-- Formular comandă -->
+    <form id="order-form" class="box">
+      <fieldset>
         <legend>Tip client</legend>
         <label><input type="radio" name="tip" value="Persoană fizică" checked> Persoană fizică</label>
         &nbsp;&nbsp;
@@ -77,41 +69,35 @@
         <div><label>Județ<input class="input" name="judet" required></label></div>
         <div><label>Oraș<input class="input" name="oras" required></label></div>
         <div><label>Cod poștal<input class="input" name="codpostal" required></label></div>
-        <div style="grid-column:1/-1"><label>Adresă<input class="input" name="adresa" required></label></div>
-        <div style="grid-column:1/-1"><label>Mențiuni (opțional)<textarea class="input" name="mentiuni" rows="3"></textarea></label></div>
+        <div style="grid-column:1 / -1"><label>Adresă<input class="input" name="adresa" required></label></div>
+        <div style="grid-column:1 / -1"><label>Mențiuni (opțional)<textarea class="input" name="mentiuni" rows="3"></textarea></label></div>
       </div>
 
-      <!-- PJ extra -->
-      <div id="pj" style="display:none;margin-top:10px">
+      <!-- Câmpuri extra pentru PJ -->
+      <div id="pj" style="display:none">
         <hr>
         <strong>Persoană juridică</strong>
-        <div class="grid" style="margin-top:8px">
+        <div class="grid">
           <div><label>Firmă<input class="input" name="firma"></label></div>
           <div><label>CUI<input class="input" name="cui"></label></div>
-          <div style="grid-column:1/-1"><label>Reg. Com.<input class="input" name="regcom"></label></div>
+          <div style="grid-column:1 / -1"><label>Reg. Com.<input class="input" name="regcom"></label></div>
         </div>
       </div>
 
-      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+      <div class="actions" style="margin-top:12px">
         <button type="button" id="clear" class="btn gray">Golește coșul</button>
         <button type="submit" class="btn">Plasează comanda</button>
       </div>
     </form>
   </main>
 
-  <!-- FOOTER -->
-  <footer>
+  <!-- FOOTER unificat -->
+  <footer class="site-footer">
     <div class="socials">
-      <a href="https://facebook.com" target="_blank">
-        <img src="images/facebook.svg" alt="Facebook">
-      </a>
-      <a href="https://instagram.com" target="_blank">
-        <img src="images/instagram.svg" alt="Instagram">
-      </a>
+      <a href="https://facebook.com" target="_blank"><img src="images/facebook.svg" alt="Facebook"></a>
+      <a href="https://instagram.com" target="_blank"><img src="images/instagram.svg" alt="Instagram"></a>
     </div>
-
     <small>&copy; <span id="year"></span> – MSA Handmade. Toate drepturile rezervate.</small>
-
     <nav class="legal-nav">
       <a href="termeni.html">Termeni & Condiții</a> ·
       <a href="confidentialitate.html">Confidențialitate</a> ·
@@ -121,36 +107,36 @@
   </footer>
 
   <script>
+    // anul curent în footer
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // comut PJ
-    document.addEventListener('change', (e)=>{
+    // arată/ascunde câmpurile PJ
+    document.addEventListener('change', (e) => {
       if (e.target.name === 'tip') {
         document.getElementById('pj').style.display =
           e.target.value === 'Persoană juridică' ? '' : 'none';
       }
     });
 
-    // randare + butoane
-    document.addEventListener('DOMContentLoaded', ()=>{
+    // randare listă + butoane
+    document.addEventListener('DOMContentLoaded', () => {
       if (window.MSACart?.render) MSACart.render();
-      document.getElementById('clear').addEventListener('click', ()=>{
+      document.getElementById('clear').addEventListener('click', () => {
         MSACart.clearCart(); MSACart.render();
       });
     });
 
-    // submit
-    document.getElementById('order-form').addEventListener('submit', async (e)=>{
+    // trimiterea comenzii
+    document.getElementById('order-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const list = MSACart.readCart();
-      if (!list.length){ return alert('Coșul este gol.'); }
-      try{
+      if (!list.length) { return alert('Coșul este gol.'); }
+      try {
         await MSACart.submitOrder(new FormData(e.target));
-      }catch(err){
-        alert('Eroare la trimiterea comenzii: ' + (err?.message||''));
+      } catch (err) {
+        alert('Eroare la trimiterea comenzii: ' + (err?.message || ''));
       }
     });
   </script>
-
 </body>
 </html>
