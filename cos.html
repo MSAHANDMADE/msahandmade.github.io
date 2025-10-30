@@ -6,52 +6,72 @@
   <title>Coș — MSA Handmade</title>
 
   <!-- SEO / OG -->
-  <meta name="description" content="Finalizează comanda pentru lumânări și decorațiuni MSA Handmade. Livrare gratuită de la 300 RON.">
-  <link rel="canonical" href="https://www.msahandmade.ro/cos.html">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.msahandmade.ro/cos.html">
-  <meta property="og:title" content="Coș — MSA Handmade">
-  <meta property="og:description" content="Coșul tău MSA Handmade. Vezi produsele și plasează comanda.">
-  <meta property="og:image" content="https://www.msahandmade.ro/images/logo.png">
+  <meta name="description" content="Finalizează comanda pentru lumânări și decorațiuni MSA Handmade. Livrare gratuită de la 300 RON." />
+  <link rel="canonical" href="https://www.msahandmade.ro/cos.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.msahandmade.ro/cos.html" />
+  <meta property="og:title" content="Coș — MSA Handmade" />
+  <meta property="og:description" content="Coșul tău MSA Handmade. Vezi produsele și plasează comanda." />
+  <meta property="og:image" content="https://www.msahandmade.ro/images/logo.png" />
 
   <link rel="stylesheet" href="styles.css" />
   <style>
+    /* layout local pentru coș (complet compatibil cu styles.css) */
     .wrap{max-width:980px;margin:0 auto;padding:0 16px}
-    #main-nav{display:flex;justify-content:center;gap:15px;flex-wrap:nowrap}
-    #main-nav a{text-decoration:none;color:#333;font-weight:500;padding:6px 10px}
-    #main-nav a:hover{color:#d12b4a}
-    .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f7f7f7}
-
     .grid{display:grid;grid-template-columns:1fr;gap:16px}
     @media(min-width:980px){.grid{grid-template-columns:2fr 1fr}}
-
     .card{background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);padding:14px}
-    table.cart{width:100%;border-collapse:collapse}
-    table.cart th,table.cart td{padding:10px;border-bottom:1px solid #eee;vertical-align:middle}
+
+    /* tabel coș – lățimi stabile + nu rupe textul pe litere */
+    table.cart{width:100%;border-collapse:collapse;table-layout:fixed}
+    table.cart th,table.cart td{padding:10px;border-bottom:1px solid #eee;vertical-align:middle;white-space:nowrap;word-break:normal}
+    table.cart th:nth-child(1), table.cart td:nth-child(1){width:58%}
+    table.cart th:nth-child(2), table.cart td:nth-child(2){width:14%;text-align:right}
+    table.cart th:nth-child(3), table.cart td:nth-child(3){width:18%;text-align:center}
+    table.cart th:nth-child(4), table.cart td:nth-child(4){width:10%;text-align:right}
     table.cart img{width:72px;height:72px;object-fit:cover;border-radius:8px}
+    .prod-name{white-space:normal}
 
-    .qty{display:inline-flex;border:1px solid #ddd;border-radius:8px;overflow:hidden}
-    .qty button{width:34px;height:34px;border:0;background:#f6f6f6}
-    .qty input{width:42px;text-align:center;border:0}
+    .muted{color:#777;font-size:.9rem}
 
+    /* stepper cantitate – vizibil pe mobil; semnele vin din CSS (::after) */
+    .qty{
+      display:inline-flex;align-items:center;
+      border:1px solid #ddd;border-radius:10px;overflow:hidden;background:#fff;
+    }
+    .qty button{
+      -webkit-appearance:none;appearance:none;
+      width:42px;min-width:42px;height:42px;border:0;background:#f6f6f6;
+      color:#111;font-size:22px;line-height:1;font-weight:800;
+      display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;
+    }
+    .qty .qminus::after{content:"−";}
+    .qty .qplus::after{content:"+";}
+    .qty button:active{background:#ececec;}
+    .qty input{
+      -webkit-appearance:none;appearance:none;
+      width:60px;height:42px;text-align:center;border:0;font-size:16px;
+    }
+    @media (pointer:coarse){
+      .qty button{width:48px;min-width:48px;height:48px;font-size:24px}
+      .qty input{width:64px;height:48px;font-size:18px}
+    }
+
+    /* totaluri, formular, footer */
     .totals{display:grid;gap:8px}
     .totals .row{display:flex;justify-content:space-between}
     .totals .big{font-size:1.15rem;font-weight:700}
-
     form .row{display:flex;flex-direction:column;margin-bottom:10px}
     input, textarea, select{border:1px solid #ddd;border-radius:10px;padding:10px}
     fieldset{border:1px solid #eee;border-radius:10px;padding:10px}
     legend{padding:0 6px;color:#555}
-    .muted{color:#777;font-size:.9rem}
-    .btn{padding:12px;border:0;border-radius:10px;font-weight:700}
+    .btn{padding:12px;border:0;border-radius:10px;font-weight:700;min-height:44px}
     .btn.primary{background:#0a2230;color:#fff;width:100%}
     .btn.ghost{background:#f3f3f3;color:#111}
     .actions{display:flex;gap:10px;flex-wrap:wrap}
 
-    .promo{padding:8px;text-align:center;background:#0a2230;color:#fff}
-    footer{text-align:center;padding:20px 10px;font-size:14px;color:#666;border-top:1px solid #ddd;background:#fafafa}
-    footer .legal-nav a{margin:0 5px;color:#555;text-decoration:none}
-    footer .legal-nav a:hover{color:#d12b4a}
+    /* nav local (în caz că pagina e deschisă direct) */
+    #main-nav a{padding:6px 8px}
   </style>
 </head>
 <body>
@@ -62,7 +82,7 @@
   <header class="header">
     <nav id="main-nav">
       <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
+      <a href="produse.html"><strong>Produse</strong></a>
       <a href="despre.html">Despre</a>
       <a href="contact.html">Contact</a>
       <a href="cos.html" class="cart-pill" aria-label="Vezi coșul">🛒 <span id="cart-count">0</span></a>
@@ -87,10 +107,14 @@
           </thead>
           <tbody id="cart-body"><tr><td colspan="5">Se încarcă…</td></tr></tbody>
         </table>
+
         <div class="actions" style="margin-top:8px">
           <button id="btn-clear" class="btn ghost" type="button">Golește coșul</button>
         </div>
-        <p class="muted" style="margin-top:8px">* Imaginile sunt cu titlu de prezentare. Produsele sunt realizate manual — pot exista mici variații.</p>
+
+        <p class="muted" style="margin-top:8px">
+          * Imaginile sunt cu titlu de prezentare. Produsele sunt realizate manual — pot exista mici variații.
+        </p>
       </article>
 
       <!-- Rezumat + Formular -->
@@ -113,59 +137,25 @@
             <label><input type="radio" name="tip" value="Persoană juridică"> Persoană juridică</label>
           </fieldset>
 
-          <div class="row">
-            <label>Nume</label>
-            <input name="nume" required />
-          </div>
-          <div class="row">
-            <label>Prenume</label>
-            <input name="prenume" required />
-          </div>
-          <div class="row">
-            <label>Email</label>
-            <input name="email" type="email" required />
-          </div>
-          <div class="row">
-            <label>Telefon</label>
-            <input name="telefon" inputmode="tel" required />
-          </div>
-          <div class="row">
-            <label>Județ</label>
-            <input name="judet" required />
-          </div>
-          <div class="row">
-            <label>Oraș</label>
-            <input name="oras" required />
-          </div>
-          <div class="row">
-            <label>Cod poștal</label>
-            <input name="codpostal" required />
-          </div>
-          <div class="row">
-            <label>Adresă livrare</label>
-            <textarea name="adresa" rows="3" required></textarea>
-          </div>
+          <div class="row"><label>Nume<input name="nume" required></label></div>
+          <div class="row"><label>Prenume<input name="prenume" required></label></div>
+          <div class="row"><label>Email<input name="email" type="email" required></label></div>
+          <div class="row"><label>Telefon<input name="telefon" inputmode="tel" required></label></div>
+          <div class="row"><label>Județ<input name="judet" required></label></div>
+          <div class="row"><label>Oraș<input name="oras" required></label></div>
+          <div class="row"><label>Cod poștal<input name="codpostal" required></label></div>
+          <div class="row" style="grid-column:1/-1"><label>Adresă livrare<textarea name="adresa" rows="3" required></textarea></label></div>
 
-          <!-- Câmpuri PJ (se afișează doar când e selectat PJ) -->
+          <!-- Câmpuri PJ (vizibile doar când e selectat PJ) -->
           <div id="pj-extra" style="display:none">
             <hr style="margin:10px 0;border:0;border-top:1px solid #eee" />
-            <div class="row">
-              <label>Firmă</label>
-              <input name="firma" />
-            </div>
-            <div class="row">
-              <label>CUI</label>
-              <input name="cui" />
-            </div>
-            <div class="row">
-              <label>Reg. Com.</label>
-              <input name="regcom" />
-            </div>
+            <div class="row"><label>Firmă<input name="firma"></label></div>
+            <div class="row"><label>CUI<input name="cui"></label></div>
+            <div class="row" style="grid-column:1/-1"><label>Reg. Com.<input name="regcom"></label></div>
           </div>
 
-          <div class="row">
-            <label>Observații</label>
-            <textarea name="mentiuni" rows="3" placeholder="Culoare, mesaj, interval orar, etc."></textarea>
+          <div class="row" style="grid-column:1/-1">
+            <label>Observații<textarea name="mentiuni" rows="3" placeholder="Culoare, mesaj, interval orar, etc."></textarea></label>
           </div>
 
           <button id="place-order" class="btn primary" type="submit">Confirmă comanda</button>
@@ -186,9 +176,12 @@
 
   <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <!-- Logica coșului -->
+
+  <!-- Logica coșului (păstrează-l neschimbat dacă merge) -->
   <script src="cart.js"></script>
+
   <script>
+    // anul din footer
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // comutare PF/PJ
@@ -199,15 +192,19 @@
       }
     });
 
-    // buton "Golește coșul"
+    // Golește coșul
     document.getElementById('btn-clear')?.addEventListener('click', ()=>{
       if (confirm('Sigur golești coșul?')) { MSACart.clearCart(); MSACart.render(); }
     });
 
-    // legare formular -> cart.js
-    MSACart.hookCheckout('#checkout-form', '#place-order');
-    // randare coș + badge
-    MSACart.render();
+    // Hook către cart.js – păstrează proforma + anti-dublu (exact ca înainte)
+    if (window.MSACart?.hookCheckout) {
+      MSACart.hookCheckout('#checkout-form', '#place-order');
+    }
+    // randare coș + badge (cart.js ar trebui să suprascrie #cart-body)
+    if (window.MSACart?.render) {
+      MSACart.render();
+    }
   </script>
 </body>
 </html>
