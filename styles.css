@@ -304,3 +304,47 @@ table.cart td:nth-child(4) {
   word-break: keep-all;
   overflow-wrap: normal;
 }
+/* === MSA OVERRIDE FINAL - corecție forțată coș mobil === */
+@media (max-width: 640px) {
+  table.cart {
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+  table.cart th,
+  table.cart td {
+    padding: 8px 6px !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+  }
+  table.cart th:nth-child(1),
+  table.cart td:nth-child(1) {
+    width: 45% !important;
+    text-align: left !important;
+    white-space: normal !important;
+  }
+  table.cart th:nth-child(2),
+  table.cart td:nth-child(2) {
+    width: 15% !important;
+    text-align: right !important;
+  }
+  table.cart th:nth-child(3),
+  table.cart td:nth-child(3) {
+    width: 20% !important;
+    text-align: center !important;
+  }
+  table.cart th:nth-child(4),
+  table.cart td:nth-child(4) {
+    width: 20% !important;
+    text-align: right !important;
+  }
+  .qty {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .qty input {
+    min-width: 36px !important;
+  }
+}
