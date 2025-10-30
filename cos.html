@@ -14,7 +14,41 @@
   <meta property="og:image" content="https://www.msahandmade.ro/images/logo.png">
 
   <link rel="stylesheet" href="styles.css" />
-  <style>
+  <style>/* ==== FIX MSA: cart pe mobil – nu se mai suprapun cantitatea și totalul ==== */
+
+/* mai compact peste tot */
+table.cart th, table.cart td { padding: 8px; }
+
+/* butoanele +/− și input mai înguste */
+.qty { max-width: 140px; }
+.qty button { width: 32px; height: 32px; font-size: 18px; }
+.qty input  { width: 48px; height: 32px; font-size: 15px; }
+
+/* asigură semnele +/− chiar dacă HTML-ul are butoane goale */
+.qty .qminus { position: relative; }
+.qty .qplus  { position: relative; }
+.qty .qminus::before { content: "−"; position: absolute; inset: 0; display:flex; align-items:center; justify-content:center; }
+.qty .qplus::before  { content: "+"; position: absolute; inset: 0; display:flex; align-items:center; justify-content:center; }
+
+/* distribuție de lățimi pe mobil: Produs 50%, Preț 16%, Cant. 20–24%, Total 16–18% */
+@media (max-width: 640px){
+  table.cart { table-layout: fixed; }
+  table.cart th:nth-child(1), table.cart td:nth-child(1) { width: 50%; }
+  table.cart th:nth-child(2), table.cart td:nth-child(2) { width: 16%; text-align:right; }
+  table.cart th:nth-child(3), table.cart td:nth-child(3) { width: 24%; text-align:center; }
+  table.cart th:nth-child(4), table.cart td:nth-child(4) { width: 18%; text-align:right; }
+}
+
+/* și mai strâns pe ecrane foarte înguste (≤380px) */
+@media (max-width: 380px){
+  .qty { max-width: 120px; }
+  .qty button { width: 28px; height: 28px; font-size: 16px; }
+  .qty input  { width: 40px; height: 28px; font-size: 14px; }
+  table.cart th:nth-child(1), table.cart td:nth-child(1) { width: 48%; }
+  table.cart th:nth-child(2), table.cart td:nth-child(2) { width: 16%; }
+  table.cart th:nth-child(3), table.cart td:nth-child(3) { width: 22%; }
+  table.cart th:nth-child(4), table.cart td:nth-child(4) { width: 14%; }
+}
     /* ===== MSA Handmade - Coș curat și centrat ===== */
     .wrap.narrow {
       max-width: 850px;
