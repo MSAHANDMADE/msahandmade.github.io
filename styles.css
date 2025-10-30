@@ -194,3 +194,26 @@ footer .legal-nav a:hover{ color:#d12b4a; }
   .card{ border-radius: 12px; }
   .hero img.logo{ width: 180px; }
 }
+/* ===== HOTFIX MSA – Cart mobil: nu se mai calcă + păstrăm Total pentru script ===== */
+@media (max-width: 640px){
+  table.cart{ table-layout: fixed; }
+  table.cart th, table.cart td{ padding: 8px; }
+
+  /* Lățimi pe mobil */
+  table.cart th:nth-child(1), table.cart td:nth-child(1){ width: 58%; } /* Produs */
+  table.cart th:nth-child(2), table.cart td:nth-child(2){ width: 20%; text-align: right; } /* Preț */
+  table.cart th:nth-child(3), table.cart td:nth-child(3){ width: 22%; text-align: center; } /* Cant. */
+
+  /* Col. 4 (Total) – ascuns optic, dar prezent în DOM pentru calcule */
+  table.cart th:nth-child(4),
+  table.cart td:nth-child(4){
+    font-size: 0 !important;         /* ascunde vizual textul */
+    line-height: 0 !important;
+    white-space: nowrap;
+  }
+
+  /* Stepper mai îngust ca să nu împingă coloanele */
+  .qty{ max-width: 116px; }
+  .qty button{ width: 32px; height: 32px; font-size: 18px; }
+  .qty input{  width: 44px; height: 32px; font-size: 15px; }
+}
