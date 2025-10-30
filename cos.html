@@ -15,7 +15,57 @@
 
   <link rel="stylesheet" href="styles.css" />
   <style>/* ==== FIX MSA: cart pe mobil – nu se mai suprapun cantitatea și totalul ==== */
+/* === FIX final mobil: un singur +/− și fără suprapuneri === */
 
+/* 1) Ascund textul din butoanele reale și afișez simbolurile din CSS */
+.qty button{ 
+  position: relative;
+  font-size: 0;              /* ascunde orice text din HTML */
+  width: 36px; 
+  height: 36px;
+  border: 0; 
+  background:#f6f6f6;
+  cursor:pointer; 
+  user-select:none;
+}
+.qty .qminus::before,
+.qty .qplus::before{
+  content: "";
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; line-height:1; color:#111; font-weight:700;
+}
+.qty .qminus::before{ content:"−"; }
+.qty .qplus::before { content:"+"; }
+.qty button:active{ background:#ececec; }
+
+/* 2) Input-ul de cantitate și containerul – lățime fixă, nu mai iese din celulă */
+.qty{
+  display:inline-flex; align-items:center;
+  border:1px solid #ddd; border-radius:10px; background:#fff; overflow:hidden;
+  max-width: 116px;                 /* important pe mobil */
+}
+.qty input{
+  width: 44px; height:36px; border:0; text-align:center; font-size:16px;
+}
+
+/* 3) Lățimi de coloană sigure pe mobil: Cant. fixă, Total nu mai e călcat */
+@media (max-width: 640px){
+  table.cart{ table-layout: fixed; }
+  table.cart th:nth-child(1), table.cart td:nth-child(1){ width: 50%; }
+  table.cart th:nth-child(2), table.cart td:nth-child(2){ width: 16%; text-align:right; }
+  table.cart th:nth-child(3), table.cart td:nth-child(3){ width: 24%; text-align:center; } /* loc suficient pentru stepper */
+  table.cart th:nth-child(4), table.cart td:nth-child(4){ width: 18%; text-align:right; white-space:nowrap; }
+}
+
+/* 4) Ecrane foarte înguste */
+@media (max-width: 380px){
+  .qty{ max-width:110px; }
+  .qty button{ width:32px; height:32px; }
+  .qty input { width:40px; height:32px; font-size:14px; }
+  table.cart th:nth-child(3), table.cart td:nth-child(3){ width: 22%; }
+  table.cart th:nth-child(4), table.cart td:nth-child(4){ width: 16%; }
+}
 /* mai compact peste tot */
 table.cart th, table.cart td { padding: 8px; }
 
