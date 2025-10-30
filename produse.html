@@ -1,167 +1,171 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Produse — MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style><meta name="description" content="Produse MSA Handmade – lumânări și decorațiuni artizanale create manual în România.">
-<meta name="keywords" content="lumânări handmade, decorațiuni artizanale, cadouri, aranjamente, coronițe">
-<meta name="author" content="MSA Handmade">
-<link rel="canonical" href="https://www.msahandmade.ro/produse.html">
+<!DOCTYPE html>  
+<html lang="ro">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1" />  
+  <title>Produse — MSA Handmade</title>  
+  <link rel="stylesheet" href="styles.css" />  
+  <style>
+<meta name="description" content="Produse MSA Handmade – lumânări și decorațiuni artizanale create manual în România.">  
+<meta name="keywords" content="lumânări handmade, decorațiuni artizanale, cadouri, aranjamente, coronițe">  
+<meta name="author" content="MSA Handmade">  
+<link rel="canonical" href="https://www.msahandmade.ro/produse.html">  
+  
+<meta property="og:type" content="website">  
+<meta property="og:url" content="https://www.msahandmade.ro/produse.html">  
+<meta property="og:title" content="Produse — MSA Handmade">  
+<meta property="og:description" content="Descoperă colecția noastră de lumânări și decorațiuni realizate manual.">  
+<meta property="og:image" content="https://www.msahandmade.ro/images/logo.png">  
 
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://www.msahandmade.ro/produse.html">
-<meta property="og:title" content="Produse — MSA Handmade">
-<meta property="og:description" content="Descoperă colecția noastră de lumânări și decorațiuni realizate manual.">
-<meta property="og:image" content="https://www.msahandmade.ro/images/logo.png">
-    /* mici ajustări locale pentru grilă și carduri */
-    .wrap{max-width:980px;margin:0 auto;padding:0 16px}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-    .card{grid-column:span 12;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);overflow:hidden}
-    @media(min-width:720px){.card{grid-column:span 6}}
-    @media(min-width:1024px){.card{grid-column:span 4}}
-    .thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
-    .body{padding:12px 14px}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .price{font-weight:700}
-    .btn{width:100%;margin-top:10px;padding:12px;border:0;border-radius:10px;background:#0a2230;color:#fff;font-weight:700}
-    /* nav consistent cu index */
-    #main-nav{display:flex;justify-content:center;gap:15px;flex-wrap:nowrap}
-    #main-nav a{text-decoration:none;color:#333;font-weight:500;padding:6px 10px}
-    #main-nav a:hover{color:#d12b4a}
-    .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f7f7f7}
-    footer{text-align:center;padding:20px 10px;font-size:14px;color:#666;border-top:1px solid #ddd;background:#fafafa}
-    footer .socials{margin-bottom:10px}
-    footer .socials img{width:24px;height:24px;margin:0 5px}
-    footer .legal-nav a{margin:0 5px;color:#555;text-decoration:none}
-    footer .legal-nav a:hover{color:#d12b4a}
-  </style>
-</head>
-<body>
+/* mici ajustări locale pentru grilă și carduri */  
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}  
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}  
+.card{grid-column:span 12;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);overflow:hidden}  
+@media(min-width:720px){.card{grid-column:span 6}}  
+@media(min-width:1024px){.card{grid-column:span 4}}  
+.thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}  
+.body{padding:12px 14px}  
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}  
+.price{font-weight:700}  
+.btn{width:100%;margin-top:10px;padding:12px;border:0;border-radius:10px;background:#0a2230;color:#fff;font-weight:700}  
+/* nav consistent cu index */  
+#main-nav{display:flex;justify-content:center;gap:15px;flex-wrap:nowrap}  
+#main-nav a{text-decoration:none;color:#333;font-weight:500;padding:6px 10px}  
+#main-nav a:hover{color:#d12b4a}  
+.cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f7f7f7}  
+footer{text-align:center;padding:20px 10px;font-size:14px;color:#666;border-top:1px solid #ddd;background:#fafafa}  
+footer .socials{margin-bottom:10px}  
+footer .socials img{width:24px;height:24px;margin:0 5px}  
+footer .legal-nav a{margin:0 5px;color:#555;text-decoration:none}  
+footer .legal-nav a:hover{color:#d12b4a}  
+  </style>  
+</head>  
+<body>  
+  
+  <!-- bară promo (opțională) -->  
+  <div class="promo">  
+    <b>Reduceri până la -20%</b> · <b>Livrare gratuită</b> de la <b>300 RON</b>  
+  </div>  
+  
+  <!-- NAV unificat -->  
+  <header class="header">  
+    <nav id="main-nav">  
+      <a href="index.html">Acasă</a>  
+      <a href="produse.html"><strong>Produse</strong></a>  
+      <a href="despre.html">Despre</a>  
+      <a href="contact.html">Contact</a>  
+      <a href="cos.html" class="cart-pill" aria-label="Vezi coșul">🛒 <span id="cart-count">0</span></a>  
+    </nav>  
+  </header>  
+  
+  <main class="wrap">  
+    <h1>Produsele noastre</h1>  
+    <section class="grid" id="prod-list"></section>  
+  </main>  
+  
+  <!-- FOOTER unificat -->  
+  <footer>  
+    <div class="socials">  
+      <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">  
+        <img src="images/facebook.svg" alt="Facebook">  
+      </a>  
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">  
+        <img src="images/instagram.svg" alt="Instagram">  
+      </a>  
+    </div>  
+  
+    <small>&copy; <span id="year"></span> – MSA Handmade. Toate drepturile rezervate.</small>  
+  
+    <nav class="legal-nav">  
+      <a href="termeni.html">Termeni & Condiții</a> ·  
+      <a href="confidentialitate.html">Confidențialitate</a> ·  
+      <a href="cookies.html">Cookies</a> ·  
+      <a href="retur.html">Retur</a>  
+    </nav>  
+  </footer>  
+  
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>  
+  <script src="cart.js"></script>  
+  
+  <script>  
+    const PRODUCTS = [  
+      // 5 RON  
+      { id: 'ingeras',    name: 'Îngeraș',         price: 5,  image: 'images/ingeras.png' },  
+      { id: 'floricele',  name: 'Floricele',       price: 5,  image: 'images/floricele.png' },  
+  
+      // 11 RON  
+      { id: 'family',     name: 'Family',          price: 11, image: 'images/family.png' },  
+  
+      // 33 RON  
+      { id: 'isus',       name: 'Iisus',           price: 33, image: 'images/isus.png' },  
+      { id: 'buchet',     name: 'Buchet',          price: 29, image: 'images/buchet.jpg' },  
+      { id: 'crin',       name: 'Crin',            price: 33, image: 'images/crin.jpg' },  
+      { id: 'dans',       name: 'Dans',            price: 33, image: 'images/dans.jpg' },  
+      { id: 'flori',      name: 'Flori',           price: 33, image: 'images/flori.jpg' },  
+      { id: 'inger',      name: 'Înger',           price: 33, image: 'images/inger.jpg' },  
+      { id: 'logodna',    name: 'Logodnă',         price: 33, image: 'images/logodna.jpg' },  
+      { id: 'floarea-soarelui', name: 'Floarea-soarelui', price: 33, image: 'images/lumanare_floarea-soarelui.png' },  
 
-  <!-- bară promo (opțională) -->
-  <div class="promo">
-    <b>Reduceri până la -20%</b> · <b>Livrare gratuită</b> de la <b>300 RON</b>
-  </div>
+      // 35 RON - Coronițe de Crăciun  
+      { id: 'coronita1', name: 'Coroniță Crăciun – roșu & auriu', price: 35, image: 'images/coronita1.png' },  
+      { id: 'coronita2', name: 'Coroniță Crăciun – albastru & argintiu', price: 35, image: 'images/coronita2.png' },  
 
-  <!-- NAV unificat -->
-  <header class="header">
-    <nav id="main-nav">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html"><strong>Produse</strong></a>
-      <a href="despre.html">Despre</a>
-      <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart-pill" aria-label="Vezi coșul">🛒 <span id="cart-count">0</span></a>
-    </nav>
-  </header>
-
-  <main class="wrap">
-    <h1>Produsele noastre</h1>
-    <section class="grid" id="prod-list"></section>
-  </main>
-
-  <!-- FOOTER unificat cu linkuri legale -->
-  <footer>
-    <div class="socials">
-      <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-        <img src="images/facebook.svg" alt="Facebook">
-      </a>
-      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-        <img src="images/instagram.svg" alt="Instagram">
-      </a>
-    </div>
-
-    <small>&copy; <span id="year"></span> – MSA Handmade. Toate drepturile rezervate.</small>
-
-    <nav class="legal-nav">
-      <a href="termeni.html">Termeni & Condiții</a> ·
-      <a href="confidentialitate.html">Confidențialitate</a> ·
-      <a href="cookies.html">Cookies</a> ·
-      <a href="retur.html">Retur</a>
-    </nav>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script src="cart.js"></script>
-
-  <script>
-    // ===== LISTA OFICIALĂ (ordonată: 5 → 11 → 33 → 99) =====
-    const PRODUCTS = [
-      // 5 RON
-      { id: 'ingeras',    name: 'Îngeraș',         price: 5,  image: 'images/ingeras.png' },
-      { id: 'floricele',  name: 'Floricele',       price: 5,  image: 'images/floricele.png' },
-
-      // 11 RON
-      { id: 'family',     name: 'Family',          price: 11, image: 'images/family.png' },
-
-      // 33 RON
-      { id: 'isus',       name: 'Iisus',           price: 33, image: 'images/isus.png' },
-      { id: 'buchet',     name: 'Buchet',          price: 29, image: 'images/buchet.jpg' },  // pune 33 dacă vrei
-      { id: 'crin',       name: 'Crin',            price: 33, image: 'images/crin.jpg' },
-      { id: 'dans',       name: 'Dans',            price: 33, image: 'images/dans.jpg' },
-      { id: 'flori',      name: 'Flori',           price: 33, image: 'images/flori.jpg' },
-      { id: 'inger',      name: 'Înger',           price: 33, image: 'images/inger.jpg' },
-      { id: 'logodna',    name: 'Logodnă',         price: 33, image: 'images/logodna.jpg' },
-      { id: 'floarea-soarelui', name: 'Floarea-soarelui', price: 33, image: 'images/lumanare_floarea-soarelui.png' },
-
-      // 99 RON
-      { id: 'peisaj',     name: 'Peisaj',          price: 99, image: 'images/peisaj.jpg' },
-      { id: 'peisajiarna',name: 'Peisaj de iarnă', price: 99, image: 'images/peisajiarna.jpg' },
-      { id: 'indragostiti', name: 'Îndrăgostiți',  price: 99, image: 'images/indragostiti.jpg' },
-    ];
-
-    function renderProducts(){
-      const mount = document.getElementById('prod-list');
-      mount.innerHTML = PRODUCTS.map(p => `
-        <article class="card">
-          <img class="thumb" src="${p.image}" alt="${p.name}" loading="lazy" />
-          <div class="body">
-            <div class="top"><h3>${p.name}</h3><span class="price">${p.price} RON</span></div>
-            <button class="btn add" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}">
-              Adaugă în coș
-            </button>
-          </div>
-        </article>
-      `).join('');
-    }
-
-    (function bindOnce(){
-      if (window.__MSA_BOUND__) return;
-      window.__MSA_BOUND__ = true;
-
-      function bind(){
-        renderProducts();
-        document.querySelectorAll('.add').forEach(btn=>{
-          btn.addEventListener('click', (e)=>{
-            e.preventDefault();
-            if (!window.MSACart) return;
-            MSACart.addToCart({
-              id:   btn.dataset.id,
-              name: btn.dataset.name,
-              price: Number(btn.dataset.price || 0),
-              image: btn.dataset.image
-            });
-            const old = btn.textContent; btn.textContent = 'Adăugat!';
-            setTimeout(()=> btn.textContent = old, 700);
-          });
-        });
-        // anul + badge coș
-        document.getElementById('year').textContent = new Date().getFullYear();
-        if (window.MSACart && typeof MSACart.updateCartCountBadge === 'function') {
-          MSACart.updateCartCountBadge();
-        } else {
-          const el = document.getElementById('cart-count');
-          if (el && typeof MSACart?.readCart === 'function') {
-            const n = MSACart.readCart();
-            if (typeof n === 'number') el.textContent = n;
-          }
-        }
-      }
-
-      document.addEventListener('DOMContentLoaded', bind);
-      setTimeout(bind, 80);
-    })();
-  </script>
-</body>
+      // 99 RON  
+      { id: 'peisaj',     name: 'Peisaj',          price: 99, image: 'images/peisaj.jpg' },  
+      { id: 'peisajiarna',name: 'Peisaj de iarnă', price: 99, image: 'images/peisajiarna.jpg' },  
+      { id: 'indragostiti', name: 'Îndrăgostiți',  price: 99, image: 'images/indragostiti.jpg' },  
+    ];  
+  
+    function renderProducts(){  
+      const mount = document.getElementById('prod-list');  
+      mount.innerHTML = PRODUCTS.map(p => `  
+        <article class="card">  
+          <img class="thumb" src="${p.image}" alt="${p.name}" loading="lazy" />  
+          <div class="body">  
+            <div class="top"><h3>${p.name}</h3><span class="price">${p.price} RON</span></div>  
+            <button class="btn add" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}">  
+              Adaugă în coș  
+            </button>  
+          </div>  
+        </article>  
+      `).join('');  
+    }  
+  
+    (function bindOnce(){  
+      if (window.__MSA_BOUND__) return;  
+      window.__MSA_BOUND__ = true;  
+  
+      function bind(){  
+        renderProducts();  
+        document.querySelectorAll('.add').forEach(btn=>{  
+          btn.addEventListener('click', (e)=>{  
+            e.preventDefault();  
+            if (!window.MSACart) return;  
+            MSACart.addToCart({  
+              id:   btn.dataset.id,  
+              name: btn.dataset.name,  
+              price: Number(btn.dataset.price || 0),  
+              image: btn.dataset.image  
+            });  
+            const old = btn.textContent; btn.textContent = 'Adăugat!';  
+            setTimeout(()=> btn.textContent = old, 700);  
+          });  
+        });  
+        document.getElementById('year').textContent = new Date().getFullYear();  
+        if (window.MSACart && typeof MSACart.updateCartCountBadge === 'function') {  
+          MSACart.updateCartCountBadge();  
+        } else {  
+          const el = document.getElementById('cart-count');  
+          if (el && typeof MSACart?.readCart === 'function') {  
+            const n = MSACart.readCart();  
+            if (typeof n === 'number') el.textContent = n;  
+          }  
+        }  
+      }  
+  
+      document.addEventListener('DOMContentLoaded', bind);  
+      setTimeout(bind, 80);  
+    })();  
+  </script>  
+</body>  
 </html>
