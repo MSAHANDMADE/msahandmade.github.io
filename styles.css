@@ -107,3 +107,24 @@ h1,h2,h3{line-height:1.2;margin:10px 0}
     font-size: 15px;
   }
 }
+/* === MSA FIX: layout responsiv și fără scroll pe orizontală === */
+html, body { max-width: 100%; overflow-x: hidden; }
+* { box-sizing: border-box; }
+
+/* imaginile nu depășesc containerul */
+img { max-width: 100%; height: auto; display: block; }
+
+/* container consistent pe mobil */
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+
+/* navbar să nu rupă layout-ul și să rămână vizibil */
+.header { position: sticky; top: 0; z-index: 50; background: #fff; }
+#main-nav { display: flex; justify-content: center; gap: 14px; padding: 8px 0; flex-wrap: nowrap; }
+#main-nav a { text-decoration: none; color: #222; font-weight: 600; }
+#main-nav a:hover { color: #d12b4a; }
+
+/* texturi lungi să nu iasă din ecran */
+table, th, td { word-break: break-word; }
+
+/* carduri și butoane mai „touch-friendly” pe mobil */
+button, .btn { min-height: 44px; }
