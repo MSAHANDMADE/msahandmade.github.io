@@ -1,144 +1,158 @@
-/* MSA Handmade — Coș + reduceri + livrare + EmailJS + proformă + anti-dubluri */
+/* MSA Handmade — Coș complet: PF/PJ, reduceri, livrare, proformă, EmailJS, anti-dublu */
 (function () {
-  // ===== CONFIG =====
+  // === CONFIG ===
   const STORAGE_KEY   = 'msa_cart';
-  const SHIPPING_BASE = 17;
+  const SHIPPING_BASE = 17; // sub 300 RON
 
-  // EmailJS
+  // EmailJS (cheile tale confirmate)
   const PUBLIC_KEY      = 'iSadfb7-TV_89l_6k';
   const SERVICE_ID      = 'service_ix0zpp7';
-  const TEMPLATE_ADMIN  = 'template_13qpqtt';  // spre admin
-  const TEMPLATE_CLIENT = 'template_9yctwor';  // spre client
+  const TEMPLATE_ADMIN  = 'template_13qpqtt';  // către admin
+  const TEMPLATE_CLIENT = 'template_9yctwor';  // către client
   const ADMIN_EMAIL     = 'msahandmade.contact@gmail.com';
 
-  // antispam / idempotency (10 minute)
-  const IDEMP_KEY   = 'msa_last_order_sig';
-  const IDEMP_TIME  = 'msa_last_order_ts';
-  const IDEMP_TTL   = 10 * 60 * 1000; // 10 minute
-
   if (window.emailjs && typeof emailjs.init === 'function') {
-    try { emailjs.init(PUBLIC_KEY); } catch (_) {}
+    try { emailjs.init(PUBLIC_KEY); } catch(e){}
   }
 
-  // ===== UTIL =====
-  const fmt = n => (Number(n) || 0).toFixed(2);
-  const esc = s =>
-    String(s || '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
+  // === UTILS ===
+  const fmt = n => (Number(n)||0).toFixed(2);
+  const esc = s => String(s||'')
+     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+     .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 
-  async function sha256(str) {
-    try {
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-    } catch (_) {
-      // fallback simplu
-      let h = 0; for (let i=0;i<str.length;i++) h = (h<<5)-h+str.charCodeAt(i)|0; 
-      return String(h);
-    }
+  async function sha256(text){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
   }
 
-  const readCart = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; } };
-  const saveCart = (list) => localStorage.setItem(STORAGE_KEY, JSON.stringify(list || []));
-  const clearCart = () => { saveCart([]); updateCartCountBadge(); };
+  // === STORAGE ===
+  const readCart = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); } catch { return []; } };
+  const saveCart = (list) => localStorage.setItem(STORAGE_KEY, JSON.stringify(list||[]));
 
-  // ===== BADGE =====
-  function updateCartCountBadge() {
+  // === BADGE ===
+  function updateCartCountBadge(){
     const list = readCart();
-    const count = list.reduce((s, i) => s + (parseInt(i.qty) || 1), 0);
+    const count = list.reduce((s,i)=>s+(parseInt(i.qty)||1),0);
     const b1 = document.getElementById('cart-count');
     const b2 = document.getElementById('cart-count-fab');
     if (b1) b1.textContent = count;
     if (b2) b2.textContent = count;
   }
 
-  // ===== CRUD =====
-  function addToCart({ id, name, price, image }) {
+  // === CRUD ===
+  function addToCart({id,name,price,image}){
     if (!id) return;
     const list = readCart();
-    const idx = list.findIndex(p => p.id === id);
-    price = Number(price) || 0;
-    if (idx > -1) list[idx].qty = (parseInt(list[idx].qty) || 1) + 1;
-    else list.push({ id, name: name || '', price, image: image || '', qty: 1 });
+    const idx = list.findIndex(p=>p.id===id);
+    price = Number(price)||0;
+    if (idx>-1) list[idx].qty = (parseInt(list[idx].qty)||1)+1;
+    else list.push({id, name:name||'', price, image:image||'', qty:1});
     saveCart(list);
     updateCartCountBadge();
   }
-
-  function removeFromCart(indexOrId) {
+  function removeFromCart(indexOrId){
     const list = readCart();
-    const idx = (typeof indexOrId === 'number') ? indexOrId : list.findIndex(p => p.id === indexOrId);
-    if (idx > -1) { list.splice(idx, 1); saveCart(list); updateCartCountBadge(); }
+    const idx = (typeof indexOrId==='number') ? indexOrId : list.findIndex(p=>p.id===indexOrId);
+    if (idx>-1){ list.splice(idx,1); saveCart(list); updateCartCountBadge(); }
+  }
+  function clearCart(){ saveCart([]); updateCartCountBadge(); }
+  function setQty(indexOrId, v){
+    const list = readCart();
+    const idx = (typeof indexOrId==='number') ? indexOrId : list.findIndex(p=>p.id===indexOrId);
+    if (idx>-1){ list[idx].qty = Math.max(1, Number(v)||1); saveCart(list); updateCartCountBadge(); }
   }
 
-  function setQty(indexOrId, v) {
-    const list = readCart();
-    const idx = (typeof indexOrId === 'number') ? indexOrId : list.findIndex(p => p.id === indexOrId);
-    if (idx > -1) { list[idx].qty = Math.max(1, Number(v) || 1); saveCart(list); updateCartCountBadge(); }
-  }
-
-  // ===== TOTALURI (livrare 0 lei ≥300 RON) =====
-  function computeTotals(list) {
-    const subtotal = list.reduce((s, i) => s + (Number(i.price) || 0) * (Number(i.qty) || 1), 0);
+  // === TOTALURI (reguli confirmate) ===
+  function computeTotals(list){
+    const subtotal = list.reduce((s,i)=> s + (Number(i.price)||0)*(Number(i.qty)||1), 0);
     let pct = 0, shipping = SHIPPING_BASE;
+
     if (subtotal >= 400) { pct = 20; shipping = 0; }
     else if (subtotal >= 300) { pct = 15; shipping = 0; }
     else if (subtotal >= 200) { pct = 10; }
+
     const discount = +(subtotal * pct / 100).toFixed(2);
     const total = +((subtotal - discount + shipping)).toFixed(2);
-    return { subtotal: +subtotal.toFixed(2), discount, shipping: +shipping.toFixed(2), total, pct };
+    return { subtotal:+subtotal.toFixed(2), discount, shipping:+shipping.toFixed(2), total, pct };
   }
 
-  // ===== RENDER COȘ =====
-  function render() {
-    const list = readCart();
-    const mount = document.getElementById('items');
-    if (!mount) return;
-    mount.innerHTML = '';
+  // === RENDER în tabel ===
+  function money(n){ return fmt(n) + ' RON'; }
 
-    if (!list.length) {
-      mount.innerHTML = '<p>Coșul tău este gol.</p>';
+  function render(){
+    const body = document.getElementById('cart-body');
+    if (!body) return;
+
+    const items = readCart();
+    if (!items.length){
+      body.innerHTML = '<tr><td colspan="5">Coșul este gol.</td></tr>';
     } else {
-      list.forEach((p, idx) => {
-        const card = document.createElement('div');
-        card.className = 'cart-card';
-        card.innerHTML = `
-          <div class="cart-left"><img src="${p.image || 'logo.png'}" alt="${esc(p.name)}"></div>
-          <div class="cart-mid">
-            <div class="name">${esc(p.name)}</div>
-            <div class="price">${fmt(p.price)} RON</div>
-            <div class="qty">
-              <button data-act="dec" aria-label="Scade">−</button>
-              <input type="number" min="1" value="${p.qty || 1}">
-              <button data-act="inc" aria-label="Crește">+</button>
-              <button class="danger" data-act="del">Șterge</button>
-            </div>
-          </div>`;
-        const input = card.querySelector('input');
-        card.querySelector('[data-act="inc"]').onclick = () => { input.value = Number(input.value || 1) + 1; input.dispatchEvent(new Event('change')); };
-        card.querySelector('[data-act="dec"]').onclick = () => { input.value = Math.max(1, Number(input.value || 1) - 1); input.dispatchEvent(new Event('change')); };
-        card.querySelector('[data-act="del"]').onclick = () => { removeFromCart(idx); render(); };
-        input.addEventListener('change', () => { setQty(idx, input.value); refreshTotals(); });
-        mount.appendChild(card);
-      });
+      body.innerHTML = items.map((i,idx)=>{
+        const line = (Number(i.price)||0) * (Number(i.qty)||1);
+        return `
+          <tr data-idx="${idx}">
+            <td>
+              <div style="display:flex; gap:10px; align-items:center">
+                <img src="${i.image||''}" alt="${esc(i.name||'')}">
+                <div>
+                  <div style="font-weight:600">${esc(i.name||'')}</div>
+                </div>
+              </div>
+            </td>
+            <td>${money(i.price)}</td>
+            <td>
+              <div class="qty">
+                <button type="button" class="qminus">−</button>
+                <input type="number" class="qinput" min="1" value="${i.qty||1}">
+                <button type="button" class="qplus">+</button>
+              </div>
+            </td>
+            <td><b>${money(line)}</b></td>
+            <td><button class="remove" type="button" aria-label="Șterge">✕</button></td>
+          </tr>
+        `;
+      }).join('');
     }
+    bindRowEvents();
     refreshTotals();
-  }
-
-  function refreshTotals() {
-    const t = computeTotals(readCart());
-    const put = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    put('subtot', fmt(t.subtotal));
-    put('disc',   fmt(t.discount));
-    put('ship',   fmt(t.shipping));
-    put('grand',  fmt(t.total));
     updateCartCountBadge();
   }
 
-  // ===== PROFORMĂ HTML =====
-  function makeProformaHTML(data, list, totals, orderId) {
+  function bindRowEvents(){
+    document.querySelectorAll('#cart-body tr').forEach(tr=>{
+      const idx = Number(tr.getAttribute('data-idx'));
+      const input = tr.querySelector('.qinput');
+
+      tr.querySelector('.qminus')?.addEventListener('click', ()=>{
+        input.value = Math.max(1, (parseInt(input.value)||1)-1);
+        setQty(idx, input.value); render();
+      });
+      tr.querySelector('.qplus')?.addEventListener('click', ()=>{
+        input.value = (parseInt(input.value)||1)+1;
+        setQty(idx, input.value); render();
+      });
+      input?.addEventListener('change', (e)=>{
+        const v = Math.max(1, parseInt(e.target.value)||1);
+        setQty(idx, v); render();
+      });
+      tr.querySelector('.remove')?.addEventListener('click', ()=>{
+        removeFromCart(idx); render();
+      });
+    });
+  }
+
+  function refreshTotals(){
+    const t = computeTotals(readCart());
+    const put = (id,val)=>{ const el=document.getElementById(id); if (el) el.textContent = val; };
+    put('t-sub',   money(t.subtotal));
+    put('t-disc',  money(t.discount));
+    put('t-ship',  money(t.shipping));
+    put('t-total', money(t.total));
+  }
+
+  // === PROFORMĂ HTML (trimisă clientului)
+  function makeProformaHTML(data, list, totals, orderId){
     const firma = {
       denumire:'Stoica Mihaela – Persoană Fizică Autorizată',
       cui:'52197623',
@@ -148,13 +162,24 @@
       banca:'Salt Bank'
     };
 
+    const rows = list.map(i=>{
+      const line = (Number(i.price)||0)*(Number(i.qty)||1);
+      return `
+        <tr>
+          <td style="padding:8px 10px;border-bottom:1px solid #eee">${esc(i.name||'')}</td>
+          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:center">${Number(i.qty)||1}</td>
+          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right">${fmt(i.price)} RON</td>
+          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right">${fmt(line)} RON</td>
+        </tr>`;
+    }).join('');
+
     const clientPF = `
       <div style="line-height:1.5">
         <div style="font-weight:700;margin-bottom:4px">Client (PF)</div>
         <div>${esc(data.nume)} ${esc(data.prenume)}</div>
         <div>Email: <a href="mailto:${esc(data.email)}" style="color:#0b62">${esc(data.email)}</a></div>
-        <div>Tel: ${esc(data.telefon)}</div>
-        <div>Adresă: ${esc(data.adresa)}, ${esc(data.oras)}, ${esc(data.judet)} ${esc(data.codpostal)}</div>
+        <div>Tel: ${esc(data.telefon||'')}</div>
+        <div>Adresă: ${esc(data.adresa||'')}, ${esc(data.oras||'')}, ${esc(data.judet||'')} ${esc(data.codpostal||'')}</div>
       </div>`;
 
     const clientPJ = `
@@ -164,21 +189,11 @@
         <div>CUI: ${esc(data.cui||'')} · Reg. Com.: ${esc(data.regcom||'')}</div>
         <div>Persoană de contact: ${esc(data.nume)} ${esc(data.prenume)}</div>
         <div>Email: <a href="mailto:${esc(data.email)}" style="color:#0b62">${esc(data.email)}</a></div>
-        <div>Tel: ${esc(data.telefon)}</div>
-        <div>Adresă: ${esc(data.adresa)}, ${esc(data.oras)}, ${esc(data.judet)} ${esc(data.codpostal)}</div>
+        <div>Tel: ${esc(data.telefon||'')}</div>
+        <div>Adresă: ${esc(data.adresa||'')}, ${esc(data.oras||'')}, ${esc(data.judet||'')} ${esc(data.codpostal||'')}</div>
       </div>`;
-    const clientBlock = (data.tip === 'Persoană juridică') ? clientPJ : clientPF;
 
-    const rows = list.map(i=>{
-      const line = (Number(i.price)||0) * (Number(i.qty)||1);
-      return `
-        <tr>
-          <td style="padding:8px 10px;border-bottom:1px solid #eee">${esc(i.name||'')}</td>
-          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:center">${Number(i.qty)||1}</td>
-          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right">${fmt(i.price)} RON</td>
-          <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right">${fmt(line)} RON</td>
-        </tr>`;
-    }).join('');
+    const clientBlock = (data.tip === 'Persoană juridică') ? clientPJ : clientPF;
 
     return `
     <div style="font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,Arial;max-width:760px;margin:16px auto;padding:14px;border:1px solid #eaeaea;border-radius:12px;background:#fff">
@@ -231,57 +246,65 @@
     </div>`;
   }
 
-  // ===== TRIMITERE COMANDĂ (cu anti-dubluri) =====
+  // === TRIMITERE COMANDĂ (anti-dublu + diag + redirect)
   let SENDING = false;
 
-  async function submitOrder(formElOrFormData) {
-    if (SENDING) return false; // blocăm dublu-click
+  async function submitOrder(formEl){
     const list = readCart();
-    if (!list.length) { alert('Coșul este gol.'); return false; }
+    if (!list.length){ alert('Coșul este gol.'); return false; }
 
-    const fd = (formElOrFormData instanceof FormData)
-      ? formElOrFormData
-      : new FormData(formElOrFormData);
-
+    const fd = new FormData(formEl);
     const data = Object.fromEntries(fd.entries());
-    const totals = computeTotals(list);
 
-    // semnătură unică pe conținut + email client
-    const signature = await sha256(JSON.stringify({ list, email: data.email || '', totals }));
-
-    // verificăm ultimele 10 minute
-    const lastSig = localStorage.getItem(IDEMP_KEY);
-    const lastTs  = Number(localStorage.getItem(IDEMP_TIME) || 0);
-    const now     = Date.now();
-
-    if (lastSig === signature && now - lastTs < IDEMP_TTL) {
-      // aceeași comandă, nu retrimitem
-      try { window.location.href = 'multumesc.html'; } catch (_) {}
+    // validări minime
+    if (!data.email || !/^[^@]+@[^@]+\.[^@]+$/.test(data.email)) {
+      alert('Te rugăm să introduci un email valid.');
       return false;
     }
 
-    // marcăm imediat ca „în curs” ca să blocăm alte clickuri
+    if (SENDING) return false;
     SENDING = true;
-    localStorage.setItem(IDEMP_KEY, signature);
-    localStorage.setItem(IDEMP_TIME, String(now));
 
-    // ID comandă
-    const orderId = Math.random().toString(36).slice(2, 7).toUpperCase();
+    const totals    = computeTotals(list);
+    const signature = await sha256(JSON.stringify({ list, email:data.email||'', totals }));
+    const lastSig   = localStorage.getItem('msa_last_order_sig');
+    const lastTs    = Number(localStorage.getItem('msa_last_order_ts')||0);
+    const now       = Date.now();
+
+    if (lastSig === signature && now - lastTs < 10*60*1000) {
+      try { window.location.href = 'multumesc.html'; } catch(_) {}
+      SENDING = false; return false;
+    }
+    localStorage.setItem('msa_last_order_sig', signature);
+    localStorage.setItem('msa_last_order_ts', String(now));
+
+    const orderId = Math.random().toString(36).slice(2,7).toUpperCase();
     const html_proforma = makeProformaHTML(data, list, totals, orderId);
-    const produseText = list.map(i => `• ${i.name} x ${i.qty} = ${fmt((Number(i.price)||0)*(Number(i.qty)||1))} RON`).join('\n');
+    const produseText = list.map(i => `• ${i.name} x ${i.qty} = ${fmt((+i.price||0)*(+i.qty||1))} RON`).join('\n');
 
-    try {
-      if (!window.emailjs) throw new Error('EmailJS indisponibil');
+    const explain = (err) => {
+      let msg = 'A apărut o eroare la trimitere.';
+      if (err && (err.text || err.message)) msg += `\n\nDetalii: ${err.text || err.message}`;
+      msg += '\n\nVerifică în EmailJS:'
+           + '\n• Public Key / Service ID / Template ID'
+           + '\n• Domeniul „https://www.msahandmade.ro” la „Domains”'
+           + '\n• Variabilele necesare din template (to_email, order_id, nume, html_proforma etc.)';
+      alert(msg);
+      console.error('EmailJS error:', err);
+    };
 
-      // CLIENT
+    try{
+      if (!window.emailjs) throw new Error('EmailJS nu este încărcat.');
+
+      // CLIENT: proformă
       await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, {
         to_email: data.email || '',
         order_id: orderId,
-        nume: data.nume || '',
+        nume: (data.nume || '') + ' ' + (data.prenume || ''),
         html_proforma,
       });
 
-      // ADMIN
+      // ADMIN: rezumat complet
       await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, {
         to_email: ADMIN_EMAIL,
         order_id: orderId,
@@ -294,56 +317,52 @@
         oras: data.oras || '',
         codpostal: data.codpostal || '',
         adresa: data.adresa || '',
+        firma: data.firma || '',
+        cui: data.cui || '',
+        regcom: data.regcom || '',
+        mentiuni: data.mentiuni || '',
         produse: produseText,
         subtotal: fmt(totals.subtotal),
         livrare: fmt(totals.shipping),
-        total: fmt(totals.total),
-        mentiuni: data.mentiuni || ''
+        reducere_pct: String(totals.pct||0),
+        reducere: fmt(totals.discount),
+        total: fmt(totals.total)
       });
 
       clearCart();
-      try { window.location.href = 'multumesc.html'; } catch (_) {}
+      try { window.location.href = 'multumesc.html'; } catch(_){}
       return true;
-    } catch (err) {
-      // dacă a eșuat, deblocăm și curățăm semnătura ca să poată reîncerca
-      console.error(err);
-      alert('A apărut o problemă la trimiterea comenzii. Te rugăm să încerci din nou.');
+    }catch(err){
+      localStorage.removeItem('msa_last_order_sig');
+      localStorage.removeItem('msa_last_order_ts');
       SENDING = false;
-      localStorage.removeItem(IDEMP_KEY);
-      localStorage.removeItem(IDEMP_TIME);
+      explain(err);
       return false;
     }
   }
 
-  // ===== Helper: leagă automat formularul de checkout și gestionează butonul =====
-  function hookCheckout(formSelector = '#checkout-form', buttonSelector = '#place-order') {
-    const form = document.querySelector(formSelector);
-    const btn  = document.querySelector(buttonSelector);
+  function hookCheckout(formSel='#checkout-form', btnSel='#place-order'){
+    const form = document.querySelector(formSel);
+    const btn  = document.querySelector(btnSel);
     if (!form) return;
 
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async (e)=>{
       e.preventDefault();
-      if (btn) { btn.disabled = true; btn.textContent = 'Se trimite…'; }
+      const old = btn ? btn.textContent : '';
+      if (btn){ btn.disabled = true; btn.textContent = 'Se trimite…'; }
       const ok = await submitOrder(form);
-      if (!ok && btn) { btn.disabled = false; btn.textContent = 'Trimite comanda'; }
+      if (!ok && btn){ btn.disabled = false; btn.textContent = old || 'Confirmă comanda'; }
     });
-
-    // fallback pentru click direct pe buton (dublu apăsări etc.)
-    if (btn) {
-      btn.addEventListener('click', (e) => {
-        if (SENDING) { e.preventDefault(); return false; }
-      });
-    }
   }
 
-  // ===== Expose + init =====
+  // === EXPOSE + INIT ===
   window.MSACart = {
     readCart, saveCart, addToCart, removeFromCart, clearCart, setQty,
-    computeTotals, render, submitOrder, updateCartCountBadge, hookCheckout
+    computeTotals, render, hookCheckout, updateCartCountBadge
   };
 
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', ()=>{
     updateCartCountBadge();
-    if (document.getElementById('items')) render();
+    if (document.getElementById('cart-body')) render();
   });
 })();
