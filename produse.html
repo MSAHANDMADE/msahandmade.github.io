@@ -4,15 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Produse — MSA Handmade</title>
-  <meta name="description" content="Lumânări și decorațiuni artizanale create manual de MSA Handmade – perfecte pentru cadouri și decor.">
-  <meta name="keywords" content="lumânări handmade, coronițe, decorațiuni, MSA Handmade, cadouri, artizanat">
+
+  <!-- SEO -->
+  <meta name="description" content="Lumânări și decorațiuni artizanale MSA Handmade – produse din ceară și ipsos, realizate manual în România. Descoperă coronițe, lumânări și decoruri unicat.">
+  <meta name="keywords" content="lumânări handmade, coronițe Crăciun, decoruri artizanale, ceară naturală, ipsos, MSA Handmade">
   <meta name="author" content="MSA Handmade">
   <link rel="canonical" href="https://www.msahandmade.ro/produse.html">
+
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.msahandmade.ro/produse.html">
   <meta property="og:title" content="Produse — MSA Handmade">
   <meta property="og:description" content="Descoperă colecția noastră de lumânări și decorațiuni realizate manual.">
   <meta property="og:image" content="https://www.msahandmade.ro/images/logo.png">
+
   <link rel="stylesheet" href="styles.css" />
   <style>
     .wrap{max-width:980px;margin:0 auto;padding:0 16px}
@@ -20,21 +25,45 @@
     .card{grid-column:span 12;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);overflow:hidden}
     @media(min-width:720px){.card{grid-column:span 6}}
     @media(min-width:1024px){.card{grid-column:span 4}}
-    .thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+    .thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;cursor:pointer}
     .body{padding:12px 14px}
     .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
     .price{font-weight:700}
-    .desc{font-size:0.9rem;color:#555;margin-top:6px;min-height:50px}
-    .btn{width:100%;margin-top:10px;padding:12px;border:0;border-radius:10px;background:#0a2230;color:#fff;font-weight:700}
+    .desc{font-size:.92rem;color:#555;margin-top:6px;min-height:48px}
+
+    /* nav */
     #main-nav{display:flex;justify-content:center;gap:15px;flex-wrap:nowrap}
     #main-nav a{text-decoration:none;color:#333;font-weight:500;padding:6px 10px}
     #main-nav a:hover{color:#d12b4a}
     .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f7f7f7}
+
     footer{text-align:center;padding:20px 10px;font-size:14px;color:#666;border-top:1px solid #ddd;background:#fafafa}
     footer .socials{margin-bottom:10px}
     footer .socials img{width:24px;height:24px;margin:0 5px}
     footer .legal-nav a{margin:0 5px;color:#555;text-decoration:none}
     footer .legal-nav a:hover{color:#d12b4a}
+
+    /* search */
+    .search-wrap{position:relative;margin:10px 0 20px}
+    .search-input{width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:12px;font-size:16px}
+    .suggest{position:absolute;top:46px;left:0;right:0;background:#fff;border:1px solid #ddd;border-top:none;border-radius:0 0 12px 12px;box-shadow:0 12px 24px rgba(0,0,0,.06);z-index:20;overflow:hidden}
+    .suggest.hidden{display:none}
+    .suggest-item{padding:10px 14px;border-top:1px solid #f0f0f0;cursor:pointer}
+    .suggest-item:hover{background:#f6faff}
+
+    /* modal */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+    .modal.open{display:flex}
+    .modal-card{background:#fff;max-width:900px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+    .modal-media{width:100%;background:#000}
+    .modal-media img{width:100%;height:auto;display:block}
+    .modal-body{padding:16px}
+    .modal-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+    .modal-title{font-size:20px;font-weight:700}
+    .modal-close{background:#f3f3f3;border:none;border-radius:10px;padding:8px 10px;cursor:pointer}
+    .modal-desc{color:#444;margin:6px 0 10px}
+    .modal-spec{font-size:.95rem;color:#555;margin:0 0 10px}
+    .btn{width:100%;margin-top:10px;padding:12px;border:0;border-radius:10px;background:#0a2230;color:#fff;font-weight:700;cursor:pointer}
   </style>
 </head>
 <body>
@@ -55,13 +84,24 @@
 
   <main class="wrap">
     <h1>Produsele noastre</h1>
+
+    <!-- CĂUTARE cu sugestii -->
+    <div class="search-wrap">
+      <input id="search" class="search-input" type="search" placeholder="Caută un produs… (ex: ing, coro, crin, dans)" autocomplete="off">
+      <div id="suggest" class="suggest hidden"></div>
+    </div>
+
     <section class="grid" id="prod-list"></section>
   </main>
 
   <footer>
     <div class="socials">
-      <a href="https://facebook.com" target="_blank"><img src="images/facebook.svg" alt="Facebook"></a>
-      <a href="https://instagram.com" target="_blank"><img src="images/instagram.svg" alt="Instagram"></a>
+      <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+        <img src="images/facebook.svg" alt="Facebook">
+      </a>
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+        <img src="images/instagram.svg" alt="Instagram">
+      </a>
     </div>
     <small>&copy; <span id="year"></span> – MSA Handmade. Toate drepturile rezervate.</small>
     <nav class="legal-nav">
@@ -72,73 +112,203 @@
     </nav>
   </footer>
 
+  <!-- Modal preview -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-label="Previzualizare produs">
+    <div class="modal-card">
+      <div class="modal-media"><img id="mimg" src="" alt=""></div>
+      <div class="modal-body">
+        <div class="modal-top">
+          <div class="modal-title" id="mtitle"></div>
+          <button class="modal-close" id="mclose">Închide ✕</button>
+        </div>
+        <div class="modal-desc" id="mdesc"></div>
+        <div class="modal-spec" id="mspec"></div>
+        <button class="btn" id="madd">Adaugă în coș</button>
+      </div>
+    </div>
+  </div>
+
   <script src="cart.js"></script>
-
   <script>
+    // === DATE PRODUSE (coronițe primele) ===
     const PRODUCTS = [
-      // === 5 RON ===
-      { id:'ingeras', name:'Îngeraș', price:5, image:'images/ingeras.png', desc:'Lumânare decorativă cu îngeraș, 100% ceară naturală, turnată manual. Ideală pentru cadou.' },
-      { id:'floricele', name:'Floricele', price:5, image:'images/floricele.png', desc:'Mini lumânări în formă de floare, lucrate manual, delicate și parfumate.' },
+      // 35 RON — Coronițe
+      { id:'coronita1', name:'Coroniță Crăciun – roșu & auriu', price:35, image:'images/coronita1.png',
+        desc:'Strălucire caldă de sărbătoare: flori aurii și accente roșii ce transformă ușa sau peretele într-un colț de poveste.',
+        specs:{ material:'mix decor + lumini pe baterii', size:'Ø 30 cm', weight:'-', notes:'lumină alb cald' } },
+      { id:'coronita2', name:'Coroniță Crăciun – albastru & argintiu', price:35, image:'images/coronita2.png',
+        desc:'Eleganță rece, iernatică: nuanțe de albastru și argintiu pentru un decor premium, gata să lumineze serile de iarnă.',
+        specs:{ material:'mix decor + lumini pe baterii', size:'Ø 30 cm', weight:'-', notes:'baterii incluse' } },
 
-      // === 11 RON ===
-      { id:'family', name:'Family', price:11, image:'images/family.png', desc:'Lumânare cu tematică familială, simbol al iubirii și unității.' },
+      // 5 RON
+      { id:'ingeras', name:'Îngeraș', price:5, image:'images/ingeras.png',
+        desc:'Mic protector al casei tale, turnat manual. Perfect pentru seturi drăgălașe și cadouri cu suflet.',
+        specs:{ material:'ceară', size:'7 × 3 cm', weight:'~30 g', notes:'' } },
+      { id:'floricele', name:'Floricele', price:5, image:'images/floricele.png',
+        desc:'Floricele delicate din ceară — un accent vesel pentru orice aranjament.',
+        specs:{ material:'ceară', size:'4 × 3 cm', weight:'~25 g', notes:'' } },
 
-      // === 33 RON ===
-      { id:'isus', name:'Iisus', price:33, image:'images/isus.png', desc:'Lumânare handmade cu chipul Mântuitorului. Ceară 150g, h 9.5 cm, l 4.5 cm.' },
-      { id:'buchet', name:'Buchet', price:29, image:'images/buchet.jpg', desc:'Lumânare artizanală sub formă de buchet, 120g ceară naturală, înălțime 9.5 cm.' },
-      { id:'crin', name:'Crin', price:33, image:'images/crin.jpg', desc:'Lumânare florală tip crin, 150g ceară, lucrată manual, perfectă pentru decor.' },
-      { id:'dans', name:'Dans', price:33, image:'images/dans.jpg', desc:'Lumânare handmade cu siluetă de cuplu în dans – un cadou elegant și romantic.' },
-      { id:'flori', name:'Flori', price:33, image:'images/flori.jpg', desc:'Lumânare 100g ceară în suport de ipsos manual, diametru 7cm, înălțime 5cm.' },
-      { id:'inger', name:'Înger', price:33, image:'images/inger.jpg', desc:'Lumânare cu înger, detaliată manual, simbol al protecției și luminii.' },
-      { id:'logodna', name:'Logodnă', price:33, image:'images/logodna.jpg', desc:'Lumânare handmade cu temă romantică, potrivită pentru logodnă sau aniversare.' },
-      { id:'floarea-soarelui', name:'Floarea-soarelui', price:33, image:'images/lumanare_floarea-soarelui.png', desc:'Lumânare artizanală decorată cu floarea-soarelui, din ceară naturală, 100% manuală.' },
+      // 11 RON
+      { id:'family', name:'Family', price:11, image:'images/family.png',
+        desc:'Simbol liniștitor al armoniei: piesă lucrată din ceară, cu o prezență caldă și blândă.',
+        specs:{ material:'ceară', size:'9 × 4 cm', weight:'~60 g', notes:'' } },
 
-      // === 99 RON ===
-      { id:'peisaj', name:'Peisaj', price:99, image:'images/peisaj.jpg', desc:'Lumânare mare de 300g ceară, pe suport 25x9cm, decorată manual cu detalii rustice.' },
-      { id:'peisajiarna', name:'Peisaj de iarnă', price:99, image:'images/peisajiarna.jpg', desc:'Lumânare de 280g ceară, diametru 15cm, cu decor de iarnă lucrat manual.' },
-      { id:'indragostiti', name:'Îndrăgostiți', price:99, image:'images/indragostiti.jpg', desc:'Lumânare elegantă pentru cupluri, model romantic, 100% realizată manual.' },
+      // 33 RON
+      { id:'isus', name:'Iisus', price:33, image:'images/isus.png',
+        desc:'Detalii sculptate manual, pentru un colț de rugăciune plin de pace.',
+        specs:{ material:'ceară', size:'11 × 7 cm', weight:'~300 g', notes:'' } },
+      { id:'buchet', name:'Buchet', price:29, image:'images/buchet.jpg',
+        desc:'Flori din ceară pe tijă — grațioase, elegante, ușor de integrat în decor.',
+        specs:{ material:'flori din ceară pe tijă', size:'H 20 cm, L 3.5 cm', weight:'~120 g', notes:'' } },
+      { id:'crin', name:'Crin', price:33, image:'images/crin.jpg',
+        desc:'Formă florală ce aduce rafinament și calm în orice încăpere.',
+        specs:{ material:'ceară', size:'9.5 × 6.5 cm', weight:'~200 g', notes:'' } },
+      { id:'dans', name:'Dans', price:33, image:'images/dans.jpg',
+        desc:'Siluete în mișcare — o poveste de iubire surprinsă în ceară.',
+        specs:{ material:'ceară', size:'10 × 6.5 cm', weight:'~200 g', notes:'' } },
+      { id:'flori', name:'Flori (suport ipsos)', price:33, image:'images/flori.jpg',
+        desc:'Lumânare din ceară prezentată pe suport de ipsos lucrat manual.',
+        specs:{ material:'ceară + suport ipsos', size:'Ø 7 × 5 cm', weight:'ceară ~100 g', notes:'suport inclus' } },
+      { id:'inger', name:'Înger', price:33, image:'images/inger.jpg',
+        desc:'Un simbol al protecției și al luminii, modelat cu grijă.',
+        specs:{ material:'ceară', size:'9.5 × 4.5 cm', weight:'~150 g', notes:'' } },
+      { id:'logodna', name:'Logodnă', price:33, image:'images/logodna.jpg',
+        desc:'Romantică și elegantă — pentru momente care merită păstrate.',
+        specs:{ material:'ceară', size:'H 9.5 cm, L 4 cm', weight:'~120 g', notes:'' } },
+      { id:'floarea-soarelui', name:'Floarea-soarelui', price:33, image:'images/lumanare_floarea-soarelui.png',
+        desc:'Soare mic pentru casă: floare din ceară într-o prezentare artizanală.',
+        specs:{ material:'ceară + suport ipsos', size:'farfurie 10 × 5 cm', weight:'ceară ~100 g', notes:'' } },
 
-      // === 35 RON ===
-      { id:'coronita1', name:'Coroniță Crăciun – roșu & auriu', price:35, image:'images/coronita1.png', desc:'Coroniță de Crăciun de 30cm diametru, decorată manual cu flori aurii și roșii, luminițe pe baterii.' },
-      { id:'coronita2', name:'Coroniță Crăciun – albastru & argintiu', price:35, image:'images/coronita2.png', desc:'Coroniță de Crăciun de 30cm diametru, cu decorațiuni albastre și argintii, luminițe pe baterii.' },
+      // 99 RON
+      { id:'peisaj', name:'Peisaj', price:99, image:'images/peisaj.jpg',
+        desc:'Peisaj turnat manual în ceară — texturi blânde și lumină caldă.',
+        specs:{ material:'ceară', size:'suport 25 × 9 cm', weight:'~300 g', notes:'' } },
+      { id:'peisajiarna', name:'Peisaj de iarnă', price:99, image:'images/peisajiarna.jpg',
+        desc:'Farmecul iernii surprins în ceară, pentru serile liniștite de acasă.',
+        specs:{ material:'ceară', size:'suport 25 × 9 cm', weight:'~300 g', notes:'' } },
+      { id:'indragostiti', name:'Îndrăgostiți', price:99, image:'images/indragostiti.jpg',
+        desc:'Două inimi, aceeași lumină — o piesă cu suflet.',
+        specs:{ material:'ceară', size:'Ø 15 cm', weight:'~280 g', notes:'' } },
     ];
 
-    function renderProducts(){
-      const mount = document.getElementById('prod-list');
-      mount.innerHTML = PRODUCTS.map(p => `
+    // === RENDER LIST ===
+    const mount = document.getElementById('prod-list');
+    function render(products){
+      mount.innerHTML = products.map(p => `
         <article class="card">
-          <img class="thumb" src="${p.image}" alt="${p.name}" loading="lazy" />
+          <img class="thumb" src="${p.image}" alt="${p.name}" data-id="${p.id}" />
           <div class="body">
-            <div class="top"><h3>${p.name}</h3><span class="price">${p.price} RON</span></div>
+            <div class="top">
+              <h3>${p.name}</h3>
+              <span class="price">${p.price} RON</span>
+            </div>
             <p class="desc">${p.desc}</p>
-            <button class="btn add" data-id="${p.id}" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}">
-              Adaugă în coș
-            </button>
+            <button class="btn add" data-id="${p.id}">Adaugă în coș</button>
           </div>
         </article>
       `).join('');
+      bindCardEvents();
     }
 
-    (function(){
-      document.addEventListener('DOMContentLoaded', ()=>{
-        renderProducts();
-        document.querySelectorAll('.add').forEach(btn=>{
-          btn.addEventListener('click', ()=>{
-            if (!window.MSACart) return;
-            MSACart.addToCart({
-              id:btn.dataset.id,
-              name:btn.dataset.name,
-              price:Number(btn.dataset.price||0),
-              image:btn.dataset.image
-            });
-            const old=btn.textContent;
-            btn.textContent='Adăugat!';
-            setTimeout(()=>btn.textContent=old,800);
-          });
+    // === SUGGESTIONS (drop-down) ===
+    const q = document.getElementById('search');
+    const suggest = document.getElementById('suggest');
+
+    function buildSuggestions(list){
+      if (!q.value.trim()){ suggest.classList.add('hidden'); suggest.innerHTML=''; return; }
+      const html = list.map(p => `<div class="suggest-item" data-id="${p.id}">${p.name}</div>`).join('');
+      suggest.innerHTML = html || `<div class="suggest-item" data-id="">Nicio potrivire</div>`;
+      suggest.classList.remove('hidden');
+    }
+
+    q.addEventListener('input', ()=>{
+      const v = q.value.trim().toLowerCase();
+      if (v.length < 2){ buildSuggestions([]); return; }
+      const hits = PRODUCTS.filter(p =>
+        p.name.toLowerCase().includes(v) ||
+        (p.desc && p.desc.toLowerCase().includes(v))
+      ).slice(0,8);
+      buildSuggestions(hits);
+    });
+
+    document.addEventListener('click', (e)=>{
+      // click pe sugestie
+      if (e.target.classList.contains('suggest-item')){
+        const id = e.target.dataset.id;
+        suggest.classList.add('hidden');
+        if (!id) return;
+        const found = PRODUCTS.find(p => p.id === id);
+        if (found){ render([found]); }
+        q.blur();
+      }else{
+        // click în afara cutiei — închide lista
+        if (!e.target.closest('.search-wrap')) suggest.classList.add('hidden');
+      }
+    });
+
+    // === MODAL ===
+    const modal = document.getElementById('modal');
+    const mimg  = document.getElementById('mimg');
+    const mtitle= document.getElementById('mtitle');
+    const mdesc = document.getElementById('mdesc');
+    const mspec = document.getElementById('mspec');
+    const madd  = document.getElementById('madd');
+    const mclose= document.getElementById('mclose');
+    let currentProd = null;
+
+    function openModal(prod){
+      currentProd = prod;
+      mimg.src = prod.image;
+      mimg.alt = prod.name;
+      mtitle.textContent = prod.name;
+      mdesc.textContent = prod.desc;
+      const s = prod.specs || {};
+      mspec.textContent = [
+        s.material ? `Material: ${s.material}` : '',
+        s.size ? `Dimensiuni: ${s.size}` : '',
+        s.weight ? `Greutate: ${s.weight}` : '',
+        s.notes ? `Note: ${s.notes}` : ''
+      ].filter(Boolean).join(' • ');
+      modal.classList.add('open');
+    }
+    function closeModal(){ modal.classList.remove('open'); currentProd=null; }
+
+    function bindCardEvents(){
+      document.querySelectorAll('.thumb').forEach(img=>{
+        img.addEventListener('click', ()=>{
+          const id = img.dataset.id;
+          const p = PRODUCTS.find(x=>x.id===id);
+          if (p) openModal(p);
         });
-        document.getElementById('year').textContent=new Date().getFullYear();
       });
-    })();
+      document.querySelectorAll('.add').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const id = btn.dataset.id;
+          const p = PRODUCTS.find(x=>x.id===id);
+          if (!p || !window.MSACart) return;
+          MSACart.addToCart({ id:p.id, name:p.name, price:p.price, image:p.image });
+          const old = btn.textContent; btn.textContent='Adăugat!'; setTimeout(()=>btn.textContent=old,800);
+        });
+      });
+    }
+
+    mclose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+    madd.addEventListener('click', ()=>{
+      if (!currentProd || !window.MSACart) return;
+      MSACart.addToCart({ id:currentProd.id, name:currentProd.name, price:currentProd.price, image:currentProd.image });
+      madd.textContent = 'Adăugat!'; setTimeout(()=>madd.textContent='Adaugă în coș',900);
+    });
+
+    // INIT
+    document.addEventListener('DOMContentLoaded', ()=>{
+      render(PRODUCTS);
+      document.getElementById('year').textContent = new Date().getFullYear();
+      // badge coș
+      if (window.MSACart && typeof MSACart.updateCartCountBadge === 'function') {
+        MSACart.updateCartCountBadge();
+      }
+    });
   </script>
 </body>
 </html>
