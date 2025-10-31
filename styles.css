@@ -217,3 +217,25 @@ footer .legal-nav a:hover{ color:#d12b4a; }
   .qty button{ width: 32px; height: 32px; font-size: 18px; }
   .qty input{  width: 44px; height: 32px; font-size: 15px; }
 }
+/* === MSA PATCH 2025-10-31 === */
+
+/* Ascund coloana cu butonul de ștergere (X) din coș */
+table.cart th:last-child,
+table.cart td:last-child { display:none; }
+
+/* Control cantitate: elimină iconițele din input și păstrează doar – [n] +  */
+.qty input { -moz-appearance: textfield; }
+.qty input::-webkit-outer-spin-button,
+.qty input::-webkit-inner-spin-button { -webkit-appearance: none; margin:0; }
+
+/* Lățimi sigure pe mobil ca să nu se calce peste TOTAL */
+@media (max-width:640px){
+  table.cart { table-layout: fixed; }
+  table.cart th:nth-child(1), table.cart td:nth-child(1){ width:50%; }
+  table.cart th:nth-child(2), table.cart td:nth-child(2){ width:16%; text-align:right; }
+  table.cart th:nth-child(3), table.cart td:nth-child(3){ width:22%; text-align:center; }
+  table.cart th:nth-child(4), table.cart td:nth-child(4){ width:12%; text-align:right; white-space:nowrap; }
+}
+
+/* Butonul din hero (index) să fie vizibil mereu */
+.hero .btn { display:inline-block; width:auto; }
