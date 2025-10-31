@@ -239,3 +239,17 @@ table.cart td:last-child { display:none; }
 
 /* Butonul din hero (index) să fie vizibil mereu */
 .hero .btn { display:inline-block; width:auto; }
+/* === MSA CART PATCH (safe to append) === */
+.wrap.narrow{max-width:880px}
+table.cart{width:100%;border-collapse:collapse;table-layout:fixed}
+table.cart th,table.cart td{padding:10px;border-bottom:1px solid #eee;vertical-align:middle}
+table.cart th:nth-child(1),table.cart td:nth-child(1){width:50%}
+table.cart th:nth-child(2),table.cart td:nth-child(2){width:16%;text-align:right}
+table.cart th:nth-child(3),table.cart td:nth-child(3){width:20%;text-align:center}
+table.cart th:nth-child(4),table.cart td:nth-child(4){width:14%;text-align:right;white-space:nowrap}
+.qty{display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:10px;background:#fff;overflow:hidden}
+.qty button{width:36px;height:36px;border:0;background:#f6f6f6;color:#111;font-size:20px;font-weight:700}
+.qty input{width:54px;height:36px;border:0;text-align:center;font-size:16px}
+@media (max-width:420px){.qty button{width:28px;height:28px;font-size:16px}.qty input{width:40px;height:28px;font-size:14px}}
+.btn.primary{background:#0a2230;color:#fff;border:0;border-radius:12px;padding:12px 18px;font-weight:800;min-height:44px}
+.btn.ghost{background:#f3f3f3;color:#111;border:0;border-radius:12px;padding:12px 18px;font-weight:700}
