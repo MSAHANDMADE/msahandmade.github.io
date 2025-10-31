@@ -1,127 +1,254 @@
-/* cart.js — MSA Handmade (stabil) */
+/* ================================
+   MSA Handmade – cart.js (final)
+   LocalStorage cart + render + checkout hook
+   ================================ */
+
 (function () {
-  const STORE_KEY = 'msa_cart_v1';
-  const CURRENCY = 'RON';
+  const LS_KEY = 'msa_cart_v2';
 
-  function load() { try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); } catch { return []; } }
-  function save(it) { localStorage.setItem(STORE_KEY, JSON.stringify(it)); return it; }
-  function fmt(n) { return `${n.toFixed(2)} ${CURRENCY}`; }
+  // --- Config ---
+  const SHIPPING_FEE = 17;               // taxa standard
+  const FREE_SHIPPING_FROM = 300;        // prag livrare gratuită
+  // reduceri automate (ordinea contează: descrescător ca prag)
+  const DISCOUNTS = [
+    { from: 400, percent: 20 },
+    { from: 300, percent: 15 },
+    { from: 200, percent: 10 },
+  ];
 
-  let items = load(); // [{id,name,price,image,qty}]
+  // --- Helpers ---
+  const fmt = (n) => `${Number(n).toFixed(2)} RON`;
 
-  const byId = id => items.findIndex(i => i.id === id);
-
-  function add(product, qty = 1) {
-    qty = parseInt(qty, 10) || 1;
-    const i = byId(product.id);
-    if (i >= 0) items[i].qty += qty;
-    else items.push({ id:String(product.id), name:product.name, price:Number(product.price||0), image:product.image||'', qty });
-    save(items); render();
+  function load() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); }
+    catch { return []; }
   }
-  function updateQty(id, qty) {
-    qty = Math.max(0, parseInt(qty, 10) || 0);
-    const i = byId(id); if (i < 0) return;
-    if (qty === 0) items.splice(i, 1); else items[i].qty = qty;
-    save(items); render();
-  }
-  function clearCart(){ items = []; save(items); render(); }
-
-  function totals(){
-    const subtotal = items.reduce((s,i)=>s + i.price*i.qty, 0);
-    const discount = subtotal>=400?subtotal*0.20: subtotal>=300?subtotal*0.15: subtotal>=200?subtotal*0.10: 0;
-    const after = subtotal - discount;
-    const shipping = subtotal===0 ? 0 : (after>=300 ? 0 : 17);
-    const grand = after + shipping;
-    return {subtotal, discount, shipping, grand};
+  function save(cart) {
+    localStorage.setItem(LS_KEY, JSON.stringify(cart));
+    updateCartCountBadge();
   }
 
-  function badge(){
-    const el = document.getElementById('cart-count');
-    if (el) el.textContent = items.reduce((s,i)=>s+i.qty,0);
-  }
+  // --- Public API container ---
+  const api = (window.MSACart = window.MSACart || {});
 
-  function render(){
-    badge();
-    const body = document.getElementById('cart-body');
-    if (!body) return; // nu suntem pe cos.html
-
-    if (items.length === 0) {
-      body.innerHTML = `<tr><td colspan="5">Coșul este gol.</td></tr>`;
+  // Add / Set / Clear
+  api.addToCart = function ({ id, name, price, image }) {
+    const cart = load();
+    const idx = cart.findIndex((x) => x.id === id);
+    if (idx >= 0) {
+      cart[idx].qty += 1;
     } else {
-      body.innerHTML = items.map(it=>`
-        <tr data-id="${it.id}">
-          <td>
-            <div style="display:flex;gap:12px;align-items:center">
-              ${it.image?`<img src="${it.image}" alt="${it.name}" style="width:72px;height:72px;object-fit:cover;border-radius:8px">`:``}
-              <div><div class="name" style="font-weight:700">${it.name}</div></div>
-            </div>
-          </td>
-          <td>${fmt(it.price)}</td>
-          <td>
-            <div class="qty" style="display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:10px;background:#fff;overflow:hidden;">
-              <button class="qminus" type="button" aria-label="Scade" style="width:36px;height:36px;border:0;background:#f6f6f6;font-weight:800;">−</button>
-              <input class="qval" type="number" inputmode="numeric" min="0" value="${it.qty}" style="width:54px;height:36px;border:0;text-align:center;font-size:16px">
-              <button class="qplus" type="button" aria-label="Crește" style="width:36px;height:36px;border:0;background:#f6f6f6;font-weight:800;">+</button>
-            </div>
-          </td>
-          <td class="line-total">${fmt(it.price*it.qty)}</td>
-          <td></td>
-        </tr>`).join('');
+      cart.push({ id, name, price: Number(price), image, qty: 1 });
     }
-
-    const t = totals();
-    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = fmt(val); };
-    set('t-sub', t.subtotal);
-    set('t-disc', t.discount);
-    set('t-ship', t.shipping);
-    set('t-total', t.grand);
-
-    body.querySelectorAll('tr').forEach(tr=>{
-      const id = tr.getAttribute('data-id');
-      tr.querySelector('.qminus')?.addEventListener('click', ()=>{
-        const cur = parseInt(tr.querySelector('.qval').value||'0',10)||0;
-        updateQty(id, Math.max(0, cur-1));
-      });
-      tr.querySelector('.qplus')?.addEventListener('click', ()=>{
-        const cur = parseInt(tr.querySelector('.qval').value||'0',10)||0;
-        updateQty(id, cur+1);
-      });
-      tr.querySelector('.qval')?.addEventListener('input', e=> updateQty(id, e.target.value));
-    });
-  }
-
-  // butoane .add-to-cart (oriunde în site)
-  document.addEventListener('click', e=>{
-    const btn = e.target.closest('.add-to-cart');
-    if (!btn) return;
-    const id = btn.dataset.id, name = btn.dataset.name, price = parseFloat(btn.dataset.price), image = btn.dataset.image||'';
-    if (!id || !name || isNaN(price)) { console.warn('Lipsesc data-id/data-name/data-price pe .add-to-cart'); return; }
-    add({id,name,price,image}, parseInt(btn.dataset.qty||'1',10)||1);
-  });
-
-  window.MSACart = {
-    add, updateQty, clearCart, render,
-    getItems: ()=>items.slice(),
-    getTotals: totals,
-    hookCheckout(formSel, btnSel){
-      const form = document.querySelector(formSel), btn = document.querySelector(btnSel);
-      if (!form) return;
-      form.addEventListener('submit', e=>{
-        e.preventDefault();
-        btn && (btn.disabled=true);
-        const payload = {
-          items: items.slice(),
-          totals: totals(),
-          data: Object.fromEntries(new FormData(form).entries()),
-          createdAt: new Date().toISOString()
-        };
-        console.log('ORDER', payload); // aici trimiți cu EmailJS/backend
-        alert('Mulțumim! Comanda a fost înregistrată.');
-        clearCart();
-        btn && (btn.disabled=false);
-      });
-    }
+    save(cart);
   };
 
-  window.addEventListener('load', render);
+  api.setQty = function (id, qty) {
+    let cart = load();
+    const row = cart.find((x) => x.id === id);
+    if (!row) return;
+    const q = Math.max(1, parseInt(qty || 1, 10));
+    row.qty = q;
+    save(cart);
+  };
+
+  api.remove = function (id) {
+    let cart = load().filter((x) => x.id !== id);
+    save(cart);
+  };
+
+  api.clearCart = function () {
+    save([]);
+  };
+
+  // Badge (🛒 <span id="cart-count">N</span>)
+  function updateCartCountBadge() {
+    const n = load().reduce((s, r) => s + r.qty, 0);
+    const el = document.getElementById('cart-count');
+    if (el) el.textContent = n;
+  }
+  api.updateCartCountBadge = updateCartCountBadge;
+
+  // --- Totals ---
+  function getTotals() {
+    const cart = load();
+    const subtotal = cart.reduce((s, r) => s + r.price * r.qty, 0);
+
+    // discount progresiv
+    let discount = 0;
+    for (const rule of DISCOUNTS) {
+      if (subtotal >= rule.from) {
+        discount = (rule.percent / 100) * subtotal;
+        break;
+      }
+    }
+
+    // livrare
+    const shipping = subtotal >= FREE_SHIPPING_FROM || subtotal === 0 ? 0 : SHIPPING_FEE;
+    const total = Math.max(0, subtotal - discount) + shipping;
+
+    return { subtotal, discount, shipping, total };
+  }
+
+  // --- Render coș (pentru cos.html) ---
+  api.render = function () {
+    const cart = load();
+    updateCartCountBadge();
+
+    // Tabel
+    const tbody = document.getElementById('cart-body');
+    if (!tbody) return;
+
+    if (!cart.length) {
+      tbody.innerHTML = `<tr><td colspan="5">Coșul tău este gol.</td></tr>`;
+    } else {
+      tbody.innerHTML = cart
+        .map((r) => {
+          const lineTotal = r.price * r.qty;
+          return `
+          <tr data-id="${r.id}">
+            <td>
+              <div style="display:flex; gap:10px; align-items:center">
+                <img src="${r.image}" alt="${r.name}" width="72" height="72" style="border-radius:8px; object-fit:cover">
+                <div class="prod-name">${r.name}</div>
+              </div>
+            </td>
+            <td>${fmt(r.price)}</td>
+            <td>
+              <div class="qty">
+                <button class="qminus" aria-label="Scade" type="button">−</button>
+                <input class="qinput" type="number" min="1" value="${r.qty}" aria-label="Cantitate">
+                <button class="qplus" aria-label="Crește" type="button">+</button>
+              </div>
+            </td>
+            <td>${fmt(lineTotal)}</td>
+            <td>
+              <button class="btn ghost btn-remove" type="button" aria-label="Șterge">✕</button>
+            </td>
+          </tr>`;
+        })
+        .join('');
+    }
+
+    // Totals
+    const { subtotal, discount, shipping, total } = getTotals();
+    const elSub = document.getElementById('t-sub');
+    const elDisc = document.getElementById('t-disc');
+    const elShip = document.getElementById('t-ship');
+    const elTot = document.getElementById('t-total');
+    if (elSub) elSub.textContent = fmt(subtotal);
+    if (elDisc) elDisc.textContent = fmt(discount);
+    if (elShip) elShip.textContent = fmt(shipping);
+    if (elTot) elTot.textContent = fmt(total);
+
+    // Bind qty +/- & remove
+    tbody.querySelectorAll('tr').forEach((row) => {
+      const id = row.getAttribute('data-id');
+      const minus = row.querySelector('.qminus');
+      const plus = row.querySelector('.qplus');
+      const input = row.querySelector('.qinput');
+      const removeBtn = row.querySelector('.btn-remove');
+
+      minus?.addEventListener('click', () => {
+        const q = Math.max(1, parseInt(input.value || '1', 10) - 1);
+        input.value = q;
+        api.setQty(id, q);
+        api.render();
+      });
+      plus?.addEventListener('click', () => {
+        const q = Math.max(1, parseInt(input.value || '1', 10) + 1);
+        input.value = q;
+        api.setQty(id, q);
+        api.render();
+      });
+      input?.addEventListener('change', () => {
+        const q = Math.max(1, parseInt(input.value || '1', 10));
+        api.setQty(id, q);
+        api.render();
+      });
+      removeBtn?.addEventListener('click', () => {
+        api.remove(id);
+        api.render();
+      });
+    });
+  };
+
+  // --- Checkout hook (trimite comandă prin EmailJS dacă există, altfel doar proformă) ---
+  api.hookCheckout = function (formSelector, submitBtnSelector) {
+    const form = document.querySelector(formSelector);
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const cart = load();
+      if (!cart.length) {
+        alert('Coșul este gol.');
+        return;
+      }
+
+      // colectare form
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      // sumar comandă
+      const { subtotal, discount, shipping, total } = getTotals();
+      const lines = cart
+        .map((r) => `- ${r.name} × ${r.qty} = ${fmt(r.price * r.qty)}`)
+        .join('\n');
+
+      const message =
+        `Comandă MSA Handmade\n\n` +
+        `Tip: ${data.tip || '-'}\n` +
+        (data.firma ? `Firmă: ${data.firma}\n` : '') +
+        (data.cui ? `CUI: ${data.cui}\n` : '') +
+        (data.regcom ? `Reg. Com.: ${data.regcom}\n` : '') +
+        `Nume: ${data.nume || ''} ${data.prenume || ''}\n` +
+        `Email: ${data.email || ''}\n` +
+        `Telefon: ${data.telefon || ''}\n` +
+        `Adresă: ${data.adresa || ''}, ${data.oras || ''}, ${data.judet || ''} (${data.codpostal || ''})\n` +
+        (data.mentiuni ? `Observații: ${data.mentiuni}\n` : '') +
+        `\nProduse:\n${lines}\n\n` +
+        `Subtotal: ${fmt(subtotal)}\n` +
+        `Reducere: ${fmt(discount)}\n` +
+        `Livrare: ${fmt(shipping)}\n` +
+        `TOTAL:   ${fmt(total)}\n`;
+
+      // Dacă există EmailJS în pagină, încearcă trimiterea
+      const btn = submitBtnSelector ? document.querySelector(submitBtnSelector) : null;
+      const oldTxt = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Se trimite…'; }
+
+      try {
+        if (window.emailjs && emailjs.send) {
+          // !!! Configurează-ți SERVICE_ID / TEMPLATE_ID în EmailJS
+          const SERVICE_ID = 'msa_service';
+          const TEMPLATE_ID = 'msa_order_template';
+          await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+            to_email: 'msahandmade.contact@gmail.com',
+            subject: 'Comandă nouă MSA Handmade',
+            message,
+          });
+          alert('Mulțumim! Comanda a fost trimisă. Te contactăm în curând.');
+        } else {
+          // fallback simplu
+          console.log(message);
+          alert('Mulțumim! Comanda a fost înregistrată (mod test).');
+        }
+        api.clearCart();
+        api.render();
+        form.reset();
+        // revine la Persoană fizică implicit
+        const pf = form.querySelector('input[name="tip"][value="Persoană fizică"]');
+        if (pf) pf.checked = true;
+        const pj = document.getElementById('pj-extra'); if (pj) pj.style.display = 'none';
+      } catch (err) {
+        console.error(err);
+        alert('Ups, nu am putut trimite comanda. Încearcă din nou.');
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = oldTxt; }
+      }
+    });
+  };
+
+  // Init badge la încărcare
+  document.addEventListener('DOMContentLoaded', updateCartCountBadge);
 })();
