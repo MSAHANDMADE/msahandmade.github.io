@@ -1,166 +1,114 @@
 /* ===========================
    MSA Handmade – styles.css
-   Curat, stabil, 2025-10-31
-=========================== */
+   =========================== */
 
-/* ---------- Variabile ---------- */
-:root {
-  --brand:#0a2230;
-  --brand-2:#0e344c;
-  --bg:#f6f6f6;
-  --card:#fff;
-  --text:#111;
-  --muted:#666;
-  --line:#eaeaea;
+/* ---- Variabile ---- */
+:root{
+  --brand:#0a2230; --brand-2:#0e344c;
+  --gold:#d9c08b; --bg:#f6f6f6; --card:#fff;
+  --text:#111; --muted:#666; --line:#eaeaea;
   --shadow:0 8px 24px rgba(0,0,0,.06);
 }
 
-/* ---------- Reset & bază ---------- */
-*{ box-sizing:border-box; }
-html,body{ max-width:100%; overflow-x:hidden; }
+/* ---- Reset ---- */
+*{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
 body{
-  margin:0; font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,Arial,"Helvetica Neue";
-  background:var(--bg); color:var(--text); font-size:16px; line-height:1.45;
+  margin:0;font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,Arial,"Helvetica Neue";
+  background:var(--bg);color:var(--text);font-size:16px;line-height:1.45;
 }
-img{ max-width:100%; height:auto; display:block; }
-a{ color:inherit; text-decoration:none; }
-.wrap{ max-width:1100px; margin:0 auto; padding:0 16px; }
-.wrap.narrow{ max-width:880px; }
+img{max-width:100%;height:auto;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.wrap.narrow{max-width:880px}
 
-/* ---------- Promo bar ---------- */
-.promo{
-  background:#0f3a2e; color:#fff; text-align:center; padding:10px 12px; font-weight:700;
-}
-.promo b{ color:#ffd27a; }
+/* ---- Header/Nav ---- */
+.header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
+#main-nav{display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 0;flex-wrap:nowrap}
+#main-nav a{color:#222;font-weight:600;font-size:15px;padding:6px 8px;border-radius:8px}
+#main-nav a:hover{color:#d12b4a}
+.cart-pill{display:inline-flex;align-items:center;gap:8px;background:#f5f5f5;padding:6px 10px;border-radius:999px;font-weight:700}
+.badge{min-width:22px;height:22px;border-radius:999px;display:inline-grid;place-items:center;background:#ffe4a4;color:#000;font-weight:800}
 
-/* ---------- Header / Nav ---------- */
-.header{ position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--line); }
-#main-nav{
-  display:flex; align-items:center; justify-content:center; gap:12px; padding:8px 0; flex-wrap:nowrap;
-}
-#main-nav a{ color:#222; font-weight:600; font-size:15px; padding:6px 8px; border-radius:8px; }
-#main-nav a:hover{ color:#d12b4a; }
-.cart-pill{
-  display:inline-flex; align-items:center; gap:8px;
-  background:#f5f5f5; padding:6px 10px; border-radius:999px; font-weight:700;
-}
 @media (max-width:420px){
-  #main-nav{ gap:8px; }
-  #main-nav a{ font-size:14px; padding:4px 6px; }
+  #main-nav{gap:8px}
+  #main-nav a{font-size:14px;padding:4px 6px}
 }
 
-/* ---------- Butoane ---------- */
+/* ---- Butoane ---- */
 .btn{
-  appearance:none; border:0; cursor:pointer;
-  display:inline-flex; align-items:center; justify-content:center;
-  min-height:44px; padding:12px 18px; border-radius:12px;
-  font-weight:800; font-size:16px; transition:transform .05s ease;
+  appearance:none;border:0;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;padding:12px 18px;border-radius:12px;
+  font-weight:800;font-size:16px;transition:transform .05s ease
 }
-.btn:active{ transform:translateY(1px); }
-.btn.primary{ background:#0a2230; color:#fff; }
-.btn.primary:hover{ background:#0e344c; }
-.btn.ghost{ background:#f3f3f3; color:#111; }
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.primary:hover{background:var(--brand-2)}
+.btn.ghost{background:#f3f3f3;color:#111}
 
-/* butonul negru “Vezi produsele” (acasă) */
-.cta-hero{ background:#000; color:#fff; border-radius:12px; text-transform:uppercase; }
-.cta-hero:hover{ background:#222; }
+/* ---- Box ---- */
+.box{background:#fff;border-radius:12px;padding:18px;box-shadow:var(--shadow)}
 
-/* ---------- Hero (Acasă) ---------- */
-.hero{ padding:28px 0 18px; }
-.hero .box{
-  background:var(--card); border-radius:16px; box-shadow:var(--shadow);
-  padding:26px; display:grid; gap:18px; place-items:center; text-align:center;
+/* ---- Tabel coș ---- */
+table.cart{width:100%;border-collapse:collapse;table-layout:fixed}
+table.cart th,table.cart td{
+  padding:10px;border-bottom:1px solid #eee;vertical-align:middle;
+  white-space:normal;word-break:normal;overflow-wrap:anywhere;
 }
-.hero img.logo{ width:220px; height:auto; }
-h1,h2,h3{ margin:10px 0; line-height:1.2; }
-.lead{ color:#555; font-size:1rem; }
+table.cart th{font-weight:700}
+table.cart th:nth-child(1), table.cart td:nth-child(1){width:50%}
+table.cart th:nth-child(2), table.cart td:nth-child(2){width:16%;text-align:right}
+table.cart th:nth-child(3), table.cart td:nth-child(3){width:20%;text-align:center}
+table.cart th:nth-child(4), table.cart td:nth-child(4){width:14%;text-align:right;white-space:nowrap}
+table.cart img{width:76px;height:76px;object-fit:cover;border-radius:10px}
 
-/* ---------- Grilă / Carduri produse ---------- */
-.grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:18px; }
-.card{ grid-column:span 12; background:#fff; border-radius:16px; overflow:hidden; box-shadow:var(--shadow); }
-.card img{ width:100%; height:260px; object-fit:cover; }
-.card-body{ padding:14px 16px; }
-.price{ float:right; font-weight:800; color:#222; }
-.add-to-cart{ width:100%; margin-top:8px; }
+/* Titlul produsului în coș: mai compact să nu împingă coloanele */
+.cart .prod-title{font-size:1rem;line-height:1.25;margin:0}
 
-@media (min-width:700px){ .card{ grid-column:span 6; } }
-@media (min-width:1024px){ .card{ grid-column:span 4; } }
-
-/* ---------- Box generic ---------- */
-.box{ background:#fff; border-radius:12px; padding:18px; box-shadow:var(--shadow); }
-
-/* ---------- Tabel coș ---------- */
-table.cart{ width:100%; border-collapse:collapse; table-layout:fixed; }
-table.cart th, table.cart td{
-  padding:10px; border-bottom:1px solid #eee; vertical-align:middle;
-  white-space:normal; word-break:normal; overflow-wrap:anywhere;
-}
-table.cart th{ font-weight:700; }
-table.cart th:nth-child(2), table.cart td:nth-child(2){ text-align:right; }
-table.cart th:nth-child(3), table.cart td:nth-child(3){ text-align:center; }
-table.cart th:nth-child(4), table.cart td:nth-child(4){ text-align:right; white-space:nowrap; }
-table.cart img{ width:76px; height:76px; object-fit:cover; border-radius:10px; }
-
-/* Stepper cantitate – [n] + */
+/* Stepper cantitate – mic (se vede „+” pe mobil) */
 .qty{
-  display:inline-flex; align-items:center; background:#fff;
-  border:1px solid #ddd; border-radius:10px; overflow:hidden;
+  display:inline-flex;align-items:center;background:#fff;overflow:hidden;
+  border:1px solid #ddd;border-radius:10px;max-width:124px;
 }
 .qty button{
-  width:28px; height:28px; border:0; background:#f6f6f6; color:#111;
-  font-weight:800; font-size:18px; line-height:1;
-  display:flex; align-items:center; justify-content:center;
+  width:32px;height:32px;border:0;background:#f6f6f6;color:#111;
+  font-weight:800;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center
 }
-.qty button:active{ background:#eaeaea; }
+.qty button:active{background:#eaeaea}
 .qty input{
-  width:44px; height:28px; border:0; text-align:center; font-size:15px;
+  width:48px;height:32px;border:0;text-align:center;font-size:15px;
   -moz-appearance:textfield;
 }
 .qty input::-webkit-outer-spin-button,
-.qty input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+.qty input::-webkit-inner-spin-button{ -webkit-appearance:none;margin:0 }
 
-/* ---------- Acțiuni coș ---------- */
-.actions{ display:flex; gap:10px; flex-wrap:wrap; }
-.muted{ color:#777; font-size:.92rem; }
+/* Acțiuni + text mic */
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.muted{color:#777;font-size:.92rem}
 
-/* ---------- Totaluri ---------- */
-.totals{ display:grid; gap:8px; }
-.totals .row{ display:flex; justify-content:space-between; }
-.totals .big{ border-top:2px solid #222; padding-top:10px; font-weight:800; font-size:1.15rem; }
+/* Totaluri */
+.totals{display:grid;gap:8px}
+.totals .row{display:flex;justify-content:space-between}
+.totals .big{border-top:2px solid #222;padding-top:10px;font-weight:800;font-size:1.15rem}
 
-/* ---------- Formular checkout ---------- */
-form .row{ display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
-input, select, textarea{
-  width:100%; border:1px solid #ddd; border-radius:10px; padding:10px; font-size:15px;
-}
-fieldset{ border:1px solid #eee; border-radius:10px; padding:10px; }
-legend{ padding:0 6px; color:#555; }
+/* Formular */
+form .row{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+input,select,textarea{width:100%;border:1px solid #ddd;border-radius:10px;padding:10px;font-size:15px}
+fieldset{border:1px solid #eee;border-radius:10px;padding:10px}
+legend{padding:0 6px;color:#555}
+[hidden]{display:none !important}
 
-/* ---------- Footer ---------- */
-footer{
-  text-align:center; padding:22px 10px; font-size:14px; color:#666;
-  border-top:1px solid #ddd; background:#fafafa;
-}
-footer .legal-nav a{ margin:0 6px; color:#555; }
-footer .legal-nav a:hover{ color:#d12b4a; }
-
-/* ---------- Responsive pentru coș ---------- */
+/* Responsive coș */
 @media (max-width:640px){
-  table.cart th, table.cart td{ padding:8px; }
-
-  table.cart th:nth-child(1), table.cart td:nth-child(1){ width:54%; }
-  table.cart th:nth-child(2), table.cart td:nth-child(2){ width:20%; text-align:right; }
-  table.cart th:nth-child(3), table.cart td:nth-child(3){ width:26%; text-align:center; }
-
-  .qty{ max-width:112px; }
-  .qty button{ width:28px; height:28px; font-size:17px; }
-  .qty input{ width:40px; height:28px; font-size:14px; }
+  table.cart th,table.cart td{padding:8px}
+  .qty{max-width:116px}
+  .qty button{width:30px;height:30px;font-size:18px}
+  .qty input{width:44px;height:30px;font-size:15px}
 }
 
-/* ---------- Ajustări mobile ---------- */
 @media (max-width:480px){
-  body{ font-size:15px; }
-  .wrap{ padding:0 12px; }
-  .card{ border-radius:12px; }
-  .hero img.logo{ width:180px; }
+  body{font-size:15px}
+  .wrap{padding:0 12px}
+  .box{border-radius:12px}
 }
