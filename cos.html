@@ -6,26 +6,48 @@
   <title>Coș — MSA Handmade</title>
 
   <!-- SEO -->
-  <meta name="description" content="Finalizează comanda pentru lumânări și decorațiuni MSA Handmade. Livrare gratuită de la 300 RON.">
-  <link rel="canonical" href="https://www.msahandmade.ro/cos.html">
-  <!-- OG -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.msahandmade.ro/cos.html">
-  <meta property="og:title" content="Coș — MSA Handmade">
-  <meta property="og:description" content="Coșul tău MSA Handmade. Vezi produsele și plasează comanda.">
-  <meta property="og:image" content="https://www.msahandmade.ro/images/logo.png">
+  <meta name="description" content="Finalizează comanda pentru lumânări și decorațiuni MSA Handmade. Livrare gratuită de la 300 RON." />
+  <link rel="canonical" href="https://www.msahandmade.ro/cos.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.msahandmade.ro/cos.html" />
+  <meta property="og:title" content="Coș — MSA Handmade" />
+  <meta property="og:description" content="Coșul tău MSA Handmade. Vezi produsele și plasează comanda." />
+  <meta property="og:image" content="https://www.msahandmade.ro/images/logo.png" />
 
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Mic hotfix vizibilitate stepper mobil (ca să se vadă „+”) -->
+  <style>
+    .wrap.narrow{max-width:880px;margin:0 auto;padding:0 16px}
+    .qty{max-width:140px}
+    .qty button{width:36px;height:36px;font-size:20px}
+    .qty input{width:56px;height:36px;font-size:16px}
+    @media (max-width:420px){
+      .qty{max-width:122px}
+      .qty button{width:30px;height:30px;font-size:18px}
+      .qty input{width:46px;height:30px;font-size:15px}
+    }
+    /* ascund butonul "X" de ștergere pe mobil; rămâne minus până la 0 pentru ștergere */
+    @media (max-width:640px){
+      table.cart th:last-child,
+      table.cart td:last-child{display:none}
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Bară promo -->
   <div class="promo">
     <b>Reduceri până la -20%</b> · <b>Livrare gratuită</b> de la <b>300 RON</b>
   </div>
 
+  <!-- Header/nav -->
   <header class="header">
     <nav id="main-nav">
       <a href="index.html">Acasă</a>
-      <a href="produse.html"><strong>Produse</strong></a>
+      <a href="produse.html">Produse</a>
       <a href="despre.html">Despre</a>
       <a href="contact.html">Contact</a>
       <a href="cos.html" class="cart-pill" aria-label="Vezi coșul">🛒 <span id="cart-count">0</span></a>
@@ -35,6 +57,7 @@
   <main class="wrap narrow">
     <h1>Coșul tău</h1>
 
+    <!-- Tabel coș -->
     <section class="card">
       <table class="cart" id="cart-table" aria-live="polite">
         <thead>
@@ -55,9 +78,10 @@
       <p class="muted">* Imaginile sunt cu titlu de prezentare. Produsele sunt realizate manual — pot exista mici variații.</p>
     </section>
 
+    <!-- Totaluri -->
     <aside class="card" style="margin-top:16px">
       <h2>Totaluri</h2>
-      <div class="totals" id="totals">
+      <div class="totals">
         <div class="row"><span>Subtotal</span><b id="t-sub">0 RON</b></div>
         <div class="row"><span>Reducere</span><b id="t-disc">0 RON</b></div>
         <div class="row"><span>Livrare</span><b id="t-ship">17 RON</b></div>
@@ -66,8 +90,10 @@
       </div>
     </aside>
 
+    <!-- Formular checkout -->
     <section class="card" style="margin-top:16px">
       <h2>Detalii pentru livrare</h2>
+
       <form id="checkout-form" autocomplete="on">
         <fieldset>
           <legend>Tip client</legend>
@@ -80,53 +106,44 @@
         <div class="row"><label>Prenume<input name="prenume" required></label></div>
         <div class="row"><label>Email<input name="email" type="email" required></label></div>
         <div class="row"><label>Telefon<input name="telefon" inputmode="tel" required></label></div>
+
         <div class="row"><label>Județ<input name="judet" required></label></div>
         <div class="row"><label>Oraș<input name="oras" required></label></div>
         <div class="row"><label>Adresă<textarea name="adresa" rows="3" required></textarea></label></div>
+
+        <!-- câmpuri opționale PJ -->
+        <div class="row"><label>Firmă (opțional)<input name="firma" placeholder="Doar pentru persoane juridice"></label></div>
+        <div class="row"><label>CUI (opțional)<input name="cui" placeholder="RO..."></label></div>
+
+        <div class="row"><label>Mentiuni (opțional)<textarea name="mentiuni" rows="3" placeholder="Ex: interval livrare, observații"></textarea></label></div>
 
         <button id="place-order" class="btn primary" type="submit">Confirmă comanda</button>
       </form>
     </section>
   </main>
 
-  <footer>
+  <footer class="footer">
     <small>&copy; <span id="year"></span> – MSA Handmade. Toate drepturile rezervate.</small>
   </footer>
 
-  <!-- EmailJS (opțional) -->
+  <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <!-- cart.js -->
+
+  <!-- Logica de coș -->
   <script src="cart.js"></script>
 
+  <!-- Inițializări pagină -->
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Golește coșul
-    document.getElementById('btn-clear')?.addEventListener('click', ()=>{
-      if (confirm('Golești coșul?')) { MSACart.clearCart(); MSACart.render(); }
+    document.getElementById('btn-clear')?.addEventListener('click', () => {
+      if (confirm('Golești coșul?')) MSACart.clearCart(), MSACart.render();
     });
 
-    // Checkout + randare
+    // Conectăm formularul + randăm coșul
     MSACart.hookCheckout('#checkout-form', '#place-order');
     MSACart.render();
-
-    // PF / PJ – doar cosmetizare ( câmpurile PJ le poți adăuga ulterior )
-    document.addEventListener('change', (e)=>{
-      if (e.target.name === 'tip') {
-        // aici poți comuta câmpuri extra pentru PJ dacă le adaugi
-      }
-    });
   </script>
 </body>
 </html>
-<script src="cart.js?v=6"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-  document.getElementById('year').textContent = new Date().getFullYear();
-  document.getElementById('btn-clear')?.addEventListener('click', ()=>{
-    if(confirm('Golești coșul?')) MSACart.clearCart();
-  });
-  MSACart.hookCheckout('#checkout-form','#place-order');
-  MSACart.render();
-});
-</script>
