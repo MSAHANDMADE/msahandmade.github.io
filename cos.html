@@ -119,3 +119,14 @@
   </script>
 </body>
 </html>
+<script src="cart.js?v=6"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('btn-clear')?.addEventListener('click', ()=>{
+    if(confirm('Golești coșul?')) MSACart.clearCart();
+  });
+  MSACart.hookCheckout('#checkout-form','#place-order');
+  MSACart.render();
+});
+</script>
