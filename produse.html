@@ -232,7 +232,6 @@
     });
 
     document.addEventListener('click', (e)=>{
-      // click pe sugestie
       if (e.target.classList.contains('suggest-item')){
         const id = e.target.dataset.id;
         suggest.classList.add('hidden');
@@ -241,7 +240,6 @@
         if (found){ render([found]); }
         q.blur();
       }else{
-        // click în afara cutiei — închide lista
         if (!e.target.closest('.search-wrap')) suggest.classList.add('hidden');
       }
     });
@@ -286,7 +284,8 @@
           const id = btn.dataset.id;
           const p = PRODUCTS.find(x=>x.id===id);
           if (!p || !window.MSACart) return;
-          MSACart.addToCart({ id:p.id, name:p.name, price:p.price, image:p.image });
+          // FIX: folosim MSACart.add(...)
+          MSACart.add({ id:p.id, name:p.name, price:p.price, image:p.image });
           const old = btn.textContent; btn.textContent='Adăugat!'; setTimeout(()=>btn.textContent=old,800);
         });
       });
@@ -296,7 +295,8 @@
     modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
     madd.addEventListener('click', ()=>{
       if (!currentProd || !window.MSACart) return;
-      MSACart.addToCart({ id:currentProd.id, name:currentProd.name, price:currentProd.price, image:currentProd.image });
+      // FIX: folosim MSACart.add(...)
+      MSACart.add({ id:currentProd.id, name:currentProd.name, price:currentProd.price, image:currentProd.image });
       madd.textContent = 'Adăugat!'; setTimeout(()=>madd.textContent='Adaugă în coș',900);
     });
 
@@ -304,8 +304,7 @@
     document.addEventListener('DOMContentLoaded', ()=>{
       render(PRODUCTS);
       document.getElementById('year').textContent = new Date().getFullYear();
-      // badge coș
-      if (window.MSACart && typeof MSACart.updateCartCountBadge === 'function') {
+      if (window.MSACart?.updateCartCountBadge) {
         MSACart.updateCartCountBadge();
       }
     });
