@@ -19,6 +19,24 @@
   <meta property="og:image" content="https://www.msahandmade.ro/images/logo.png">
 
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .wrap{max-width:980px;margin:0 auto;padding:0 16px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+    .card{grid-column:span 12;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);overflow:hidden}
+    @media(min-width:720px){.card{grid-column:span 6}}
+    @media(min-width:1024px){.card{grid-column:span 4}}
+    .thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;cursor:pointer}
+    .body{padding:12px 14px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .price{font-weight:700}
+    .desc{font-size:.92rem;color:#555;margin-top:6px;min-height:48px}
+
+    /* nav (compat cu styles.css) */
+    #main-nav{display:flex;justify-content:center;gap:15px;flex-wrap:nowrap}
+    #main-nav a{text-decoration:none;color:#333;font-weight:500;padding:6px 10px}
+    #main-nav a:hover{color:#d12b4a}
+    .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f7f7f7}
+  </style>
 </head>
 <body>
 
@@ -40,15 +58,19 @@
     <h1>Produsele noastre</h1>
 
     <!-- Căutare cu sugestii -->
-    <div class="search-wrap" style="position:relative; margin:10px 0 20px">
-      <input id="search" class="search-input" type="search" placeholder="Caută un produs… (ex: ing, coro, crin, dans)" autocomplete="off" style="width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:12px;font-size:16px">
-      <div id="suggest" class="suggest hidden" style="position:absolute;top:46px;left:0;right:0;background:#fff;border:1px solid #ddd;border-top:none;border-radius:0 0 12px 12px;box-shadow:0 12px 24px rgba(0,0,0,.06);z-index:20;overflow:hidden"></div>
+    <div class="search-wrap">
+      <input id="search" class="search-input" type="search" placeholder="Caută un produs… (ex: ing, coro, crin, dans)" autocomplete="off">
+      <div id="suggest" class="suggest hidden"></div>
     </div>
 
     <section class="grid" id="prod-list"></section>
   </main>
 
   <footer>
+    <div class="socials">
+      <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><img src="images/facebook.svg" alt="Facebook"></a>
+      <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><img src="images/instagram.svg" alt="Instagram"></a>
+    </div>
     <small>&copy; <span id="year"></span> – MSA Handmade. Toate drepturile rezervate.</small>
     <nav class="legal-nav">
       <a href="termeni.html">Termeni & Condiții</a> ·
@@ -60,14 +82,24 @@
 
   <!-- Modal preview -->
   <div id="modal" class="modal" role="dialog" aria-modal="true" aria-label="Previzualizare produs">
-    <div class="modal-card" style="background:#fff;max-width:900px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.25);display:none"></div>
+    <div class="modal-card">
+      <div class="modal-media"><img id="mimg" src="" alt=""></div>
+      <div class="modal-body">
+        <div class="modal-top">
+          <div class="modal-title" id="mtitle"></div>
+          <button class="modal-close" id="mclose">Închide ✕</button>
+        </div>
+        <div class="modal-desc" id="mdesc"></div>
+        <div class="modal-spec" id="mspec"></div>
+        <button class="btn" id="madd">Adaugă în coș</button>
+      </div>
+    </div>
   </div>
 
-  <!-- cart.js -->
+  <!-- IMPORTANT: cart.js trebuie să fie încărcat înainte de scriptul paginii -->
   <script src="cart.js"></script>
-
   <script>
-    // === Date produse (coronițe primele) ===
+    // === DATE PRODUSE (coronițe primele) ===
     const PRODUCTS = [
       { id:'coronita1', name:'Coroniță Crăciun – roșu & auriu', price:35, image:'images/coronita1.png',
         desc:'Strălucire caldă de sărbătoare: flori aurii și accente roșii ce transformă ușa sau peretele într-un colț de poveste.',
@@ -123,19 +155,19 @@
         specs:{ material:'ceară', size:'Ø 15 cm', weight:'~280 g', notes:'' } },
     ];
 
-    // Render listă
     const mount = document.getElementById('prod-list');
+
     function render(products){
       mount.innerHTML = products.map(p => `
         <article class="card">
           <img class="thumb" src="${p.image}" alt="${p.name}" data-id="${p.id}" />
-          <div class="card-body">
-            <div class="top" style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+          <div class="body">
+            <div class="top">
               <h3>${p.name}</h3>
               <span class="price">${p.price} RON</span>
             </div>
-            <p class="desc" style="color:#555;margin-top:6px;min-height:48px">${p.desc}</p>
-            <button class="btn primary add" data-id="${p.id}">Adaugă în coș</button>
+            <p class="desc">${p.desc}</p>
+            <button class="btn add" data-id="${p.id}">Adaugă în coș</button>
           </div>
         </article>
       `).join('');
@@ -145,21 +177,24 @@
     // Sugestii
     const q = document.getElementById('search');
     const suggest = document.getElementById('suggest');
+
     function buildSuggestions(list){
       if (!q.value.trim()){ suggest.classList.add('hidden'); suggest.innerHTML=''; return; }
-      const html = list.map(p => `<div class="suggest-item" data-id="${p.id}" style="padding:10px 14px;border-top:1px solid #f0f0f0;cursor:pointer">${p.name}</div>`).join('');
-      suggest.innerHTML = html || `<div class="suggest-item" data-id="" style="padding:10px 14px">Nicio potrivire</div>`;
+      const html = list.map(p => `<div class="suggest-item" data-id="${p.id}">${p.name}</div>`).join('');
+      suggest.innerHTML = html || `<div class="suggest-item" data-id="">Nicio potrivire</div>`;
       suggest.classList.remove('hidden');
     }
+
     q.addEventListener('input', ()=>{
       const v = q.value.trim().toLowerCase();
       if (v.length < 2){ buildSuggestions([]); return; }
       const hits = PRODUCTS.filter(p =>
         p.name.toLowerCase().includes(v) ||
-        (p.desc && p.desc.toLowerCase().includes(v))
-      ).slice(0,8);
+        (p.desc && p.desc.toLowerCase().includes(v)
+      )).slice(0,8);
       buildSuggestions(hits);
     });
+
     document.addEventListener('click', (e)=>{
       if (e.target.classList.contains('suggest-item')){
         const id = e.target.dataset.id;
@@ -168,15 +203,37 @@
         const found = PRODUCTS.find(p => p.id === id);
         if (found){ render([found]); }
         q.blur();
-      } else {
+      }else{
         if (!e.target.closest('.search-wrap')) suggest.classList.add('hidden');
       }
     });
 
-    // Modal simplu (folosim card existent la click pe poză)
+    // Modal
+    const modal = document.getElementById('modal');
+    const mimg  = document.getElementById('mimg');
+    const mtitle= document.getElementById('mtitle');
+    const mdesc = document.getElementById('mdesc');
+    const mspec = document.getElementById('mspec');
+    const madd  = document.getElementById('madd');
+    const mclose= document.getElementById('mclose');
+    let currentProd = null;
+
     function openModal(prod){
-      alert(prod.name + " — " + prod.price + " RON"); // simplu (evităm conflicte)
+      currentProd = prod;
+      mimg.src = prod.image;
+      mimg.alt = prod.name;
+      mtitle.textContent = prod.name;
+      mdesc.textContent = prod.desc;
+      const s = prod.specs || {};
+      mspec.textContent = [
+        s.material ? `Material: ${s.material}` : '',
+        s.size ? `Dimensiuni: ${s.size}` : '',
+        s.weight ? `Greutate: ${s.weight}` : '',
+        s.notes ? `Note: ${s.notes}` : ''
+      ].filter(Boolean).join(' • ');
+      modal.classList.add('open');
     }
+    function closeModal(){ modal.classList.remove('open'); currentProd=null; }
 
     function bindCardEvents(){
       document.querySelectorAll('.thumb').forEach(img=>{
@@ -191,11 +248,19 @@
           const id = btn.dataset.id;
           const p = PRODUCTS.find(x=>x.id===id);
           if (!p || !window.MSACart) return;
-          MSACart.addToCart({ id:p.id, name:p.name, price:p.price, image:p.image }); // <-- corect
-          const old = btn.textContent; btn.textContent='Adăugat!'; setTimeout(()=>btn.textContent=old,900);
+          MSACart.addToCart({ id:p.id, name:p.name, price:p.price, image:p.image });
+          const old = btn.textContent; btn.textContent='Adăugat!'; setTimeout(()=>btn.textContent=old,800);
         });
       });
     }
+
+    mclose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+    madd.addEventListener('click', ()=>{
+      if (!currentProd || !window.MSACart) return;
+      MSACart.addToCart({ id:currentProd.id, name:currentProd.name, price:currentProd.price, image:currentProd.image });
+      madd.textContent = 'Adăugat!'; setTimeout(()=>madd.textContent='Adaugă în coș',900);
+    });
 
     // INIT
     document.addEventListener('DOMContentLoaded', ()=>{
