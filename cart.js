@@ -1,254 +1,242 @@
-/* ================================
-   MSA Handmade – cart.js (final)
-   LocalStorage cart + render + checkout hook
-   ================================ */
+/* MSA Handmade – cart.js (stable) */
+/* Stocare în localStorage + randare coș + badge + reduceri + livrare */
 
 (function () {
-  const LS_KEY = 'msa_cart_v2';
+  const LS_KEY = "msa_cart_v1";
 
-  // --- Config ---
-  const SHIPPING_FEE = 17;               // taxa standard
-  const FREE_SHIPPING_FROM = 300;        // prag livrare gratuită
-  // reduceri automate (ordinea contează: descrescător ca prag)
-  const DISCOUNTS = [
-    { from: 400, percent: 20 },
-    { from: 300, percent: 15 },
-    { from: 200, percent: 10 },
-  ];
+  const rules = {
+    shippingFlat: 17,
+    freeShipFrom: 300,
+    discounts: [
+      { min: 400, pct: 0.20 },
+      { min: 300, pct: 0.15 },
+      { min: 200, pct: 0.10 },
+    ],
+  };
 
-  // --- Helpers ---
-  const fmt = (n) => `${Number(n).toFixed(2)} RON`;
+  // ---------- Utils ----------
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $all = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const money = (n) => `${n.toFixed(2)} RON`;
 
-  function load() {
-    try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); }
+  const read = () => {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || "[]"); }
     catch { return []; }
-  }
-  function save(cart) {
-    localStorage.setItem(LS_KEY, JSON.stringify(cart));
-    updateCartCountBadge();
-  }
+  };
+  const write = (arr) => localStorage.setItem(LS_KEY, JSON.stringify(arr));
 
-  // --- Public API container ---
-  const api = (window.MSACart = window.MSACart || {});
+  const findIndex = (cart, id) => cart.findIndex(i => i.id === id);
 
-  // Add / Set / Clear
-  api.addToCart = function ({ id, name, price, image }) {
-    const cart = load();
-    const idx = cart.findIndex((x) => x.id === id);
-    if (idx >= 0) {
-      cart[idx].qty += 1;
+  // ---------- Core ----------
+  function addToCart(item, qty = 1) {
+    const cart = read();
+    const i = findIndex(cart, item.id);
+    if (i >= 0) {
+      cart[i].qty += qty;
     } else {
-      cart.push({ id, name, price: Number(price), image, qty: 1 });
+      cart.push({
+        id: item.id,
+        name: item.name,
+        price: Number(item.price) || 0,
+        image: item.image || "",
+        qty: qty,
+      });
     }
-    save(cart);
-  };
-
-  api.setQty = function (id, qty) {
-    let cart = load();
-    const row = cart.find((x) => x.id === id);
-    if (!row) return;
-    const q = Math.max(1, parseInt(qty || 1, 10));
-    row.qty = q;
-    save(cart);
-  };
-
-  api.remove = function (id) {
-    let cart = load().filter((x) => x.id !== id);
-    save(cart);
-  };
-
-  api.clearCart = function () {
-    save([]);
-  };
-
-  // Badge (🛒 <span id="cart-count">N</span>)
-  function updateCartCountBadge() {
-    const n = load().reduce((s, r) => s + r.qty, 0);
-    const el = document.getElementById('cart-count');
-    if (el) el.textContent = n;
-  }
-  api.updateCartCountBadge = updateCartCountBadge;
-
-  // --- Totals ---
-  function getTotals() {
-    const cart = load();
-    const subtotal = cart.reduce((s, r) => s + r.price * r.qty, 0);
-
-    // discount progresiv
-    let discount = 0;
-    for (const rule of DISCOUNTS) {
-      if (subtotal >= rule.from) {
-        discount = (rule.percent / 100) * subtotal;
-        break;
-      }
-    }
-
-    // livrare
-    const shipping = subtotal >= FREE_SHIPPING_FROM || subtotal === 0 ? 0 : SHIPPING_FEE;
-    const total = Math.max(0, subtotal - discount) + shipping;
-
-    return { subtotal, discount, shipping, total };
-  }
-
-  // --- Render coș (pentru cos.html) ---
-  api.render = function () {
-    const cart = load();
+    write(cart);
     updateCartCountBadge();
+    return cart;
+  }
 
-    // Tabel
-    const tbody = document.getElementById('cart-body');
-    if (!tbody) return;
+  function removeFromCart(id) {
+    const cart = read().filter(i => i.id !== id);
+    write(cart);
+    updateCartCountBadge();
+    return cart;
+  }
+
+  function setQty(id, qty) {
+    qty = Math.max(0, Number(qty) || 0);
+    let cart = read();
+    const i = findIndex(cart, id);
+    if (i >= 0) {
+      if (qty === 0) cart.splice(i, 1); else cart[i].qty = qty;
+      write(cart);
+      updateCartCountBadge();
+    }
+    return cart;
+  }
+
+  function clearCart() {
+    write([]);
+    updateCartCountBadge();
+  }
+
+  function totals(cart) {
+    const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    let disc = 0;
+    for (const r of rules.discounts) {
+      if (sub >= r.min) { disc = sub * r.pct; break; } // ia cel mai mare prag
+    }
+    const afterDisc = sub - disc;
+    const ship = afterDisc >= rules.freeShipFrom || afterDisc === 0 ? 0 : rules.shippingFlat;
+    const total = afterDisc + ship;
+    return { sub, disc, ship, total };
+  }
+
+  // ---------- Badge ----------
+  function updateCartCountBadge() {
+    const count = read().reduce((s, i) => s + i.qty, 0);
+    const el = $("#cart-count");
+    if (el) el.textContent = count;
+  }
+
+  // ---------- Render coș (cos.html) ----------
+  function render() {
+    const body = $("#cart-body");
+    if (!body) return; // altă pagină
+    const cart = read();
 
     if (!cart.length) {
-      tbody.innerHTML = `<tr><td colspan="5">Coșul tău este gol.</td></tr>`;
-    } else {
-      tbody.innerHTML = cart
-        .map((r) => {
-          const lineTotal = r.price * r.qty;
-          return `
-          <tr data-id="${r.id}">
-            <td>
-              <div style="display:flex; gap:10px; align-items:center">
-                <img src="${r.image}" alt="${r.name}" width="72" height="72" style="border-radius:8px; object-fit:cover">
-                <div class="prod-name">${r.name}</div>
-              </div>
-            </td>
-            <td>${fmt(r.price)}</td>
-            <td>
-              <div class="qty">
-                <button class="qminus" aria-label="Scade" type="button">−</button>
-                <input class="qinput" type="number" min="1" value="${r.qty}" aria-label="Cantitate">
-                <button class="qplus" aria-label="Crește" type="button">+</button>
-              </div>
-            </td>
-            <td>${fmt(lineTotal)}</td>
-            <td>
-              <button class="btn ghost btn-remove" type="button" aria-label="Șterge">✕</button>
-            </td>
-          </tr>`;
-        })
-        .join('');
+      body.innerHTML = `<tr><td colspan="5">Coșul este gol.</td></tr>`;
+      paintTotals({ sub:0, disc:0, ship:rules.shippingFlat, total:rules.shippingFlat });
+      return;
     }
 
-    // Totals
-    const { subtotal, discount, shipping, total } = getTotals();
-    const elSub = document.getElementById('t-sub');
-    const elDisc = document.getElementById('t-disc');
-    const elShip = document.getElementById('t-ship');
-    const elTot = document.getElementById('t-total');
-    if (elSub) elSub.textContent = fmt(subtotal);
-    if (elDisc) elDisc.textContent = fmt(discount);
-    if (elShip) elShip.textContent = fmt(shipping);
-    if (elTot) elTot.textContent = fmt(total);
+    body.innerHTML = cart.map(rowHTML).join("");
+    bindRowEvents();
+    paintTotals(totals(cart));
+  }
 
-    // Bind qty +/- & remove
-    tbody.querySelectorAll('tr').forEach((row) => {
-      const id = row.getAttribute('data-id');
-      const minus = row.querySelector('.qminus');
-      const plus = row.querySelector('.qplus');
-      const input = row.querySelector('.qinput');
-      const removeBtn = row.querySelector('.btn-remove');
+  function rowHTML(i) {
+    const line = i.price * i.qty;
+    return `
+      <tr data-id="${i.id}">
+        <td>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <img src="${i.image}" alt="" width="72" height="72" style="border-radius:8px; object-fit:cover;">
+            <div><b>${i.name}</b></div>
+          </div>
+        </td>
+        <td>${money(i.price)}</td>
+        <td>
+          <div class="qty" role="group" aria-label="Cantitate">
+            <button class="qminus" type="button" aria-label="Scade">−</button>
+            <input class="qinput" inputmode="numeric" value="${i.qty}">
+            <button class="qplus" type="button" aria-label="Crește">+</button>
+          </div>
+        </td>
+        <td class="line-total">${money(line)}</td>
+        <td><button class="qdel btn ghost" type="button" aria-label="Șterge">✕</button></td>
+      </tr>
+    `;
+  }
 
-      minus?.addEventListener('click', () => {
-        const q = Math.max(1, parseInt(input.value || '1', 10) - 1);
-        input.value = q;
-        api.setQty(id, q);
-        api.render();
-      });
-      plus?.addEventListener('click', () => {
-        const q = Math.max(1, parseInt(input.value || '1', 10) + 1);
-        input.value = q;
-        api.setQty(id, q);
-        api.render();
-      });
-      input?.addEventListener('change', () => {
-        const q = Math.max(1, parseInt(input.value || '1', 10));
-        api.setQty(id, q);
-        api.render();
-      });
-      removeBtn?.addEventListener('click', () => {
-        api.remove(id);
-        api.render();
+  function bindRowEvents() {
+    // minus
+    $all(".qminus").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tr = btn.closest("tr"); const id = tr.dataset.id;
+        const input = $(".qinput", tr);
+        const next = Math.max(0, Number(input.value || 0) - 1);
+        input.value = next;
+        setQty(id, next);
+        rerenderRow(tr);
       });
     });
-  };
+    // plus
+    $all(".qplus").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tr = btn.closest("tr"); const id = tr.dataset.id;
+        const input = $(".qinput", tr);
+        const next = Math.max(0, Number(input.value || 0) + 1);
+        input.value = next;
+        setQty(id, next);
+        rerenderRow(tr);
+      });
+    });
+    // input direct
+    $all(".qinput").forEach(inp => {
+      inp.addEventListener("change", () => {
+        const tr = inp.closest("tr"); const id = tr.dataset.id;
+        const val = Math.max(0, Number(inp.value || 0));
+        inp.value = val;
+        setQty(id, val);
+        rerenderRow(tr);
+      });
+    });
+    // delete
+    $all(".qdel").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tr = btn.closest("tr"); const id = tr.dataset.id;
+        removeFromCart(id);
+        tr.remove();
+        // dacă am golit coșul, rerender complet ca să afișeze mesajul
+        if (read().length === 0) render(); else paintTotals(totals(read()));
+      });
+    });
+  }
 
-  // --- Checkout hook (trimite comandă prin EmailJS dacă există, altfel doar proformă) ---
-  api.hookCheckout = function (formSelector, submitBtnSelector) {
-    const form = document.querySelector(formSelector);
-    if (!form) return;
+  function rerenderRow(tr) {
+    const id = tr.dataset.id;
+    const cart = read();
+    const item = cart.find(x => x.id === id);
+    if (!item) { tr.remove(); render(); return; }
+    $(".line-total", tr).textContent = money(item.price * item.qty);
+    paintTotals(totals(cart));
+  }
 
-    form.addEventListener('submit', async (e) => {
+  function paintTotals(t) {
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = typeof val === "number" ? money(val) : val; };
+    set("t-sub", t.sub);
+    set("t-disc", t.disc);
+    set("t-ship", t.ship);
+    set("t-total", t.total);
+  }
+
+  // ---------- Checkout helper ----------
+  function hookCheckout(formSel, submitBtnSel) {
+    const form = $(formSel);
+    const btn  = $(submitBtnSel);
+    if (!form || !btn) return;
+
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const cart = load();
-      if (!cart.length) {
-        alert('Coșul este gol.');
-        return;
-      }
+      const cart = read();
+      if (!cart.length) { alert("Coșul este gol."); return; }
 
-      // colectare form
       const data = Object.fromEntries(new FormData(form).entries());
+      const t = totals(cart);
 
-      // sumar comandă
-      const { subtotal, discount, shipping, total } = getTotals();
-      const lines = cart
-        .map((r) => `- ${r.name} × ${r.qty} = ${fmt(r.price * r.qty)}`)
-        .join('\n');
-
-      const message =
-        `Comandă MSA Handmade\n\n` +
-        `Tip: ${data.tip || '-'}\n` +
-        (data.firma ? `Firmă: ${data.firma}\n` : '') +
-        (data.cui ? `CUI: ${data.cui}\n` : '') +
-        (data.regcom ? `Reg. Com.: ${data.regcom}\n` : '') +
-        `Nume: ${data.nume || ''} ${data.prenume || ''}\n` +
-        `Email: ${data.email || ''}\n` +
-        `Telefon: ${data.telefon || ''}\n` +
-        `Adresă: ${data.adresa || ''}, ${data.oras || ''}, ${data.judet || ''} (${data.codpostal || ''})\n` +
-        (data.mentiuni ? `Observații: ${data.mentiuni}\n` : '') +
-        `\nProduse:\n${lines}\n\n` +
-        `Subtotal: ${fmt(subtotal)}\n` +
-        `Reducere: ${fmt(discount)}\n` +
-        `Livrare: ${fmt(shipping)}\n` +
-        `TOTAL:   ${fmt(total)}\n`;
-
-      // Dacă există EmailJS în pagină, încearcă trimiterea
-      const btn = submitBtnSelector ? document.querySelector(submitBtnSelector) : null;
-      const oldTxt = btn ? btn.textContent : '';
-      if (btn) { btn.disabled = true; btn.textContent = 'Se trimite…'; }
-
+      // trimite prin EmailJS dacă e configurat (opțional)
       try {
-        if (window.emailjs && emailjs.send) {
-          // !!! Configurează-ți SERVICE_ID / TEMPLATE_ID în EmailJS
-          const SERVICE_ID = 'msa_service';
-          const TEMPLATE_ID = 'msa_order_template';
-          await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-            to_email: 'msahandmade.contact@gmail.com',
-            subject: 'Comandă nouă MSA Handmade',
-            message,
+        if (window.emailjs) {
+          emailjs.init({ publicKey: 'YOUR_EMAILJS_PUBLIC_KEY' }); // ⇦ pune cheia ta dacă folosești EmailJS
+          emailjs.send('service_id','template_id', {
+            cart_json: JSON.stringify(cart, null, 2),
+            totals_json: JSON.stringify(t, null, 2),
+            ...data
           });
-          alert('Mulțumim! Comanda a fost trimisă. Te contactăm în curând.');
-        } else {
-          // fallback simplu
-          console.log(message);
-          alert('Mulțumim! Comanda a fost înregistrată (mod test).');
         }
-        api.clearCart();
-        api.render();
-        form.reset();
-        // revine la Persoană fizică implicit
-        const pf = form.querySelector('input[name="tip"][value="Persoană fizică"]');
-        if (pf) pf.checked = true;
-        const pj = document.getElementById('pj-extra'); if (pj) pj.style.display = 'none';
-      } catch (err) {
-        console.error(err);
-        alert('Ups, nu am putut trimite comanda. Încearcă din nou.');
-      } finally {
-        if (btn) { btn.disabled = false; btn.textContent = oldTxt; }
-      }
+      } catch(e){ console.warn("EmailJS nedefinit/oprit:", e); }
+
+      alert("Comanda a fost trimisă. Îți mulțumim!");
+      clearCart();
+      render();
+      try { form.reset(); } catch {}
     });
+  }
+
+  // ---------- API public ----------
+  window.MSACart = {
+    addToCart,
+    removeFromCart,
+    setQty,
+    clearCart,
+    render,
+    hookCheckout,
+    updateCartCountBadge
   };
 
-  // Init badge la încărcare
-  document.addEventListener('DOMContentLoaded', updateCartCountBadge);
+  // Auto-init badge
+  document.addEventListener("DOMContentLoaded", updateCartCountBadge);
 })();
