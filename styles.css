@@ -184,3 +184,52 @@ footer .legal-nav a:hover{ color:#d12b4a; }
 .qty button{ width:30px !important; height:32px !important; font-size:18px !important; }
 .qty input{ width:44px !important; height:32px !important; font-size:15px !important; }
 table.cart td:nth-child(3){ overflow:visible; } /* ca să nu taie butonul + */
+/* === MSA HOTFIX — stepper cantitate: să se vadă mereu butonul „+” === */
+
+/* Lățime fixă (nu procent) pentru coloana „Cant.” ca să încapă – [n] + */
+table.cart th:nth-child(3),
+table.cart td:nth-child(3){
+  width: 126px !important;     /* poți crește la 132px dacă încă e strâmt */
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+
+/* Micșorăm controlul în sine */
+table.cart .qty{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+  border: 1px solid #ddd !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+table.cart .qty button{
+  width: 26px !important;
+  height: 26px !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  background: #f6f6f6 !important;
+  border: 0 !important;
+}
+table.cart .qty input{
+  width: 36px !important;
+  height: 26px !important;
+  font-size: 14px !important;
+  text-align: center !important;
+  border: 0 !important;
+  -moz-appearance: textfield !important;
+}
+table.cart .qty input::-webkit-outer-spin-button,
+table.cart .qty input::-webkit-inner-spin-button{
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+/* Pe ecrane foarte mici, mai mult loc pentru „Cant.” */
+@media (max-width: 420px){
+  table.cart th:nth-child(1), table.cart td:nth-child(1){ width: 52% !important; }
+  table.cart th:nth-child(2), table.cart td:nth-child(2){ width: 18% !important; text-align: right !important; }
+  table.cart th:nth-child(3), table.cart td:nth-child(3){ width: 30% !important; } /* – [n] + are loc */
+}
