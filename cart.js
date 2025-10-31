@@ -1,208 +1,189 @@
-/* ===== MSA Handmade – cart.js (curat) ===== */
+/* cart.js — MSA Handmade (drop-in) */
 (function () {
-  const LS_KEY = 'msa_cart';
-  const RON = v => `${v.toFixed(2)} RON`;
+  const STORE_KEY = 'msa_cart_v1';
+  const CURRENCY = 'RON';
 
-  const state = {
-    items: loadItems(),  // [{id,name,price,qty,img}]
-  };
-
-  /* ---------- storage ---------- */
-  function loadItems() {
-    try {
-      const raw = localStorage.getItem(LS_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch { return []; }
+  function load() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }
+    catch { return []; }
   }
-  function save() {
-    localStorage.setItem(LS_KEY, JSON.stringify(state.items));
+  function save(items) {
+    localStorage.setItem(STORE_KEY, JSON.stringify(items));
+    return items;
   }
+  function fmt(n) { return `${n.toFixed(2)} ${CURRENCY}`; }
 
-  /* ---------- helpers ---------- */
-  function findIndex(id){ return state.items.findIndex(x => String(x.id)===String(id)); }
-  function setQty(id, qty) {
-    qty = Math.max(0, parseInt(qty || 0, 10));
-    const i = findIndex(id);
+  let items = load(); // [{id,name,price,image,qty}]
+
+  function findIndex(id) { return items.findIndex(i => i.id === id); }
+
+  function add(product, qty = 1) {
+    qty = parseInt(qty, 10) || 1;
+    const i = findIndex(product.id);
     if (i >= 0) {
-      if (qty === 0) state.items.splice(i,1);
-      else state.items[i].qty = qty;
-      save();
-      render();
+      items[i].qty += qty;
+    } else {
+      items.push({ id: String(product.id), name: product.name, price: Number(product.price || 0), image: product.image || '', qty });
     }
-  }
-  function addQty(id, delta){
-    const i = findIndex(id);
-    if (i >= 0) setQty(id, (state.items[i].qty || 0) + delta);
-  }
-  function clearCart(){
-    state.items = [];
-    save();
+    save(items);
     render();
   }
 
-  /* ---------- totals ---------- */
+  function updateQty(id, qty) {
+    qty = Math.max(0, parseInt(qty, 10) || 0);
+    const i = findIndex(id);
+    if (i < 0) return;
+    if (qty === 0) {
+      items.splice(i, 1);
+    } else {
+      items[i].qty = qty;
+    }
+    save(items);
+    render();
+  }
+
+  function remove(id) { updateQty(id, 0); }
+
+  function clearCart() {
+    items = [];
+    save(items);
+    render();
+  }
+
   function totals() {
-    const sub = state.items.reduce((s, it) => s + (Number(it.price)||0) * (Number(it.qty)||0), 0);
-    const discRate = sub >= 400 ? 0.20 : sub >= 300 ? 0.15 : sub >= 200 ? 0.10 : 0;
-    const disc = sub * discRate;
-    const afterDisc = sub - disc;
-    const ship = afterDisc >= 300 || sub === 0 ? 0 : 17;
-    const total = afterDisc + ship;
-    return { sub, disc, ship, total };
+    const subtotal = items.reduce((s, it) => s + it.price * it.qty, 0);
+    const discount =
+      subtotal >= 400 ? subtotal * 0.20 :
+      subtotal >= 300 ? subtotal * 0.15 :
+      subtotal >= 200 ? subtotal * 0.10 : 0;
+    const after = subtotal - discount;
+    const shipping = subtotal === 0 ? 0 : (after >= 300 ? 0 : 17);
+    const grand = after + shipping;
+    return { subtotal, discount, shipping, grand };
   }
 
-  /* ---------- badge ---------- */
-  function renderBadge(){
-    const el = document.querySelector('#cart-count');
-    if (el) el.textContent = state.items.reduce((s,it)=>s+(Number(it.qty)||0),0);
+  function updateBadge() {
+    const el = document.getElementById('cart-count');
+    if (el) {
+      const count = items.reduce((s, i) => s + i.qty, 0);
+      el.textContent = count;
+    }
   }
 
-  /* ---------- rows ---------- */
-  function rowHTML(it){
-    const line = (Number(it.price)||0) * (Number(it.qty)||0);
-    return `
-      <tr data-id="${it.id}">
-        <td>
-          <div style="display:flex; gap:12px; align-items:center;">
-            <img src="${it.img || it.image || ''}" alt="" width="72" height="72" style="border-radius:8px; object-fit:cover">
-            <div>
-              <div style="font-weight:700">${it.name || it.title || 'Produs'}</div>
-            </div>
-          </div>
-        </td>
-        <td style="text-align:right">${RON(Number(it.price)||0)}</td>
-        <td style="text-align:center">
-          <div class="qty" data-id="${it.id}">
-            <button class="qminus" type="button" aria-label="Scade">-</button>
-            <input class="qval" type="number" inputmode="numeric" value="${it.qty}" aria-label="Cantitate">
-            <button class="qplus" type="button" aria-label="Crește">+</button>
-          </div>
-        </td>
-        <td style="text-align:right">${RON(line)}</td>
-        <td>
-          <button class="remove" type="button" aria-label="Șterge" style="display:none">×</button>
-        </td>
-      </tr>
-    `;
-  }
-
-  /* ---------- render ---------- */
   function render() {
-    // tabel
-    const tbody = document.querySelector('#cart-body');
-    if (tbody) {
-      if (!state.items.length) {
-        tbody.innerHTML = `<tr><td colspan="5">Coșul este gol.</td></tr>`;
-      } else {
-        tbody.innerHTML = state.items.map(rowHTML).join('');
-      }
+    updateBadge();
+
+    // dacă nu suntem pe cos.html e ok, doar actualizăm badge-ul
+    const body = document.getElementById('cart-body');
+    const table = document.getElementById('cart-table');
+    if (!body || !table) return;
+
+    if (items.length === 0) {
+      body.innerHTML = `<tr><td colspan="5">Coșul este gol.</td></tr>`;
+    } else {
+      body.innerHTML = items.map(it => `
+        <tr data-id="${it.id}">
+          <td>
+            <div style="display:flex;gap:12px;align-items:center">
+              ${it.image ? `<img src="${it.image}" alt="${it.name}" style="width:72px;height:72px;object-fit:cover;border-radius:8px">` : ``}
+              <div><div class="name" style="font-weight:700">${it.name}</div></div>
+            </div>
+          </td>
+          <td>${fmt(it.price)}</td>
+          <td>
+            <div class="qty" style="display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:10px;background:#fff;overflow:hidden;">
+              <button class="qminus" type="button" aria-label="Scade" style="width:36px;height:36px;border:0;background:#f6f6f6;font-weight:800;">−</button>
+              <input class="qval" type="number" inputmode="numeric" min="0" value="${it.qty}" style="width:54px;height:36px;border:0;text-align:center;font-size:16px">
+              <button class="qplus" type="button" aria-label="Crește" style="width:36px;height:36px;border:0;background:#f6f6f6;font-weight:800;">+</button>
+            </div>
+          </td>
+          <td class="line-total">${fmt(it.price * it.qty)}</td>
+          <td><button class="remove" type="button" aria-label="Șterge" title="Șterge" style="display:none">×</button></td>
+        </tr>
+      `).join('');
     }
 
-    // evenimente pe tabel (plus, minus, input, remove)
-    const table = document.querySelector('#cart-table');
-    if (table && !table._msaBound) {
-      table.addEventListener('click', (e)=>{
-        const btn = e.target.closest('button');
-        if (!btn) return;
-        const wrap = btn.closest('.qty') || btn.closest('tr');
-        const id = wrap?.dataset?.id || btn.closest('tr')?.dataset?.id;
-        if (!id) return;
-
-        if (btn.classList.contains('qminus')) addQty(id, -1);
-        else if (btn.classList.contains('qplus')) addQty(id, +1);
-        else if (btn.classList.contains('remove')) setQty(id, 0);
-      });
-      table.addEventListener('change', (e)=>{
-        const inp = e.target.closest('.qval');
-        if (!inp) return;
-        const id = e.target.closest('.qty')?.dataset?.id;
-        setQty(id, e.target.value);
-      });
-      table._msaBound = true;
-    }
-
-    // totals
+    // totaluri în sidebar
     const t = totals();
-    const elSub  = document.querySelector('#t-sub');
-    const elDisc = document.querySelector('#t-disc');
-    const elShip = document.querySelector('#t-ship');
-    const elTot  = document.querySelector('#t-total');
+    const elSub = document.getElementById('t-sub');
+    const elDis = document.getElementById('t-disc');
+    const elShip = document.getElementById('t-ship');
+    const elTot = document.getElementById('t-total');
+    if (elSub) elSub.textContent = fmt(t.subtotal);
+    if (elDis) elDis.textContent = fmt(t.discount);
+    if (elShip) elShip.textContent = fmt(t.shipping);
+    if (elTot) elTot.textContent = fmt(t.grand);
 
-    if (elSub)  elSub.textContent  = RON(t.sub);
-    if (elDisc) elDisc.textContent = RON(t.disc);
-    if (elShip) elShip.textContent = RON(t.ship);
-    if (elTot)  elTot.textContent  = RON(t.total);
-
-    renderBadge();
-  }
-
-  /* ---------- checkout hook (EmailJS existent) ---------- */
-  function hookCheckout(formSel, submitBtnSel){
-    const form = document.querySelector(formSel);
-    if (!form) return;
-
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const t = totals();
-      const data = Object.fromEntries(new FormData(form).entries());
-      const payload = {
-        tip: data.tip || 'Persoană fizică',
-        nume: data.nume || '',
-        prenume: data.prenume || '',
-        email: data.email || '',
-        telefon: data.telefon || '',
-        judet: data.judet || '',
-        oras: data.oras || '',
-        codpostal: data.codpostal || '',
-        adresa: data.adresa || '',
-        firma: data.firma || '',
-        cui: data.cui || '',
-        regcom: data.regcom || '',
-        mentiuni: data.mentiuni || '',
-        items: state.items.map(i=>({nume:i.name, qty:i.qty, pret:i.price, total:(i.price*i.qty)})),
-        subtotal: t.sub, reducere: t.disc, livrare: t.ship, total: t.total,
-      };
-
-      // Dacă folosești EmailJS, completează user/service/template în .env sau înlocuiește mai jos:
-      try {
-        if (window.emailjs?.send) {
-          await emailjs.send('service_msa', 'template_comanda', {
-            message: JSON.stringify(payload, null, 2)
-          });
-          alert('Comandă trimisă! Îți mulțumim!');
-          clearCart();
-          form.reset();
-        } else {
-          console.log('Comanda:', payload);
-          alert('Comandă înregistrată local (EmailJS indisponibil).');
-          clearCart();
-          form.reset();
-        }
-      } catch (err) {
-        console.error(err);
-        alert('Nu am putut trimite comanda. Încearcă din nou.');
-      }
+    // evenimente pentru stepper
+    body.querySelectorAll('tr').forEach(tr => {
+      const id = tr.getAttribute('data-id');
+      tr.querySelector('.qminus')?.addEventListener('click', () => {
+        const current = parseInt(tr.querySelector('.qval').value || '0', 10) || 0;
+        updateQty(id, Math.max(0, current - 1));
+      });
+      tr.querySelector('.qplus')?.addEventListener('click', () => {
+        const current = parseInt(tr.querySelector('.qval').value || '0', 10) || 0;
+        updateQty(id, current + 1);
+      });
+      tr.querySelector('.qval')?.addEventListener('input', (e) => {
+        updateQty(id, e.target.value);
+      });
+      tr.querySelector('.remove')?.addEventListener('click', () => remove(id));
     });
   }
 
-  /* ---------- expune global ---------- */
+  // Listener global pentru butoanele „Adaugă în coș”
+  document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.add-to-cart');
+    if (!btn) return;
+
+    // atribute necesare
+    const id = btn.getAttribute('data-id');
+    const name = btn.getAttribute('data-name');
+    const price = parseFloat(btn.getAttribute('data-price'));
+    const image = btn.getAttribute('data-image') || '';
+
+    if (!id || !name || isNaN(price)) {
+      console.warn('Butonul .add-to-cart trebuie să aibă data-id, data-name, data-price');
+      return;
+    }
+
+    const qtyAttr = btn.getAttribute('data-qty');
+    const qty = qtyAttr ? parseInt(qtyAttr, 10) : 1;
+
+    add({ id, name, price, image }, qty);
+  });
+
+  // Expune API
   window.MSACart = {
-    render, clearCart, hookCheckout,
-    // API minim pentru paginile de produs (adăugare articol)
-    add(product){
-      // product: {id, name, price, img}
-      const i = findIndex(product.id);
-      if (i >= 0) state.items[i].qty += 1;
-      else state.items.push({id:product.id, name:product.name, price:Number(product.price)||0, qty:1, img:product.img});
-      save(); render();
+    add, updateQty, remove, clearCart,
+    render, getItems: () => items.slice(),
+    getTotals: totals,
+    hookCheckout(formSel, btnSel) {
+      const form = document.querySelector(formSel);
+      const btn  = document.querySelector(btnSel);
+      if (!form) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (btn) btn.disabled = true;
+
+        const payload = {
+          items: items.slice(),
+          totals: totals(),
+          data: Object.fromEntries(new FormData(form).entries()),
+          createdAt: new Date().toISOString()
+        };
+
+        // Aici poți integra EmailJS / backend
+        console.log('ORDER', payload);
+        alert('Mulțumim! Comanda ta a fost înregistrată.');
+        clearCart();
+        if (btn) btn.disabled = false;
+      });
     }
   };
 
-  // Butonul “Golește coșul”
-  document.getElementById('btn-clear')?.addEventListener('click', ()=>{
-    if (confirm('Sigur golești coșul?')) clearCart();
-  });
-
-  // Auto-render la încărcare
-  document.addEventListener('DOMContentLoaded', render);
+  // initializează
+  window.addEventListener('load', render);
 })();
