@@ -31,11 +31,19 @@
     .price{font-weight:700}
     .desc{font-size:.92rem;color:#555;margin-top:6px;min-height:48px}
 
-    /* nav (compat cu styles.css) */
+    /* nav compat */
     #main-nav{display:flex;justify-content:center;gap:15px;flex-wrap:nowrap}
     #main-nav a{text-decoration:none;color:#333;font-weight:500;padding:6px 10px}
     #main-nav a:hover{color:#d12b4a}
     .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:#f7f7f7}
+
+    /* input căutare + sugestii */
+    .search-wrap{position:relative;margin:10px 0 20px}
+    .search-input{width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:12px;font-size:16px}
+    .suggest{position:absolute;top:46px;left:0;right:0;background:#fff;border:1px solid #ddd;border-top:none;border-radius:0 0 12px 12px;box-shadow:0 12px 24px rgba(0,0,0,.06);z-index:20;overflow:hidden}
+    .suggest.hidden{display:none}
+    .suggest-item{padding:10px 14px;border-top:1px solid #f0f0f0;cursor:pointer}
+    .suggest-item:hover{background:#f6faff}
   </style>
 </head>
 <body>
@@ -91,15 +99,16 @@
         </div>
         <div class="modal-desc" id="mdesc"></div>
         <div class="modal-spec" id="mspec"></div>
-        <button class="btn" id="madd">Adaugă în coș</button>
+        <!-- Buton negru (clasa din styles.css) -->
+        <button class="btn primary" id="madd">Adaugă în coș</button>
       </div>
     </div>
   </div>
 
-  <!-- IMPORTANT: cart.js trebuie să fie încărcat înainte de scriptul paginii -->
-  <script src="cart.js"></script>
+  <!-- IMPORTANT: încărcăm cart.js înainte + cu versiune ca să rupem cache-ul -->
+  <script src="cart.js?v=4"></script>
   <script>
-    // === DATE PRODUSE (coronițe primele) ===
+    // === DATE PRODUSE ===
     const PRODUCTS = [
       { id:'coronita1', name:'Coroniță Crăciun – roșu & auriu', price:35, image:'images/coronita1.png',
         desc:'Strălucire caldă de sărbătoare: flori aurii și accente roșii ce transformă ușa sau peretele într-un colț de poveste.',
@@ -167,7 +176,7 @@
               <span class="price">${p.price} RON</span>
             </div>
             <p class="desc">${p.desc}</p>
-            <button class="btn add" data-id="${p.id}">Adaugă în coș</button>
+            <button class="btn primary add" data-id="${p.id}">Adaugă în coș</button>
           </div>
         </article>
       `).join('');
@@ -180,7 +189,7 @@
 
     function buildSuggestions(list){
       if (!q.value.trim()){ suggest.classList.add('hidden'); suggest.innerHTML=''; return; }
-      const html = list.map(p => `<div class="suggest-item" data-id="${p.id}">${p.name}</div>`).join('');
+      const html = list.map(p => `<div class="suggest-item" data-id="\${p.id}">\${p.name}</div>`).join('');
       suggest.innerHTML = html || `<div class="suggest-item" data-id="">Nicio potrivire</div>`;
       suggest.classList.remove('hidden');
     }
@@ -248,6 +257,7 @@
           const id = btn.dataset.id;
           const p = PRODUCTS.find(x=>x.id===id);
           if (!p || !window.MSACart) return;
+          // NUME CORECT al funcției publice
           MSACart.addToCart({ id:p.id, name:p.name, price:p.price, image:p.image });
           const old = btn.textContent; btn.textContent='Adăugat!'; setTimeout(()=>btn.textContent=old,800);
         });
