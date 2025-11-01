@@ -22,10 +22,8 @@ a{color:inherit;text-decoration:none}
 .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
 .wrap.narrow{max-width:880px}
 
-/* ---- Bară promo (revenit) ---- */
-.promo{
-  background:#0f3a2e;color:#fff;text-align:center;padding:10px 12px;font-weight:700
-}
+/* ---- Bară promo ---- */
+.promo{background:#0f3a2e;color:#fff;text-align:center;padding:10px 12px;font-weight:700}
 .promo b{color:#ffd27a}
 
 /* ---- Header/Nav ---- */
@@ -63,32 +61,40 @@ table.cart th,table.cart td{
   white-space:normal;word-break:normal;overflow-wrap:anywhere;
 }
 table.cart th{font-weight:700}
-table.cart th:nth-child(1), table.cart td:nth-child(1){width:48%}
-table.cart th:nth-child(2), table.cart td:nth-child(2){width:16%;text-align:right;white-space:nowrap}
-table.cart th:nth-child(3), table.cart td:nth-child(3){width:20%;text-align:center}
-table.cart th:nth-child(4), table.cart td:nth-child(4){width:16%;text-align:right;white-space:nowrap}
+
+/* distribuție lățimi fără coloana TOTAL (o ascundem complet mai jos) */
+table.cart th:nth-child(1), table.cart td:nth-child(1){width:56%}
+table.cart th:nth-child(2), table.cart td:nth-child(2){width:18%;text-align:right;white-space:nowrap}
+table.cart th:nth-child(3), table.cart td:nth-child(3){width:26%;text-align:center}
+
+/* ASCUNDE TOTAL (coloana 4) peste tot */
+table.cart th:nth-child(4),
+table.cart td:nth-child(4){display:none !important}
+
+/* coloana 5 (ștergere) rămâne îngustă */
+table.cart th:nth-child(5), table.cart td:nth-child(5){width:0.1%}
 table.cart img{width:76px;height:76px;object-fit:cover;border-radius:10px}
 
 /* Titlul produsului mai compact */
 .cart .prod-title{font-size:1rem;line-height:1.25;margin:0}
 
-/* Stepper cantitate – mic și cu spațiu, să nu calce peste total */
+/* Stepper cantitate – mai îngust */
 .qty{
   display:inline-flex;align-items:center;background:#fff;overflow:hidden;
-  border:1px solid #ddd;border-radius:10px;max-width:132px
+  border:1px solid #ddd;border-radius:10px;max-width:116px
 }
 .qty button{
-  width:32px;height:32px;border:0;background:#f6f6f6;color:#111;
+  width:30px;height:30px;border:0;background:#f6f6f6;color:#111;
   font-weight:800;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center
 }
 .qty button:active{background:#eaeaea}
 .qty input{
-  width:52px;height:32px;border:0;text-align:center;font-size:15px;-moz-appearance:textfield
+  width:44px;height:30px;border:0;text-align:center;font-size:15px;-moz-appearance:textfield
 }
 .qty input::-webkit-outer-spin-button,
 .qty input::-webkit-inner-spin-button{ -webkit-appearance:none;margin:0 }
 
-/* Acțiuni + text mic */
+/* Diverse */
 .actions{display:flex;gap:10px;flex-wrap:wrap}
 .muted{color:#777;font-size:.92rem}
 
@@ -107,9 +113,6 @@ legend{padding:0 6px;color:#555}
 /* Responsive */
 @media (max-width:640px){
   table.cart th,table.cart td{padding:8px}
-  .qty{max-width:120px}
-  .qty button{width:30px;height:30px;font-size:18px}
-  .qty input{width:44px;height:30px;font-size:15px}
 }
 @media (max-width:480px){
   body{font-size:15px}
