@@ -4,20 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Coș — MSA Handmade</title>
-
-  <!-- SEO -->
   <meta name="description" content="Finalizează comanda pentru lumânări și decorațiuni MSA Handmade. Livrare gratuită de la 300 RON." />
   <link rel="canonical" href="https://www.msahandmade.ro/cos.html" />
-  <!-- OG -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.msahandmade.ro/cos.html" />
   <meta property="og:title" content="Coș — MSA Handmade" />
   <meta property="og:description" content="Coșul tău MSA Handmade. Vezi produsele și plasează comanda." />
   <meta property="og:image" content="https://www.msahandmade.ro/images/logo.png" />
-
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div class="promo">Reduceri până la <b>-20%</b> · Livrare gratuită de la <b>300 RON</b></div>
+
   <header class="header">
     <nav id="main-nav">
       <a href="index.html">Acasă</a>
@@ -31,29 +29,21 @@
   <main class="wrap narrow">
     <h1>Coșul tău</h1>
 
-    <!-- Tabel coș -->
     <section class="box">
       <table class="cart" id="cart-table" aria-live="polite">
         <thead>
           <tr>
-            <th>Produs</th>
-            <th>Preț</th>
-            <th>Cant.</th>
-            <th>Total</th>
-            <th></th>
+            <th>Produs</th><th>Preț</th><th>Cant.</th><th>Total</th><th></th>
           </tr>
         </thead>
         <tbody id="cart-body"><tr><td colspan="5">Se încarcă…</td></tr></tbody>
       </table>
-
       <div class="actions" style="margin-top:10px">
         <button id="btn-clear" class="btn ghost" type="button">Golește coșul</button>
       </div>
-
       <p class="muted">* Produsele sunt realizate manual — pot exista mici variații.</p>
     </section>
 
-    <!-- Totaluri -->
     <aside class="box" style="margin-top:16px">
       <h2>Totaluri</h2>
       <div class="totals">
@@ -68,7 +58,6 @@
       </div>
     </aside>
 
-    <!-- Formular -->
     <section class="box" style="margin-top:16px">
       <h2>Detalii pentru livrare</h2>
       <form id="checkout-form">
@@ -78,19 +67,15 @@
           &nbsp;&nbsp;
           <label><input type="radio" name="tip" value="Persoană juridică"> Persoană juridică</label>
         </fieldset>
-
-        <!-- PF -->
         <div class="row"><label>Nume<input name="nume" required></label></div>
         <div class="row"><label>Prenume<input name="prenume" required></label></div>
-
-        <!-- În comun -->
         <div class="row"><label>Email<input name="email" type="email" required></label></div>
         <div class="row"><label>Telefon<input name="telefon" inputmode="tel" required></label></div>
         <div class="row"><label>Județ<input name="judet" required></label></div>
         <div class="row"><label>Oraș<input name="oras" required></label></div>
         <div class="row"><label>Adresă<textarea name="adresa" rows="3" required></textarea></label></div>
 
-        <!-- DOAR PJ -->
+        <!-- doar PJ -->
         <div class="row pj-only" hidden><label>Firmă (denumire)<input name="firma"></label></div>
         <div class="row pj-only" hidden><label>CUI<input name="cui" placeholder="RO..."></label></div>
         <div class="row pj-only" hidden><label>Nr. Reg. Com.<input name="regcom"></label></div>
@@ -111,21 +96,15 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Afișează câmpurile PJ doar când e selectată Persoană juridică
+    // PF/PJ toggle
     const tipInputs = document.querySelectorAll('input[name="tip"]');
     const pjRows = document.querySelectorAll('.pj-only');
-    function togglePJ() {
-      const isPJ = [...tipInputs].find(r=>r.checked)?.value === 'Persoană juridică';
-      pjRows.forEach(el => el.hidden = !isPJ);
-    }
-    tipInputs.forEach(r => r.addEventListener('change', togglePJ));
-    togglePJ();
+    function togglePJ(){ const isPJ=[...tipInputs].find(r=>r.checked)?.value==='Persoană juridică'; pjRows.forEach(el=>el.hidden=!isPJ); }
+    tipInputs.forEach(r=>r.addEventListener('change',togglePJ)); togglePJ();
 
-    // Coș
-    document.getElementById('btn-clear')?.addEventListener('click', ()=>{
-      if(confirm('Golești coșul?')) { MSACart.clearCart(); MSACart.render(); }
-    });
-    MSACart.hookCheckout('#checkout-form', '#place-order');
+    // coș
+    document.getElementById('btn-clear')?.addEventListener('click', ()=>{ if(confirm('Golești coșul?')){ MSACart.clearCart(); MSACart.render(); }});
+    MSACart.hookCheckout('#checkout-form','#place-order');
     MSACart.render();
   </script>
 </body>
