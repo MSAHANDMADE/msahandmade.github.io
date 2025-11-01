@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Coș — MSA Handmade</title>
-  <meta name="description" content="Finalizează comanda pentru lumânări și decorațiuni MSA Handmade. Livrare gratuită de la 300 RON." />
+  <meta name="description" content="Coșul tău MSA Handmade. Livrare gratuită de la 300 RON." />
   <link rel="canonical" href="https://www.msahandmade.ro/cos.html" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.msahandmade.ro/cos.html" />
   <meta property="og:title" content="Coș — MSA Handmade" />
-  <meta property="og:description" content="Coșul tău MSA Handmade. Vezi produsele și plasează comanda." />
-  <meta property="og:image" content="https://www.msahandmade.ro/images/logo.png" />
+  <meta property="og:description" content="Finalizează comanda." />
+  <meta property="og:image" content="https://www.msahandmade.ro/logo.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -22,7 +22,7 @@
       <a href="produse.html"><strong>Produse</strong></a>
       <a href="despre.html">Despre</a>
       <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart-pill" aria-label="Vezi coșul">🛒 <span id="cart-count">0</span></a>
+      <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
     </nav>
   </header>
 
@@ -95,17 +95,11 @@
   <script src="cart.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // PF/PJ toggle
-    const tipInputs = document.querySelectorAll('input[name="tip"]');
-    const pjRows = document.querySelectorAll('.pj-only');
+    const tipInputs=document.querySelectorAll('input[name="tip"]'); const pjRows=document.querySelectorAll('.pj-only');
     function togglePJ(){ const isPJ=[...tipInputs].find(r=>r.checked)?.value==='Persoană juridică'; pjRows.forEach(el=>el.hidden=!isPJ); }
     tipInputs.forEach(r=>r.addEventListener('change',togglePJ)); togglePJ();
-
-    // coș
-    document.getElementById('btn-clear')?.addEventListener('click', ()=>{ if(confirm('Golești coșul?')){ MSACart.clearCart(); MSACart.render(); }});
-    MSACart.hookCheckout('#checkout-form','#place-order');
-    MSACart.render();
+    document.getElementById('btn-clear')?.addEventListener('click',()=>{ if(confirm('Golești coșul?')){ MSACart.clearCart(); MSACart.render(); }});
+    MSACart.hookCheckout('#checkout-form','#place-order'); MSACart.render();
   </script>
 </body>
 </html>
