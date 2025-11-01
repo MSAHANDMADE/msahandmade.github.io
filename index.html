@@ -1,69 +1,14 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MSA Handmade – Acasă</title>
-  <link rel="stylesheet" href="styles.css">
-  <style><meta name="description" content="MSA Handmade - lumânări și decorațiuni artizanale create manual în România. Vizitează www.msahandmade.ro pentru produse unice și autentice.">
-  <meta name="keywords" content="MSA Handmade, lumânări handmade, decorațiuni artizanale, cadouri personalizate, decor handmade România, MSA Handmade Decor">
-  <meta name="author" content="MSA Handmade">
-  <meta property="og:title" content="MSA Handmade - Lumânări și decorațiuni artizanale">
-  <meta property="og:description" content="Descoperă lumânări și decorațiuni handmade realizate cu grijă. Produse unice, create manual, disponibile pe www.msahandmade.ro">
-    #main-nav {
-      display: flex !important;
-      justify-content: center !important;
-      gap: 15px !important;
-      flex-wrap: nowrap !important;
-    }
-    #main-nav a {
-      text-decoration: none !important;
-      color: #333 !important;
-      font-weight: 500 !important;
-      padding: 6px 10px !important;
-    }
-    #main-nav a:hover {
-      color: #d12b4a !important;
-    }
-    .cart-pill {
-      display: inline-flex !important;
-      align-items: center !important;
-      gap: 6px !important;
-      padding: 6px 10px !important;
-      border-radius: 999px !important;
-      background: #f7f7f7 !important;
-    }
-    footer {
-      text-align: center;
-      padding: 20px 10px;
-      font-size: 14px;
-      color: #666;
-      border-top: 1px solid #ddd;
-      background-color: #fafafa;
-    }
-    footer .socials {
-      margin-bottom: 10px;
-    }
-    footer .socials img {
-      width: 24px;
-      height: 24px;
-      margin: 0 5px;
-    }
-    footer .legal-nav a {
-      margin: 0 5px;
-      color: #555;
-      text-decoration: none;
-    }
-    footer .legal-nav a:hover {
-      color: #d12b4a;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MSA Handmade</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="cart.js"></script>
 </head>
-
 <body>
-  <div class="promo">
-    <b>Reduceri până la -20%</b> · <b>Livrare gratuită</b> de la <b>300 RON</b>
-  </div>
+  <div class="promo">Reduceri până la <b>-20%</b> · Livrare gratuită de la <b>300 RON</b></div>
 
   <header class="header">
     <nav id="main-nav">
@@ -78,45 +23,16 @@
   <main class="wrap">
     <section class="hero">
       <div class="box">
-        <img class="logo" src="logo.png" alt="MSA Handmade Decor">
-        <h1 style="text-align:center">Bun venit la MSA Handmade</h1>
-        <p class="lead" style="text-align:center">
-          Lumânări și decorațiuni artizanale, făcute cu grijă.<br>
-          Profită de reduceri și livrare gratuită de la 300 RON.
-        </p>
-        <div style="text-align:center; margin-top:10px;">
-          <a href="produse.html" class="btn">Vezi produsele</a>
-        </div>
+        <img src="logo.png" alt="MSA Handmade" class="logo">
+        <h1>Bun venit la MSA Handmade</h1>
+        <p class="lead">Lumânări și decorațiuni artizanale, făcute cu grijă. Profită de reduceri și livrare gratuită de la 300 RON.</p>
+        <a href="produse.html" class="btn primary cta-hero">Vezi produsele</a>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="socials">
-      <a href="https://facebook.com" target="_blank">
-        <img src="images/facebook.svg" alt="Facebook">
-      </a>
-      <a href="https://instagram.com" target="_blank">
-        <img src="images/instagram.svg" alt="Instagram">
-      </a>
-    </div>
-
-    <small>&copy; <span id="year"></span> – MSA Handmade. Toate drepturile rezervate.</small>
-
-    <nav class="legal-nav">
-      <a href="termeni.html">Termeni & Condiții</a> ·
-      <a href="confidentialitate.html">Confidențialitate</a> ·
-      <a href="cookies.html">Cookies</a> ·
-      <a href="retur.html">Retur</a>
-    </nav>
-  </footer>
-
-  <script src="cart.js"></script>
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.MSACart) MSACart.readCart();
-    });
+    document.addEventListener('DOMContentLoaded', MSACart.updateCartCountBadge);
   </script>
 </body>
 </html>
