@@ -53,7 +53,7 @@
         <div class="row big"><span>Total</span><b id="t-total">17 RON</b></div>
         <div class="muted">
           Reduceri automate: ≥200 RON –10%, ≥300 RON –15%, ≥400 RON –20%.<br>
-          Livrare gratuită de la 300 RON (chiar dacă se aplică reducere).
+          <b>Livrare gratuită de la 300 RON</b> (chiar dacă se aplică reducere).
         </div>
       </div>
     </aside>
@@ -91,15 +91,27 @@
     <small>&copy; <span id="year"></span> – MSA Handmade. Toate drepturile rezervate.</small>
   </footer>
 
+  <!-- EmailJS + coș -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script src="cart.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-    const tipInputs=document.querySelectorAll('input[name="tip"]'); const pjRows=document.querySelectorAll('.pj-only');
-    function togglePJ(){ const isPJ=[...tipInputs].find(r=>r.checked)?.value==='Persoană juridică'; pjRows.forEach(el=>el.hidden=!isPJ); }
+
+    // PF/PJ toggle
+    const tipInputs=document.querySelectorAll('input[name="tip"]');
+    const pjRows=document.querySelectorAll('.pj-only');
+    function togglePJ(){
+      const isPJ=[...tipInputs].find(r=>r.checked)?.value==='Persoană juridică';
+      pjRows.forEach(el=>el.hidden=!isPJ);
+    }
     tipInputs.forEach(r=>r.addEventListener('change',togglePJ)); togglePJ();
+
+    // acțiuni
     document.getElementById('btn-clear')?.addEventListener('click',()=>{ if(confirm('Golești coșul?')){ MSACart.clearCart(); MSACart.render(); }});
-    MSACart.hookCheckout('#checkout-form','#place-order'); MSACart.render();
+
+    // init coș
+    MSACart.hookCheckout('#checkout-form','#place-order');
+    MSACart.render();
   </script>
 </body>
 </html>
