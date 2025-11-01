@@ -2,47 +2,34 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mulțumim — MSA Handmade</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mulțumim – MSA Handmade</title>
   <link rel="stylesheet" href="styles.css" />
-  <style>
-    .thanks{max-width:700px;margin:40px auto;padding:20px;text-align:center}
-    .thanks h1{font-size:32px}
-    .btn-main{display:inline-block;background:#111827;color:#fff;padding:10px 16px;border-radius:10px;text-decoration:none}
-  </style>
+  <script src="cart.js"></script>
 </head>
 <body>
   <header class="header">
-    <nav class="nav">
+    <nav id="main-nav">
       <a href="index.html">Acasă</a>
       <a href="produse.html">Produse</a>
       <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
+      <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
     </nav>
   </header>
 
-  <main class="thanks">
-    <h1>Mulțumim pentru comandă! 🥰</h1>
-    <p>Ți-am trimis un email de confirmare. Te vom contacta în curând.</p>
-    <p>
-      <a href="produse.html" class="btn-main" style="margin:8px;">Înapoi la produse</a>
-      <a href="index.html" class="btn-main" style="margin:8px;background:#0f766e;">Înapoi acasă</a>
-    </p>
+  <main class="wrap narrow">
+    <section class="box thanks" style="text-align:center">
+      <h1>Mulțumim pentru comandă! 🥰</h1>
+      <p>Ți-am trimis un email de confirmare. Te vom contacta în curând.</p>
+      <p style="margin-top:16px">
+        <a href="produse.html" class="btn primary">Înapoi la produse</a>
+        <a href="index.html" class="btn ghost" style="margin-left:8px">Înapoi acasă</a>
+      </p>
+    </section>
   </main>
 
-  <footer class="footer" style="text-align:center;margin-top:40px;padding:20px;color:#666;">
-    <small>&copy; <span id="year"></span> — MSA Handmade.</small>
-  </footer>
-
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-    // Badge coș (va fi 0 pentru că l-am golit)
-    try{
-      const list = JSON.parse(localStorage.getItem("msa_cart")||"[]");
-      const count = list.reduce((s,i)=> s + (i.qty||1), 0);
-      const el = document.getElementById("cart-count");
-      if (el) el.textContent = count;
-    }catch(_){}
+    document.addEventListener('DOMContentLoaded', MSACart.updateCartCountBadge);
   </script>
 </body>
 </html>
