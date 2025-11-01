@@ -62,34 +62,29 @@ table.cart th,table.cart td{
 }
 table.cart th{font-weight:700}
 
-/* distribuție lățimi fără coloana TOTAL (o ascundem complet mai jos) */
-table.cart th:nth-child(1), table.cart td:nth-child(1){width:56%}
-table.cart th:nth-child(2), table.cart td:nth-child(2){width:18%;text-align:right;white-space:nowrap}
-table.cart th:nth-child(3), table.cart td:nth-child(3){width:26%;text-align:center}
-
-/* ASCUNDE TOTAL (coloana 4) peste tot */
-table.cart th:nth-child(4),
-table.cart td:nth-child(4){display:none !important}
-
-/* coloana 5 (ștergere) rămâne îngustă */
+/* Lățimi desktop (toate cele 4 coloane vizibile) */
+table.cart th:nth-child(1), table.cart td:nth-child(1){width:52%}
+table.cart th:nth-child(2), table.cart td:nth-child(2){width:16%;text-align:right;white-space:nowrap}
+table.cart th:nth-child(3), table.cart td:nth-child(3){width:20%;text-align:center}
+table.cart th:nth-child(4), table.cart td:nth-child(4){width:12%;text-align:right;white-space:nowrap}
 table.cart th:nth-child(5), table.cart td:nth-child(5){width:0.1%}
 table.cart img{width:76px;height:76px;object-fit:cover;border-radius:10px}
 
-/* Titlul produsului mai compact */
+/* Titlul produsului mai compact pe o coloană îngustă */
 .cart .prod-title{font-size:1rem;line-height:1.25;margin:0}
 
-/* Stepper cantitate – mai îngust */
+/* Stepper cantitate – ÎNGUST să încapă „+” pe mobil */
 .qty{
   display:inline-flex;align-items:center;background:#fff;overflow:hidden;
-  border:1px solid #ddd;border-radius:10px;max-width:116px
+  border:1px solid #ddd;border-radius:10px;max-width:108px
 }
 .qty button{
-  width:30px;height:30px;border:0;background:#f6f6f6;color:#111;
+  width:28px;height:30px;border:0;background:#f6f6f6;color:#111;
   font-weight:800;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center
 }
 .qty button:active{background:#eaeaea}
 .qty input{
-  width:44px;height:30px;border:0;text-align:center;font-size:15px;-moz-appearance:textfield
+  width:36px;height:30px;border:0;text-align:center;font-size:15px;-moz-appearance:textfield
 }
 .qty input::-webkit-outer-spin-button,
 .qty input::-webkit-inner-spin-button{ -webkit-appearance:none;margin:0 }
@@ -113,6 +108,7 @@ legend{padding:0 6px;color:#555}
 /* Responsive */
 @media (max-width:640px){
   table.cart th,table.cart td{padding:8px}
+  .cart .prod-title{font-size:.98rem}
 }
 @media (max-width:480px){
   body{font-size:15px}
