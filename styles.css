@@ -22,6 +22,12 @@ a{color:inherit;text-decoration:none}
 .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
 .wrap.narrow{max-width:880px}
 
+/* ---- Bară promo (revenit) ---- */
+.promo{
+  background:#0f3a2e;color:#fff;text-align:center;padding:10px 12px;font-weight:700
+}
+.promo b{color:#ffd27a}
+
 /* ---- Header/Nav ---- */
 .header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
 #main-nav{display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 0;flex-wrap:nowrap}
@@ -57,19 +63,19 @@ table.cart th,table.cart td{
   white-space:normal;word-break:normal;overflow-wrap:anywhere;
 }
 table.cart th{font-weight:700}
-table.cart th:nth-child(1), table.cart td:nth-child(1){width:50%}
-table.cart th:nth-child(2), table.cart td:nth-child(2){width:16%;text-align:right}
+table.cart th:nth-child(1), table.cart td:nth-child(1){width:48%}
+table.cart th:nth-child(2), table.cart td:nth-child(2){width:16%;text-align:right;white-space:nowrap}
 table.cart th:nth-child(3), table.cart td:nth-child(3){width:20%;text-align:center}
-table.cart th:nth-child(4), table.cart td:nth-child(4){width:14%;text-align:right;white-space:nowrap}
+table.cart th:nth-child(4), table.cart td:nth-child(4){width:16%;text-align:right;white-space:nowrap}
 table.cart img{width:76px;height:76px;object-fit:cover;border-radius:10px}
 
-/* Titlul produsului în coș: mai compact să nu împingă coloanele */
+/* Titlul produsului mai compact */
 .cart .prod-title{font-size:1rem;line-height:1.25;margin:0}
 
-/* Stepper cantitate – mic (se vede „+” pe mobil) */
+/* Stepper cantitate – mic și cu spațiu, să nu calce peste total */
 .qty{
   display:inline-flex;align-items:center;background:#fff;overflow:hidden;
-  border:1px solid #ddd;border-radius:10px;max-width:124px;
+  border:1px solid #ddd;border-radius:10px;max-width:132px
 }
 .qty button{
   width:32px;height:32px;border:0;background:#f6f6f6;color:#111;
@@ -77,8 +83,7 @@ table.cart img{width:76px;height:76px;object-fit:cover;border-radius:10px}
 }
 .qty button:active{background:#eaeaea}
 .qty input{
-  width:48px;height:32px;border:0;text-align:center;font-size:15px;
-  -moz-appearance:textfield;
+  width:52px;height:32px;border:0;text-align:center;font-size:15px;-moz-appearance:textfield
 }
 .qty input::-webkit-outer-spin-button,
 .qty input::-webkit-inner-spin-button{ -webkit-appearance:none;margin:0 }
@@ -99,14 +104,13 @@ fieldset{border:1px solid #eee;border-radius:10px;padding:10px}
 legend{padding:0 6px;color:#555}
 [hidden]{display:none !important}
 
-/* Responsive coș */
+/* Responsive */
 @media (max-width:640px){
   table.cart th,table.cart td{padding:8px}
-  .qty{max-width:116px}
+  .qty{max-width:120px}
   .qty button{width:30px;height:30px;font-size:18px}
   .qty input{width:44px;height:30px;font-size:15px}
 }
-
 @media (max-width:480px){
   body{font-size:15px}
   .wrap{padding:0 12px}
