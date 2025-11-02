@@ -146,4 +146,68 @@ footer .legal-nav a:hover{ color:#d12b4a; }
 .modal-content{ padding:16px; }
 @media (min-width:780px){
   .modal-body{ grid-template-columns:1.1fr 1fr; }
+}/* ====== FIX COS (tabel + cantitate) ====== */
+.cart table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0 12px;
+  table-layout:auto;
+}
+.cart th,
+.cart td{
+  padding:10px 8px;
+  vertical-align:middle;
+  white-space:nowrap;       /* oprește ruperea pe verticală a headerelor */
+}
+.cart th:nth-child(1),
+.cart td:nth-child(1){
+  width:50%;
+  white-space:normal;       /* produsul poate avea titlu lung */
+}
+
+/* celula produs: imagine + titlu pe un singur rând fluent */
+.cart .prod{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+.cart .prod img{
+  width:64px; height:64px; object-fit:cover;
+  border-radius:10px; flex:0 0 64px;
+}
+.cart .prod .name{
+  font-weight:600; line-height:1.25;
+  overflow:hidden; text-overflow:ellipsis;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+}
+
+/* control cantitate compact + clar vizibil */
+.qty{
+  display:inline-flex; align-items:center; gap:6px;
+  border:1px solid #e5e7eb; border-radius:10px; padding:6px;
+  background:#fff;
+}
+.qty button{
+  width:32px; height:32px; line-height:32px;
+  border:0; border-radius:8px; background:#f3f4f6;
+  font-size:20px; cursor:pointer;
+}
+.qty input{
+  width:36px; text-align:center; border:0; background:transparent; font-size:16px;
+}
+
+/* ascunde săgețile default la number */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+input[type=number]{ -moz-appearance:textfield; }
+
+/* aliniere total pe dreapta */
+.cart td:last-child, .cart th:last-child{ text-align:right; }
+
+/* mobil: și mai compact */
+@media (max-width:480px){
+  .cart .prod img{ width:56px; height:56px; }
+  .qty button{ width:28px; height:28px; font-size:18px; }
+  .qty input{ width:28px; font-size:15px; }
 }
