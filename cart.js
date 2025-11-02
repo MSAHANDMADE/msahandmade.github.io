@@ -1,274 +1,164 @@
-/* ===========================
-   Coș + Checkout + EmailJS
-   =========================== */
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+/* ====== CONFIG COMENZII ====== */
+const SHIPPING = 17;
+const FREE_FROM = 300; // livrare gratuită de la 300 chiar dacă există reducere
+const DISCOUNTS = [ {t:400, p:0.20}, {t:300, p:0.15}, {t:200, p:0.10} ];
+const SERVICE_ID = "service_ix0zpp7";          // din screenshot
+const TEMPLATE_ADMIN = "tmpl_admin_comanda";   // pune aici ID-ul tău exact
+const TEMPLATE_CLIENT = "tmpl_client_confirm"; // pune aici ID-ul tău exact
+const EMAIL_PUBLIC_KEY = "ISadfb7-TV_89l_6k";  // cheia publică din screenshot
 
-const SERVICE_ID = "service_ix0zpp7";
-const TEMPLATE_CLIENT = "template_9yctwor";   // Order Confirmation
-const TEMPLATE_ADMIN  = "template_13qpqtt";   // Contact Us / Admin
-const CART_KEY = "msa_cart";
+(function(){ emailjs.init(EMAIL_PUBLIC_KEY); })();
 
-function loadCart(){
-  try{ return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
-  catch(e){ return []; }
-}
-function saveCart(list){
-  localStorage.setItem(CART_KEY, JSON.stringify(list));
-  // actualizează badge
-  const count = list.reduce((s,i)=>s+(i.qty||1),0);
+function cartItems(){ try{ return JSON.parse(localStorage.getItem("msa_cart"))||[] }catch(e){ return [] } }
+function saveCart(items){ localStorage.setItem("msa_cart", JSON.stringify(items)); updateBadge(); }
+function updateBadge(){
+  const count = cartItems().reduce((s,i)=>s+i.qty,0);
   const el = document.getElementById("cart-count");
   if(el) el.textContent = count;
 }
 
-function money(v){ return `${v.toFixed(2)} RON`; }
-
-function calcTotals(list){
-  const subtotal = list.reduce((s,i)=> s + i.price * i.qty, 0);
-  // reduceri pe praguri
-  let discRate = 0;
-  if (subtotal >= 400) discRate = 0.20;
-  else if (subtotal >= 300) discRate = 0.15;
-  else if (subtotal >= 200) discRate = 0.10;
-  const discount = +(subtotal * discRate);
-  const afterDisc = subtotal - discount;
-
-  // livrare 0 de la 300 RON chiar dacă există reducere -> criteriu pe subtotal
-  const shipping = subtotal >= 300 ? 0 : 17;
-
-  const total = afterDisc + shipping;
-  return { subtotal, discount, afterDisc, shipping, total };
-}
-
+/* ====== RENDER COȘ ====== */
 function renderCart(){
-  const body = document.getElementById("cart-body");
-  const list = loadCart();
-
-  body.innerHTML = "";
-  list.forEach((item, idx)=>{
+  const tb = document.getElementById("tbody");
+  tb.innerHTML = "";
+  const items = cartItems();
+  items.forEach((it,idx)=>{
     const tr = document.createElement("tr");
-
-    const tdProd = document.createElement("td");
-    tdProd.innerHTML = `
-      <div style="display:flex;gap:10px;align-items:center">
-        <img src="${item.img}" alt="${item.title}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid #eee">
-        <div><b>${item.title}</b></div>
-      </div>
+    tr.innerHTML = `
+      <td><img class="item-img" src="${it.img}" alt=""></td>
+      <td>${it.nume}<div style="font-size:12px;color:#666">${it.pret.toFixed(2)} RON</div></td>
+      <td>
+        <div class="qty">
+          <button onclick="chg(${idx},-1)">−</button>
+          <input value="${it.qty}" readonly>
+          <button onclick="chg(${idx},1)">+</button>
+        </div>
+      </td>
+      <td><b>${(it.pret*it.qty).toFixed(2)} RON</b></td>
+      <td><button class="btn" style="background:#b00020" onclick="rem(${idx})">Șterge</button></td>
     `;
-
-    const tdPrice = document.createElement("td");
-    tdPrice.textContent = money(item.price);
-
-    const tdQty = document.createElement("td");
-    tdQty.innerHTML = `
-      <div class="qty">
-        <button aria-label="Scade" data-act="dec" data-i="${idx}">−</button>
-        <input type="number" min="1" value="${item.qty}" data-i="${idx}">
-        <button aria-label="Crește" data-act="inc" data-i="${idx}">+</button>
-      </div>
-    `;
-
-    const tdTotal = document.createElement("td");
-    tdTotal.className = "col-total";
-    tdTotal.textContent = money(item.price * item.qty);
-
-    tr.append(tdProd, tdPrice, tdQty, tdTotal);
-    body.appendChild(tr);
+    tb.appendChild(tr);
   });
-
-  // listeners pentru qty
-  body.addEventListener("click", (e)=>{
-    const btn = e.target.closest("button[data-act]");
-    if(!btn) return;
-    const i = +btn.dataset.i;
-    const act = btn.dataset.act;
-    const list = loadCart();
-    if(!list[i]) return;
-    if(act === "inc") list[i].qty += 1;
-    if(act === "dec") list[i].qty = Math.max(1, list[i].qty - 1);
-    saveCart(list);
-    renderCart();
-    updateTotals();
-  });
-  body.addEventListener("change", (e)=>{
-    if(e.target.matches('.qty input')){
-      const i = +e.target.dataset.i;
-      const list = loadCart();
-      const v = Math.max(1, parseInt(e.target.value||"1",10));
-      if(list[i]) list[i].qty = v;
-      saveCart(list);
-      renderCart();
-      updateTotals();
-    }
-  });
-
-  updateTotals();
+  calcTotals();
+}
+function chg(i,delta){
+  const items = cartItems();
+  items[i].qty = Math.max(1, items[i].qty + delta);
+  saveCart(items); renderCart();
+}
+function rem(i){
+  const items = cartItems(); items.splice(i,1); saveCart(items); renderCart();
 }
 
-function updateTotals(){
-  const list = loadCart();
-  const t = calcTotals(list);
-  document.getElementById("t-sub").textContent = money(t.subtotal);
-  document.getElementById("t-disc").textContent = money(t.discount);
-  document.getElementById("t-ship").textContent = money(t.shipping);
-  document.getElementById("t-total").textContent = money(t.total);
+/* ====== TOTALURI, REDUCERI, LIVRARE ====== */
+function calcTotals(){
+  const items = cartItems();
+  const subtotal = items.reduce((s,i)=>s+i.pret*i.qty,0);
+  let reducere = 0;
+  for(const d of DISCOUNTS){ if(subtotal>=d.t){ reducere = subtotal*d.p; break; } }
+  const livrare = subtotal>=FREE_FROM ? 0 : SHIPPING; // GRATUIT de la 300 RON indiferent de reducere
+  const total = subtotal - reducere + (items.length?livrare:0);
+
+  document.getElementById("t-sub").textContent = subtotal.toFixed(2)+" RON";
+  document.getElementById("t-disc").textContent = reducere.toFixed(2)+" RON";
+  document.getElementById("t-ship").textContent = (items.length?livrare:0).toFixed(2)+" RON";
+  document.getElementById("t-total").textContent = total.toFixed(2)+" RON";
 }
 
-document.getElementById("clear-cart")?.addEventListener("click", ()=>{
-  if(confirm("Golești coșul?")){
-    saveCart([]);
-    renderCart();
+/* ====== PF vs PJ ====== */
+function bindTip(){
+  const pf = document.getElementById("tip-pf");
+  const pj = document.getElementById("tip-pj");
+  const firm = document.getElementById("wrap-firma");
+  const cui  = document.getElementById("wrap-cui");
+  function apply(){
+    if(pj.checked){ firm.classList.remove("hide"); cui.classList.remove("hide"); }
+    else { firm.classList.add("hide"); cui.classList.add("hide"); }
   }
-});
+  pf.onchange = apply; pj.onchange = apply; apply();
+}
 
-/* ===== Toggle PF / PJ ===== */
-const pfBox = document.getElementById("pf-fields");
-const pjBox = document.getElementById("pj-fields");
+/* ====== TRIMITERE COMANDĂ (EmailJS) ====== */
+function randID(){ return Math.random().toString(36).slice(2,7).toUpperCase(); }
 
-function setRequired(selector, state){
-  document.querySelectorAll(selector).forEach(inp=>{
-    if(state) inp.setAttribute("required","required");
-    else inp.removeAttribute("required");
+async function trimiteComanda(e){
+  e.preventDefault();
+  const items = cartItems();
+  if(!items.length){ alert("Coșul este gol."); return; }
+
+  const f = e.target;
+  const data = {
+    order_id: randID(),
+    tip: f.tip.value==="pf"?"Persoană fizică":"Persoană juridică",
+    nume: f.nume.value.trim(),
+    prenume: f.prenume.value.trim(),
+    email: f.email.value.trim(),
+    telefon: f.telefon.value.trim(),
+    judet: f.judet.value.trim(),
+    oras: f.oras.value.trim(),
+    codpostal: f.codpostal.value.trim(),
+    adresa: f.adresa.value.trim(),
+    firma: f.firma.value.trim(),
+    cui: f.cui.value.trim(),
+    subtotal: document.getElementById("t-sub").textContent,
+    reducere: document.getElementById("t-disc").textContent,
+    livrare: document.getElementById("t-ship").textContent,
+    total: document.getElementById("t-total").textContent,
+    produse: items.map(i=>`${i.nume} × ${i.qty} — ${(i.pret*i.qty).toFixed(2)} RON`).join("\n"),
+    html_proforma: genProformaHTML(items) // pentru email client
+  };
+
+  // 1) email către tine (admin)
+  await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, {
+    order_id: data.order_id, tip: data.tip, nume: data.nume, prenume: data.prenume,
+    email: data.email, telefon: data.telefon, judet: data.judet, oras: data.oras,
+    codpostal: data.codpostal, adresa: data.adresa, produse: data.produse,
+    subtotal: data.subtotal, reducere: data.reducere, livrare: data.livrare, total: data.total
   });
-}
-function showPF(){
-  pfBox.style.display = "";
-  pjBox.style.display = "none";
-  setRequired("#pf-fields input", true);
-  setRequired("#pj-fields input", false);
-}
-function showPJ(){
-  pfBox.style.display = "none";
-  pjBox.style.display = "";
-  setRequired("#pf-fields input", false);
-  setRequired("#pj-fields input", true);
-}
 
-document.querySelectorAll('input[name="tip"]').forEach(r=>{
-  r.addEventListener("change", (e)=>{
-    if(e.target.value === "Persoană fizică") showPF();
-    else showPJ();
+  // 2) email către client cu proformă
+  await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, {
+    to_email: data.email, order_id: data.order_id, nume: data.nume, html_proforma: data.html_proforma
   });
-});
-showPF(); // default
 
-/* ====== GENERARE PROFORMĂ (HTML) ====== */
-function proformaHTML(list, totals, client){
-  const rows = list.map(p=>`
+  // curățare + redirect
+  localStorage.removeItem("msa_cart");
+  window.location.href = "multumesc.html";
+}
+
+function genProformaHTML(items){
+  const sub = items.reduce((s,i)=>s+i.pret*i.qty,0);
+  let disc=0; for(const d of DISCOUNTS){ if(sub>=d.t){ disc=sub*d.p; break; } }
+  const ship = sub>=FREE_FROM?0:SHIPPING;
+  const tot = sub-disc+ship;
+  const rows = items.map(i=>`
     <tr>
-      <td>${p.title}</td>
-      <td style="text-align:right">${money(p.price)}</td>
-      <td style="text-align:center">${p.qty}</td>
-      <td style="text-align:right">${money(p.price*p.qty)}</td>
-    </tr>
-  `).join("");
-
-  const clientBlock = client.tip === 'Persoană juridică'
-    ? `<p><b>Firmă:</b> ${client.firma}<br><b>CUI:</b> ${client.cui}</p>`
-    : `<p><b>Nume:</b> ${client.nume} ${client.prenume}</p>`;
-
+      <td style="padding:6px;border-bottom:1px solid #eee">${i.nume}</td>
+      <td style="padding:6px;border-bottom:1px solid #eee">${i.qty}</td>
+      <td style="padding:6px;border-bottom:1px solid #eee">${i.pret.toFixed(2)} RON</td>
+      <td style="padding:6px;border-bottom:1px solid #eee"><b>${(i.pret*i.qty).toFixed(2)} RON</b></td>
+    </tr>`).join("");
   return `
-  <div style="font-family:Arial,Helvetica,sans-serif">
-    ${clientBlock}
-    <p><b>Adresă:</b> ${client.adresa}, ${client.oras}, ${client.judet}, ${client.codpostal}</p>
-    <table style="width:100%;border-collapse:collapse" border="1" cellpadding="6">
+    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
       <thead>
-        <tr style="background:#f5f5f5">
-          <th align="left">Produs</th>
-          <th align="right">Preț</th>
-          <th align="center">Cant.</th>
-          <th align="right">Total</th>
-        </tr>
+        <tr><th align="left">Produs</th><th align="left">Cant.</th><th align="left">Preț</th><th align="left">Total</th></tr>
       </thead>
       <tbody>${rows}</tbody>
       <tfoot>
-        <tr><td colspan="3" align="right"><b>Subtotal</b></td><td align="right">${money(totals.subtotal)}</td></tr>
-        <tr><td colspan="3" align="right"><b>Reducere</b></td><td align="right">− ${money(totals.discount)}</td></tr>
-        <tr><td colspan="3" align="right"><b>Livrare</b></td><td align="right">${money(totals.shipping)}</td></tr>
-        <tr><td colspan="3" align="right"><b>Total</b></td><td align="right"><b>${money(totals.total)}</b></td></tr>
+        <tr><td colspan="3" align="right" style="padding:6px">Subtotal</td><td>${sub.toFixed(2)} RON</td></tr>
+        <tr><td colspan="3" align="right" style="padding:6px">Reducere</td><td>${disc.toFixed(2)} RON</td></tr>
+        <tr><td colspan="3" align="right" style="padding:6px">Livrare</td><td>${ship.toFixed(2)} RON</td></tr>
+        <tr><td colspan="3" align="right" style="padding:6px;border-top:2px solid #111"><b>Total</b></td><td><b>${tot.toFixed(2)} RON</b></td></tr>
       </tfoot>
-    </table>
-  </div>`;
+    </table>`;
 }
 
-/* ====== CHECKOUT ====== */
-document.getElementById("checkout-form").addEventListener("submit", async (e)=>{
-  e.preventDefault();
-  const list = loadCart();
-  if(!list.length){ alert("Coșul este gol."); return; }
-
-  // colectăm clientul
-  const tip = document.querySelector('input[name="tip"]:checked').value;
-  let client = { tip };
-  if(tip === "Persoană fizică"){
-    client.nume = document.getElementById("pf-nume").value.trim();
-    client.prenume = document.getElementById("pf-prenume").value.trim();
-    client.email = document.getElementById("pf-email").value.trim();
-    client.telefon = document.getElementById("pf-telefon").value.trim();
-    client.judet = document.getElementById("pf-judet").value.trim();
-    client.oras = document.getElementById("pf-oras").value.trim();
-    client.codpostal = document.getElementById("pf-codpostal").value.trim();
-    client.adresa = document.getElementById("pf-adresa").value.trim();
-  }else{
-    client.firma = document.getElementById("pj-firma").value.trim();
-    client.cui = document.getElementById("pj-cui").value.trim();
-    client.email = document.getElementById("pj-email").value.trim();
-    client.telefon = document.getElementById("pj-telefon").value.trim();
-    client.judet = document.getElementById("pj-judet").value.trim();
-    client.oras = document.getElementById("pj-oras").value.trim();
-    client.codpostal = document.getElementById("pj-codpostal").value.trim();
-    client.adresa = document.getElementById("pj-adresa").value.trim();
-  }
-  client.mentiuni = document.getElementById("mentiuni").value.trim();
-
-  const totals = calcTotals(list);
-
-  // ID comandă scurt
-  const orderId = Math.random().toString(36).substring(2,8).toUpperCase();
-
-  // HTML proformă
-  const htmlProforma = proformaHTML(list, totals, client);
-
-  // Parametri pentru template CLIENT (Order Confirmation)
-  const paramsClient = {
-    to_email: client.email,
-    order_id: orderId,
-    html_proforma: htmlProforma,
-    nume: client.nume || client.firma || "",
-  };
-
-  // Parametri pentru template ADMIN (Contact Us) – câmpurile din șablonul tău
-  const prodAdmin = list.map(p=>`${p.title} × ${p.qty} = ${money(p.price*p.qty)}`).join('<br>');
-  const paramsAdmin = {
-    tip: tip,
-    nume: client.nume || client.firma || "",
-    prenume: client.prenume || "",
-    email: client.email,
-    telefon: client.telefon,
-    judet: client.judet,
-    oras: client.oras,
-    codpostal: client.codpostal,
-    adresa: client.adresa,
-    cui: client.cui || "",
-    produse: prodAdmin,
-    subtotal: totals.subtotal.toFixed(2),
-    livrare: totals.shipping.toFixed(2),
-    total: totals.total.toFixed(2),
-    mentiuni: client.mentiuni || "",
-    order_id: orderId
-  };
-
-  // Trimitem emailuri (întâi la client, apoi la admin)
-  try{
-    await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, paramsClient);
-    await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, paramsAdmin);
-  }catch(err){
-    console.error(err);
-    alert("A apărut o eroare la trimiterea emailurilor. Comanda a fost înregistrată, dar te rugăm să verifici emailul ulterior.");
-  }
-
-  // Golește coșul și redirecționează
-  saveCart([]);
-  window.location.href = "multumesc.html";
-});
-
-/* ====== inițializare ====== */
-renderCart();
+// INIT pe cos.html
+function initCartPage(){
+  renderCart();
+  bindTip();
+  document.getElementById("checkout-form").addEventListener("submit", trimiteComanda);
+}
+</script>
