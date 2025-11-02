@@ -1,233 +1,183 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Coș – MSA Handmade</title>
-  <meta name="description" content="Coșul tău MSA Handmade. Livrare gratuită de la 300 RON." />
   <link rel="canonical" href="https://www.msahandmade.ro/cos.html" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="MSA Handmade" />
-  <meta property="og:title" content="Coș – MSA Handmade" />
-  <meta property="og:description" content="Finalizează comanda." />
-  <meta property="og:image" content="https://www.msahandmade.ro/logo.png" />
-
-  <!-- Stilul site-ului tău -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Coș – MSA Handmade">
+  <meta property="og:image" content="https://www.msahandmade.ro/logo.png">
   <link rel="stylesheet" href="styles.css" />
-
   <style>
-    /* ———— bara promo ———— */
-    .promo{background:#0f3e2a;color:#fff;text-align:center;padding:8px 12px;font-weight:600}
-    .promo b{color:#ffd27d}
-
-    /* ———— layout coș ———— */
-    .wrap{max-width:960px;margin:16px auto;padding:0 12px}
-    .box{background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);padding:16px}
-    h1{font-size:32px;margin:12px 0 16px}
-    h2{font-size:22px;margin:0 0 10px}
-
-    table.cart{width:100%;border-collapse:collapse}
-    table.cart th, table.cart td{padding:12px 10px;border-bottom:1px solid #eee;vertical-align:middle}
-    table.cart th{font-weight:700;color:#222}
-    table.cart td img{width:72px;height:72px;border-radius:8px;object-fit:cover}
-    .prod-cell{display:flex;gap:12px;align-items:center}
-    .prod-name{font-weight:700;line-height:1.25}
-
-    /* ———— cantitate mică și clară pe mobil ———— */
-    .qty{display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:10px;overflow:hidden}
-    .qty button{width:36px;height:36px;line-height:36px;border:0;background:#f5f5f5;font-size:20px}
-    .qty input{width:46px;text-align:center;border:0;height:36px;font-size:14px}
-    .btn.ghost{background:#f6f6f6;border:1px solid #e5e5e5;border-radius:10px;padding:6px 10px}
-    .right{text-align:right;white-space:nowrap}
-
-    /* ———— totaluri ———— */
-    .totals .row{display:flex;justify-content:space-between;gap:16px;margin:6px 0}
-    .totals .row.big{margin-top:12px;padding-top:10px;border-top:2px solid #111;font-weight:800;font-size:22px}
-
-    /* ———— formular ———— */
-    form .field{margin:10px 0}
-    label{display:block;font-weight:600;margin-bottom:6px}
-    input[type="text"], input[type="email"], textarea{
-      width:100%;border:1px solid #ddd;border-radius:10px;padding:10px 12px;font-size:16px;background:#fff
+    /* ===== HOTFIX COȘ & CANTITATE ===== */
+    .cart-table{width:100%;table-layout:fixed;border-collapse:collapse}
+    .cart-table th,.cart-table td{
+      writing-mode:horizontal-tb!important;white-space:normal;word-break:break-word;
+      vertical-align:middle;padding:10px
     }
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:640px){
-      table.cart th:nth-child(4), table.cart td:nth-child(4){display:none} /* ascunde coloana „Total” pe mobil dacă nu încape */
-      .grid{grid-template-columns:1fr}
-    }
-
-    .muted{color:#666;font-size:14px}
-    .badge-cart{display:inline-flex;align-items:center;gap:6px}
-    .badge-cart b{background:#111827;color:#fff;border-radius:999px;padding:2px 8px;font-size:12px}
-    .action{display:inline-block;background:#0f3e2a;color:#fff;border-radius:12px;padding:10px 16px}
+    .cart-table th{text-align:left}
+    .cart-table td.col-total{text-align:right}
+    .qty{display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:10px;overflow:hidden;background:#fff}
+    .qty button{width:36px;height:36px;font-size:20px;line-height:1;border:0;background:#fff;cursor:pointer}
+    .qty input{width:48px;height:36px;border:0;text-align:center;font-size:16px;background:#fff}
+    @media (max-width:480px){.qty button{width:32px;height:32px;font-size:18px}.qty input{width:40px;height:32px;font-size:15px}}
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script> (function(){ emailjs.init("iSadfb7-TV_89l_6k"); })(); </script>
 </head>
 <body>
-
-  <!-- HEADER simplu -->
-  <header class="wrap" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0">
+  <header class="header">
     <nav class="nav">
-      <a href="index.html">Acasă</a> ·
-      <a href="produse.html">Produse</a> ·
-      <a href="despre.html">Despre</a> ·
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="despre.html">Despre</a>
       <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart">🛒 <span id="cart-count">0</span></a>
     </nav>
-    <a class="badge-cart" href="cos.html">
-      <span style="font-weight:700">🛒</span> <b id="cart-count">0</b>
-    </a>
   </header>
 
-  <!-- PROMO -->
-  <div class="promo">Reduceri până la <b>-20%</b> · Livrare gratuită de la <b>300 RON</b></div>
-
-  <main class="wrap">
+  <main class="container">
     <h1>Coșul tău</h1>
 
-    <!-- TABEL COȘ -->
+    <!-- Tabel coș -->
     <section class="box">
-      <table class="cart">
+      <table class="cart-table">
         <thead>
           <tr>
             <th>Produs</th>
             <th>Preț</th>
             <th>Cant.</th>
-            <th class="right">Total</th>
-            <th></th>
+            <th>Total</th>
           </tr>
         </thead>
-        <tbody id="cart-body">
-          <!-- rândurile vin din cart.js -->
-        </tbody>
+        <tbody id="cart-body"><!-- din JS --></tbody>
       </table>
 
-      <div style="margin-top:14px">
-        <button id="clear-btn" class="btn ghost">Golește coșul</button>
-      </div>
-
+      <button id="clear-cart" class="btn-secondary" style="margin-top:12px">Golește coșul</button>
       <p class="muted" style="margin-top:12px">* Produsele sunt realizate manual — pot exista mici variații.</p>
     </section>
 
-    <!-- TOTALURI -->
-    <aside class="box" style="margin-top:14px">
+    <!-- Totaluri -->
+    <aside class="box">
       <h2>Totaluri</h2>
-      <div class="totals">
-        <div class="row"><span>Subtotal</span><b id="t-sub">0.00 RON</b></div>
-        <div class="row"><span>Reducere</span><b id="t-disc">0.00 RON</b></div>
-        <div class="row"><span>Livrare</span><b id="t-ship">17.00 RON</b></div>
-        <div class="row big"><span>Total</span><span id="t-total">17.00 RON</span></div>
-      </div>
+      <div class="row"><span>Subtotal</span><b id="t-sub">0 RON</b></div>
+      <div class="row"><span>Reducere</span><b id="t-disc">0 RON</b></div>
+      <div class="row"><span>Livrare</span><b id="t-ship">17 RON</b></div>
+      <div class="row big"><span>Total</span><b id="t-total">0 RON</b></div>
 
-      <p class="muted" style="margin-top:10px">
-        Reduceri automate: ≥200 RON −10%, ≥300 RON −15%, ≥400 RON −20%.<br>
+      <div class="muted" style="margin-top:10px">
+        Reduceri automate: ≥200 RON –10%, ≥300 RON –15%, ≥400 RON –20%.<br>
         <b>Livrare gratuită de la 300 RON</b> (chiar dacă se aplică reducere).
-      </p>
+      </div>
     </aside>
 
-    <!-- FORMULAR LIVRARE -->
+    <!-- Formular livrare -->
     <section class="box" style="margin-top:16px">
       <h2>Detalii pentru livrare</h2>
-
       <form id="checkout-form">
-        <div class="field">
-          <legend style="font-weight:700;margin-bottom:6px">Tip client</legend>
+        <fieldset>
+          <legend>Tip client</legend>
           <label><input type="radio" name="tip" value="Persoană fizică" checked> Persoană fizică</label>
+          &nbsp;&nbsp;
           <label><input type="radio" name="tip" value="Persoană juridică"> Persoană juridică</label>
-        </div>
+        </fieldset>
 
-        <div class="grid">
-          <div class="field">
-            <label for="nume">Nume</label>
-            <input id="nume" name="nume" type="text" required>
+        <!-- PF -->
+        <div id="pf-fields">
+          <div class="grid">
+            <label>Nume*
+              <input type="text" id="pf-nume" required>
+            </label>
+            <label>Prenume*
+              <input type="text" id="pf-prenume" required>
+            </label>
           </div>
-          <div class="field">
-            <label for="prenume">Prenume</label>
-            <input id="prenume" name="prenume" type="text" required>
+          <div class="grid">
+            <label>Email*
+              <input type="email" id="pf-email" required>
+            </label>
+            <label>Telefon*
+              <input type="tel" id="pf-telefon" required>
+            </label>
           </div>
-        </div>
-
-        <div class="grid">
-          <div class="field">
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" required>
+          <div class="grid">
+            <label>Județ*
+              <input type="text" id="pf-judet" required>
+            </label>
+            <label>Oraș*
+              <input type="text" id="pf-oras" required>
+            </label>
           </div>
-          <div class="field">
-            <label for="telefon">Telefon</label>
-            <input id="telefon" name="telefon" type="text" required>
-          </div>
-        </div>
-
-        <div class="grid">
-          <div class="field">
-            <label for="judet">Județ</label>
-            <input id="judet" name="judet" type="text" required>
-          </div>
-          <div class="field">
-            <label for="oras">Oraș</label>
-            <input id="oras" name="oras" type="text" required>
-          </div>
-        </div>
-
-        <div class="grid">
-          <div class="field">
-            <label for="codpostal">Cod poștal</label>
-            <input id="codpostal" name="codpostal" type="text">
-          </div>
-          <div class="field">
-            <label for="adresa">Adresă</label>
-            <input id="adresa" name="adresa" type="text" required>
+          <div class="grid">
+            <label>Cod poștal*
+              <input type="text" id="pf-codpostal" required>
+            </label>
+            <label>Adresă*
+              <input type="text" id="pf-adresa" required>
+            </label>
           </div>
         </div>
 
-        <!-- Câmpuri doar pentru PJ (opționale, nu se trimit dacă e PF) -->
-        <div class="grid">
-          <div class="field">
-            <label for="firma">Firmă (numai pentru PJ)</label>
-            <input id="firma" name="firma" type="text" placeholder="Doar pentru persoane juridice">
+        <!-- PJ -->
+        <div id="pj-fields" style="display:none">
+          <div class="grid">
+            <label>Firmă*
+              <input type="text" id="pj-firma" >
+            </label>
+            <label>CUI*
+              <input type="text" id="pj-cui" >
+            </label>
           </div>
-          <div class="field">
-            <label for="cui">CUI (numai pentru PJ)</label>
-            <input id="cui" name="cui" type="text" placeholder="RO...">
+          <div class="grid">
+            <label>Email*
+              <input type="email" id="pj-email" >
+            </label>
+            <label>Telefon*
+              <input type="tel" id="pj-telefon" >
+            </label>
+          </div>
+          <div class="grid">
+            <label>Județ*
+              <input type="text" id="pj-judet" >
+            </label>
+            <label>Oraș*
+              <input type="text" id="pj-oras" >
+            </label>
+          </div>
+          <div class="grid">
+            <label>Cod poștal*
+              <input type="text" id="pj-codpostal" >
+            </label>
+            <label>Adresă*
+              <input type="text" id="pj-adresa" >
+            </label>
           </div>
         </div>
 
-        <div class="field">
-          <label for="mentiuni">Mențiuni (opțional)</label>
-          <textarea id="mentiuni" name="mentiuni" rows="3" placeholder="Ex: interval livrare, observații"></textarea>
-        </div>
+        <label style="display:block;margin-top:8px">Mențiuni (opțional)
+          <textarea id="mentiuni" rows="3" placeholder="Ex: interval livrare, observații"></textarea>
+        </label>
 
-        <button class="action" type="submit">Confirmă comanda</button>
+        <button type="submit" class="btn-main" style="margin-top:12px">Confirmă comanda</button>
       </form>
     </section>
   </main>
 
-  <footer class="wrap" style="text-align:center;margin:32px 0;color:#666">
-    <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
+  <footer class="footer">
+    <small>&copy; <span id="year"></span> — MSA Handmade.</small>
   </footer>
 
-  <script>
-    // an curent în footer
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // butonul „Golește coșul”
-    document.addEventListener("click", function(e){
-      const btn = e.target.closest("#clear-btn");
-      if(!btn) return;
-      if(confirm("Sigur golești coșul?")){
-        MSACart.clearCart();
-        MSACart.render();
-      }
-    });
-  </script>
-
-  <!-- EmailJS SDK (necesar pentru mailurile de confirmare + proformă) -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
-  <!-- Script coș (versiunea pe care ți-am dat-o) -->
   <script src="cart.js"></script>
   <script>
-    // pornește randarea coșului + checkout
-    MSACart.render();
-    MSACart.hookCheckout("#checkout-form");
+    // Badge coș (nu se pierde)
+    try{
+      const list = JSON.parse(localStorage.getItem('msa_cart')||'[]');
+      const count = list.reduce((s,i)=>s + (i.qty||1), 0);
+      const el = document.getElementById('cart-count');
+      if(el) el.textContent = count;
+    }catch(e){}
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
