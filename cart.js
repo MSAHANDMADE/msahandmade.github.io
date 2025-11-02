@@ -1,336 +1,274 @@
-(function () {
-  const LS_KEY = "msa_cart_v1";
+/* ===========================
+   Coș + Checkout + EmailJS
+   =========================== */
 
-  const rules = {
-    shippingFlat: 17,
-    freeShipFrom: 300,
-    discounts: [
-      { min: 400, pct: 0.20 },
-      { min: 300, pct: 0.15 },
-      { min: 200, pct: 0.10 },
-    ],
-  };
+const SERVICE_ID = "service_ix0zpp7";
+const TEMPLATE_CLIENT = "template_9yctwor";   // Order Confirmation
+const TEMPLATE_ADMIN  = "template_13qpqtt";   // Contact Us / Admin
+const CART_KEY = "msa_cart";
 
-  const $ = (sel, root = document) => root.querySelector(sel);
-  const $all = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-  const money = (n) => `${(Number(n) || 0).toFixed(2)} RON`;
+function loadCart(){
+  try{ return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }
+  catch(e){ return []; }
+}
+function saveCart(list){
+  localStorage.setItem(CART_KEY, JSON.stringify(list));
+  // actualizează badge
+  const count = list.reduce((s,i)=>s+(i.qty||1),0);
+  const el = document.getElementById("cart-count");
+  if(el) el.textContent = count;
+}
 
-  const read = () => {
-    try {
-      return JSON.parse(localStorage.getItem(LS_KEY) || "[]");
-    } catch {
-      return [];
-    }
-  };
-  const write = (arr) => localStorage.setItem(LS_KEY, JSON.stringify(arr));
+function money(v){ return `${v.toFixed(2)} RON`; }
 
-  const findIndex = (cart, id) => cart.findIndex((i) => i.id === id);
+function calcTotals(list){
+  const subtotal = list.reduce((s,i)=> s + i.price * i.qty, 0);
+  // reduceri pe praguri
+  let discRate = 0;
+  if (subtotal >= 400) discRate = 0.20;
+  else if (subtotal >= 300) discRate = 0.15;
+  else if (subtotal >= 200) discRate = 0.10;
+  const discount = +(subtotal * discRate);
+  const afterDisc = subtotal - discount;
 
-  function addToCart(item, qty = 1) {
-    const cart = read();
-    const i = findIndex(cart, item.id);
-    if (i >= 0) {
-      cart[i].qty += qty;
-    } else {
-      cart.push({
-        id: item.id,
-        name: item.name,
-        price: Number(item.price) || 0,
-        image: item.image || "",
-        qty: Number(qty) || 1,
-      });
-    }
-    write(cart);
-    updateCartCountBadge();
-    return cart;
-  }
+  // livrare 0 de la 300 RON chiar dacă există reducere -> criteriu pe subtotal
+  const shipping = subtotal >= 300 ? 0 : 17;
 
-  function removeFromCart(id) {
-    const cart = read().filter((i) => i.id !== id);
-    write(cart);
-    updateCartCountBadge();
-    return cart;
-  }
+  const total = afterDisc + shipping;
+  return { subtotal, discount, afterDisc, shipping, total };
+}
 
-  function setQty(id, qty) {
-    qty = Math.max(0, Number(qty) || 0);
-    let cart = read();
-    const i = findIndex(cart, id);
-    if (i >= 0) {
-      if (qty === 0) cart.splice(i, 1);
-      else cart[i].qty = qty;
-      write(cart);
-      updateCartCountBadge();
-    }
-    return cart;
-  }
+function renderCart(){
+  const body = document.getElementById("cart-body");
+  const list = loadCart();
 
-  function clearCart() {
-    write([]);
-    updateCartCountBadge();
-  }
+  body.innerHTML = "";
+  list.forEach((item, idx)=>{
+    const tr = document.createElement("tr");
 
-  function totals(cart) {
-    const sub = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    let disc = 0;
-    for (const r of rules.discounts) {
-      if (sub >= r.min) {
-        disc = sub * r.pct;
-        break;
-      }
-    }
-    const afterDisc = sub - disc;
-    const ship =
-      sub >= rules.freeShipFrom || sub === 0 ? 0 : rules.shippingFlat;
-    const total = afterDisc + ship;
-    return { sub, disc, ship, total };
-  }
-
-  function updateCartCountBadge() {
-    const count = read().reduce((s, i) => s + i.qty, 0);
-    const el = $("#cart-count");
-    if (el) el.textContent = count;
-  }
-
-  function render() {
-    const body = $("#cart-body");
-    if (!body) return;
-    const cart = read();
-
-    if (!cart.length) {
-      body.innerHTML = `<tr><td colspan="5">Coșul este gol.</td></tr>`;
-      paintTotals({ sub: 0, disc: 0, ship: rules.shippingFlat, total: rules.shippingFlat });
-      return;
-    }
-
-    body.innerHTML = cart.map(rowHTML).join("");
-    bindRowEvents();
-    paintTotals(totals(cart));
-  }
-
-  function rowHTML(i) {
-    const line = i.price * i.qty;
-    return `
-      <tr data-id="${i.id}">
-        <td>
-          <div style="display:flex; gap:10px; align-items:center;">
-            <img src="${i.image}" alt="" width="72" height="72" style="border-radius:8px; object-fit:cover;">
-            <div><b>${i.name}</b></div>
-          </div>
-        </td>
-        <td>${money(i.price)}</td>
-        <td>
-          <div class="qty">
-            <button class="qminus">−</button>
-            <input class="qinput" value="${i.qty}" />
-            <button class="qplus">+</button>
-          </div>
-        </td>
-        <td class="line-total">${money(line)}</td>
-        <td><button class="qdel btn ghost">✕</button></td>
-      </tr>
+    const tdProd = document.createElement("td");
+    tdProd.innerHTML = `
+      <div style="display:flex;gap:10px;align-items:center">
+        <img src="${item.img}" alt="${item.title}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid #eee">
+        <div><b>${item.title}</b></div>
+      </div>
     `;
-  }
 
-  function bindRowEvents() {
-    $all(".qminus").forEach((btn) =>
-      btn.addEventListener("click", () => {
-        const tr = btn.closest("tr");
-        const id = tr.dataset.id;
-        const input = $(".qinput", tr);
-        const next = Math.max(0, Number(input.value || 0) - 1);
-        input.value = next;
-        setQty(id, next);
-        rerenderRow(tr);
-      })
-    );
+    const tdPrice = document.createElement("td");
+    tdPrice.textContent = money(item.price);
 
-    $all(".qplus").forEach((btn) =>
-      btn.addEventListener("click", () => {
-        const tr = btn.closest("tr");
-        const id = tr.dataset.id;
-        const input = $(".qinput", tr);
-        const next = Math.max(0, Number(input.value || 0) + 1);
-        input.value = next;
-        setQty(id, next);
-        rerenderRow(tr);
-      })
-    );
+    const tdQty = document.createElement("td");
+    tdQty.innerHTML = `
+      <div class="qty">
+        <button aria-label="Scade" data-act="dec" data-i="${idx}">−</button>
+        <input type="number" min="1" value="${item.qty}" data-i="${idx}">
+        <button aria-label="Crește" data-act="inc" data-i="${idx}">+</button>
+      </div>
+    `;
 
-    $all(".qinput").forEach((inp) =>
-      inp.addEventListener("change", () => {
-        const tr = inp.closest("tr");
-        const id = tr.dataset.id;
-        const val = Math.max(0, Number(inp.value || 0));
-        inp.value = val;
-        setQty(id, val);
-        rerenderRow(tr);
-      })
-    );
+    const tdTotal = document.createElement("td");
+    tdTotal.className = "col-total";
+    tdTotal.textContent = money(item.price * item.qty);
 
-    $all(".qdel").forEach((btn) =>
-      btn.addEventListener("click", () => {
-        const tr = btn.closest("tr");
-        const id = tr.dataset.id;
-        removeFromCart(id);
-        tr.remove();
-        if (read().length === 0) render();
-        else paintTotals(totals(read()));
-      })
-    );
-  }
+    tr.append(tdProd, tdPrice, tdQty, tdTotal);
+    body.appendChild(tr);
+  });
 
-  function rerenderRow(tr) {
-    const id = tr.dataset.id;
-    const cart = read();
-    const item = cart.find((x) => x.id === id);
-    if (!item) {
-      tr.remove();
-      render();
-      return;
+  // listeners pentru qty
+  body.addEventListener("click", (e)=>{
+    const btn = e.target.closest("button[data-act]");
+    if(!btn) return;
+    const i = +btn.dataset.i;
+    const act = btn.dataset.act;
+    const list = loadCart();
+    if(!list[i]) return;
+    if(act === "inc") list[i].qty += 1;
+    if(act === "dec") list[i].qty = Math.max(1, list[i].qty - 1);
+    saveCart(list);
+    renderCart();
+    updateTotals();
+  });
+  body.addEventListener("change", (e)=>{
+    if(e.target.matches('.qty input')){
+      const i = +e.target.dataset.i;
+      const list = loadCart();
+      const v = Math.max(1, parseInt(e.target.value||"1",10));
+      if(list[i]) list[i].qty = v;
+      saveCart(list);
+      renderCart();
+      updateTotals();
     }
-    $(".line-total", tr).textContent = money(item.price * item.qty);
-    paintTotals(totals(cart));
+  });
+
+  updateTotals();
+}
+
+function updateTotals(){
+  const list = loadCart();
+  const t = calcTotals(list);
+  document.getElementById("t-sub").textContent = money(t.subtotal);
+  document.getElementById("t-disc").textContent = money(t.discount);
+  document.getElementById("t-ship").textContent = money(t.shipping);
+  document.getElementById("t-total").textContent = money(t.total);
+}
+
+document.getElementById("clear-cart")?.addEventListener("click", ()=>{
+  if(confirm("Golești coșul?")){
+    saveCart([]);
+    renderCart();
   }
+});
 
-  function paintTotals(t) {
-    const set = (id, val) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = typeof val === "number" ? money(val) : val;
-    };
-    set("t-sub", t.sub);
-    set("t-disc", t.disc);
-    set("t-ship", t.ship);
-    set("t-total", t.total);
+/* ===== Toggle PF / PJ ===== */
+const pfBox = document.getElementById("pf-fields");
+const pjBox = document.getElementById("pj-fields");
+
+function setRequired(selector, state){
+  document.querySelectorAll(selector).forEach(inp=>{
+    if(state) inp.setAttribute("required","required");
+    else inp.removeAttribute("required");
+  });
+}
+function showPF(){
+  pfBox.style.display = "";
+  pjBox.style.display = "none";
+  setRequired("#pf-fields input", true);
+  setRequired("#pj-fields input", false);
+}
+function showPJ(){
+  pfBox.style.display = "none";
+  pjBox.style.display = "";
+  setRequired("#pf-fields input", false);
+  setRequired("#pj-fields input", true);
+}
+
+document.querySelectorAll('input[name="tip"]').forEach(r=>{
+  r.addEventListener("change", (e)=>{
+    if(e.target.value === "Persoană fizică") showPF();
+    else showPJ();
+  });
+});
+showPF(); // default
+
+/* ====== GENERARE PROFORMĂ (HTML) ====== */
+function proformaHTML(list, totals, client){
+  const rows = list.map(p=>`
+    <tr>
+      <td>${p.title}</td>
+      <td style="text-align:right">${money(p.price)}</td>
+      <td style="text-align:center">${p.qty}</td>
+      <td style="text-align:right">${money(p.price*p.qty)}</td>
+    </tr>
+  `).join("");
+
+  const clientBlock = client.tip === 'Persoană juridică'
+    ? `<p><b>Firmă:</b> ${client.firma}<br><b>CUI:</b> ${client.cui}</p>`
+    : `<p><b>Nume:</b> ${client.nume} ${client.prenume}</p>`;
+
+  return `
+  <div style="font-family:Arial,Helvetica,sans-serif">
+    ${clientBlock}
+    <p><b>Adresă:</b> ${client.adresa}, ${client.oras}, ${client.judet}, ${client.codpostal}</p>
+    <table style="width:100%;border-collapse:collapse" border="1" cellpadding="6">
+      <thead>
+        <tr style="background:#f5f5f5">
+          <th align="left">Produs</th>
+          <th align="right">Preț</th>
+          <th align="center">Cant.</th>
+          <th align="right">Total</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+      <tfoot>
+        <tr><td colspan="3" align="right"><b>Subtotal</b></td><td align="right">${money(totals.subtotal)}</td></tr>
+        <tr><td colspan="3" align="right"><b>Reducere</b></td><td align="right">− ${money(totals.discount)}</td></tr>
+        <tr><td colspan="3" align="right"><b>Livrare</b></td><td align="right">${money(totals.shipping)}</td></tr>
+        <tr><td colspan="3" align="right"><b>Total</b></td><td align="right"><b>${money(totals.total)}</b></td></tr>
+      </tfoot>
+    </table>
+  </div>`;
+}
+
+/* ====== CHECKOUT ====== */
+document.getElementById("checkout-form").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const list = loadCart();
+  if(!list.length){ alert("Coșul este gol."); return; }
+
+  // colectăm clientul
+  const tip = document.querySelector('input[name="tip"]:checked').value;
+  let client = { tip };
+  if(tip === "Persoană fizică"){
+    client.nume = document.getElementById("pf-nume").value.trim();
+    client.prenume = document.getElementById("pf-prenume").value.trim();
+    client.email = document.getElementById("pf-email").value.trim();
+    client.telefon = document.getElementById("pf-telefon").value.trim();
+    client.judet = document.getElementById("pf-judet").value.trim();
+    client.oras = document.getElementById("pf-oras").value.trim();
+    client.codpostal = document.getElementById("pf-codpostal").value.trim();
+    client.adresa = document.getElementById("pf-adresa").value.trim();
+  }else{
+    client.firma = document.getElementById("pj-firma").value.trim();
+    client.cui = document.getElementById("pj-cui").value.trim();
+    client.email = document.getElementById("pj-email").value.trim();
+    client.telefon = document.getElementById("pj-telefon").value.trim();
+    client.judet = document.getElementById("pj-judet").value.trim();
+    client.oras = document.getElementById("pj-oras").value.trim();
+    client.codpostal = document.getElementById("pj-codpostal").value.trim();
+    client.adresa = document.getElementById("pj-adresa").value.trim();
   }
+  client.mentiuni = document.getElementById("mentiuni").value.trim();
 
-  function hookCheckout(formSel) {
-    const form = $(formSel);
-    if (!form) return;
+  const totals = calcTotals(list);
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const cart = read();
-      if (!cart.length) {
-        alert("Coșul este gol.");
-        return;
-      }
+  // ID comandă scurt
+  const orderId = Math.random().toString(36).substring(2,8).toUpperCase();
 
-      const data = Object.fromEntries(new FormData(form).entries());
-      const t = totals(cart);
-      const orderId = genOrderId();
+  // HTML proformă
+  const htmlProforma = proformaHTML(list, totals, client);
 
-      const produseText = cart
-        .map(
-          (i) =>
-            `• ${i.name} × ${i.qty} @ ${money(i.price)} = ${money(
-              i.qty * i.price
-            )}`
-        )
-        .join("\n");
-
-      const proformaHTML = `
-        <table style="width:100%;border-collapse:collapse">
-          <thead>
-            <tr><th style="text-align:left;border-bottom:1px solid #eee;">Produs</th>
-            <th style="text-align:right;border-bottom:1px solid #eee;">Cant.</th>
-            <th style="text-align:right;border-bottom:1px solid #eee;">Preț</th>
-            <th style="text-align:right;border-bottom:1px solid #eee;">Total</th></tr>
-          </thead>
-          <tbody>
-            ${cart
-              .map(
-                (i) => `
-              <tr>
-                <td>${i.name}</td>
-                <td style="text-align:right;">${i.qty}</td>
-                <td style="text-align:right;">${money(i.price)}</td>
-                <td style="text-align:right;">${money(i.qty * i.price)}</td>
-              </tr>`
-              )
-              .join("")}
-          </tbody>
-          <tfoot>
-            <tr><td colspan="3" style="text-align:right;"><b>Subtotal</b></td><td style="text-align:right;">${money(
-              t.sub
-            )}</td></tr>
-            <tr><td colspan="3" style="text-align:right;">Reducere</td><td style="text-align:right;">${money(
-              t.disc
-            )}</td></tr>
-            <tr><td colspan="3" style="text-align:right;">Livrare</td><td style="text-align:right;">${money(
-              t.ship
-            )}</td></tr>
-            <tr><td colspan="3" style="text-align:right;"><b>Total</b></td><td style="text-align:right;"><b>${money(
-              t.total
-            )}</b></td></tr>
-          </tfoot>
-        </table>`;
-
-      try {
-        if (window.emailjs) {
-          const SERVICE = "service_ix0zpp7";
-          const TEMPLATE_CONFIRM = "template_9yctwor";
-          const TEMPLATE_STORE = "template_13qpqtt";
-          const PUBLIC_KEY = "iSadfb7-TV_89l_6k";
-
-          emailjs.init({ publicKey: PUBLIC_KEY });
-
-          await emailjs.send(SERVICE, TEMPLATE_CONFIRM, {
-            to_email: data.email || "",
-            order_id: orderId,
-            nume: data.nume || "",
-            html_proforma: proformaHTML,
-          });
-
-          await emailjs.send(SERVICE, TEMPLATE_STORE, {
-            order_id: orderId,
-            tip: data.tip || "Persoană fizică",
-            nume: data.nume || "",
-            prenume: data.prenume || "",
-            email: data.email || "",
-            telefon: data.telefon || "",
-            judet: data.judet || "",
-            oras: data.oras || "",
-            codpostal: data.codpostal || "",
-            adresa: data.adresa || "",
-            produse: produseText,
-            subtotal: t.sub.toFixed(2),
-            livrare: t.ship.toFixed(2),
-            total: t.total.toFixed(2),
-            mentiuni: data.mentiuni || "",
-            firma: data.firma || "",
-            cui: data.cui || "",
-          });
-        }
-      } catch (e) {
-        console.warn("EmailJS eroare:", e);
-      }
-
-      clearCart();
-      window.location.href = "multumesc.html";
-    });
-  }
-
-  function genOrderId() {
-    const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-    let s = "";
-    for (let i = 0; i < 6; i++)
-      s += alphabet[Math.floor(Math.random() * alphabet.length)];
-    return s;
-  }
-
-  window.MSACart = {
-    addToCart,
-    removeFromCart,
-    setQty,
-    clearCart,
-    render,
-    hookCheckout,
-    updateCartCountBadge,
+  // Parametri pentru template CLIENT (Order Confirmation)
+  const paramsClient = {
+    to_email: client.email,
+    order_id: orderId,
+    html_proforma: htmlProforma,
+    nume: client.nume || client.firma || "",
   };
 
-  document.addEventListener("DOMContentLoaded", () => {
-    updateCartCountBadge();
-    if (document.getElementById("cart-body")) render();
-  });
-})();
+  // Parametri pentru template ADMIN (Contact Us) – câmpurile din șablonul tău
+  const prodAdmin = list.map(p=>`${p.title} × ${p.qty} = ${money(p.price*p.qty)}`).join('<br>');
+  const paramsAdmin = {
+    tip: tip,
+    nume: client.nume || client.firma || "",
+    prenume: client.prenume || "",
+    email: client.email,
+    telefon: client.telefon,
+    judet: client.judet,
+    oras: client.oras,
+    codpostal: client.codpostal,
+    adresa: client.adresa,
+    cui: client.cui || "",
+    produse: prodAdmin,
+    subtotal: totals.subtotal.toFixed(2),
+    livrare: totals.shipping.toFixed(2),
+    total: totals.total.toFixed(2),
+    mentiuni: client.mentiuni || "",
+    order_id: orderId
+  };
+
+  // Trimitem emailuri (întâi la client, apoi la admin)
+  try{
+    await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, paramsClient);
+    await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, paramsAdmin);
+  }catch(err){
+    console.error(err);
+    alert("A apărut o eroare la trimiterea emailurilor. Comanda a fost înregistrată, dar te rugăm să verifici emailul ulterior.");
+  }
+
+  // Golește coșul și redirecționează
+  saveCart([]);
+  window.location.href = "multumesc.html";
+});
+
+/* ====== inițializare ====== */
+renderCart();
