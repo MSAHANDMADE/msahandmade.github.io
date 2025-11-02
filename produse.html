@@ -6,10 +6,14 @@
   <title>Produsele noastre – MSA Handmade</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* mici corecții ca să se vadă frumos pe mobil chiar dacă styles.css rămâne neschimbat */
+    .promo{background:#0f3f2d;color:#fff;text-align:center;padding:8px 12px}
+    .promo b{color:#ffd85e}
+    .header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px}
+    .nav a{margin-right:14px;color:#222;text-decoration:none;font-weight:700}
+    .cart-badge{font-weight:900;text-decoration:none}
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
     .card{background:#fff;border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.06);overflow:hidden;display:flex;flex-direction:column}
-    .card-img{width:100%;aspect-ratio:16/11;object-fit:cover;cursor:pointer}
+    .card-img{width:100%;aspect-ratio:16/11;object-fit:cover;cursor:pointer;background:#f4f4f4}
     .card-body{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
     .card-title{font-weight:800;line-height:1.2}
     .card-desc{color:#444}
@@ -17,23 +21,17 @@
     .card-price{margin-top:4px;font-weight:900}
     .btn{background:#0f7c2a;color:#fff;border:none;border-radius:12px;padding:12px 14px;font-weight:700;cursor:pointer}
     .btn:hover{filter:brightness(1.03)}
-    .promo{background:#0f3f2d;color:#fff;text-align:center;padding:8px 12px}
-    .promo b{color:#ffd85e}
-    .header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px}
-    .nav a{margin-right:14px;color:#222;text-decoration:none;font-weight:700}
-    .cart-badge{font-weight:900;text-decoration:none}
     /* modal */
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;display:flex;align-items:center;justify-content:center;padding:16px;transition:.2s}
     .modal.show{opacity:1;pointer-events:auto}
     .modal-box{background:#fff;max-width:720px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.25)}
     .modal-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 16px;border-bottom:1px solid #eee}
-    .modal-box img{width:100%;max-height:420px;object-fit:cover}
+    .modal-box img{width:100%;max-height:420px;object-fit:cover;background:#f4f4f4}
     .modal-box .inner{padding:14px 16px}
     .modal-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:12px}
   </style>
 </head>
 <body>
-
   <div class="promo">Reduceri până la <b>-20%</b> • Livrare gratuită de la <b>300 RON</b></div>
 
   <header class="header">
@@ -70,6 +68,71 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+  // ===== CART badge (compatibil cu cos.html)
+  const CART_KEY="msa_cart";
+  const getCart=()=>{try{return JSON.parse(localStorage.getItem(CART_KEY))||[]}catch(e){return[]}};
+  const setCart=v=>{localStorage.setItem(CART_KEY,JSON.stringify(v));updateBadge()};
+  const updateBadge=()=>{const c=getCart().reduce((s,i)=>s+(i.qty||0),0);const el=document.getElementById("cart-count");if(el)el.textContent=c};
+  const addToCart=(p,qty=1)=>{const cart=getCart();const i=cart.findIndex(x=>x.id===p.id);if(i>=0)cart[i].qty+=qty;else cart.push({id:p.id,nume:p.nume,pret:p.pret,img:p.img,qty:qty});setCart(cart)};
+
+  // ===== PRODUSE (imaginile sunt exact cum sunt în /images din repo-ul tău)
+  const PRODUSE=[
+    {id:"coronita-rosu-auriu",nume:"Coroniță Crăciun – roșu & auriu",pret:35,img:"images/coronita1.png",descr:"Strălucire caldă de sărbătoare: flori aurii și accente roșii.",dim:"Ø ~35 cm",greutate:"~350 g"},
+    {id:"coronita-alb-argintiu",nume:"Coroniță Crăciun – alb & argintiu",pret:35,img:"images/coronita2.png",descr:"Eleganță rece de iarnă: alb sidefat și panglici argintii.",dim:"Ø ~35 cm",greutate:"~350 g"},
+    {id:"buchet",nume:"Buchet (aranjament decor)",pret:45,img:"images/buchet.jpg",descr:"Aranjament decorativ – potrivit pentru masă sau cadou.",dim:"~20×12 cm",greutate:"~300 g"},
+    {id:"crin",nume:"Crin – lumânare decor",pret:45,img:"images/crin.jpg",descr:"Lumânare din ceară în formă de crin, pe suport de ipsos.",dim:"~9×9 cm",greutate:"~250 g"},
+    {id:"dans",nume:"Dans – figurină decor",pret:45,img:"images/dans.jpg",descr:"Figurină tematică turnată, finisată manual.",dim:"~12×8 cm",greutate:"~300 g"},
+    {id:"family",nume:"Family – figurină decor",pret:45,img:"images/family.png",descr:"Compoziție familială, ideală pentru cadou.",dim:"~12×8 cm",greutate:"~300 g"},
+    {id:"flori",nume:"Flori – lumânare decor",pret:45,img:"images/flori.jpg",descr:"Lumânare din ceară cu motiv floral, suport ipsos.",dim:"~10×10 cm",greutate:"~260 g"},
+    {id:"floricele",nume:"Floricele – lumânare decor",pret:45,img:"images/floricele.png",descr:"Mix floral diafan; turnată manual cu grijă.",dim:"~10×10 cm",greutate:"~250 g"},
+    {id:"indragostitii",nume:"Îndrăgostiții – figurină decor",pret:45,img:"images/indragostitii.jpg",descr:"Duo romantic, detaliu fin, ideal pentru ocazii speciale.",dim:"~12×8 cm",greutate:"~300 g"},
+    {id:"inger",nume:"Înger – figurină decor",pret:30,img:"images/inger.jpg",descr:"Figurină din ceară pe suport de ipsos.",dim:"~10×6 cm",greutate:"~180 g"},
+    {id:"ingeras",nume:"Îngeraș – figurină decor",pret:28,img:"images/ingeras.png",descr:"Mini figurină angelică, perfectă pentru un colț de poveste.",dim:"~9×5 cm",greutate:"~150 g"},
+    {id:"isus",nume:"Iisus – relief decorativ",pret:45,img:"images/isus.png",descr:"Relief decorativ turnat, finisaj atent.",dim:"~12×8 cm",greutate:"~300 g"},
+    {id:"logodna",nume:"Logodnă – figurină decor",pret:45,img:"images/logodna.jpg",descr:"Compoziție elegantă pentru ocazii speciale.",dim:"~12×8 cm",greutate:"~300 g"},
+    {id:"lumanare-floarea-soarelui",nume:"Lumânare Floarea-soarelui",pret:45,img:"images/lumanare_floarea-soarelui.png",descr:"Lumânare din ceară parfumată, pe suport de ipsos.",dim:"~8×8×5 cm",greutate:"~250 g"},
+    {id:"peisaj",nume:"Peisaj – relief decorativ",pret:45,img:"images/peisaj.jpg",descr:"Relief decorativ cu peisaj, turnat în ipsos.",dim:"~12×8 cm",greutate:"~300 g"},
+    {id:"peisajiarna",nume:"Peisaj iarnă – relief decorativ",pret:45,img:"images/peisajiarna.jpg",descr:"Scenă de iarnă, textură bogată, finisaj manual.",dim:"~12×8 cm",greutate:"~300 g"},
+    {id:"sarut",nume:"Sărut – relief decorativ",pret:45,img:"images/sarut.jpg",descr:"Compoziție decorativă, inspirată, cu efect elegant.",dim:"~12×8 cm",greutate:"~300 g"}
+  ];
+
+  function productCard(p, idx){
+    return `
+    <div class="card">
+      <img class="card-img" src="${p.img}" alt="${p.nume}" data-idx="${idx}"
+           onerror="this.src='logo.png'">
+      <div class="card-body">
+        <div class="card-title">${p.nume}</div>
+        <div class="card-desc">${p.descr||""}</div>
+        <div class="muted">${[p.dim,p.greutate].filter(Boolean).join(" • ")}</div>
+        <div class="card-price">${p.pret.toFixed(2)} RON</div>
+        <button class="btn" onclick="addToCart(PRODUSE[${idx}],1)">Adaugă în coș</button>
+      </div>
+    </div>`;
+  }
+
+  function renderProduse(){
+    const grid=document.getElementById("prod-grid");
+    grid.innerHTML=PRODUSE.map((p,i)=>productCard(p,i)).join("");
+    // click imagine -> modal
+    grid.querySelectorAll(".card-img").forEach(img=>{
+      img.addEventListener("click",()=>{
+        const p=PRODUSE[img.dataset.idx];
+        document.getElementById("m-title").textContent=p.nume;
+        document.getElementById("m-img").src=p.img;
+        document.getElementById("m-desc").textContent=p.descr||"";
+        document.getElementById("m-specs").textContent=[p.dim,p.greutate].filter(Boolean).join(" • ");
+        document.getElementById("m-price").textContent=p.pret.toFixed(2)+" RON";
+        document.getElementById("m-add").onclick=()=>{addToCart(p,1);closeModal();};
+        document.getElementById("prod-modal").classList.add("show");
+      });
+    });
+  }
+  function closeModal(){document.getElementById("prod-modal").classList.remove("show")}
+  // init
+  updateBadge();
+  renderProduse();
+  </script>
 </body>
 </html>
