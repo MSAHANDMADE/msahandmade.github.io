@@ -1,35 +1,24 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mulțumim – MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="cart.js"></script>
-</head>
-<body>
-  <header class="header">
-    <nav id="main-nav">
-      <a href="index.html">Acasă</a>
-      <a href="produse.html">Produse</a>
-      <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
-    </nav>
-  </header>
+<!doctype html><html lang="ro"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mulțumim – MSA Handmade</title>
+<link rel="stylesheet" href="styles.css">
+</head><body>
+<header class="header">
+  <nav class="nav">
+    <a href="index.html">Acasă</a>
+    <a href="produse.html">Produse</a>
+    <a href="despre.html">Despre</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <a class="cart-badge" href="cos.html">🛒 <span id="cart-count">0</span></a>
+</header>
 
-  <main class="wrap narrow">
-    <section class="box thanks" style="text-align:center">
-      <h1>Mulțumim pentru comandă! 🥰</h1>
-      <p>Ți-am trimis un email de confirmare. Te vom contacta în curând.</p>
-      <p style="margin-top:16px">
-        <a href="produse.html" class="btn primary">Înapoi la produse</a>
-        <a href="index.html" class="btn ghost" style="margin-left:8px">Înapoi acasă</a>
-      </p>
-    </section>
-  </main>
+<main class="box" style="text-align:center">
+  <h1>Mulțumim pentru comandă! 🥰</h1>
+  <p>Ți-am trimis un email de confirmare. Te contactăm în curând.</p>
+  <a class="btn" href="produse.html">Înapoi la produse</a>
+  <a class="btn" style="background:#0f3e2d" href="index.html">Înapoi acasă</a>
+</main>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', MSACart.updateCartCountBadge);
-  </script>
-</body>
-</html>
+<script>localStorage.setItem("msa_cart","[]");</script>
+</body></html>
