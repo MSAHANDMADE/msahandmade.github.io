@@ -1,119 +1,120 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Produse – MSA Handmade</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produse | MSA Handmade Decor</title>
   <link rel="stylesheet" href="styles.css">
-  <style>
-    .wrap{max-width:1100px;margin:0 auto;padding:16px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
-    .card{background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);overflow:hidden;text-align:center}
-    .card img{width:100%;height:240px;object-fit:cover;cursor:pointer}
-    .card h3{margin:10px 0 5px;font-size:18px}
-    .price{color:#0f3f2e;font-weight:700}
-    .btn{background:#0f3f2e;color:#fff;padding:10px 16px;border-radius:12px;border:0;font-weight:600;margin:10px 0;cursor:pointer}
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:20px}
-    .modal.open{display:flex}
-    .modal-card{background:#fff;border-radius:16px;max-width:800px;width:100%;overflow:hidden;position:relative}
-    .modal img{width:100%;height:auto}
-    .modal-content{padding:20px}
-    .close-x{position:absolute;top:10px;right:10px;background:#0f3f2e;color:#fff;border:0;border-radius:10px;padding:6px 10px;cursor:pointer}
-  </style>
+  <script src="cart.js" defer></script>
 </head>
 <body>
-  <header class="wrap" style="display:flex;justify-content:space-between;align-items:center">
-    <h1>Produsele noastre</h1>
-    <a href="cos.html">🛒 <span id="cart-count">0</span></a>
+
+  <!-- Bara sus -->
+  <header>
+    <div class="banner">Reduceri până la -20% • Livrare gratuită de la 300 RON</div>
+    <nav class="navbar">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html" class="active">Produse</a>
+      <a href="despre.html">Despre</a>
+      <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart-link">
+        <img src="images/cart.svg" alt="Coș"> <span id="cart-count">0</span>
+      </a>
+    </nav>
   </header>
 
-  <main class="wrap">
-    <section class="grid" id="product-list"></section>
+  <main class="container">
+    <h1 class="page-title">Produsele noastre</h1>
+
+    <div class="product-grid">
+
+      <!-- 1 -->
+      <div class="product-card">
+        <img src="images/coronita1.png" alt="Coroniță Crăciun roșu & auriu">
+        <h3>Coroniță Crăciun – roșu & auriu</h3>
+        <p>Strălucire caldă de sărbătoare: flori aurii și accente roșii.</p>
+        <div class="price">35 RON</div>
+        <button class="add-to-cart" data-id="coronita1" data-name="Coroniță Crăciun – roșu & auriu" data-price="35" data-image="images/coronita1.png">Adaugă în coș</button>
+      </div>
+
+      <!-- 2 -->
+      <div class="product-card">
+        <img src="images/coronita2.png" alt="Coroniță Crăciun alb & argintiu">
+        <h3>Coroniță Crăciun – alb & argintiu</h3>
+        <p>Eleganță rece de iarnă: alb sidefat și panglici argintii.</p>
+        <div class="price">35 RON</div>
+        <button class="add-to-cart" data-id="coronita2" data-name="Coroniță Crăciun – alb & argintiu" data-price="35" data-image="images/coronita2.png">Adaugă în coș</button>
+      </div>
+
+      <!-- 3 -->
+      <div class="product-card">
+        <img src="images/buchet.jpg" alt="Buchet flori uscate">
+        <h3>Buchet flori uscate</h3>
+        <p>Mix elegant de nuanțe pastel, perfect pentru decor sau cadou.</p>
+        <div class="price">45 RON</div>
+        <button class="add-to-cart" data-id="buchet" data-name="Buchet flori uscate" data-price="45" data-image="images/buchet.jpg">Adaugă în coș</button>
+      </div>
+
+      <!-- 4 -->
+      <div class="product-card">
+        <img src="images/indragostiti.jpg" alt="Tablou îndrăgostiți">
+        <h3>Tablou – Îndrăgostiți</h3>
+        <p>Romantism în culori calde, ideal pentru dormitor sau cadou.</p>
+        <div class="price">55 RON</div>
+        <button class="add-to-cart" data-id="indragostiti" data-name="Tablou – Îndrăgostiți" data-price="55" data-image="images/indragostiti.jpg">Adaugă în coș</button>
+      </div>
+
+      <!-- 5 -->
+      <div class="product-card">
+        <img src="images/flori.jpg" alt="Tablou flori de câmp">
+        <h3>Tablou – Flori de câmp</h3>
+        <p>Explozie de culoare și energie pentru orice încăpere.</p>
+        <div class="price">40 RON</div>
+        <button class="add-to-cart" data-id="flori" data-name="Tablou – Flori de câmp" data-price="40" data-image="images/flori.jpg">Adaugă în coș</button>
+      </div>
+
+      <!-- 6 -->
+      <div class="product-card">
+        <img src="images/inger.jpg" alt="Înger decorativ">
+        <h3>Înger decorativ</h3>
+        <p>Simbol de pace și protecție, realizat manual cu grijă.</p>
+        <div class="price">25 RON</div>
+        <button class="add-to-cart" data-id="inger" data-name="Înger decorativ" data-price="25" data-image="images/inger.jpg">Adaugă în coș</button>
+      </div>
+
+      <!-- 7 -->
+      <div class="product-card">
+        <img src="images/lumanare_floarea-soarelui.png" alt="Lumânare Floarea Soarelui">
+        <h3>Lumânare – Floarea Soarelui</h3>
+        <p>Lumânare parfumată, decorată cu motive solare și flori galbene.</p>
+        <div class="price">30 RON</div>
+        <button class="add-to-cart" data-id="lumanare" data-name="Lumânare – Floarea Soarelui" data-price="30" data-image="images/lumanare_floarea-soarelui.png">Adaugă în coș</button>
+      </div>
+
+      <!-- 8 -->
+      <div class="product-card">
+        <img src="images/sarut.jpg" alt="Tablou Sărutul">
+        <h3>Tablou – Sărutul</h3>
+        <p>Inspirat din arta clasică, transmite pasiune și conexiune.</p>
+        <div class="price">60 RON</div>
+        <button class="add-to-cart" data-id="sarut" data-name="Tablou – Sărutul" data-price="60" data-image="images/sarut.jpg">Adaugă în coș</button>
+      </div>
+
+      <!-- 9 -->
+      <div class="product-card">
+        <img src="images/peisajarina.jpg" alt="Peisaj iarnă">
+        <h3>Tablou – Peisaj de iarnă</h3>
+        <p>Atmosferă liniștită de iarnă, redată în nuanțe reci și delicate.</p>
+        <div class="price">50 RON</div>
+        <button class="add-to-cart" data-id="peisajarina" data-name="Tablou – Peisaj de iarnă" data-price="50" data-image="images/peisajarina.jpg">Adaugă în coș</button>
+      </div>
+
+    </div>
   </main>
 
-  <div class="modal" id="modal">
-    <div class="modal-card">
-      <button class="close-x" id="close">✕</button>
-      <img id="m-img" src="" alt="">
-      <div class="modal-content">
-        <h2 id="m-title"></h2>
-        <p id="m-price" class="price"></p>
-        <button id="m-add" class="btn">Adaugă în coș</button>
-      </div>
-    </div>
-  </div>
+  <footer>
+    <p>© 2025 M.S.A Handmade Decor</p>
+  </footer>
 
-  <script>
-    // === PRODUSE AUTOMATE ===
-    const imageFiles = [
-      "buchet.jpg","coronita1.png","coronita2.png","crin.jpg","dans.jpg","family.png",
-      "flori.jpg","floricele.png","indragostitti.jpg","inger.jpg","ingeras.png",
-      "isus.png","logodna.jpg","lumanare_floarea-soarelui.png","peisaj.jpg",
-      "peisajiarna.jpg","sarut.jpg"
-    ];
-
-    const prices = {
-      buchet:39, coronita1:35, coronita2:35, crin:33, dans:29, family:30,
-      flori:29, floricele:27, indragostitti:31, inger:30, ingeras:28,
-      isus:30, logodna:35, "lumanare_floarea-soarelui":38, peisaj:32,
-      peisajiarna:32, sarut:34
-    };
-
-    const container = document.getElementById("product-list");
-
-    imageFiles.forEach(file => {
-      const name = file.split(".")[0];
-      const price = prices[name] || 30;
-      const title = name.charAt(0).toUpperCase() + name.slice(1).replace(/_/g," ");
-      const card = document.createElement("article");
-      card.className="card";
-      card.innerHTML=`
-        <img src="images/${file}" alt="${title}" data-name="${title}" data-price="${price}" data-image="images/${file}">
-        <h3>${title}</h3>
-        <div class="price">${price} RON</div>
-        <button class="btn add-to-cart" data-id="${name}" data-name="${title}" data-price="${price}" data-image="images/${file}">Adaugă în coș</button>`;
-      container.appendChild(card);
-    });
-
-    // === COȘ ===
-    const STORAGE_KEY="msa_cart";
-    const readCart=()=>JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
-    const writeCart=(d)=>localStorage.setItem(STORAGE_KEY,JSON.stringify(d));
-    const updateBadge=()=>{const el=document.getElementById("cart-count");const c=readCart().reduce((s,i)=>s+i.qty,0);el.textContent=c||0;}
-    const addItem=(it)=>{const c=readCart();const i=c.findIndex(p=>p.id===it.id);if(i>=0)c[i].qty+=1;else c.push(it);writeCart(c);updateBadge();}
-
-    document.addEventListener("click",e=>{
-      if(e.target.classList.contains("add-to-cart")){
-        const b=e.target;
-        addItem({id:b.dataset.id,name:b.dataset.name,price:+b.dataset.price,image:b.dataset.image,qty:1});
-        b.textContent="Adăugat ✓";setTimeout(()=>b.textContent="Adaugă în coș",1000);
-      }
-    });
-
-    // === MODAL ===
-    const modal=document.getElementById("modal");
-    const mImg=document.getElementById("m-img");
-    const mTitle=document.getElementById("m-title");
-    const mPrice=document.getElementById("m-price");
-    const mAdd=document.getElementById("m-add");
-    let current=null;
-
-    container.addEventListener("click",e=>{
-      if(e.target.tagName==="IMG"){
-        const img=e.target;
-        mImg.src=img.dataset.image;
-        mTitle.textContent=img.dataset.name;
-        mPrice.textContent=img.dataset.price+" RON";
-        current={id:img.dataset.name.toLowerCase(),name:img.dataset.name,price:+img.dataset.price,image:img.dataset.image,qty:1};
-        modal.classList.add("open");
-      }
-    });
-
-    document.getElementById("close").onclick=()=>modal.classList.remove("open");
-    modal.onclick=e=>{if(e.target===modal)modal.classList.remove("open");};
-    mAdd.onclick=()=>{if(current)addItem(current);modal.classList.remove("open");};
-
-    updateBadge();
-  </script>
 </body>
 </html>
