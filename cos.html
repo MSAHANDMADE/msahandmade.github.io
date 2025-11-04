@@ -1,79 +1,193 @@
-<!doctype html><html lang="ro"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Coș – MSA Handmade</title>
-<link rel="stylesheet" href="styles.css">
-</head><body onload="initCartPage()">
-<div class="promo">Reduceri până la <b>-20%</b> • Livrare gratuită de la <b>300 RON</b></div>
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Coșul tău — M.S.A Handmade Decor</title>
+  <meta name="description" content="Finalizează comanda pe M.S.A Handmade Decor. Livrare gratuită de la 300 RON și reduceri automate.">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    main.wrap{margin-top:16px}
+    .footer{ text-align:center; padding:24px 10px; color:#666 }
+    form .row{display:flex;gap:12px}
+    @media (max-width:640px){ form .row{flex-direction:column} }
+    .btn-primary{background:#0a2230;color:#fff;padding:12px 16px;border:0;border-radius:10px;cursor:pointer;font-weight:800}
+    .btn-primary:hover{background:#0e344c}
+  </style>
+</head>
+<body>
+  <div class="promo">Reduceri până la <b>-20%</b> • Livrare gratuită de la <b>300 RON</b></div>
 
-<header class="header">
-  <nav class="nav">
-    <a href="index.html">Acasă</a>
-    <a href="produse.html">Produse</a>
-    <a href="despre.html">Despre</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-  <a class="cart-badge" href="cos.html">🛒 <span id="cart-count">0</span></a>
-</header>
+  <header class="header">
+    <nav id="main-nav">
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="despre.html">Despre</a>
+      <a href="contact.html">Contact</a>
+      <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
+    </nav>
+  </header>
 
-<h1>Coșul tău</h1>
+  <main class="wrap">
+    <h1>Coșul tău</h1>
+    <div id="cart-mount"></div>
 
-<section class="box">
-  <table class="table" width="100%">
-    <thead>
-      <tr>
-        <th>Produs</th>
-        <th>Detalii</th>
-        <th>Cant.</th>
-        <th>Total</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-  </table>
-</section>
+    <h2 style="margin-top:22px">Finalizează comanda</h2>
+    <form id="order-form" class="box">
+      <div class="row">
+        <div style="flex:1">
+          <label>Tip client</label>
+          <select id="tip">
+            <option value="Persoană fizică">Persoană fizică</option>
+            <option value="Persoană juridică">Persoană juridică</option>
+          </select>
+        </div>
+        <div style="flex:1">
+          <label>Nume</label>
+          <input id="nume" required>
+        </div>
+        <div style="flex:1">
+          <label>Prenume</label>
+          <input id="prenume" required>
+        </div>
+      </div>
 
-<aside class="box">
-  <h2>Totaluri</h2>
-  <div class="row"><span>Subtotal</span><b id="t-sub">0 RON</b></div>
-  <div class="row"><span>Reducere</span><b id="t-disc">0 RON</b></div>
-  <div class="row"><span>Livrare</span><b id="t-ship">0 RON</b></div>
-  <div class="row big"><span>Total</span><b id="t-total">0 RON</b></div>
-  <div class="muted" style="margin-top:8px">
-    Reduceri automate: ≥200 RON −10%, ≥300 RON −15%, ≥400 RON −20%.<br>
-    Livrare gratuită de la 300 RON (chiar dacă se aplică reducere).
-  </div>
-</aside>
+      <div class="row">
+        <div style="flex:1">
+          <label>Email</label>
+          <input id="email" type="email" required>
+        </div>
+        <div style="flex:1">
+          <label>Telefon</label>
+          <input id="telefon" required>
+        </div>
+      </div>
 
-<section class="box" style="margin-top:16px">
-  <h2>Detalii pentru livrare</h2>
-  <form id="checkout-form">
-    <fieldset>
-      <legend>Tip client</legend>
-      <label><input id="tip-pf" type="radio" name="tip" value="pf" checked> Persoană fizică</label>
-      <label><input id="tip-pj" type="radio" name="tip" value="pj"> Persoană juridică</label>
-    </fieldset>
+      <div class="row">
+        <div style="flex:1">
+          <label>Județ</label>
+          <input id="judet" required>
+        </div>
+        <div style="flex:1">
+          <label>Oraș</label>
+          <input id="oras" required>
+        </div>
+        <div style="flex:1">
+          <label>Cod poștal</label>
+          <input id="codpostal" required>
+        </div>
+      </div>
 
-    <label>Nume<input name="nume" required></label>
-    <label>Prenume<input name="prenume" required></label>
-    <label>Email<input name="email" type="email" required></label>
-    <label>Telefon<input name="telefon" required></label>
+      <div class="row">
+        <div style="flex:1">
+          <label>Adresă</label>
+          <input id="adresa" required>
+        </div>
+      </div>
 
-    <label>Județ<input name="judet" required></label>
-    <label>Oraș<input name="oras" required></label>
-    <label>Cod poștal<input name="codpostal" required></label>
-    <label>Adresă<textarea name="adresa" rows="3" required></textarea></label>
+      <div class="row">
+        <div style="flex:1">
+          <label>Mențiuni (opțional)</label>
+          <textarea id="mentiuni" rows="3"></textarea>
+        </div>
+      </div>
 
-    <div id="wrap-firma" class="hide">
-      <label>Firmă (doar PJ)<input name="firma"></label>
-    </div>
-    <div id="wrap-cui" class="hide">
-      <label>CUI (doar PJ)<input name="cui" placeholder="RO..."></label>
-    </div>
+      <button class="btn btn-primary" type="submit">Trimite comanda</button>
+    </form>
+  </main>
 
-    <button class="btn" style="margin-top:10px">Confirmă comanda</button>
-  </form>
-</section>
+  <footer class="footer">
+    <small>&copy; <span id="year"></span> — M.S.A Handmade Decor</small>
+  </footer>
 
-<script src="script.js"></script>
-<script src="cart.js"></script>
-</body></html>
+  <!-- Coș + EmailJS -->
+  <script src="cart.js?v=8"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    // === EmailJS config (datele tale reale) ===
+    const SERVICE_ID = 'service_ix0zpp7';
+    const PUBLIC_KEY = 'iSadfb7-TV_89l_6k';
+    const TEMPLATE_ADMIN = 'template_13qpqtt';  // către magazin
+    const TEMPLATE_CONFIRM = 'template_9yctwor'; // către client
+    emailjs.init(PUBLIC_KEY);
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.MSACart) {
+        MSACart.renderCart();
+        MSACart.updateCartCountBadge();
+      }
+    });
+
+    function money(v){ return MSACart.money(v); }
+
+    // Trimite comanda
+    document.getElementById('order-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!window.MSACart) { alert('Eroare: coș indisponibil.'); return; }
+      const cart = MSACart.getCart();
+      if (!cart.length) { alert('Coșul este gol.'); return; }
+
+      const totals = MSACart._calcTotals(cart);
+
+      const form = {
+        tip: tip.value,
+        nume: nume.value.trim(),
+        prenume: prenume.value.trim(),
+        email: email.value.trim(),
+        telefon: telefon.value.trim(),
+        judet: judet.value.trim(),
+        oras: oras.value.trim(),
+        codpostal: codpostal.value.trim(),
+        adresa: adresa.value.trim(),
+        mentiuni: mentiuni.value.trim(),
+        order_id: Date.now().toString().slice(-6)
+      };
+
+      // text simplu pentru emailul către magazin
+      const produseText = cart.map(p => `• ${p.name} × ${p.qty} — ${money(p.price*p.qty)} RON`).join('\n');
+
+      const paramsAdmin = {
+        tip: form.tip,
+        nume: form.nume,
+        prenume: form.prenume,
+        email: form.email,
+        telefon: form.telefon,
+        judet: form.judet,
+        oras: form.oras,
+        codpostal: form.codpostal,
+        adresa: form.adresa,
+        mentiuni: form.mentiuni || '-',
+        produse: produseText,
+        subtotal: money(totals.subtotal),
+        livrare: money(totals.shipping),
+        total: money(totals.total),
+        order_id: form.order_id
+      };
+
+      // HTML frumos pentru client — încărcat din proforma.html
+      const htmlProforma = await MSACart.buildProformaHTML(cart, totals, form);
+      const paramsClient = {
+        to_email: form.email,
+        nume: form.nume,
+        order_id: form.order_id,
+        html_proforma: htmlProforma
+      };
+
+      try {
+        await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, paramsAdmin);
+        await emailjs.send(SERVICE_ID, TEMPLATE_CONFIRM, paramsClient);
+
+        alert('✅ Comanda a fost trimisă! Ți-am trimis confirmarea prin email.');
+        MSACart.clear();
+        window.location.href = 'multumesc.html';
+      } catch (err) {
+        console.error(err);
+        alert('A apărut o eroare la trimiterea emailului. Verifică EmailJS.');
+      }
+    });
+  </script>
+</body>
+</html>
