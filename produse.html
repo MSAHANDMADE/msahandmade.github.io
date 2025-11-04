@@ -16,12 +16,10 @@
     .card-img{width:100%;aspect-ratio:16/11;object-fit:cover;cursor:pointer;background:#f4f4f4}
     .card-body{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
     .card-title{font-weight:800;line-height:1.2}
-    .card-desc{color:#444}
-    .muted{color:#666;font-size:.92rem}
-    .card-price{margin-top:4px;font-weight:900}
+    .muted{color:#666}
+    .card-price{margin-top:2px;font-weight:900}
     .btn{background:#0f7c2a;color:#fff;border:none;border-radius:12px;padding:12px 14px;font-weight:700;cursor:pointer}
     .btn:hover{filter:brightness(1.03)}
-    /* modal */
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;display:flex;align-items:center;justify-content:center;padding:16px;transition:.2s}
     .modal.show{opacity:1;pointer-events:auto}
     .modal-box{background:#fff;max-width:720px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.25)}
@@ -58,8 +56,7 @@
       </div>
       <img id="m-img" alt="">
       <div class="inner">
-        <p id="m-desc"></p>
-        <div id="m-specs" class="muted"></div>
+        <div id="m-extra" class="muted"></div>
         <div class="modal-actions">
           <div id="m-price" style="font-weight:900"></div>
           <button id="m-add" class="btn">Adaugă în coș</button>
@@ -69,65 +66,69 @@
   </div>
 
   <script>
-  /* ===== Coș (badge) ===== */
+  /* ==== Coș badge ==== */
   const CART_KEY="msa_cart";
   const getCart=()=>{try{return JSON.parse(localStorage.getItem(CART_KEY))||[]}catch(e){return[]}};
   const setCart=v=>{localStorage.setItem(CART_KEY,JSON.stringify(v));updateBadge()};
   const updateBadge=()=>{const c=getCart().reduce((s,i)=>s+(i.qty||0),0);const el=document.getElementById("cart-count");if(el)el.textContent=c};
   const addToCart=(p,qty=1)=>{const cart=getCart();const i=cart.findIndex(x=>x.id===p.id);if(i>=0)cart[i].qty+=qty;else cart.push({id:p.id,nume:p.nume,pret:p.pret,img:p.img,qty:qty});setCart(cart)};
 
-  /* ===== PRODUSE — DOAR LUMÂNĂRI + CORONIȚE =====
-     ⚠️ Schimbi rapid preț/dim/greutate aici, într-un singur loc.
-  */
+  /* ===== PRODUSE (doar ce ai cerut) ===== */
+  const P=({
+    coronita:(nume,img)=>({tip:"coronita",nume,pret:35,img,extra:"Diametru ~30 cm"}),
+    aran:(nume,img,pret)=>({tip:"aranj",nume,pret,img}), // NU afisez greutate
+    lum:(nume,img,pret,gr)=>({tip:"lumanare",nume,pret,img,gr})
+  });
+
   const PRODUSE=[
     // Coronițe
-    {id:"coronita-rosu-auriu",  tip:"coronita", nume:"Coroniță Crăciun – roșu & auriu",  pret:35, img:"images/coronita1.png", descr:"Coroniță realizată manual, accente roșii și aurii.", dim:"Ø ~35 cm", greutate:"~350 g"},
-    {id:"coronita-alb-argintiu",tip:"coronita", nume:"Coroniță Crăciun – alb & argintiu", pret:35, img:"images/coronita2.png", descr:"Coroniță elegantă, tonuri reci de iarnă.",          dim:"Ø ~35 cm", greutate:"~350 g"},
+    {id:"coronita-rosu-auriu",  ...P.coronita("Coroniță Crăciun – roșu & auriu","images/coronita1.png")},
+    {id:"coronita-alb-argintiu",...P.coronita("Coroniță Crăciun – alb & argintiu","images/coronita2.png")},
 
-    // Lumânări din ceară pe suport de ipsos (pozele tale din /images)
-    {id:"buchet",  tip:"lumanare", nume:"Lumânare Buchet",        pret:45, img:"images/buchet.jpg",  descr:"Lumânare din ceară, montată pe suport de ipsos.", dim:"~10×10 cm", greutate:"~250 g"},
-    {id:"crin",    tip:"lumanare", nume:"Lumânare Crin",          pret:45, img:"images/crin.jpg",    descr:"Lumânare din ceară în formă de crin, suport ipsos.", dim:"~9×9 cm",  greutate:"~250 g"},
-    {id:"dans",    tip:"lumanare", nume:"Lumânare Dans",          pret:45, img:"images/dans.jpg",    descr:"Lumânare decor turnată manual, suport ipsos.",     dim:"~12×8 cm", greutate:"~300 g"},
-    {id:"family",  tip:"lumanare", nume:"Lumânare Family",        pret:45, img:"images/family.png",  descr:"Lumânare decor, compoziție tematică, suport ipsos.", dim:"~12×8 cm", greutate:"~300 g"},
-    {id:"flori",   tip:"lumanare", nume:"Lumânare Flori",         pret:45, img:"images/flori.jpg",   descr:"Lumânare cu motiv floral, suport ipsos.",          dim:"~10×10 cm",greutate:"~260 g"},
-    {id:"floricele",tip:"lumanare",nume:"Lumânare Floricele",     pret:45, img:"images/floricele.png",descr:"Lumânare delicată, lucrată manual, suport ipsos.", dim:"~10×10 cm",greutate:"~250 g"},
-    {id:"indragostitii",tip:"lumanare",nume:"Lumânare Îndrăgostiții",pret:45,img:"images/indragostitii.jpg",descr:"Lumânare decorativă pe suport de ipsos.",        dim:"~12×8 cm", greutate:"~300 g"},
-    {id:"inger",   tip:"lumanare", nume:"Lumânare Înger",         pret:30, img:"images/inger.jpg",   descr:"Lumânare cu înger, suport de ipsos.",              dim:"~10×6 cm", greutate:"~180 g"},
-    {id:"ingeras", tip:"lumanare", nume:"Lumânare Îngeraș",       pret:28, img:"images/ingeras.png", descr:"Lumânare mică, perfectă pentru cadou.",            dim:"~9×5 cm",  greutate:"~150 g"},
-    {id:"isus",    tip:"lumanare", nume:"Lumânare Iisus",         pret:45, img:"images/isus.png",    descr:"Lumânare relief, pe suport de ipsos.",             dim:"~12×8 cm", greutate:"~300 g"},
-    {id:"logodna", tip:"lumanare", nume:"Lumânare Logodnă",       pret:45, img:"images/logodna.jpg", descr:"Lumânare tematică, turnată manual.",               dim:"~12×8 cm", greutate:"~300 g"},
-    {id:"floarea-soarelui",tip:"lumanare",nume:"Lumânare Floarea-soarelui",pret:45,img:"images/lumanare_floarea-soarelui.png",descr:"Lumânare parfumată pe suport de ipsos.", dim:"~8×8×5 cm",greutate:"~250 g"},
-    {id:"peisaj",  tip:"lumanare", nume:"Lumânare Peisaj",        pret:45, img:"images/peisaj.jpg",  descr:"Lumânare relief cu peisaj, suport de ipsos.",      dim:"~12×8 cm", greutate:"~300 g"},
-    {id:"peisaj-iarna",tip:"lumanare",nume:"Lumânare Peisaj iarnă",pret:45,img:"images/peisajiarna.jpg",descr:"Lumânare relief iarnă, suport de ipsos.",        dim:"~12×8 cm", greutate:"~300 g"},
-    {id:"sarut",   tip:"lumanare", nume:"Lumânare Sărut",         pret:45, img:"images/sarut.jpg",   descr:"Lumânare relief decorativă, suport ipsos.",        dim:"~12×8 cm", greutate:"~300 g"}
+    // Aranjamente (NU afișăm greutate): peisaje, îndrăgostiții, floarea-soarelui
+    {id:"peisaj",         ...P.aran("Aranjament Peisaj","images/peisaj.jpg",99)},
+    {id:"peisaj-iarna",   ...P.aran("Aranjament Peisaj iarnă","images/peisajiarna.jpg",99)},
+    {id:"indragostitii",  ...P.aran("Aranjament Îndrăgostiții","images/indragostitii.jpg",99)},
+    {id:"floarea-soarelui",...P.aran("Aranjament Floarea-soarelui","images/lumanare_floarea-soarelui.png",33)},
+
+    // Lumânări cu greutăți exacte
+    {id:"buchet", ...P.lum("Lumânare Buchet","images/buchet.jpg",29,"~150 g")},
+    {id:"floricele", ...P.lum("Lumânare Floricele","images/floricele.png",33,"~50 g")},
+    {id:"ingeras", ...P.lum("Lumânare Îngeraș","images/ingeras.png",33,"~50 g")},
+    {id:"dans", ...P.lum("Lumânare Dans","images/dans.jpg",33,"~200 g")},
+    {id:"sarut", ...P.lum("Lumânare Sărut","images/sarut.jpg",33,"~200 g")},
+    {id:"crin", ...P.lum("Lumânare Crin","images/crin.jpg",33,"~200 g")},
+    {id:"isus", ...P.lum("Lumânare Iisus","images/isus.png",33,"~300 g")},
+    {id:"family", ...P.lum("Lumânare Family","images/family.png",33,"~180 g")},
+    {id:"flori", ...P.lum("Lumânare Flori","images/flori.jpg",33,"")},
+    {id:"logodna", ...P.lum("Lumânare Logodnă","images/logodna.jpg",33,"")}
   ];
 
-  function productCard(p, idx){
+  function card(p,idx){
+    const extra = p.extra ? `<div class="muted">${p.extra}</div>` :
+                  p.gr ? `<div class="muted">Greutate ${p.gr}</div>` : "";
     return `
-    <div class="card">
-      <img class="card-img" src="${p.img}" alt="${p.nume}" data-idx="${idx}"
-           onerror="this.src='logo.png'">
-      <div class="card-body">
-        <div class="card-title">${p.nume}</div>
-        <div class="card-desc">${p.descr||""}</div>
-        <div class="muted">${[p.dim,p.greutate].filter(Boolean).join(" • ")}</div>
-        <div class="card-price">${p.pret.toFixed(2)} RON</div>
-        <button class="btn" onclick="addToCart(PRODUSE[${idx}],1)">Adaugă în coș</button>
-      </div>
-    </div>`;
+      <div class="card">
+        <img class="card-img" src="${p.img}" alt="${p.nume}" data-idx="${idx}" onerror="this.src='logo.png'">
+        <div class="card-body">
+          <div class="card-title">${p.nume}</div>
+          ${extra}
+          <div class="card-price">${p.pret.toFixed(2)} RON</div>
+          <button class="btn" onclick="addToCart(PRODUSE[${idx}],1)">Adaugă în coș</button>
+        </div>
+      </div>`;
   }
 
-  function renderProduse(){
+  function render(){
     const grid=document.getElementById("prod-grid");
-    grid.innerHTML=PRODUSE.map((p,i)=>productCard(p,i)).join("");
-    // click imagine -> modal
+    grid.innerHTML=PRODUSE.map((p,i)=>card(p,i)).join("");
     grid.querySelectorAll(".card-img").forEach(img=>{
       img.addEventListener("click",()=>{
         const p=PRODUSE[img.dataset.idx];
         document.getElementById("m-title").textContent=p.nume;
         document.getElementById("m-img").src=p.img;
-        document.getElementById("m-desc").textContent=p.descr||"";
-        document.getElementById("m-specs").textContent=[p.dim,p.greutate].filter(Boolean).join(" • ");
+        const e = p.extra ? p.extra : (p.gr?`Greutate ${p.gr}`:"");
+        document.getElementById("m-extra").textContent=e;
         document.getElementById("m-price").textContent=p.pret.toFixed(2)+" RON";
         document.getElementById("m-add").onclick=()=>{addToCart(p,1);closeModal();};
         document.getElementById("prod-modal").classList.add("show");
@@ -135,9 +136,9 @@
     });
   }
   function closeModal(){document.getElementById("prod-modal").classList.remove("show")}
-  // init
+
   updateBadge();
-  renderProduse();
+  render();
   </script>
 </body>
 </html>
