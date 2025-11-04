@@ -389,6 +389,50 @@
   </script>
 
   <!-- Dacă ai și alte scripturi proprii -->
-  <script src="script.js"></script>
+  <script src="script.js"></script><script>
+/* Stop dublare la “Adaugă în coș” – un singur handler global */
+(function(){
+  const KEY = 'MSA_CART';
+
+  function read(){ try{ return JSON.parse(localStorage.getItem(KEY))||[] }catch(_){ return [] } }
+  function write(items){
+    localStorage.setItem(KEY, JSON.stringify(items));
+    try{
+      const c = items.reduce((s,i)=>s+(+i.qty||0),0);
+      const el = document.getElementById('cart-count');
+      if (el) el.textContent = c;
+    }catch(_){}
+    // ping către celelalte pagini (badge)
+    window.dispatchEvent(new StorageEvent('storage', {key: KEY, newValue: localStorage.getItem(KEY)}));
+  }
+
+  function add(item){
+    const cart = read();
+    const i = cart.findIndex(p => String(p.id) === String(item.id));
+    if (i > -1) cart[i].qty = (Number(cart[i].qty)||0) + (Number(item.qty)||1);
+    else cart.push({ id:item.id, name:item.name, price:Number(item.price)||0, image:item.image||'', qty:Number(item.qty)||1 });
+    write(cart);
+  }
+
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.add-to-cart,[data-add-to-cart]');
+    if (!btn) return;
+
+    // anti-dublu-trigger
+    if (btn.dataset.busy === '1') return;
+    btn.dataset.busy = '1'; setTimeout(()=>btn.dataset.busy='0', 350);
+
+    const d = btn.dataset;
+    if (!d.id || !d.name || !d.price) { alert('Butonul nu are data-id/name/price.'); return; }
+
+    add({ id:d.id, name:d.name, price:d.price, image:d.image||'', qty:d.qty||1 });
+
+    // feedback mic
+    const old = btn.textContent;
+    btn.textContent = 'Adăugat ✓';
+    setTimeout(()=> btn.textContent = old, 600);
+  });
+})();
+</script>
 </body>
 </html>
