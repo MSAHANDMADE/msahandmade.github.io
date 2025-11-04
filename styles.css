@@ -1,63 +1,174 @@
-/********  BARA PROMO  *********/
-.promo{background:#0f3e2d;color:#fff;text-align:center;padding:8px 10px;font-weight:600}
-.promo b{color:#ffd36b}
+/* =========================
+   MSA Handmade — styles.css (curățat)
+   ========================= */
 
-/********  NAV  *********/
-.header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
-.nav a{margin-right:16px;color:#222;text-decoration:none;font-weight:600}
-.cart-badge{display:inline-flex;align-items:center;gap:6px}
-
-/********  TITLURI  *********/
-h1{font-size:34px;margin:16px 16px 10px}
-
-/********  GRID PRODUSE  *********/
-.grid{display:grid;gap:18px;padding:0 16px 28px}
-@media(min-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
-.card{background:#fff;border-radius:18px;box-shadow:0 10px 22px rgba(0,0,0,.06);overflow:hidden}
-.card-img{width:100%;height:260px;object-fit:cover;display:block;cursor:pointer}
-.card-body{padding:16px}
-.card-title{font-size:22px;margin:6px 0 8px}
-.card-desc{color:#555;line-height:1.45;margin-bottom:12px}
-.card-price{font-weight:800;float:right}
-.btn{display:inline-block;background:#0a8f2e;color:#fff;border:none;border-radius:12px;padding:14px 16px;font-weight:700;cursor:pointer}
-.btn:disabled{opacity:.5}
-
-/* MODAL imagine produs */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:18px;z-index:999}
-.modal.show{display:flex}
-.modal-box{background:#fff;border-radius:16px;max-width:640px;width:100%;padding:16px}
-.modal-box img{width:100%;height:auto;border-radius:12px}
-.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.modal-actions{display:flex;gap:10px;margin-top:12px}
-
-/********  COȘ  *********/
-.table{width:100%;border-collapse:collapse}
-.table th,.table td{padding:12px 8px;text-align:left;vertical-align:middle}
-.table thead th{border-bottom:2px solid #eee;color:#444}
-.item-img{width:48px;height:48px;object-fit:cover;border-radius:8px}
-
-/* Control cantitate – mic și clar pe mobil */
-.qty{display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:10px;overflow:hidden}
-.qty button{width:36px;height:36px;border:none;background:#f8f8f8;font-size:22px;line-height:1}
-.qty input{width:44px;height:36px;text-align:center;border:none;font-weight:700;font-size:16px}
-
-/* Totaluri */
-.box{background:#fff;border-radius:18px;box-shadow:0 10px 22px rgba(0,0,0,.06);padding:16px;margin:16px}
-.row{display:flex;align-items:center;justify-content:space-between;padding:6px 0}
-.row.big{font-weight:900;font-size:22px;border-top:2px solid #111;padding-top:12px;margin-top:8px}
-.muted{color:#666;font-size:14px}
-
-/********  CHECKOUT  *********/
-fieldset{border:1px solid #eee;border-radius:12px;padding:12px;margin:16px}
-legend{padding:0 6px;font-weight:700}
-label{display:block;margin:8px 0 4px;font-weight:600}
-input,textarea,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px}
-.hide{display:none}
-
-/* „+” să nu cadă peste total pe mobil */
-@media(max-width:420px){
-  .table td:nth-child(4){white-space:nowrap}
+/* Reset + variabile */
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+:root{
+  --bg:#f6f6f6;
+  --card:#fff;
+  --text:#111;
+  --muted:#555;
+  --brand:#0a2230;
+  --brand-2:#13373d;
+  --gold:#d9c08b;
+  --border:#e7e7e7;
 }
 
-/* badge coș în header */
-#cart-count{font-weight:800}
+/* Body + linkuri + imagini */
+body{
+  font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+}
+a{ color: inherit; text-decoration: none; }
+img{ max-width:100%; display:block; }
+.hidden{ display:none; }
+
+/* Containere */
+.wrap{ max-width:1100px; margin:0 auto; padding:0 16px; }
+.box{
+  background: var(--card);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  margin-top: 16px;
+}
+
+/* Promo bar */
+.promo{ background:#0f3a2e; color:#fff; text-align:center; padding:10px; font-weight:700; }
+.promo b{ color:#ffd27a; }
+
+/* Header + Nav */
+.header{
+  background:#fff;
+  position:sticky; top:0; z-index:10;
+  border-bottom:1px solid #eee;
+  margin-top:8px;
+}
+.nav{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; height:62px; padding:0 4px;
+}
+.nav .left{ display:flex; align-items:center; gap:18px; }
+.nav .left a{ padding:8px 12px; color:#0b1c22; font-weight:600; }
+.nav a.active{ color: var(--gold); }
+
+/* Cart pill / badge */
+.cart-pill{ display:inline-flex; align-items:center; gap:6px; background:#f4f4f4; border-radius:999px; padding:8px 12px; }
+.badge,
+#cart-count{
+  background:#ffe9a8; color:#000; border-radius:999px; font-weight:800;
+  min-width:24px; height:24px; display:grid; place-content:center; padding:0 7px; font-size:12px;
+}
+
+/* Hero */
+.hero{ padding:34px 0 16px; }
+.hero .box{
+  background:var(--card); border-radius:14px; padding:26px;
+  display:grid; gap:20px; place-items:center;
+  box-shadow:0 10px 22px rgba(0,0,0,.06);
+}
+.hero img.logo{
+  width:180px; height:auto; display:block; margin:0 auto;
+}
+@media (min-width:480px){ .hero img.logo{ width:200px; } }
+@media (min-width:768px){ .hero img.logo{ width:220px; } }
+
+h1,h2,h3{ line-height:1.2; margin:10px 0; }
+.lead{ color:var(--muted); }
+
+/* Butoane */
+.btn{
+  background: var(--brand);
+  color:#fff; border:none; border-radius:12px;
+  padding:12px 18px; font-weight:800; cursor:pointer;
+}
+.btn:hover{ background: var(--brand-2); }
+.btn.alt{ background:#134d3a; }
+
+/* Grilă produse */
+.grid{ display:grid; grid-template-columns: repeat(12,1fr); gap:18px; }
+.card{
+  grid-column: span 12;
+  background:#fff; border-radius:16px;
+  box-shadow:0 10px 22px rgba(0,0,0,.06); overflow:hidden;
+}
+.card img{ width:100%; height:280px; object-fit:cover; display:block; border-radius:10px; }
+.card-body{ padding:14px 16px; }
+.price{ float:right; color:#222; font-weight:800; }
+.add-to-cart{ margin-top:8px; width:100%; }
+
+@media (min-width:700px){ .card{ grid-column: span 6; } }
+@media (min-width:1024px){ .card{ grid-column: span 4; } }
+
+/* Pagina produse – versiune compactă alternativă */
+.produse-container{ display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:18px; }
+.produs img{ width:100%; height:180px; object-fit:cover; border-radius:10px; }
+.produs h3{ display:flex; align-items:center; justify-content:space-between; margin:10px 0; }
+.produs .pret{ font-weight:700; }
+
+/* Coș – card variantă și tabel */
+.box.cart{ background:#fff; border-radius:12px; padding:18px; }
+.cart-card{ display:flex; gap:16px; padding:12px 8px; border-bottom:1px solid #eee; }
+.cart-left img{ width:82px; height:82px; object-fit:cover; border-radius:10px; }
+.cart-mid{ flex:1; display:flex; flex-direction:column; gap:6px; }
+.cart-mid .name{ font-weight:700; }
+
+.qty{ display:flex; align-items:center; gap:8px; }
+.qty input{
+  width:64px; height:32px; border:1px solid #ddd; border-radius:8px; padding:0 8px; text-align:center;
+  -moz-appearance:textfield;
+}
+.qty input::-webkit-outer-spin-button,
+.qty input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+.qty button{ min-width:32px; height:32px; border-radius:8px; border:1px solid #ddd; background:#f8f8f8; cursor:pointer; font-size:18px; line-height:1; }
+
+.danger{ background:#ffe9e9; border:1px solid #ffc9c9; color:#b00; padding:.5rem .8rem; border-radius:8px; }
+
+.totals{ margin-top:16px; display:grid; gap:8px; }
+.totals .row{ display:flex; justify-content:space-between; }
+.totals .grand{ border-top:2px solid #222; padding-top:10px; font-weight:800; }
+
+/* Tabel coș */
+table.cart{ width:100%; border-collapse:collapse; margin:16px 0; table-layout:auto; }
+table.cart th, table.cart td{ border-bottom:1px solid var(--border); text-align:left; padding:10px; }
+table.cart th{ font-size:14px; color:var(--muted); font-weight:700; }
+
+/* --- Mobil pentru coș (patch-urile tale) --- */
+@media (max-width:640px){
+  table.cart{ table-layout:fixed; }
+  table.cart th, table.cart td{ padding:8px; }
+
+  /* Lățimi pe mobil */
+  table.cart th:nth-child(1), table.cart td:nth-child(1){ width:58%; } /* Produs */
+  table.cart th:nth-child(2), table.cart td:nth-child(2){ width:20%; text-align:right; } /* Preț */
+  table.cart th:nth-child(3), table.cart td:nth-child(3){ width:22%; text-align:center; } /* Cant. */
+
+  /* Col. 4 (Total) – ascuns vizual, păstrat pentru calcule JS */
+  table.cart th:nth-child(4), table.cart td:nth-child(4){
+    font-size:0 !important; line-height:0 !important; white-space:nowrap;
+  }
+
+  /* Stepper mai îngust */
+  .qty{ max-width:116px; }
+  .qty button{ width:32px; height:32px; font-size:18px; }
+  .qty input{ width:44px; height:32px; font-size:15px; }
+}
+
+/* Formulare */
+.input{ width:100%; padding:.6rem .8rem; border:1px solid #ddd; border-radius:10px; }
+.radio-row{ display:flex; gap:18px; }
+.actions{ display:flex; gap:10px; margin-top:12px; }
+.btn.gray{ background:#e7e7e7; color:#333; }
+
+/* Footer */
+.footer{ color:#666; text-align:center; margin-top:30px; padding:24px; }
+.socials{ display:flex; gap:12px; justify-content:center; margin:10px 0; }
+.socials img{ width:24px; height:24px; opacity:.8; }
+
+/* Linkuri legale din footer (dacă există) */
+footer .legal-nav a{ color:inherit; }
+footer .legal-nav a:hover{ color:#d12b4a; }
