@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MSA Handmade - Acasă</title>
-  <meta name="description" content="Lumânări și decorațiuni artizanale create manual, perfecte pentru tine sau pentru un cadou cu suflet." />
+  <meta name="description" content="Lumânări și decorațiuni artizanale create manual, perfecte pentru tine sau pentru un cadou cu suflet.">
 
   <link rel="stylesheet" href="styles.css" />
   <script defer src="cart.js"></script>
@@ -20,6 +20,20 @@
       position: relative;
     }
 
+    /* Banner de sus */
+    .top-banner {
+      background: #0b362c;
+      color: #fff;
+      text-align: center;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 10px;
+    }
+
+    .top-banner span {
+      color: #ffc857;
+    }
+
     header {
       background: #fff;
       position: sticky;
@@ -33,7 +47,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 20px;
+      gap: 22px;
       flex-wrap: wrap;
     }
 
@@ -68,12 +82,14 @@
       width: 180px;
       height: auto;
       margin-bottom: 25px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
     }
 
     .hero h1 {
       font-size: 2.1rem;
       color: #102a43;
       margin: 10px 0;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.8);
     }
 
     .hero p {
@@ -82,6 +98,7 @@
       max-width: 600px;
       margin: 0 auto 30px;
       line-height: 1.6;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.5);
     }
 
     .btn {
@@ -119,7 +136,7 @@
       color: #d12b4a;
     }
 
-    /* efect ușor de zăpadă */
+    /* efect de zăpadă subtil */
     .snow {
       position: fixed;
       top: 0;
@@ -127,10 +144,10 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      background-image: url('https://i.ibb.co/3W5qv9P/snowflake.png');
-      background-size: contain;
+      background-image: radial-gradient(white 1px, transparent 1px);
+      background-size: 40px 40px;
       animation: snow 25s linear infinite;
-      opacity: 0.35;
+      opacity: 0.3;
     }
 
     @keyframes snow {
@@ -155,6 +172,10 @@
 <body>
   <div class="snow"></div>
 
+  <div class="top-banner">
+    ❄️ Reduceri de iarnă până la <span>20%</span> + Livrare gratuită de la <span>300 RON</span> 🎁
+  </div>
+
   <header>
     <nav>
       <a href="index.html"><strong>Acasă</strong></a>
@@ -166,7 +187,7 @@
   </header>
 
   <main class="hero">
-    <img src="logo.png" alt="MSA Handmade Logo" class="logo">
+    <img src="logo.png" alt="MSA Handmade Logo" class="logo" onerror="this.style.display='none'">
     <h1>Bun venit la MSA Handmade</h1>
     <p>Lumânări și decorațiuni artizanale create manual — perfecte pentru tine sau pentru un cadou cu suflet.</p>
     <a href="produse.html" class="btn">Vezi produsele</a>
