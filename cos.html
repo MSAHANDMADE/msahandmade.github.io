@@ -1,95 +1,128 @@
-<!-- COȘUL TĂU -->
-<section class="container" style="max-width:1000px;margin:24px auto;padding:0 16px">
-  <h1 style="font-size:40px;line-height:1.1;margin:8px 0 16px">Coșul tău</h1>
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Coș — MSA Handmade</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#fafafa;color:#0f172a}
+    .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
+    header.nav{display:flex;gap:18px;align-items:center;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid #e2e8f0;padding:12px 16px}
+    header.nav a{font-weight:600;text-decoration:none;color:#0f172a}
+    .pill{margin-left:auto;background:#f1f5f9;border-radius:999px;width:36px;height:36px;display:grid;place-items:center;font-weight:800}
+    h1{font-size:36px;margin:16px 0}
+    .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 2px 10px rgba(2,6,23,.06)}
+    .inner{padding:16px}
+    /* tabel scrollabil pe mobil */
+    .tbl-wrap{overflow-x:auto}
+    table{width:100%;min-width:640px;border-collapse:collapse}
+    th,td{padding:12px;border-bottom:1px solid #e2e8f0;vertical-align:middle}
+    th{background:#f8fafc;text-align:left}
+    .qty{display:inline-flex;align-items:center;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
+    .qty button{width:34px;height:34px;border:0;background:#f8fafc;font-size:18px}
+    .qty input{width:52px;height:34px;border:0;text-align:center}
+    .rm{width:36px;height:36px;border:0;border-radius:8px;background:#fee2e2;color:#991b1b}
+    .grid{display:grid;grid-template-columns:1fr 340px;gap:18px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .row{display:flex;justify-content:space-between;margin:6px 0}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid #0f172a;background:#0f172a;color:#fff;font-weight:700;cursor:pointer}
+    .btn.ghost{background:#fff;color:#0f172a;border-color:#e2e8f0}
+    .muted{color:#64748b}
+  </style>
+</head>
+<body>
+<header class="nav">
+  <a href="index.html">Acasă</a>
+  <a href="produse.html">Produse</a>
+  <a href="despre.html">Despre</a>
+  <a href="contact.html">Contact</a>
+  <div class="pill" id="cart-count">0</div>
+</header>
 
-  <div style="background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(2,6,23,.06);overflow:hidden">
-    <table style="width:100%;border-collapse:collapse">
-      <thead>
-        <tr style="background:#f8fafc">
-          <th style="text-align:left;padding:14px 16px;border-bottom:1px solid #e2e8f0">Produs</th>
-          <th style="text-align:left;padding:14px 16px;border-bottom:1px solid #e2e8f0">Cant.</th>
-          <th style="text-align:right;padding:14px 16px;border-bottom:1px solid #e2e8f0">Total</th>
-          <th style="padding:14px 16px;border-bottom:1px solid #e2e8f0"></th>
-        </tr>
-      </thead>
-      <tbody id="cart-body">
-        <tr><td colspan="4" style="padding:18px;color:#64748b">Se încarcă…</td></tr>
-      </tbody>
-    </table>
+<div class="wrap">
+  <h1>Coșul tău</h1>
+
+  <div class="grid">
+    <!-- STÂNGA: tabel -->
+    <div class="card">
+      <div class="inner tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Produs</th>
+              <th style="width:170px">Cant.</th>
+              <th style="text-align:right">Total</th>
+              <th style="width:56px"></th>
+            </tr>
+          </thead>
+          <tbody id="cart-body">
+            <tr><td colspan="4" class="muted">Se încarcă…</td></tr>
+          </tbody>
+        </table>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button id="clear-cart" class="btn ghost">Golește coșul</button>
+          <a href="produse.html" class="btn ghost">Continuă cumpărăturile</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DREAPTA: total + formular -->
+    <div class="card">
+      <div class="inner">
+        <h2 style="margin:0 0 8px">Totaluri</h2>
+        <div class="row"><span>Subtotal</span><strong id="subval">0.00 RON</strong></div>
+        <div class="row"><span>Reducere</span><strong id="discval">− 0.00 RON</strong></div>
+        <div class="row"><span>Livrare</span><strong id="shipval">0.00 RON</strong></div>
+        <div class="row" style="font-size:18px;font-weight:800"><span>Total</span><strong id="totval">0.00 RON</strong></div>
+        <p class="muted">Reduceri: ≥200 RON −10%, ≥300 RON −15%, ≥400 RON −20%. Livrare gratuită la 300 RON.</p>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid #e2e8f0" />
+
+        <h3 style="margin:0 0 10px">Detalii pentru livrare</h3>
+        <div style="display:flex;gap:18px;margin-bottom:10px">
+          <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
+          <label><input type="radio" name="tip" value="pj"> Persoană juridică</label>
+        </div>
+
+        <form id="order-form">
+          <!-- PF -->
+          <div class="pf-only" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <input name="nume" placeholder="Nume" required>
+            <input name="prenume" placeholder="Prenume" required>
+          </div>
+          <!-- PJ -->
+          <div class="pj-only" style="display:none;grid-template-columns:1fr 1fr;gap:10px">
+            <input name="firma" placeholder="Denumire firmă">
+            <input name="cui" placeholder="CUI">
+            <input name="reg" placeholder="Nr. Reg. Comerț" style="grid-column:1/3">
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+            <input name="email" type="email" placeholder="Email" required>
+            <input name="telefon" placeholder="Telefon" required>
+            <input name="judet" placeholder="Județ" required>
+            <input name="oras" placeholder="Oraș" required>
+            <input name="adresa" placeholder="Adresă completă" required style="grid-column:1/3">
+            <input name="codpostal" placeholder="Cod poștal">
+            <textarea name="mentiuni" rows="2" placeholder="Mențiuni (opțional)" style="grid-column:1/3"></textarea>
+          </div>
+
+          <button type="submit" class="btn" style="width:100%;margin-top:12px">Plasează comanda</button>
+        </form>
+      </div>
+    </div>
   </div>
 
-  <!-- butoane coș -->
-  <div style="display:flex;gap:12px;margin:12px 0 24px">
-    <button id="clear-cart" style="padding:10px 14px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;cursor:pointer">Golește coșul</button>
-    <a href="produse.html" style="padding:10px 14px;border-radius:10px;background:#0f172a;color:#fff;text-decoration:none">Continuă cumpărăturile</a>
-  </div>
+  <p class="muted" style="text-align:center;margin:22px 0 6px">© <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</p>
+</div>
 
-  <!-- totaluri -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
-    <div></div>
-    <div style="background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(2,6,23,.06);padding:16px">
-      <h2 style="font-size:22px;margin:0 0 6px">Totaluri</h2>
-      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #e2e8f0">
-        <span>Subtotal</span><strong id="subval">0.00 RON</strong>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #e2e8f0">
-        <span>Reducere</span><strong id="discval">− 0.00 RON</strong>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #e2e8f0">
-        <span>Livrare</span><strong id="shipval">0.00 RON</strong>
-      </div>
-      <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:20px">
-        <span>Total</span><strong id="totval">0.00 RON</strong>
-      </div>
-      <p style="margin:8px 0 0;color:#64748b;font-size:12px">
-        Reduceri automate: ≥200 RON −10%, ≥300 RON −15%, ≥400 RON −20%. Livrare gratuită la 300 RON.
-      </p>
-    </div>
-  </div>
-
-  <!-- formular livrare -->
-  <form id="checkout-form" style="margin:24px 0">
-    <h2 style="font-size:22px;margin:0 0 10px">Detalii pentru livrare</h2>
-
-    <div style="display:flex;gap:18px;margin:8px 0 18px">
-      <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
-      <label><input type="radio" name="tip" value="pj"> Persoană juridică</label>
-    </div>
-
-    <!-- PF -->
-    <div id="pf-fields" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <input name="nume" placeholder="Nume" required>
-      <input name="prenume" placeholder="Prenume" required>
-    </div>
-
-    <!-- PJ -->
-    <div id="pj-fields" style="display:none;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
-      <input name="firma" placeholder="Denumire firmă">
-      <input name="cui" placeholder="CUI">
-      <input name="regcom" placeholder="Nr. Registru Comerț">
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
-      <input name="email" type="email" placeholder="Email" required>
-      <input name="telefon" placeholder="Telefon" required>
-      <input name="judet" placeholder="Județ" required>
-      <input name="oras" placeholder="Oraș" required>
-      <input name="adresa" placeholder="Adresă completă" required style="grid-column:1/3">
-      <input name="codpostal" placeholder="Cod poștal" style="grid-column:1/2">
-      <input name="mentiuni" placeholder="Mențiuni pentru curier (opțional)" style="grid-column:1/3">
-    </div>
-
-    <button id="place-order" type="submit" style="margin-top:16px;padding:12px 18px;background:#0f172a;color:#fff;border:none;border-radius:10px;cursor:pointer">Plasează comanda</button>
-  </form>
-</section>
-
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<!-- Coș -->
+<script src="cart.js"></script>
 <script>
-// comută PF/PJ (doar UI)
-document.addEventListener('change', (e)=>{
-  if (e.target.name==='tip'){
-    const pj = e.target.value==='pj';
-    document.getElementById('pj-fields').style.display = pj?'grid':'none';
-    document.getElementById('pf-fields').style.display = pj?'none':'grid';
-  }
-});
+  document.getElementById('year').textContent = new Date().getFullYear();
 </script>
+</body>
+</html>
