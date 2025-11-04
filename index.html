@@ -139,40 +139,31 @@
   </footer>
 
   <!-- Cart + badge sync (folosește MSACart dacă există, altfel doar citește localStorage) -->
+  
   <script>
-    // dacă ai script separat pentru coș, îl poți lăsa și pe acela:
-    // <script src="script.js"></script>  (deja există în repo)
+(function(){
+  function updateBadge(){
+    try{
+      const raw = localStorage.getItem('MSA_CART');
+      const items = raw ? JSON.parse(raw) : [];
+      const count = Array.isArray(items)
+        ? items.reduce((s,it)=> s + (Number(it.qty)||1), 0)
+        : 0;
+      const el = document.getElementById('cart-count');
+      if (el) el.textContent = count;
+    }catch(e){}
+  }
 
-    function readCartCount() {
-      try {
-        // 1) dacă există MSACart:
-        if (window.MSACart && typeof MSACart.updateCartCountBadge === 'function') {
-          MSACart.updateCartCountBadge();
-          return;
-        }
-        // 2) fallback: numără din localStorage
-        const raw = localStorage.getItem('MSA_CART');
-        const items = raw ? JSON.parse(raw) : [];
-        const count = Array.isArray(items) ? items.reduce((s,it)=>s+(Number(it.qty)||1),0) : 0;
-        const el = document.getElementById('cart-count');
-        if (el) el.textContent = count;
-      } catch(_) {}
-    }
+  document.addEventListener('DOMContentLoaded', function(){
+    const y = document.getElementById('year');
+    if (y) y.textContent = new Date().getFullYear();
+    updateBadge();
+  });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // an set
-      const y = document.getElementById('year');
-      if (y) y.textContent = new Date().getFullYear();
-
-      // badge coș
-      readCartCount();
-
-      // ascultă schimbări din alte tab-uri/pagini
-      window.addEventListener('storage', (e)=>{
-        if (e.key === 'MSA_CART') readCartCount();
-      });
-    });
-  </script>
-  <script src="script.js"></script>
+  window.addEventListener('storage', function(e){
+    if (e.key === 'MSA_CART') updateBadge();
+  });
+})();
+</script>
 </body>
 </html>
