@@ -226,3 +226,19 @@ header .wrap .left a:hover {
 /* === HOTFIX LOGO (homepage) === */
 .hero img.logo{ width:160px !important; height:auto !important; display:block; margin:0 auto; }
 @media (min-width:600px){ .hero img.logo{ width:200px !important; } }
+/* === HOTFIX LOGO INDEX — micșorează orice imagine din secțiunea .hero === */
+.hero img,
+.hero .box > img {
+  width: 160px !important;
+  max-width: 160px !important;
+  height: auto !important;
+  display: block;
+  margin: 0 auto;
+}
+@media (min-width: 600px){
+  .hero img,
+  .hero .box > img {
+    width: 200px !important;
+    max-width: 200px !important;
+  }
+}
