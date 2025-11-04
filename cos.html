@@ -6,7 +6,6 @@
   <title>Coș — MSA Handmade</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* ------- bază ------- */
     :root{--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--bg:#fafafa;--card:#fff;--brand:#0f172a}
     *{box-sizing:border-box}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);margin:0}
@@ -20,24 +19,22 @@
     h1{font-size:36px;margin:16px 0}
     h2{margin:0 0 8px}
 
-    /* ------- nav ------- */
     header.nav{display:flex;gap:18px;align-items:center;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line);padding:12px 16px}
     header.nav a{font-weight:600}
     .pill{margin-left:auto;background:#f1f5f9;border-radius:999px;width:36px;height:36px;display:grid;place-items:center;font-weight:800}
 
-    /* ------- grid ------- */
     .grid{display:grid;grid-template-columns:1fr 340px;gap:18px}
     @media (max-width:900px){.grid{grid-template-columns:1fr}}
 
-    /* ------- tabel coș ------- */
+    /* tabel coș – compact și clar pe mobil */
     .tbl-wrap{overflow-x:auto}
-    table{width:100%;border-collapse:collapse}
+    table{width:100%;border-collapse:collapse;table-layout:auto}
     th,td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
-    th{background:#f8fafc;text-align:left}
-    /* Fă tabelul compact, vizibil pe mobil fără scroll mare */
-    th:nth-child(2), td:nth-child(2){width:1%;white-space:nowrap}
-    th:nth-child(3), td:nth-child(3){width:1%;white-space:nowrap;text-align:right}
-    td:nth-child(4){width:56px;text-align:right}
+    th{background:#f8fafc;text-align:left;white-space:nowrap}
+    /* col: produs | cant | total | remove */
+    th:nth-child(2),td:nth-child(2){width:1%;white-space:nowrap}
+    th:nth-child(3),td:nth-child(3){width:1%;white-space:nowrap;text-align:right}
+    td:nth-child(4){width:48px;text-align:right}
 
     .item-cell{display:flex;gap:12px;align-items:center;min-width:0}
     .item-cell img{width:64px;height:64px;object-fit:cover;border-radius:8px;flex:0 0 auto}
@@ -48,23 +45,21 @@
     .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden}
     .qty button{width:34px;height:34px;border:0;background:#f8fafc;font-size:18px}
     .qty input{width:48px;height:34px;border:0;text-align:center}
+    @media (max-width:400px){ .qty input{width:40px} }
 
     .rm{width:36px;height:36px;border:0;border-radius:8px;background:#fee2e2;color:#991b1b}
 
-    /* ------- totaluri ------- */
     .row{display:flex;justify-content:space-between;margin:6px 0}
     .row strong{font-weight:800}
 
-    /* ------- formular ------- */
+    /* formular */
     form input, form textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}
     form textarea{resize:vertical}
     .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .full{grid-column:1/-1}
     @media (max-width:700px){ .form-grid{grid-template-columns:1fr} }
     .switch{display:flex;gap:18px;margin:8px 0 12px}
-    .pj-only{display:none} /* ascunsă by default; JS o arată la PJ */
-
-    /* pe view-uri foarte înguste, micșorez puțin inputul de cantitate */
-    @media (max-width:400px){ .qty input{width:40px} }
+    .pj-only{display:none}
   </style>
 </head>
 <body>
@@ -129,11 +124,11 @@
             <input name="prenume" placeholder="Prenume" required>
           </div>
 
-          <!-- PJ -->
+          <!-- PJ (se arată doar când e selectat PJ) -->
           <div class="pj-only form-grid">
-            <input name="firma" placeholder="Denumire firmă">
+            <input name="firma" placeholder="Denumire firmă" class="full">
             <input name="cui" placeholder="CUI">
-            <input name="reg" placeholder="Nr. Reg. Comerț" style="grid-column:1/3">
+            <input name="reg" placeholder="Nr. Reg. Comerț" class="full">
           </div>
 
           <div class="form-grid" style="margin-top:10px">
@@ -141,9 +136,9 @@
             <input name="telefon" placeholder="Telefon" required>
             <input name="judet" placeholder="Județ" required>
             <input name="oras" placeholder="Oraș" required>
-            <input name="adresa" placeholder="Adresă completă" required style="grid-column:1/3">
+            <input name="adresa" placeholder="Adresă completă" required class="full">
             <input name="codpostal" placeholder="Cod poștal">
-            <textarea name="mentiuni" rows="2" placeholder="Mențiuni (opțional)" style="grid-column:1/3"></textarea>
+            <textarea name="mentiuni" rows="2" placeholder="Mențiuni (opțional)" class="full"></textarea>
           </div>
 
           <button type="submit" class="btn" style="width:100%;margin-top:12px">Plasează comanda</button>
@@ -162,16 +157,20 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Fac vizibil/ascuns PF/PJ (cart.js pornește și el, dar pun și aici ca să fii sigură)
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const sync = ()=>{
-      const pj = document.querySelector('input[name="tip"]:checked')?.value==='pj';
-      document.querySelectorAll('.pj-only').forEach(el=> el.style.display = pj ? '' : 'none');
-      document.querySelectorAll('.pf-only').forEach(el=> el.style.display = pj ? 'none' : '');
-    };
-    document.querySelectorAll('input[name="tip"]').forEach(r=> r.addEventListener('change', sync));
-    sync();
-  });
+  // Comutare PF/PJ: ascunde/arată blocurile și setează required corect
+  function syncPFJ(){
+    const isPJ = document.querySelector('input[name="tip"]:checked')?.value === 'pj';
+    document.querySelectorAll('.pj-only').forEach(el => el.style.display = isPJ ? '' : 'none');
+    document.querySelectorAll('.pf-only').forEach(el => el.style.display = isPJ ? 'none' : '');
+
+    const pjReq = ['firma','cui','reg'];
+    const pfReq = ['nume','prenume'];
+
+    pjReq.forEach(n => { const el = document.querySelector(`[name="${n}"]`); if (el) el.required = isPJ; });
+    pfReq.forEach(n => { const el = document.querySelector(`[name="${n}"]`); if (el) el.required = !isPJ; });
+  }
+  document.querySelectorAll('input[name="tip"]').forEach(r => r.addEventListener('change', syncPFJ));
+  syncPFJ();
 </script>
 </body>
 </html>
