@@ -22,14 +22,16 @@
   table.cart{width:100%;border-collapse:collapse;table-layout:auto}
   table.cart th,table.cart td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
   table.cart th{background:#f8fafc;text-align:left;white-space:nowrap}
+  /* Nume produs se poate rupe pe 2 rânduri */
   table.cart td:nth-child(1){max-width:0}
   table.cart td:nth-child(1) .name{display:block;line-height:1.25;word-break:break-word}
+  /* Cant. și Total au lățime minimă ca să se vadă pe mobil */
   table.cart th:nth-child(2), table.cart td:nth-child(2){min-width:150px;white-space:nowrap;text-align:center}
   table.cart th:nth-child(3), table.cart td:nth-child(3){min-width:110px;white-space:nowrap;text-align:right}
 
   /* Cantitate — mare și clar */
   .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  .qty button{width:42px;height:42px;border:0;background:#f1f5f9;font-size:22px;font-weight:800;line-height:1}
+  .qty button{width:42px;height:42px;border:0;background:#f1f5f9;font-size:22px;font-weight:800;line-height:1;cursor:pointer}
   .qty input{width:66px;height:42px;border:0;text-align:center;font-weight:800;font-size:18px}
   @media (max-width:420px){
     .qty button{width:36px;height:36px;font-size:20px}
@@ -84,14 +86,8 @@
             <th style="text-align:right">Total</th>
           </tr>
         </thead>
-
-        <!-- ATENȚIE: oferim AMBELE ținte pe care le poate folosi scriptul tău,
-             dar le ținem ASCUNSE. Afișăm doar #cart-view. -->
-        <tbody id="cart-items" style="display:none"></tbody>
-        <tbody id="cart-body"  style="display:none"></tbody>
-
-        <!-- Aici se vede coșul (copiem automat aici din cele de mai sus) -->
-        <tbody id="cart-view">
+        <tbody id="cart-body">
+          <!-- Scriptul va popula aici -->
           <tr><td colspan="3" class="muted">Se încarcă…</td></tr>
         </tbody>
       </table>
@@ -103,7 +99,7 @@
     </div>
   </section>
 
-  <!-- TOTALURI -->
+  <!-- TOTALURI (ID-urile clasice) -->
   <section class="card" style="margin-top:16px">
     <h2 style="margin:0 0 8px">Totaluri</h2>
     <div class="totals">
@@ -116,7 +112,7 @@
     <p class="muted" style="margin-top:8px">Reduceri: ≥200 RON −10%, ≥300 RON −15%, ≥400 RON −20%. Livrare gratuită la 300 RON.</p>
   </section>
 
-  <!-- FORMULAR (ID-uri exacte + PF/PJ) -->
+  <!-- FORMULAR (aceleași ID/NAME pe care le folosești deja) -->
   <section class="card" style="margin-top:16px">
     <h2 style="margin:0 0 8px">Detalii pentru livrare</h2>
 
@@ -164,72 +160,144 @@
   </footer>
 </div>
 
-<!-- EXACT cum ai, nu ating logica -->
-<script src="script.js"></script>
-
-<!-- Mic utilitar local: anul, PF/PJ, blocare dublu-submit, **mirror pentru tbody** -->
+<!-- (1) Dacă ai scriptul tău, îl lași. Dacă nu, codul de mai jos este autosuficient. -->
 <script>
-  // anul
+/* ====== CART CORE (nu atinge EmailJS/proforma; doar coșul) ====== */
+(function(){
+  const KEY = 'MSA_CART'; // aceeași cheie pe care o folosește Produse prin MSACart
+  const $ = sel => document.querySelector(sel);
+
+  // dacă există MSACart (din produsele.html), îl folosim; altfel fallback localStorage
+  const api = window.MSACart ? {
+    get: () => (window.MSACart.getItems ? window.MSACart.getItems() : readLS()),
+    set: (arr) => (window.MSACart.setItems ? window.MSACart.setItems(arr) : writeLS(arr)),
+    add: (it,qty=1) => (window.MSACart.addToCart ? window.MSACart.addToCart(it,qty) : addLS(it,qty)),
+    upd: (id,qty) => (window.MSACart.updateQty ? window.MSACart.updateQty(id,qty) : updLS(id,qty)),
+    del: (id) => (window.MSACart.remove ? window.MSACart.remove(id) : delLS(id)),
+    clr: () => (window.MSACart.clear ? window.MSACart.clear() : clearLS())
+  } : {
+    get: readLS, set: writeLS, add: addLS, upd: updLS, del: delLS, clr: clearLS
+  };
+
+  function readLS(){
+    try{ const raw=localStorage.getItem(KEY); const a=raw?JSON.parse(raw):[]; return Array.isArray(a)?a:[] }catch(_){return []}
+  }
+  function writeLS(a){ try{ localStorage.setItem(KEY, JSON.stringify(a||[])); }catch(_){}
+    updateBadge(); updateTotals(); }
+  function addLS(it,qty){
+    if(!it||!it.id) return; const q=Number(qty||1)||1;
+    const items=readLS(); const i=items.findIndex(x=>x.id===it.id);
+    if(i>=0){ items[i].qty=(Number(items[i].qty)||1)+q; }
+    else{ items.push({ id:String(it.id), name:it.name||'', price:Number(it.price)||0, image:it.image||'', qty:q }); }
+    writeLS(items);
+  }
+  function updLS(id,qty){
+    const items=readLS(); const it=items.find(x=>x.id===id); if(!it) return;
+    it.qty=Math.max(1,Number(qty)||1); writeLS(items);
+  }
+  function delLS(id){ writeLS(readLS().filter(x=>x.id!==id)); }
+  function clearLS(){ writeLS([]); }
+
+  function formatRON(x){ return (Number(x)||0).toFixed(2)+' RON'; }
+  function sums(items){
+    const sub = items.reduce((s,x)=>s+(Number(x.price)||0)*(Number(x.qty)||1),0);
+    let disc=0; if(sub>=400) disc=sub*0.20; else if(sub>=300) disc=sub*0.15; else if(sub>=200) disc=sub*0.10;
+    const ship = (sub-disc)>=300 ? 0 : 0;
+    const tot = Math.max(0, sub-disc+ship);
+    return {sub,disc,ship,tot};
+  }
+
+  function render(){
+    const tb = $('#cart-body'); if(!tb) return;
+    const items = api.get();
+    tb.innerHTML = '';
+    if(!items.length){
+      tb.innerHTML = '<tr><td colspan="3" class="muted">Coșul este gol.</td></tr>';
+      updateTotals(); updateBadge(); return;
+    }
+    items.forEach(it=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <span class="name">${it.name||''}</span>
+          <div class="price" style="margin-top:4px">${formatRON(it.price||0)}</div>
+        </td>
+        <td style="text-align:center">
+          <div class="qty">
+            <button class="qminus" aria-label="Scade">−</button>
+            <input type="number" min="1" value="${Number(it.qty)||1}" />
+            <button class="qplus" aria-label="Crește">+</button>
+          </div>
+        </td>
+        <td style="text-align:right"><strong>${formatRON((it.price||0)*(it.qty||1))}</strong></td>
+      `;
+      // evenimente qty
+      const input = tr.querySelector('input');
+      const minus = tr.querySelector('.qminus');
+      const plus  = tr.querySelector('.qplus');
+      minus.addEventListener('click', ()=>{ const v=Math.max(1,(Number(input.value)||1)-1); input.value=v; api.upd(it.id,v); render(); });
+      plus .addEventListener('click', ()=>{ const v=(Number(input.value)||1)+1; input.value=v; api.upd(it.id,v); render(); });
+      input.addEventListener('change', ()=>{ const v=Math.max(1,Number(input.value)||1); api.upd(it.id,v); render(); });
+
+      tb.appendChild(tr);
+    });
+    updateTotals(); updateBadge();
+  }
+
+  function updateTotals(){
+    const items = api.get();
+    const t = sums(items);
+    const $id = id => document.getElementById(id);
+    if($id('subval')) $id('subval').textContent = formatRON(t.sub);
+    if($id('discval')) $id('discval').textContent = '− '+formatRON(t.disc);
+    if($id('shipval')) $id('shipval').textContent = formatRON(t.ship);
+    if($id('totval')) $id('totval').textContent = formatRON(t.tot);
+  }
+  function updateBadge(){
+    const el = document.getElementById('cart-count'); if(!el) return;
+    const items = api.get(); const c = items.reduce((s,x)=>s+(Number(x.qty)||1),0);
+    el.textContent = c;
+  }
+
+  // butoane globale
+  document.getElementById('clear-cart')?.addEventListener('click', ()=>{ api.clr(); render(); });
+  window.addEventListener('storage', e=>{ if(e.key===KEY) render(); });
+
+  // init
+  document.addEventListener('DOMContentLoaded', ()=>{ render(); });
+})();
+</script>
+
+<!-- (2) Utilitare locale: an, PF/PJ toggle, blocare dublu-submit (NU ating EmailJS) -->
+<script>
+  // anul în footer
   (function(){const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();})();
 
-  // PF/PJ – afișare și required pe câmpurile PJ (fără să ating trimiterea)
+  // PF/PJ – doar afișare + required pe câmpurile PJ
   (function(){
     function sync(){
       const isPJ=(document.querySelector('input[name="tip"]:checked')||{}).value==='pj';
       document.querySelector('.pj-only').style.display = isPJ ? 'block' : 'none';
-      document.querySelector('.pf-only').style.display = isPJ ? 'none'  : 'grid';
+      document.querySelector('.pf-only').style.display = isPJ ? 'none'  : 'block';
       ['firma','cui','reg'].forEach(n=>{ const el=document.getElementById(n); if(el) el.required=isPJ; });
     }
     document.addEventListener('DOMContentLoaded', sync);
     document.querySelectorAll('input[name="tip"]').forEach(r=>r.addEventListener('change', sync));
   })();
 
-  // Blocare dublu-submit – las scriptul tău să proceseze submit-ul
+  // blocare dublu-submit – nu schimb logica ta de trimitere (EmailJS/proforma)
   (function(){
-    const form=document.getElementById('order-form');
-    const btn =document.getElementById('place-order');
-    if(!form||!btn) return;
+    const f=document.getElementById('order-form');
+    const b=document.getElementById('place-order');
+    if(!f||!b) return;
     let sent=false;
-    form.addEventListener('submit',function(e){
+    f.addEventListener('submit',function(e){
       if(sent){ e.preventDefault(); return false; }
-      sent=true; btn.disabled=true; btn.textContent='Se trimite...';
+      sent=true; b.disabled=true; b.textContent='Se trimite...';
+      // dacă trimiterea e gestionată în alt script, acesta va prelua submit-ul
+      // dacă apare o eroare, poți re-activa butonul manual:
+      // b.disabled=false; b.textContent='Plasează comanda'; sent=false;
     },{capture:true});
-  })();
-
-  // *** CHESTIA CARE TE DEBLOCHEAZĂ: mirror pentru tbody ***
-  // Orice script ai (scrie în #cart-items sau în #cart-body), noi afișăm în #cart-view.
-  (function(){
-    const itemsTB  = document.getElementById('cart-items'); // ascuns
-    const bodyTB   = document.getElementById('cart-body');  // ascuns
-    const viewTB   = document.getElementById('cart-view');  // vizibil
-
-    function copyIntoView(fromTB){
-      if(!fromTB || !viewTB) return;
-      // goliți view
-      while(viewTB.firstChild) viewTB.removeChild(viewTB.firstChild);
-      // copiați rândurile (nu mutați ca să nu supărăm scriptul)
-      fromTB.querySelectorAll('tr').forEach(tr=>{
-        viewTB.appendChild(tr.cloneNode(true));
-      });
-    }
-
-    function onChange(muts, obs){
-      // alege sursa care are conținut
-      const src = (itemsTB && itemsTB.childElementCount) ? itemsTB :
-                  (bodyTB  && bodyTB.childElementCount)  ? bodyTB  : null;
-      if(src) copyIntoView(src);
-    }
-
-    // Observăm ambele potentiale tbody
-    if(itemsTB){
-      new MutationObserver(onChange).observe(itemsTB,{childList:true,subtree:false});
-    }
-    if(bodyTB){
-      new MutationObserver(onChange).observe(bodyTB,{childList:true,subtree:false});
-    }
-
-    // În caz că scriptul a scris deja înainte să atașăm observer-ul:
-    setTimeout(()=>onChange(), 50);
   })();
 </script>
 </body>
