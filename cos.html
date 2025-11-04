@@ -8,11 +8,11 @@
   <link rel="stylesheet" href="styles.css" />
   <style>
     main.wrap{margin-top:16px}
-    .footer{ text-align:center; padding:24px 10px; color:#666 }
     form .row{display:flex;gap:12px}
     @media (max-width:640px){ form .row{flex-direction:column} }
     .btn-primary{background:#0a2230;color:#fff;padding:12px 16px;border:0;border-radius:10px;cursor:pointer;font-weight:800}
     .btn-primary:hover{background:#0e344c}
+    .hidden{display:none}
   </style>
 </head>
 <body>
@@ -38,7 +38,7 @@
         <div style="flex:1">
           <label>Tip client</label>
           <select id="tip">
-            <option value="Persoană fizică">Persoană fizică</option>
+            <option value="Persoană fizică" selected>Persoană fizică</option>
             <option value="Persoană juridică">Persoană juridică</option>
           </select>
         </div>
@@ -49,6 +49,30 @@
         <div style="flex:1">
           <label>Prenume</label>
           <input id="prenume" required>
+        </div>
+      </div>
+
+      <!-- Câmpuri PJ -->
+      <div id="pj-fields" class="hidden">
+        <div class="row">
+          <div style="flex:1">
+            <label>Denumire firmă</label>
+            <input id="firma">
+          </div>
+          <div style="flex:1">
+            <label>CUI</label>
+            <input id="cui">
+          </div>
+          <div style="flex:1">
+            <label>Nr. Reg. Comerț</label>
+            <input id="regcom">
+          </div>
+        </div>
+        <div class="row">
+          <div style="flex:1">
+            <label>IBAN (opțional)</label>
+            <input id="iban">
+          </div>
         </div>
       </div>
 
@@ -96,29 +120,42 @@
     </form>
   </main>
 
-  <footer class="footer">
+  <footer class="footer" style="text-align:center;padding:24px 10px;color:#666">
     <small>&copy; <span id="year"></span> — M.S.A Handmade Decor</small>
   </footer>
 
   <!-- Coș + EmailJS -->
-  <script src="cart.js?v=8"></script>
+  <script src="cart.js?v=9"></script>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    // === EmailJS config (datele tale reale) ===
-    const SERVICE_ID = 'service_ix0zpp7';
-    const PUBLIC_KEY = 'iSadfb7-TV_89l_6k';
-    const TEMPLATE_ADMIN = 'template_13qpqtt';  // către magazin
-    const TEMPLATE_CONFIRM = 'template_9yctwor'; // către client
+    // === EmailJS === (ID-urile tale reale)
+    const SERVICE_ID      = 'service_ix0zpp7';
+    const PUBLIC_KEY      = 'iSadfb7-TV_89l_6k';
+    const TEMPLATE_ADMIN  = 'template_13qpqtt'; // „Contact Us” – către magazin
+    const TEMPLATE_CLIENT = 'template_9yctwor'; // „Order Confirmation” – către client
     emailjs.init(PUBLIC_KEY);
 
     document.getElementById('year').textContent = new Date().getFullYear();
 
     document.addEventListener('DOMContentLoaded', () => {
-      if (window.MSACart) {
-        MSACart.renderCart();
-        MSACart.updateCartCountBadge();
-      }
+      MSACart.renderCart();
+      MSACart.updateCartCountBadge();
     });
+
+    // Afișează câmpurile PJ
+    const tipSel = document.getElementById('tip');
+    const pjBox  = document.getElementById('pj-fields');
+    function togglePJ(){
+      pjBox.classList.toggle('hidden', tipSel.value !== 'Persoană juridică');
+      // când e PJ, facem câmpurile obligatorii
+      const required = tipSel.value === 'Persoană juridică';
+      ['firma','cui','regcom'].forEach(id=>{
+        const el = document.getElementById(id);
+        el.required = required;
+      });
+    }
+    tipSel.addEventListener('change', togglePJ);
+    togglePJ();
 
     function money(v){ return MSACart.money(v); }
 
@@ -126,14 +163,14 @@
     document.getElementById('order-form').addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      if (!window.MSACart) { alert('Eroare: coș indisponibil.'); return; }
       const cart = MSACart.getCart();
-      if (!cart.length) { alert('Coșul este gol.'); return; }
+      if (!cart.length){ alert('Coșul este gol.'); return; }
 
       const totals = MSACart._calcTotals(cart);
 
+      // form values
       const form = {
-        tip: tip.value,
+        tip: tipSel.value,
         nume: nume.value.trim(),
         prenume: prenume.value.trim(),
         email: email.value.trim(),
@@ -143,12 +180,18 @@
         codpostal: codpostal.value.trim(),
         adresa: adresa.value.trim(),
         mentiuni: mentiuni.value.trim(),
+        // PJ
+        firma: (document.getElementById('firma').value || '').trim(),
+        cui: (document.getElementById('cui').value || '').trim(),
+        regcom: (document.getElementById('regcom').value || '').trim(),
+        iban: (document.getElementById('iban').value || '').trim(),
         order_id: Date.now().toString().slice(-6)
       };
 
-      // text simplu pentru emailul către magazin
+      // produse în text (pentru emailul către magazin)
       const produseText = cart.map(p => `• ${p.name} × ${p.qty} — ${money(p.price*p.qty)} RON`).join('\n');
 
+      // Parametrii pentru șablonul „Contact Us” (către magazin)
       const paramsAdmin = {
         tip: form.tip,
         nume: form.nume,
@@ -164,28 +207,38 @@
         subtotal: money(totals.subtotal),
         livrare: money(totals.shipping),
         total: money(totals.total),
-        order_id: form.order_id
+        order_id: form.order_id,
+        // extra pentru PJ (dacă nu există în template, sunt ignorate)
+        firma: form.firma,
+        cui: form.cui,
+        regcom: form.regcom,
+        iban: form.iban
       };
 
       // HTML frumos pentru client — încărcat din proforma.html
       const htmlProforma = await MSACart.buildProformaHTML(cart, totals, form);
+
+      // Parametrii pentru „Order Confirmation” (către client)
       const paramsClient = {
-        to_email: form.email,
+        to_email: form.email,     // EXACT cum e în template-ul tău
         nume: form.nume,
         order_id: form.order_id,
         html_proforma: htmlProforma
       };
 
       try {
+        // 1) email spre magazin
         await emailjs.send(SERVICE_ID, TEMPLATE_ADMIN, paramsAdmin);
-        await emailjs.send(SERVICE_ID, TEMPLATE_CONFIRM, paramsClient);
+
+        // 2) confirmare spre client
+        await emailjs.send(SERVICE_ID, TEMPLATE_CLIENT, paramsClient);
 
         alert('✅ Comanda a fost trimisă! Ți-am trimis confirmarea prin email.');
         MSACart.clear();
         window.location.href = 'multumesc.html';
       } catch (err) {
-        console.error(err);
-        alert('A apărut o eroare la trimiterea emailului. Verifică EmailJS.');
+        console.error('EmailJS error:', err);
+        alert('A apărut o eroare la trimiterea emailului. Verifică ID-urile și starea EmailJS.');
       }
     });
   </script>
