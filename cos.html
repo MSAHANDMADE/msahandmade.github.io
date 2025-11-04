@@ -6,29 +6,65 @@
   <title>Coș — MSA Handmade</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#fafafa;color:#0f172a}
+    /* ------- bază ------- */
+    :root{--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--bg:#fafafa;--card:#fff;--brand:#0f172a}
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);margin:0}
+    a{text-decoration:none;color:var(--ink)}
     .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
-    header.nav{display:flex;gap:18px;align-items:center;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid #e2e8f0;padding:12px 16px}
-    header.nav a{font-weight:600;text-decoration:none;color:#0f172a}
-    .pill{margin-left:auto;background:#f1f5f9;border-radius:999px;width:36px;height:36px;display:grid;place-items:center;font-weight:800}
-    h1{font-size:36px;margin:16px 0}
-    .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 2px 10px rgba(2,6,23,.06)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 2px 10px rgba(2,6,23,.06)}
     .inner{padding:16px}
-    /* tabel scrollabil pe mobil */
-    .tbl-wrap{overflow-x:auto}
-    table{width:100%;min-width:640px;border-collapse:collapse}
-    th,td{padding:12px;border-bottom:1px solid #e2e8f0;vertical-align:middle}
-    th{background:#f8fafc;text-align:left}
-    .qty{display:inline-flex;align-items:center;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
-    .qty button{width:34px;height:34px;border:0;background:#f8fafc;font-size:18px}
-    .qty input{width:52px;height:34px;border:0;text-align:center}
-    .rm{width:36px;height:36px;border:0;border-radius:8px;background:#fee2e2;color:#991b1b}
+    .muted{color:var(--muted)}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:700;cursor:pointer}
+    .btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+    h1{font-size:36px;margin:16px 0}
+    h2{margin:0 0 8px}
+
+    /* ------- nav ------- */
+    header.nav{display:flex;gap:18px;align-items:center;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line);padding:12px 16px}
+    header.nav a{font-weight:600}
+    .pill{margin-left:auto;background:#f1f5f9;border-radius:999px;width:36px;height:36px;display:grid;place-items:center;font-weight:800}
+
+    /* ------- grid ------- */
     .grid{display:grid;grid-template-columns:1fr 340px;gap:18px}
     @media (max-width:900px){.grid{grid-template-columns:1fr}}
+
+    /* ------- tabel coș ------- */
+    .tbl-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
+    th{background:#f8fafc;text-align:left}
+    /* Fă tabelul compact, vizibil pe mobil fără scroll mare */
+    th:nth-child(2), td:nth-child(2){width:1%;white-space:nowrap}
+    th:nth-child(3), td:nth-child(3){width:1%;white-space:nowrap;text-align:right}
+    td:nth-child(4){width:56px;text-align:right}
+
+    .item-cell{display:flex;gap:12px;align-items:center;min-width:0}
+    .item-cell img{width:64px;height:64px;object-fit:cover;border-radius:8px;flex:0 0 auto}
+    .item-meta{min-width:0}
+    .item-title{font-weight:700;line-height:1.2;word-wrap:break-word}
+    .item-price{color:var(--muted);font-size:12px}
+
+    .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    .qty button{width:34px;height:34px;border:0;background:#f8fafc;font-size:18px}
+    .qty input{width:48px;height:34px;border:0;text-align:center}
+
+    .rm{width:36px;height:36px;border:0;border-radius:8px;background:#fee2e2;color:#991b1b}
+
+    /* ------- totaluri ------- */
     .row{display:flex;justify-content:space-between;margin:6px 0}
-    .btn{padding:10px 14px;border-radius:10px;border:1px solid #0f172a;background:#0f172a;color:#fff;font-weight:700;cursor:pointer}
-    .btn.ghost{background:#fff;color:#0f172a;border-color:#e2e8f0}
-    .muted{color:#64748b}
+    .row strong{font-weight:800}
+
+    /* ------- formular ------- */
+    form input, form textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}
+    form textarea{resize:vertical}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width:700px){ .form-grid{grid-template-columns:1fr} }
+    .switch{display:flex;gap:18px;margin:8px 0 12px}
+    .pj-only{display:none} /* ascunsă by default; JS o arată la PJ */
+
+    /* pe view-uri foarte înguste, micșorez puțin inputul de cantitate */
+    @media (max-width:400px){ .qty input{width:40px} }
   </style>
 </head>
 <body>
@@ -51,16 +87,17 @@
           <thead>
             <tr>
               <th>Produs</th>
-              <th style="width:170px">Cant.</th>
-              <th style="text-align:right">Total</th>
-              <th style="width:56px"></th>
+              <th>Cant.</th>
+              <th>Total</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="cart-body">
             <tr><td colspan="4" class="muted">Se încarcă…</td></tr>
           </tbody>
         </table>
-        <div style="display:flex;gap:10px;margin-top:12px">
+
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
           <button id="clear-cart" class="btn ghost">Golește coșul</button>
           <a href="produse.html" class="btn ghost">Continuă cumpărăturile</a>
         </div>
@@ -70,35 +107,36 @@
     <!-- DREAPTA: total + formular -->
     <div class="card">
       <div class="inner">
-        <h2 style="margin:0 0 8px">Totaluri</h2>
+        <h2>Totaluri</h2>
         <div class="row"><span>Subtotal</span><strong id="subval">0.00 RON</strong></div>
         <div class="row"><span>Reducere</span><strong id="discval">− 0.00 RON</strong></div>
         <div class="row"><span>Livrare</span><strong id="shipval">0.00 RON</strong></div>
         <div class="row" style="font-size:18px;font-weight:800"><span>Total</span><strong id="totval">0.00 RON</strong></div>
         <p class="muted">Reduceri: ≥200 RON −10%, ≥300 RON −15%, ≥400 RON −20%. Livrare gratuită la 300 RON.</p>
 
-        <hr style="margin:14px 0;border:none;border-top:1px solid #e2e8f0" />
+        <hr style="margin:14px 0;border:none;border-top:1px solid var(--line)" />
 
-        <h3 style="margin:0 0 10px">Detalii pentru livrare</h3>
-        <div style="display:flex;gap:18px;margin-bottom:10px">
+        <h3 style="margin:0 0 6px">Detalii pentru livrare</h3>
+        <div class="switch">
           <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
           <label><input type="radio" name="tip" value="pj"> Persoană juridică</label>
         </div>
 
         <form id="order-form">
           <!-- PF -->
-          <div class="pf-only" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="pf-only form-grid">
             <input name="nume" placeholder="Nume" required>
             <input name="prenume" placeholder="Prenume" required>
           </div>
+
           <!-- PJ -->
-          <div class="pj-only" style="display:none;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="pj-only form-grid">
             <input name="firma" placeholder="Denumire firmă">
             <input name="cui" placeholder="CUI">
             <input name="reg" placeholder="Nr. Reg. Comerț" style="grid-column:1/3">
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+          <div class="form-grid" style="margin-top:10px">
             <input name="email" type="email" placeholder="Email" required>
             <input name="telefon" placeholder="Telefon" required>
             <input name="judet" placeholder="Județ" required>
@@ -123,6 +161,17 @@
 <script src="cart.js"></script>
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Fac vizibil/ascuns PF/PJ (cart.js pornește și el, dar pun și aici ca să fii sigură)
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const sync = ()=>{
+      const pj = document.querySelector('input[name="tip"]:checked')?.value==='pj';
+      document.querySelectorAll('.pj-only').forEach(el=> el.style.display = pj ? '' : 'none');
+      document.querySelectorAll('.pf-only').forEach(el=> el.style.display = pj ? 'none' : '');
+    };
+    document.querySelectorAll('input[name="tip"]').forEach(r=> r.addEventListener('change', sync));
+    sync();
+  });
 </script>
 </body>
 </html>
