@@ -1,181 +1,133 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Proformă — MSA Handmade</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Proformă - MSA Handmade</title>
   <style>
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 40px auto;
-      padding: 20px;
-      max-width: 900px;
-      background: #fff;
-      color: #222;
-    }
-    h1 {
-      text-align: center;
-      font-size: 28px;
-      margin-bottom: 10px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #fafafa;
+      color: #0f172a;
+      padding: 40px;
     }
     .header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      border-bottom: 2px solid #ddd;
-      padding-bottom: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 30px;
+      gap: 20px;
     }
-    .col {
+    .box {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 15px;
+      background: #fff;
       width: 32%;
-      font-size: 13px;
-      line-height: 1.4;
+      box-sizing: border-box;
     }
     .center {
       text-align: center;
+    }
+    .title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #475569;
+      margin-bottom: 8px;
     }
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
-      font-size: 14px;
     }
     th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
+      padding: 10px;
+      border-bottom: 1px solid #e2e8f0;
     }
     th {
-      background: #fafafa;
+      background: #f8fafc;
       text-align: left;
     }
-    td:last-child, th:last-child {
-      text-align: right;
+    tfoot td {
+      font-weight: 700;
     }
-    .totals {
-      width: 280px;
-      float: right;
+    .total {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .note {
+      font-size: 13px;
+      color: #64748b;
       margin-top: 20px;
-      border: 1px solid #ddd;
-    }
-    .totals td {
-      border: 1px solid #ddd;
-      padding: 6px 10px;
-    }
-    .totals td:first-child {
-      text-align: left;
-      background: #fafafa;
-      width: 50%;
-    }
-    .totals td:last-child {
-      text-align: right;
-      font-weight: 600;
-    }
-    .footer {
-      clear: both;
-      margin-top: 40px;
-      font-size: 12px;
-      color: #666;
-      border-top: 1px solid #ddd;
-      padding-top: 10px;
-      text-align: center;
     }
   </style>
 </head>
 <body>
 
-  <h1>PROFORMĂ</h1>
-
   <div class="header">
-    <!-- STÂNGA: VANZATOR -->
-    <div class="col">
-      <strong>VÂNZĂTOR</strong><br>
-      STOICA MIHAELA – PERSOANĂ FIZICĂ AUTORIZATĂ<br>
-      CUI: 52191623<br>
-      Nr. Reg. Comerț: F40/5433/2024<br>
-      EUID: ROF40PFA5433040<br>
-      Sediu: Jud. Ilfov, Oraș Bragadiru,<br>
-      Str. Generalului, Nr. 10, Cam. 1, Bl. 1, Ap. 2<br>
-      Neplătitor de TVA<br>
-      Tel: 07xx xxx xxx<br>
-      Email: msahandmade.contact@gmail.com
+    <!-- STÂNGA - Vânzător -->
+    <div class="box">
+      <div class="title">Vânzător</div>
+      <div><strong>STOICA MIHAELA – PERSOANĂ FIZICĂ AUTORIZATĂ</strong></div>
+      <div>jud. Ilfov, Oraș Bragadiru, Strada Generalului, Nr. 10, Cam. 1, Bl. 1, Ap. 2</div>
+      <div>CUI: 32196263</div>
+      <div>Nr. Reg. Com.: F23/2058/2008</div>
+      <div>Neplătitor de TVA</div>
+      <div>Tel: 0733119233</div>
+      <div>Email: msahandmade.contact@gmail.com</div>
     </div>
 
-    <!-- MIJLOC: INFO PROFORMĂ -->
-    <div class="col center">
-      <h2 style="margin:0;font-size:18px;">PROFORMĂ</h2>
-      <strong>Nr. comandă:</strong> <span id="nrcom"></span><br>
-      <strong>Data:</strong> <span id="datacom"></span>
+    <!-- MIJLOC - Număr și dată -->
+    <div class="box center">
+      <div class="title">Proformă</div>
+      <div class="subtitle">MSA Handmade Decor</div>
+      <div>Nr. comandă: <strong>#601452</strong></div>
+      <div>Data: <strong>04.11.2025</strong></div>
     </div>
 
-    <!-- DREAPTA: CLIENT -->
-    <div class="col" id="client-info" style="text-align:right">
-      <strong>CLIENT</strong><br>
-      <span id="client-nume"></span><br>
-      <span id="client-adresa"></span><br>
-      <span id="client-email"></span>
+    <!-- DREAPTA - Client -->
+    <div class="box">
+      <div class="title">Cumpărător (PF)</div>
+      <div><strong>Jcjvk Jf Igcyo</strong></div>
+      <div>Str. Gen., Bragadiru, Ilfov, 077025</div>
+      <div>Tel: 0747241246</div>
+      <div>Email: valimoloman@gmail.com</div>
     </div>
   </div>
 
-  <table id="tabel-produse">
+  <table>
     <thead>
       <tr>
         <th>Produs</th>
-        <th>Cant.</th>
-        <th>Preț</th>
-        <th>Total</th>
+        <th style="width:80px;">Cant.</th>
+        <th style="width:100px;">Preț</th>
+        <th style="width:120px;">Total</th>
       </tr>
     </thead>
     <tbody>
-      <tr><td colspan="4" style="text-align:center;color:#777;">Nu sunt produse adăugate.</td></tr>
+      <tr><td>Coroniță Crăciun – roșu & auriu</td><td>1</td><td>35.00 RON</td><td>35.00 RON</td></tr>
+      <tr><td>Floricele</td><td>1</td><td>5.00 RON</td><td>5.00 RON</td></tr>
+      <tr><td>Buchet</td><td>1</td><td>29.00 RON</td><td>29.00 RON</td></tr>
+      <tr><td>Flori (suport ipsos)</td><td>1</td><td>33.00 RON</td><td>33.00 RON</td></tr>
+      <tr><td>Floarea-soarelui</td><td>1</td><td>33.00 RON</td><td>33.00 RON</td></tr>
+      <tr><td>Îndrăgostiți</td><td>3</td><td>99.00 RON</td><td>297.00 RON</td></tr>
     </tbody>
+    <tfoot>
+      <tr><td colspan="3" align="right">Subtotal</td><td>432.00 RON</td></tr>
+      <tr><td colspan="3" align="right">Reducere</td><td>-86.40 RON</td></tr>
+      <tr><td colspan="3" align="right">Livrare</td><td>0.00 RON</td></tr>
+      <tr><td colspan="3" align="right" class="total">Total</td><td class="total">345.60 RON</td></tr>
+    </tfoot>
   </table>
 
-  <table class="totals">
-    <tr><td>Subtotal</td><td id="subtotal">0.00 RON</td></tr>
-    <tr><td>Reducere</td><td id="reducere">0.00 RON</td></tr>
-    <tr><td>Livrare</td><td id="livrare">0.00 RON</td></tr>
-    <tr><td><strong>Total</strong></td><td id="total"><strong>0.00 RON</strong></td></tr>
-  </table>
-
-  <div class="footer">
-    Această proformă a fost generată automat. Vă mulțumim pentru comanda dumneavoastră!<br>
-    MSA Handmade — Lumânări și decorațiuni artizanale.
+  <div class="note">
+    * Proforma nu este document fiscal. STOICA MIHAELA – PFA este neplătitor de TVA.  
+    Plata se va efectua conform instrucțiunilor transmise ulterior prin email.
   </div>
 
-  <script>
-    // Se preiau din localStorage datele ultimei comenzi (dacă sunt)
-    const order = JSON.parse(localStorage.getItem('MSA_LAST_ORDER') || '{}');
-    const { items = [], totaluri = {}, client = {}, orderId = '' } = order;
-
-    // Umple informațiile
-    document.getElementById('nrcom').textContent = orderId || '-';
-    document.getElementById('datacom').textContent = new Date().toLocaleDateString('ro-RO');
-    document.getElementById('client-nume').textContent = client.nume || client.denumire || '-';
-    document.getElementById('client-adresa').textContent =
-      (client.adresa ? client.adresa + ', ' : '') + (client.oras || '') + (client.judet ? ', ' + client.judet : '');
-    document.getElementById('client-email').textContent = client.email || '';
-
-    // Formatează RON
-    const fmt = n => (Number(n) || 0).toFixed(2) + ' RON';
-
-    // Tabel produse
-    const tbody = document.querySelector('#tabel-produse tbody');
-    if (items.length) {
-      tbody.innerHTML = items.map(it => `
-        <tr>
-          <td>${it.name}</td>
-          <td style="text-align:center">${it.qty}</td>
-          <td style="text-align:right">${fmt(it.price)}</td>
-          <td style="text-align:right">${fmt(it.price * it.qty)}</td>
-        </tr>
-      `).join('');
-    }
-
-    // Totaluri
-    document.getElementById('subtotal').textContent = fmt(totaluri.subtotal || 0);
-    document.getElementById('reducere').textContent = fmt(totaluri.reducere || 0);
-    document.getElementById('livrare').textContent = fmt(totaluri.livrare || 0);
-    document.getElementById('total').textContent = fmt(totaluri.total || 0);
-  </script>
 </body>
 </html>
