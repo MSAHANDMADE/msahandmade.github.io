@@ -1,70 +1,177 @@
-
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <style>
-#main-nav {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  flex-wrap: nowrap !important;
-  gap: 10px !important;
-}
-#main-nav .left {
-  display: flex !important;
-  align-items: center !important;
-  gap: 18px !important;
-  white-space: nowrap !important;
-}
-#main-nav .left a {
-  text-decoration: none !important;
-  padding: 6px 0 !important;
-  font-weight: 500 !important;
-}
-.cart-pill {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 6px !important;
-  padding: 6px 10px !important;
-  border-radius: 999px !important;
-  background: #f7f7f7 !important;
-}
-</style>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MSA Handmade — Acasă</title>
+
+  <meta name="description" content="Lumânări și decorațiuni handmade realizate cu pasiune. Descoperă produsele MSA Handmade.">
+  <meta name="author" content="MSA Handmade">
+
   <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ===== FUNDAL pastel + ninsoare ===== */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, #fde8ef 0%, #dff4ff 100%);
+      color: #222;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* fulgi de zăpadă (canvas) */
+    #snow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ===== PROMO sus ===== */
+    .promo {
+      background: #0f3a2e;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      font-weight: 600;
+      z-index: 2;
+      position: relative;
+    }
+    .promo b { color: #ffd27a; }
+
+    /* ===== NAV ===== */
+    header {
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      backdrop-filter: blur(6px);
+      position: sticky;
+      top: 0;
+      z-index: 3;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 22px;
+      padding: 14px 0;
+      flex-wrap: wrap;
+    }
+    nav a {
+      text-decoration: none;
+      color: #0a2230;
+      font-weight: 600;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+    nav a:hover { color: #d12b4a; }
+
+    /* ===== HERO (logo + text) ===== */
+    .hero {
+      text-align: center;
+      padding: 70px 20px 40px;
+      position: relative;
+      z-index: 2;
+    }
+    .hero img {
+      width: 190px;
+      max-width: 80%;
+      display: block;
+      margin: 0 auto 25px;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+    }
+    .hero h1 {
+      font-size: 2.2rem;
+      color: #0a2230;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 24px;
+    }
+    .btn {
+      background: #0a2230;
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .btn:hover { background: #134d3a; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      background: rgba(255,255,255,0.8);
+      position: relative;
+      z-index: 2;
+    }
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 10px 0;
+    }
+    .socials img {
+      width: 24px;
+      height: 24px;
+      opacity: 0.8;
+    }
+
+    /* ===== CART BADGE ===== */
+    .cart-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f7f7f7;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-weight: 600;
+    }
+    #cart-count {
+      background: #ffd27a;
+      color: #000;
+      border-radius: 50%;
+      padding: 3px 7px;
+      font-size: 13px;
+    }
+  </style>
 </head>
 <body>
-  <div class="promo">🎉 Reduceri până la <b>20%</b> + <b>livrare gratuită</b> de la <b>300 RON</b>.</div>
 
-  <header class="header">
-    <nav class="wrap">
-      <div class="left">
-        <a href="index.html">Acasă</a>
-        <a href="produse.html">Produse</a>
-        <a href="despre.html">Despre</a><!-- <- ADĂUGAT -->
-        <a href="contact.html">Contact</a>
-      </div>
+  <!-- ninsoare -->
+  <canvas id="snow"></canvas>
+
+  <div class="promo">❄️ Reduceri de iarnă până la <b>20%</b> + <b>Livrare gratuită</b> de la <b>300 RON</b> 🎁</div>
+
+  <header>
+    <nav>
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="despre.html">Despre</a>
+      <a href="contact.html">Contact</a>
       <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
     </nav>
   </header>
 
-  <main class="wrap">
-    <section class="hero">
-      <div class="box">
-        <img class="logo" src="logo.png" alt="MSA Handmade Decor">
-        <h1 style="text-align:center">Bun venit la MSA Handmade</h1>
-        <p class="lead" style="text-align:center">
-          Lumânări și decorațiuni artizanale, făcute cu grijă.
-          Profită de reduceri și livrare gratuită de la 300 RON.
-        </p>
-        <div><a href="produse.html" class="btn">Vezi produsele</a></div>
-      </div>
-    </section>
+  <main class="hero">
+    <img src="images/logo.png" alt="MSA Handmade logo">
+    <h1>Bun venit la MSA Handmade</h1>
+    <p>Lumânări și decorațiuni artizanale, create cu drag și grijă pentru detalii.</p>
+    <a href="produse.html" class="btn">Vezi produsele</a>
   </main>
 
-  <footer class="footer">
+  <footer>
     <div class="socials">
       <a href="https://facebook.com" target="_blank"><img src="images/facebook.svg" alt="Facebook"></a>
       <a href="https://instagram.com" target="_blank"><img src="images/instagram.svg" alt="Instagram"></a>
@@ -72,12 +179,69 @@
     <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
   </footer>
 
-  <script src="cart.js"></script>
+  <!-- SCRIPT COȘ -->
+  <script src="script.js?v=13" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.MSACart) MSACart.readCart();
+    document.addEventListener('DOMContentLoaded', ()=>{
+      if(window.MSACart?.updateCartCountBadge) MSACart.updateCartCountBadge();
     });
+
+    // ===== NINSOARE UȘOARĂ =====
+    const canvas = document.getElementById('snow');
+    const ctx = canvas.getContext('2d');
+    let w, h;
+    const flakes = [];
+
+    function resize(){
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function createFlakes(){
+      for(let i=0;i<80;i++){
+        flakes.push({
+          x: Math.random()*w,
+          y: Math.random()*h,
+          r: Math.random()*3 + 1,
+          d: Math.random()*1 + 0.5
+        });
+      }
+    }
+    createFlakes();
+
+    function drawFlakes(){
+      ctx.clearRect(0,0,w,h);
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.beginPath();
+      for(let flake of flakes){
+        ctx.moveTo(flake.x, flake.y);
+        ctx.arc(flake.x, flake.y, flake.r, 0, Math.PI*2, true);
+      }
+      ctx.fill();
+      moveFlakes();
+    }
+
+    let angle = 0;
+    function moveFlakes(){
+      angle += 0.01;
+      for(let flake of flakes){
+        flake.y += Math.pow(flake.d, 2) + 1;
+        flake.x += Math.sin(angle) * 0.6;
+        if(flake.y > h){
+          flake.y = 0;
+          flake.x = Math.random()*w;
+        }
+      }
+    }
+
+    function animateSnow(){
+      drawFlakes();
+      requestAnimationFrame(animateSnow);
+    }
+    animateSnow();
   </script>
 </body>
 </html>
