@@ -1,213 +1,178 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MSA Handmade - Acasă</title>
-  <meta name="description" content="Lumânări și decorațiuni artizanale create manual, perfecte pentru tine sau pentru un cadou cu suflet.">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MSA Handmade — Acasă</title>
 
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="cart.js"></script>
+  <!-- SEO -->
+  <meta name="description" content="Lumânări și decorațiuni MSA Handmade — create manual, cadouri cu suflet.">
+  <link rel="canonical" href="https://www.msahandmade.ro/">
 
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.msahandmade.ro/">
+  <meta property="og:title" content="MSA Handmade">
+  <meta property="og:description" content="Lumânări și decorațiuni artizanale.">
+  <meta property="og:image" content="https://www.msahandmade.ro/logo.png">
+
+  <!-- Stil comun al site-ului -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Stiluri specifice pentru pagina de start (hero + ninsoare + footer) -->
   <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      margin: 0;
-      background: linear-gradient(180deg, #fdf0f5, #eaf6ff);
-      color: #222;
-      overflow-x: hidden;
-      min-height: 100vh;
-      position: relative;
+    :root{
+      --brand:#0a2230;
+      --brand-2:#0e344c;
+      --gold:#d9c08b;
+      --bg:linear-gradient(180deg,#f5ecf7 0%, #e3f0ff 100%);
     }
+    body{background:var(--bg);}
 
-    /* Banner de sus */
-    .top-banner {
-      background: #0b362c;
-      color: #fff;
-      text-align: center;
-      font-weight: 600;
-      font-size: 15px;
-      padding: 10px;
-    }
+    /* BARĂ PROMO */
+    .promo{background:#0f3a2e;color:#fff;text-align:center;padding:10px 12px;font-weight:800}
+    .promo b{color:#ffd27a}
 
-    .top-banner span {
-      color: #ffc857;
-    }
+    /* HEADER */
+    .header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #eee}
+    #main-nav{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:18px}
+    #main-nav a{font-weight:700;color:#133;text-decoration:none}
+    #main-nav a:hover{color:#d12b4a}
+    .spacer{flex:1}
+    .cart-pill{display:inline-flex;align-items:center;gap:8px;background:#f5f5f5;padding:8px 12px;border-radius:999px;font-weight:800}
+    .badge{min-width:22px;height:22px;border-radius:999px;display:inline-grid;place-items:center;background:#ffe4a4;color:#000;font-weight:800}
 
-    header {
-      background: #fff;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-      padding: 10px 0;
-    }
+    /* HERO */
+    .wrap{max-width:980px;margin:0 auto;padding:0 16px}
+    .hero{position:relative;padding:36px 0 28px;text-align:center}
+    .hero .logo{width:220px;height:auto;display:block;margin:10px auto 18px;filter: drop-shadow(0 6px 20px rgba(0,0,0,.08))}
+    .hero h1{font-size:clamp(28px,5.2vw,48px);line-height:1.15;margin:10px 0;color:#0b2230}
+    .lead{max-width:780px;margin:10px auto 18px;color:#444;font-size:1.1rem}
+    .cta{appearance:none;border:0;background:#0a2230;color:#fff;padding:14px 22px;border-radius:14px;font-weight:900;min-height:48px;cursor:pointer}
+    .cta:active{transform:translateY(1px)}
 
-    nav {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 22px;
-      flex-wrap: wrap;
+    /* ZĂPADĂ – două straturi */
+    .snow,.snow2{
+      position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.55
     }
+    .snow{
+      background-image:
+        radial-gradient(#fff 1.2px, transparent 1.2px),
+        radial-gradient(#fff 1.2px, transparent 1.2px),
+        radial-gradient(#fff 1.2px, transparent 1.2px);
+      background-size:28px 28px,36px 36px,48px 48px;
+      background-position:0 0,10px -10px,-10px 20px;
+      animation:snowFall 22s linear infinite;
+      opacity:.55
+    }
+    .snow2{
+      background-image:
+        radial-gradient(#fff 2.2px, transparent 2.2px),
+        radial-gradient(#fff 1.8px, transparent 1.8px);
+      background-size:70px 70px,90px 90px;
+      background-position:0 0,20px -20px;
+      animation:snowFall2 14s linear infinite;
+      opacity:.65
+    }
+    @keyframes snowFall{to{background-position:0 1100px,10px 1090px,-10px 1120px}}
+    @keyframes snowFall2{to{background-position:0 1200px,20px 1180px}}
 
-    nav a {
-      text-decoration: none;
-      color: #0d3b2e;
-      font-weight: 600;
-      font-size: 16px;
-      transition: color 0.2s ease;
-    }
-
-    nav a:hover {
-      color: #d12b4a;
-    }
-
-    .cart-pill {
-      display: inline-flex;
-      align-items: center;
-      background: #f8f8f8;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-weight: 600;
-      gap: 6px;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 80px 20px 100px;
-    }
-
-    .hero .logo {
-      width: 180px;
-      height: auto;
-      margin-bottom: 25px;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-    }
-
-    .hero h1 {
-      font-size: 2.1rem;
-      color: #102a43;
-      margin: 10px 0;
-      text-shadow: 0 1px 2px rgba(255,255,255,0.8);
-    }
-
-    .hero p {
-      font-size: 1.1rem;
-      color: #333;
-      max-width: 600px;
-      margin: 0 auto 30px;
-      line-height: 1.6;
-      text-shadow: 0 1px 2px rgba(255,255,255,0.5);
-    }
-
-    .btn {
-      background: #103b50;
-      color: #fff;
-      padding: 12px 28px;
-      border-radius: 25px;
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-block;
-      transition: all 0.3s ease;
-    }
-
-    .btn:hover {
-      background: #195972;
-      transform: scale(1.05);
-    }
-
-    footer {
-      background: #fdfdfd;
-      border-top: 1px solid #ddd;
-      text-align: center;
-      padding: 20px 10px;
-      font-size: 14px;
-      color: #666;
-    }
-
-    footer .legal-nav a {
-      margin: 0 6px;
-      color: #555;
-      text-decoration: none;
-    }
-
-    footer .legal-nav a:hover {
-      color: #d12b4a;
-    }
-
-    /* efect de zăpadă subtil */
-    .snow {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      background-image: radial-gradient(white 1px, transparent 1px);
-      background-size: 40px 40px;
-      animation: snow 25s linear infinite;
-      opacity: 0.3;
-    }
-
-    @keyframes snow {
-      0% { background-position: 0 0; }
-      100% { background-position: 0 1200px; }
-    }
-
-    @media (max-width: 600px) {
-      .hero h1 {
-        font-size: 1.6rem;
-      }
-      .hero p {
-        font-size: 1rem;
-      }
-      .btn {
-        font-size: 0.95rem;
-        padding: 10px 24px;
-      }
-    }
+    /* FOOTER */
+    footer{background:transparent;border-top:0}
+    .legal{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:10px 0 4px}
+    .legal a{color:#223;text-decoration:none}
+    .legal a:hover{color:#d12b4a}
+    .socials{margin:14px 0 10px; display:flex; gap:14px; justify-content:center; position:relative; z-index:2}
+    .socials img{display:block;width:28px;height:28px}
   </style>
 </head>
 <body>
-  <div class="snow"></div>
 
-  <div class="top-banner">
-    ❄️ Reduceri de iarnă până la <span>20%</span> + Livrare gratuită de la <span>300 RON</span> 🎁
-  </div>
+  <div class="promo">❄️ Reduceri de iarnă până la <b>20%</b> • Livrare gratuită de la <b>300 RON</b> 🎁</div>
 
-  <header>
-    <nav>
-      <a href="index.html"><strong>Acasă</strong></a>
+  <header class="header">
+    <nav id="main-nav" aria-label="Navigare principală">
+      <a href="index.html">Acasă</a>
       <a href="produse.html">Produse</a>
       <a href="despre.html">Despre</a>
       <a href="contact.html">Contact</a>
-      <a href="cos.html" class="cart-pill">🛒 <span id="cart-count">0</span></a>
+      <span class="spacer"></span>
+      <a href="cos.html" class="cart-pill" aria-label="Vezi coșul">🛒 <span id="cart-count" class="badge">0</span></a>
     </nav>
   </header>
 
-  <main class="hero">
-    <img src="logo.png" alt="MSA Handmade Logo" class="logo" onerror="this.style.display='none'">
-    <h1>Bun venit la MSA Handmade</h1>
-    <p>Lumânări și decorațiuni artizanale create manual — perfecte pentru tine sau pentru un cadou cu suflet.</p>
-    <a href="produse.html" class="btn">Vezi produsele</a>
+  <!-- NINSOARE -->
+  <div class="snow"></div>
+  <div class="snow2"></div>
+
+  <main class="wrap">
+    <section class="hero">
+      <img src="logo.png" alt="MSA Handmade Logo" class="logo" loading="eager" width="440" height="440">
+      <h1>Bun venit la MSA Handmade</h1>
+      <p class="lead">Lumânări și decorațiuni artizanale create manual — perfecte pentru tine sau pentru un cadou cu suflet.</p>
+      <p><a class="cta" href="produse.html">Vezi produsele</a></p>
+    </section>
   </main>
 
   <footer>
-    <nav class="legal-nav">
-      <a href="termeni.html">Termeni & Condiții</a> ·
-      <a href="confidentialitate.html">Confidențialitate</a> ·
-      <a href="cookies.html">Cookies</a> ·
+    <div class="socials">
+      <a href="https://facebook.com/msa.handmade" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <img src="images/facebook.svg" alt="Facebook">
+      </a>
+      <a href="https://instagram.com/msa.handmade" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <img src="images/instagram.svg" alt="Instagram">
+      </a>
+    </div>
+
+    <nav class="legal" aria-label="Linkuri legale">
+      <a href="termeni.html">Termeni &amp; Condiții</a>
+      <span>·</span>
+      <a href="confidentialitate.html">Confidențialitate</a>
+      <span>·</span>
+      <a href="cookies.html">Cookies</a>
+      <span>·</span>
       <a href="retur.html">Retur</a>
     </nav>
-    <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
+    <div style="text-align:center;color:#666;font-size:14px;margin-bottom:18px">
+      © <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.
+    </div>
   </footer>
 
+  <!-- Cart + badge sync (folosește MSACart dacă există, altfel doar citește localStorage) -->
   <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-    document.addEventListener("DOMContentLoaded", () => {
-      if (window.MSACart) MSACart.updateCartCountBadge?.();
+    // dacă ai script separat pentru coș, îl poți lăsa și pe acela:
+    // <script src="script.js"></script>  (deja există în repo)
+
+    function readCartCount() {
+      try {
+        // 1) dacă există MSACart:
+        if (window.MSACart && typeof MSACart.updateCartCountBadge === 'function') {
+          MSACart.updateCartCountBadge();
+          return;
+        }
+        // 2) fallback: numără din localStorage
+        const raw = localStorage.getItem('MSA_CART');
+        const items = raw ? JSON.parse(raw) : [];
+        const count = Array.isArray(items) ? items.reduce((s,it)=>s+(Number(it.qty)||1),0) : 0;
+        const el = document.getElementById('cart-count');
+        if (el) el.textContent = count;
+      } catch(_) {}
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // an set
+      const y = document.getElementById('year');
+      if (y) y.textContent = new Date().getFullYear();
+
+      // badge coș
+      readCartCount();
+
+      // ascultă schimbări din alte tab-uri/pagini
+      window.addEventListener('storage', (e)=>{
+        if (e.key === 'MSA_CART') readCartCount();
+      });
     });
   </script>
+  <script src="script.js"></script>
 </body>
 </html>
