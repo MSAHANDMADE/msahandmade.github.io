@@ -223,3 +223,6 @@ header .wrap .left a:hover {
     width: 200px !important;
   }
 }
+/* === HOTFIX LOGO (homepage) === */
+.hero img.logo{ width:160px !important; height:auto !important; display:block; margin:0 auto; }
+@media (min-width:600px){ .hero img.logo{ width:200px !important; } }
