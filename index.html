@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MSA Handmade - Acasă</title>
-  <meta name="description" content="Lumânări și decorațiuni artizanale, realizate manual în România. Descoperă colecția MSA Handmade." />
+  <meta name="description" content="Lumânări și decorațiuni artizanale create manual, perfecte pentru tine sau pentru un cadou cu suflet." />
 
   <link rel="stylesheet" href="styles.css" />
   <script defer src="cart.js"></script>
@@ -13,11 +13,11 @@
     body {
       font-family: "Poppins", sans-serif;
       margin: 0;
-      background: linear-gradient(180deg, #fde7ef, #e6f4ff);
+      background: linear-gradient(180deg, #fdf0f5, #eaf6ff);
       color: #222;
       overflow-x: hidden;
-      position: relative;
       min-height: 100vh;
+      position: relative;
     }
 
     header {
@@ -25,7 +25,7 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
       padding: 10px 0;
     }
 
@@ -52,7 +52,7 @@
     .cart-pill {
       display: inline-flex;
       align-items: center;
-      background: #f5f5f5;
+      background: #f8f8f8;
       border-radius: 999px;
       padding: 6px 12px;
       font-weight: 600;
@@ -61,18 +61,18 @@
 
     .hero {
       text-align: center;
-      padding: 70px 20px;
+      padding: 80px 20px 100px;
     }
 
     .hero .logo {
-      width: 200px;
+      width: 180px;
       height: auto;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     .hero h1 {
-      font-size: 2rem;
-      color: #0a2230;
+      font-size: 2.1rem;
+      color: #102a43;
       margin: 10px 0;
     }
 
@@ -81,28 +81,30 @@
       color: #333;
       max-width: 600px;
       margin: 0 auto 30px;
+      line-height: 1.6;
     }
 
     .btn {
-      background: #0a2230;
+      background: #103b50;
       color: #fff;
       padding: 12px 28px;
       border-radius: 25px;
       font-weight: 600;
       text-decoration: none;
       display: inline-block;
-      transition: background 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     .btn:hover {
-      background: #113a50;
+      background: #195972;
+      transform: scale(1.05);
     }
 
     footer {
-      background: #fafafa;
+      background: #fdfdfd;
       border-top: 1px solid #ddd;
       text-align: center;
-      padding: 18px 10px;
+      padding: 20px 10px;
       font-size: 14px;
       color: #666;
     }
@@ -127,13 +129,26 @@
       pointer-events: none;
       background-image: url('https://i.ibb.co/3W5qv9P/snowflake.png');
       background-size: contain;
-      animation: snow 20s linear infinite;
-      opacity: 0.4;
+      animation: snow 25s linear infinite;
+      opacity: 0.35;
     }
 
     @keyframes snow {
       0% { background-position: 0 0; }
-      100% { background-position: 0 1000px; }
+      100% { background-position: 0 1200px; }
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .btn {
+        font-size: 0.95rem;
+        padding: 10px 24px;
+      }
     }
   </style>
 </head>
@@ -151,7 +166,7 @@
   </header>
 
   <main class="hero">
-    <img src="images/logo.png" alt="MSA Handmade Logo" class="logo">
+    <img src="logo.png" alt="MSA Handmade Logo" class="logo">
     <h1>Bun venit la MSA Handmade</h1>
     <p>Lumânări și decorațiuni artizanale create manual — perfecte pentru tine sau pentru un cadou cu suflet.</p>
     <a href="produse.html" class="btn">Vezi produsele</a>
