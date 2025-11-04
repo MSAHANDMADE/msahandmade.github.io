@@ -6,56 +6,72 @@
   <title>Coș — MSA Handmade</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* -------- Layout de bază (nu atinge cart.js) -------- */
     :root{--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--bg:#fafafa;--card:#fff;--brand:#0f172a}
     *{box-sizing:border-box}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#fafafa;color:var(--ink);margin:0}
     a{text-decoration:none;color:inherit}
     .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
+
+    /* nav */
     header.nav{display:flex;gap:18px;align-items:center;background:#fff;border-bottom:1px solid var(--line);padding:12px 16px;position:sticky;top:0;z-index:5}
     header.nav a{font-weight:600}
     .pill{margin-left:auto;background:#f1f5f9;border-radius:999px;width:36px;height:36px;display:grid;place-items:center;font-weight:800}
+
     h1{font-size:36px;margin:16px 0}
     .grid{display:grid;grid-template-columns:1fr 340px;gap:18px}
     @media (max-width:900px){.grid{grid-template-columns:1fr}}
     .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 2px 10px rgba(2,6,23,.06)}
     .inner{padding:16px}
     .btn{padding:10px 14px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:700;cursor:pointer}
-    .btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+    .btn.ghost{background:#fff;color:var(--ink);border-color:#e2e8f0}
     .btn.danger{background:#fee2e2;border-color:#fecaca;color:#7f1d1d}
     .muted{color:var(--muted)}
     .row{display:flex;justify-content:space-between;margin:6px 0}
     .row strong{font-weight:800}
 
-    /* -------- TABEL COȘ (doar stil, structura o scrie cart.js) -------- */
+    /* ===== TABEL COȘ – cart.js va popula #cart-body ===== */
     .tbl-wrap{overflow-x:auto}
     table.cart{width:100%;border-collapse:collapse;table-layout:auto}
     table.cart th,table.cart td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
     table.cart th{background:#f8fafc;text-align:left;white-space:nowrap}
 
-    /* Col. 1 (Produs): lăsăm numele să „urce” pe 2 rânduri ca să facem loc la Cant/Total */
+    /* Col. 1: lăsăm numele să rupă rândul ca să facă loc Cant./Total */
     table.cart td:nth-child(1){max-width:0}
     table.cart td:nth-child(1) .name{display:block;line-height:1.25;word-break:break-word}
 
-    /* Col. 2 (Cant.) și col. 3 (Total) – FORȚEZ lățime minimă ca să nu dispară pe mobil */
+    /* Col. 2 (Cant.) și col. 3 (Total) – forțăm lățimi minime, să NU dispară pe mobil */
     table.cart th:nth-child(2), table.cart td:nth-child(2){min-width:150px;white-space:nowrap}
     table.cart th:nth-child(3), table.cart td:nth-child(3){min-width:110px;white-space:nowrap;text-align:right}
     table.cart td:nth-child(4){width:56px;text-align:right}
 
-    /* Controale cantitate (fără să umblu la JS) */
+    /* Controale cantitate – compact pe ecrane mici */
     .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden}
     .qty button{width:34px;height:34px;border:0;background:#f1f5f9;font-size:18px}
     .qty input{width:48px;height:34px;border:0;text-align:center}
     @media (max-width:420px){.qty button{width:30px;height:30px}.qty input{width:44px;height:30px}}
 
-    /* -------- Formular -------- */
+    /* ===== Layout pe mobil: mutăm Cant.+Total SUB produs (fără să atingem cart.js) ===== */
+    @media (max-width: 640px){
+      #cart-body td.hide-when-stacked{ display:none !important; }
+      #cart-body td:first-child .stack{ margin-top:6px; }
+      #cart-body td:first-child .stack-bottom{
+        display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:8px;
+      }
+      #cart-body td:first-child .stack-qty .qty{
+        display:inline-flex; align-items:center; border:1px solid #e2e8f0; border-radius:10px; overflow:hidden;
+      }
+      #cart-body td:first-child .stack-qty .qty button{ width:30px; height:30px; border:0; background:#f1f5f9; font-weight:700; }
+      #cart-body td:first-child .stack-qty .qty input{ width:44px; height:30px; border:0; text-align:center; }
+    }
+
+    /* ===== Formular ===== */
     form input, form textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}
     form textarea{resize:vertical}
     .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .full{grid-column:1/-1}
     @media (max-width:700px){.form-grid{grid-template-columns:1fr}}
     .switch{display:flex;gap:18px;margin:8px 0 12px}
-    .pj-only{display:none} /* ascuns implicit; îl arătăm la PJ din JS */
+    .pj-only{display:none} /* ascuns implicit; JS o arată la PJ */
   </style>
 </head>
 <body>
@@ -84,7 +100,7 @@
               </tr>
             </thead>
             <tbody id="cart-body">
-              <!-- cart.js va scrie rândurile -->
+              <!-- cart.js scrie rândurile aici -->
               <tr><td colspan="4" class="muted">Se încarcă…</td></tr>
             </tbody>
           </table>
@@ -147,28 +163,76 @@
     <p class="muted" style="text-align:center;margin:22px 0 6px">© <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</p>
   </div>
 
-  <!-- EmailJS (las exact cum îl aveai) -->
+  <!-- EmailJS (las exact cum îl ai în proiect) -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
-  <!-- IMPORTANT: rupem cache-ul la cart.js dar NU schimbăm conținutul -->
-  <script src="cart.js?v=6"></script>
+  <!-- cart.js – îl chem cu ?v=8 ca să rup cache-ul; conținutul rămâne al tău -->
+  <script src="cart.js?v=8"></script>
 
-  <!-- Mic JS doar pentru PF/PJ + anul curent (nu atinge logica coșului) -->
+  <!-- Stack mobil (mută Cant. & Total sub produs) + PF/PJ toggle. NU atinge cart.js -->
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Dacă în col. 1 numele produsului e într-un <div>, îl stilizăm ca .name ca să poată rupe rândul frumos
-    // (cart.js poate să pună deja structure; dacă nu, nicio problemă)
-    // PF / PJ: arată/ascunde + required corect
-    function syncPFJ(){
-      const isPJ = (document.querySelector('input[name="tip"]:checked')||{}).value === 'pj';
-      document.querySelectorAll('.pj-only').forEach(el=> el.style.display = isPJ ? '' : 'none');
-      document.querySelectorAll('.pf-only').forEach(el=> el.style.display = isPJ ? 'none' : '');
-      ['firma','cui','reg'].forEach(n=>{ const el=document.querySelector('[name="'+n+'"]'); if(el) el.required=isPJ; });
-      ['nume','prenume'].forEach(n=>{ const el=document.querySelector('[name="'+n+'"]'); if(el) el.required=!isPJ; });
-    }
-    document.querySelectorAll('input[name="tip"]').forEach(r=> r.addEventListener('change', syncPFJ));
-    document.addEventListener('DOMContentLoaded', syncPFJ);
+    // A) Pe mobil: mut Cant. + Total în prima celulă, sub nume
+    (function(){
+      function stackOneRow(tr){
+        if (!tr || tr.dataset.stacked === '1') return;
+        const tds = tr.querySelectorAll('td');
+        if (tds.length < 3) return;
+
+        const tdProd  = tds[0];
+        const tdCant  = tds[1];
+        const tdTotal = tds[2];
+
+        const wrapper = document.createElement('div');
+        const top     = document.createElement('div');
+        const bottom  = document.createElement('div');
+        const left    = document.createElement('div');
+        const right   = document.createElement('div');
+
+        wrapper.className = 'stack';
+        bottom.className  = 'stack-bottom';
+        left.className    = 'stack-qty';
+        right.className   = 'stack-total';
+
+        while (tdProd.firstChild) top.appendChild(tdProd.firstChild);
+        while (tdCant.firstChild) left.appendChild(tdCant.firstChild);
+        while (tdTotal.firstChild) right.appendChild(tdTotal.firstChild);
+
+        bottom.appendChild(left);
+        bottom.appendChild(right);
+        wrapper.appendChild(top);
+        wrapper.appendChild(bottom);
+        tdProd.appendChild(wrapper);
+
+        tdCant.classList.add('hide-when-stacked');
+        tdTotal.classList.add('hide-when-stacked');
+        tr.dataset.stacked = '1';
+      }
+
+      function stackAll(){
+        if (window.matchMedia('(max-width: 640px)').matches){
+          document.querySelectorAll('#cart-body > tr').forEach(stackOneRow);
+        }
+      }
+      document.addEventListener('DOMContentLoaded', stackAll);
+      const body = document.getElementById('cart-body');
+      if (body){ new MutationObserver(stackAll).observe(body, {childList:true}); }
+      window.addEventListener('resize', stackAll);
+    })();
+
+    // B) PF / PJ – arată câmpurile firmă/cui/reg și setează required corect
+    (function(){
+      function syncPFJ(){
+        var isPJ = (document.querySelector('input[name="tip"]:checked')||{}).value === 'pj';
+        document.querySelectorAll('.pj-only').forEach(el=> el.style.display = isPJ ? '' : 'none');
+        document.querySelectorAll('.pf-only').forEach(el=> el.style.display = isPJ ? 'none' : '');
+        ['firma','cui','reg'].forEach(n=>{ var el=document.querySelector('[name="'+n+'"]'); if(el) el.required=isPJ; });
+        ['nume','prenume'].forEach(n=>{ var el=document.querySelector('[name="'+n+'"]'); if(el) el.required=!isPJ; });
+      }
+      document.addEventListener('DOMContentLoaded', syncPFJ);
+      document.querySelectorAll('input[name="tip"]').forEach(r=> r.addEventListener('change', syncPFJ));
+    })();
   </script>
 </body>
 </html>
