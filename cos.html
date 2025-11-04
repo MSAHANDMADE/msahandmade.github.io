@@ -1,205 +1,236 @@
 <!doctype html>
 <html lang="ro">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Coș — MSA Handmade</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    :root{--ink:#0b132b;--muted:#64748b;--line:#e5e7eb;--card:#fff;--brand:#0b132b}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#fafafa;color:var(--ink)}
-    a{text-decoration:none;color:inherit}
-    .wrap{max-width:980px;margin:24px auto;padding:0 16px}
-    header.nav{display:flex;gap:18px;align-items:center;justify-content:space-between;padding:12px 0}
-    nav a{font-weight:700;margin-right:18px}
-    .pill{background:#fde68a;border-radius:999px;padding:4px 10px;font-weight:800}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Coș — MSA Handmade</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  :root{--ink:#0b132b;--muted:#64748b;--line:#e5e7eb;--card:#fff;--brand:#0b132b}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:#fafafa;color:var(--ink)}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:980px;margin:24px auto;padding:0 16px}
+  header.nav{display:flex;gap:18px;align-items:center;justify-content:space-between;padding:12px 0}
+  nav a{font-weight:700;margin-right:18px}
+  .pill{background:#fde68a;border-radius:999px;padding:4px 10px;font-weight:800}
+  h1{font-size:clamp(28px,4vw,40px);margin:8px 0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(2,8,23,.06);padding:16px}
 
-    h1{font-size:clamp(28px,4vw,40px);margin:8px 0 16px}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(2,8,23,.06);padding:16px}
+  /* ——— TABEL COȘ ——— */
+  .tbl-wrap{overflow-x:auto}
+  table.cart{width:100%;border-collapse:collapse;table-layout:auto}
+  table.cart th,table.cart td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
+  table.cart th{background:#f8fafc;text-align:left;white-space:nowrap}
+  table.cart td:nth-child(1){max-width:0}
+  table.cart td:nth-child(1) .name{display:block;line-height:1.25;word-break:break-word}
+  table.cart th:nth-child(2), table.cart td:nth-child(2){min-width:150px;white-space:nowrap;text-align:center}
+  table.cart th:nth-child(3), table.cart td:nth-child(3){min-width:110px;white-space:nowrap;text-align:right}
 
-    /* ——— TABEL COȘ ——— */
-    .tbl-wrap{overflow-x:auto}
-    table.cart{width:100%;border-collapse:collapse;table-layout:auto}
-    table.cart th,table.cart td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
-    table.cart th{background:#f8fafc;text-align:left;white-space:nowrap}
+  /* Cantitate — mare și clar */
+  .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .qty button{width:42px;height:42px;border:0;background:#f1f5f9;font-size:22px;font-weight:800;line-height:1}
+  .qty input{width:66px;height:42px;border:0;text-align:center;font-weight:800;font-size:18px}
+  @media (max-width:420px){
+    .qty button{width:36px;height:36px;font-size:20px}
+    .qty input{width:54px;height:36px;font-size:16px}
+    table.cart th:nth-child(2), table.cart td:nth-child(2){min-width:130px}
+    table.cart th:nth-child(3), table.cart td:nth-child(3){min-width:96px}
+  }
 
-    /* las numele (col. 1) să se rupă pe 2 rânduri ca să fac loc la Cant./Total */
-    table.cart td:nth-child(1){max-width:0}
-    table.cart td:nth-child(1) .name{display:block;line-height:1.25;word-break:break-word}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+  .btn{padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:700;cursor:pointer}
+  .btn.primary{background:var(--brand);color:#fff;border-color:transparent}
+  .btn.danger{background:#fee2e2;color:#991b1b;border-color:#fecaca}
+  .btn[disabled]{opacity:.55;pointer-events:none}
 
-    /* forțez lățime minimă pt. Cant. și Total ca să se vadă pe mobil */
-    table.cart th:nth-child(2), table.cart td:nth-child(2){min-width:150px;white-space:nowrap;text-align:center}
-    table.cart th:nth-child(3), table.cart td:nth-child(3){min-width:110px;white-space:nowrap;text-align:right}
+  /* ——— TOTALURI ——— */
+  .totals{display:grid;gap:8px}
+  .row{display:flex;justify-content:space-between}
+  .grand{font-weight:900;font-size:22px}
 
-    /* control cantitate — mare și clar */
-    .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-    .qty button{width:42px;height:42px;border:0;background:#f1f5f9;font-size:22px;font-weight:800;line-height:1}
-    .qty input{width:66px;height:42px;border:0;text-align:center;font-weight:800;font-size:18px}
-
-    /* buton ștergere (dacă îl generează scriptul) */
-    .danger-btn{border:1px solid #fecaca;background:#fee2e2;color:#991b1b;border-radius:12px;width:44px;height:44px;font-size:20px}
-
-    /* responsive mic */
-    @media (max-width:420px){
-      .qty button{width:36px;height:36px;font-size:20px}
-      .qty input{width:54px;height:36px;font-size:16px}
-      table.cart th:nth-child(2), table.cart td:nth-child(2){min-width:130px}
-      table.cart th:nth-child(3), table.cart td:nth-child(3){min-width:96px}
-    }
-
-    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
-    .btn{padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:700;cursor:pointer}
-    .btn.primary{background:var(--brand);color:#fff;border-color:transparent}
-    .btn.danger{background:#fee2e2;color:#991b1b;border-color:#fecaca}
-    .btn[disabled]{opacity:.55;pointer-events:none}
-
-    /* ——— TOTALURI ——— */
-    .totals{display:grid;gap:8px}
-    .row{display:flex;justify-content:space-between}
-    .grand{font-weight:900;font-size:22px}
-
-    /* ——— FORMULAR ——— */
-    form input, form textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:16px;margin-bottom:10px;background:#fff}
-    .switch{display:flex;gap:18px;margin:6px 0 12px}
-    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    @media (max-width:700px){.two{grid-template-columns:1fr}}
-    .pf-only{display:block}
-    .pj-only{display:none}
-  </style>
+  /* ——— FORMULAR ——— */
+  form input, form textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:16px;margin-bottom:10px;background:#fff}
+  .switch{display:flex;gap:18px;margin:6px 0 12px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:700px){.two{grid-template-columns:1fr}}
+  .pf-only{display:block}
+  .pj-only{display:none}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- NAV -->
-    <header class="nav">
-      <nav>
-        <a href="index.html">Acasă</a>
-        <a href="produse.html">Produse</a>
-        <a href="despre.html">Despre</a>
-        <a href="contact.html">Contact</a>
-      </nav>
-      <a href="cos.html" aria-label="Coș">🛒 <span id="cart-count" class="pill">0</span></a>
-    </header>
+<div class="wrap">
+  <!-- NAV -->
+  <header class="nav">
+    <nav>
+      <a href="index.html">Acasă</a>
+      <a href="produse.html">Produse</a>
+      <a href="despre.html">Despre</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a href="cos.html" aria-label="Coș">🛒 <span id="cart-count" class="pill">0</span></a>
+  </header>
 
-    <h1>Coșul tău</h1>
+  <h1>Coșul tău</h1>
 
-    <!-- LISTĂ PRODUSE -->
-    <section class="card">
-      <div class="tbl-wrap">
-        <table class="cart" aria-label="Produse în coș">
-          <thead>
-            <tr>
-              <th>Produs</th>
-              <th style="text-align:center">Cant.</th>
-              <th style="text-align:right">Total</th>
-            </tr>
-          </thead>
-          <tbody id="cart-body">
-            <!-- scriptul tău inserează aici rândurile -->
-            <tr><td colspan="3" class="muted">Se încarcă…</td></tr>
-          </tbody>
-        </table>
+  <!-- LISTĂ PRODUSE -->
+  <section class="card">
+    <div class="tbl-wrap">
+      <table class="cart" aria-label="Produse în coș">
+        <thead>
+          <tr>
+            <th>Produs</th>
+            <th style="text-align:center">Cant.</th>
+            <th style="text-align:right">Total</th>
+          </tr>
+        </thead>
+
+        <!-- ATENȚIE: oferim AMBELE ținte pe care le poate folosi scriptul tău,
+             dar le ținem ASCUNSE. Afișăm doar #cart-view. -->
+        <tbody id="cart-items" style="display:none"></tbody>
+        <tbody id="cart-body"  style="display:none"></tbody>
+
+        <!-- Aici se vede coșul (copiem automat aici din cele de mai sus) -->
+        <tbody id="cart-view">
+          <tr><td colspan="3" class="muted">Se încarcă…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="actions">
+      <button id="clear-cart" class="btn danger" type="button">Golește coșul</button>
+      <a class="btn" href="produse.html">Continuă cumpărăturile</a>
+    </div>
+  </section>
+
+  <!-- TOTALURI -->
+  <section class="card" style="margin-top:16px">
+    <h2 style="margin:0 0 8px">Totaluri</h2>
+    <div class="totals">
+      <div class="row"><span>Subtotal</span><span id="subval">0.00 RON</span></div>
+      <div class="row"><span>Reducere</span><span id="discval">− 0.00 RON</span></div>
+      <div class="row"><span>Livrare</span><span id="shipval">0.00 RON</span></div>
+      <hr />
+      <div class="row grand"><span>Total</span><span id="totval">0.00 RON</span></div>
+    </div>
+    <p class="muted" style="margin-top:8px">Reduceri: ≥200 RON −10%, ≥300 RON −15%, ≥400 RON −20%. Livrare gratuită la 300 RON.</p>
+  </section>
+
+  <!-- FORMULAR (ID-uri exacte + PF/PJ) -->
+  <section class="card" style="margin-top:16px">
+    <h2 style="margin:0 0 8px">Detalii pentru livrare</h2>
+
+    <form id="order-form">
+      <div class="switch">
+        <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
+        <label><input type="radio" name="tip" value="pj"> Persoană juridică</label>
       </div>
 
-      <div class="actions">
-        <button id="clear-cart" class="btn danger" type="button">Golește coșul</button>
-        <a class="btn" href="produse.html">Continuă cumpărăturile</a>
+      <!-- PF -->
+      <div class="pf-only two">
+        <input id="nume"    name="nume"    placeholder="Nume" required>
+        <input id="prenume" name="prenume" placeholder="Prenume" required>
       </div>
-    </section>
 
-    <!-- TOTALURI -->
-    <section class="card" style="margin-top:16px">
-      <h2 style="margin:0 0 8px">Totaluri</h2>
-      <div class="totals">
-        <div class="row"><span>Subtotal</span><span id="subval">0.00 RON</span></div>
-        <div class="row"><span>Reducere</span><span id="discval">− 0.00 RON</span></div>
-        <div class="row"><span>Livrare</span><span id="shipval">0.00 RON</span></div>
-        <hr />
-        <div class="row grand"><span>Total</span><span id="totval">0.00 RON</span></div>
-      </div>
-      <p class="muted" style="margin-top:8px">Reduceri: ≥200 RON −10%, ≥300 RON −15%, ≥400 RON −20%. Livrare gratuită la 300 RON.</p>
-    </section>
-
-    <!-- FORMULAR (ID-uri exacte) -->
-    <section class="card" style="margin-top:16px">
-      <h2 style="margin:0 0 8px">Detalii pentru livrare</h2>
-
-      <form id="order-form">
-        <div class="switch">
-          <label><input type="radio" name="tip" value="pf" checked> Persoană fizică</label>
-          <label><input type="radio" name="tip" value="pj"> Persoană juridică</label>
-        </div>
-
-        <!-- PF -->
-        <div class="pf-only two">
-          <input id="nume"    name="nume"    placeholder="Nume" required>
-          <input id="prenume" name="prenume" placeholder="Prenume" required>
-        </div>
-
-        <!-- PJ -->
-        <div class="pj-only" id="pj-box">
-          <input id="firma" name="firma" placeholder="Denumire firmă">
-          <div class="two">
-            <input id="cui"   name="cui"   placeholder="CUI">
-            <input id="reg"   name="reg"   placeholder="Nr. Reg. Comerț">
-          </div>
-        </div>
-
+      <!-- PJ -->
+      <div class="pj-only" id="pj-box">
+        <input id="firma" name="firma" placeholder="Denumire firmă">
         <div class="two">
-          <input id="email"   name="email"   placeholder="Email" required>
-          <input id="telefon" name="telefon" placeholder="Telefon" required>
+          <input id="cui"   name="cui"   placeholder="CUI">
+          <input id="reg"   name="reg"   placeholder="Nr. Reg. Comerț">
         </div>
-        <div class="two">
-          <input id="judet"   name="judet"   placeholder="Județ" required>
-          <input id="oras"    name="oras"    placeholder="Oraș" required>
-        </div>
-        <input id="adresa"  name="adresa"  placeholder="Adresă completă" required>
-        <input id="zip"     name="zip"     placeholder="Cod poștal">
-        <textarea id="mentiuni" name="mentiuni" placeholder="Mențiuni (opțional)" rows="3"></textarea>
+      </div>
 
-        <button id="place-order" type="submit" class="btn primary" style="width:100%;margin-top:8px">
-          Plasează comanda
-        </button>
-      </form>
-    </section>
+      <div class="two">
+        <input id="email"   name="email"   placeholder="Email" required>
+        <input id="telefon" name="telefon" placeholder="Telefon" required>
+      </div>
+      <div class="two">
+        <input id="judet"   name="judet"   placeholder="Județ" required>
+        <input id="oras"    name="oras"    placeholder="Oraș" required>
+      </div>
+      <input id="adresa"  name="adresa"  placeholder="Adresă completă" required>
+      <input id="zip"     name="zip"     placeholder="Cod poștal">
+      <textarea id="mentiuni" name="mentiuni" placeholder="Mențiuni (opțional)" rows="3"></textarea>
 
-    <footer style="text-align:center;margin:26px 0;color:#6b7280">
-      © <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.
-    </footer>
-  </div>
+      <button id="place-order" type="submit" class="btn primary" style="width:100%;margin-top:8px">
+        Plasează comanda
+      </button>
+    </form>
+  </section>
 
-  <!-- EXACT cum ai, nu ating logica -->
-  <script src="script.js"></script>
+  <footer style="text-align:center;margin:26px 0;color:#6b7280">
+    © <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.
+  </footer>
+</div>
 
-  <!-- Mic utilitar local: an, PF/PJ toggle (doar display + required), blocare dublu-submit -->
-  <script>
-    // anul
-    (function(){const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();})();
+<!-- EXACT cum ai, nu ating logica -->
+<script src="script.js"></script>
 
-    // PF/PJ – doar vizibilitate + required pe câmpurile PJ; nu atinge trimiterea
-    (function(){
-      const radios=document.querySelectorAll('input[name="tip"]');
-      function sync(){
-        const isPJ=(document.querySelector('input[name="tip"]:checked')||{}).value==='pj';
-        document.querySelector('.pj-only').style.display = isPJ ? 'block' : 'none';
-        document.querySelector('.pf-only').style.display = isPJ ? 'none'  : 'grid';
-        ['firma','cui','reg'].forEach(n=>{ const el=document.getElementById(n); if(el) el.required=isPJ; });
-      }
-      document.addEventListener('DOMContentLoaded', sync);
-      radios.forEach(r=>r.addEventListener('change', sync));
-    })();
+<!-- Mic utilitar local: anul, PF/PJ, blocare dublu-submit, **mirror pentru tbody** -->
+<script>
+  // anul
+  (function(){const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();})();
 
-    // blocare dublu-submit (las scriptul tău să proceseze submit-ul)
-    (function(){
-      const form=document.getElementById('order-form');
-      const btn =document.getElementById('place-order');
-      if(!form||!btn) return;
-      let sent=false;
-      form.addEventListener('submit',function(e){
-        if(sent){ e.preventDefault(); return false; }
-        sent=true; btn.disabled=true; btn.textContent='Se trimite...';
-      },{capture:true});
-    })();
-  </script>
+  // PF/PJ – afișare și required pe câmpurile PJ (fără să ating trimiterea)
+  (function(){
+    function sync(){
+      const isPJ=(document.querySelector('input[name="tip"]:checked')||{}).value==='pj';
+      document.querySelector('.pj-only').style.display = isPJ ? 'block' : 'none';
+      document.querySelector('.pf-only').style.display = isPJ ? 'none'  : 'grid';
+      ['firma','cui','reg'].forEach(n=>{ const el=document.getElementById(n); if(el) el.required=isPJ; });
+    }
+    document.addEventListener('DOMContentLoaded', sync);
+    document.querySelectorAll('input[name="tip"]').forEach(r=>r.addEventListener('change', sync));
+  })();
+
+  // Blocare dublu-submit – las scriptul tău să proceseze submit-ul
+  (function(){
+    const form=document.getElementById('order-form');
+    const btn =document.getElementById('place-order');
+    if(!form||!btn) return;
+    let sent=false;
+    form.addEventListener('submit',function(e){
+      if(sent){ e.preventDefault(); return false; }
+      sent=true; btn.disabled=true; btn.textContent='Se trimite...';
+    },{capture:true});
+  })();
+
+  // *** CHESTIA CARE TE DEBLOCHEAZĂ: mirror pentru tbody ***
+  // Orice script ai (scrie în #cart-items sau în #cart-body), noi afișăm în #cart-view.
+  (function(){
+    const itemsTB  = document.getElementById('cart-items'); // ascuns
+    const bodyTB   = document.getElementById('cart-body');  // ascuns
+    const viewTB   = document.getElementById('cart-view');  // vizibil
+
+    function copyIntoView(fromTB){
+      if(!fromTB || !viewTB) return;
+      // goliți view
+      while(viewTB.firstChild) viewTB.removeChild(viewTB.firstChild);
+      // copiați rândurile (nu mutați ca să nu supărăm scriptul)
+      fromTB.querySelectorAll('tr').forEach(tr=>{
+        viewTB.appendChild(tr.cloneNode(true));
+      });
+    }
+
+    function onChange(muts, obs){
+      // alege sursa care are conținut
+      const src = (itemsTB && itemsTB.childElementCount) ? itemsTB :
+                  (bodyTB  && bodyTB.childElementCount)  ? bodyTB  : null;
+      if(src) copyIntoView(src);
+    }
+
+    // Observăm ambele potentiale tbody
+    if(itemsTB){
+      new MutationObserver(onChange).observe(itemsTB,{childList:true,subtree:false});
+    }
+    if(bodyTB){
+      new MutationObserver(onChange).observe(bodyTB,{childList:true,subtree:false});
+    }
+
+    // În caz că scriptul a scris deja înainte să atașăm observer-ul:
+    setTimeout(()=>onChange(), 50);
+  })();
+</script>
 </body>
 </html>
