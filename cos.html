@@ -111,6 +111,122 @@ legend{padding:0 6px;font-weight:700}
 <script src="script.js"></script>
 <!-- 2) logica paginii de coș -->
 <script src="cart.js"></script>
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script><script>
+/* COS – citire din localStorage + randare + badge sync */
+(function () {
+  const KEY = 'MSA_CART';
+
+  const tbody    = document.getElementById('cart-body');
+  const subEl    = document.getElementById('subval');
+  const discEl   = document.getElementById('discval');
+  const shipEl   = document.getElementById('shipval');
+  const totEl    = document.getElementById('totval');
+  const clearBtn = document.getElementById('clear-cart');
+  const badge    = document.getElementById('cart-count');
+
+  function read() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; }
+    catch (_) { return []; }
+  }
+  function write(items) {
+    localStorage.setItem(KEY, JSON.stringify(items));
+    updateBadge(items);
+    // ping către alte tab-uri
+    window.dispatchEvent(new StorageEvent('storage', {key: KEY, newValue: JSON.stringify(items)}));
+  }
+  function fmt(n){ return (Number(n)||0).toFixed(2) + ' RON'; }
+  function updateBadge(items){
+    try{
+      const c = (items||read()).reduce((s,i)=> s + (Number(i.qty)||0), 0);
+      if (badge) badge.textContent = c;
+    }catch(_){/* ignore */}
+  }
+
+  function totals(items){
+    const subtotal = items.reduce((s, it)=> s + (Number(it.price)||0)*(Number(it.qty)||0), 0);
+    let reducere = 0;
+    if (subtotal >= 400) reducere = 0.20 * subtotal;
+    else if (subtotal >= 300) reducere = 0.15 * subtotal;
+    else if (subtotal >= 200) reducere = 0.10 * subtotal;
+
+    const dupaReducere = subtotal - reducere;
+    const livrare = dupaReducere >= 300 || dupaReducere === 0 ? 0 : 20; // ajustează dacă ai alt tarif
+    const total = dupaReducere + livrare;
+    return { subtotal, reducere, livrare, total };
+  }
+
+  function render(){
+    const items = read();
+
+    // badge
+    updateBadge(items);
+
+    if (!tbody) return;
+
+    if (!items.length){
+      tbody.innerHTML = `<tr><td colspan="3" style="padding:16px;color:#666">Coșul este gol.</td></tr>`;
+    } else {
+      tbody.innerHTML = items.map((it, idx)=>`
+        <tr data-id="${it.id}">
+          <td>
+            <div style="display:flex;gap:10px;align-items:center">
+              <img src="${it.image||''}" alt="" style="width:56px;height:56px;object-fit:cover;border-radius:8px">
+              <div><strong>${it.name}</strong><br><small>${fmt(it.price)}</small></div>
+            </div>
+          </td>
+          <td>
+            <button class="qminus" aria-label="minus">−</button>
+            <input class="qinput" type="number" min="1" value="${Number(it.qty)||1}" style="width:56px;text-align:center">
+            <button class="qplus" aria-label="plus">+</button>
+          </td>
+          <td style="text-align:right"><strong>${fmt((Number(it.price)||0)*(Number(it.qty)||0))}</strong></td>
+        </tr>
+      `).join('');
+    }
+
+    const t = totals(items);
+    if (subEl)  subEl.textContent  = fmt(t.subtotal);
+    if (discEl) discEl.textContent = '− ' + fmt(t.reducere);
+    if (shipEl) shipEl.textContent = fmt(t.livrare);
+    if (totEl)  totEl.textContent  = fmt(t.total);
+
+    // bind controale pe rânduri
+    tbody.querySelectorAll('tr').forEach(row=>{
+      const id   = row.dataset.id;
+      const minus= row.querySelector('.qminus');
+      const plus = row.querySelector('.qplus');
+      const inp  = row.querySelector('.qinput');
+
+      function setQty(v){
+        const items = read();
+        const i = items.findIndex(p=> String(p.id)===String(id));
+        if (i>-1){
+          items[i].qty = Math.max(1, Number(v)||1);
+          write(items);
+          render();
+        }
+      }
+
+      if (minus) minus.addEventListener('click', ()=> setQty((Number(inp.value)||1)-1));
+      if (plus)  plus.addEventListener('click', ()=> setQty((Number(inp.value)||1)+1));
+      if (inp)   inp.addEventListener('change',   ()=> setQty(inp.value));
+    });
+  }
+
+  // golește coșul
+  if (clearBtn){
+    clearBtn.addEventListener('click', ()=>{
+      if (confirm('Golești coșul?')){
+        write([]);
+        render();
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', render);
+  // dacă alt tab modifică coșul, ne sincronizăm
+  window.addEventListener('storage', (e)=>{ if (e.key===KEY) render(); });
+})();
+</script>
 </body>
 </html>
