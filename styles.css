@@ -172,3 +172,54 @@ table.cart th{ font-size:14px; color:var(--muted); font-weight:700; }
 /* Linkuri legale din footer (dacă există) */
 footer .legal-nav a{ color:inherit; }
 footer .legal-nav a:hover{ color:#d12b4a; }
+/* === HOTFIX 05.11 — Navbar și logo === */
+
+header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+header .wrap .left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: nowrap;
+}
+
+header .wrap .left a {
+  color: #0a2230 !important;
+  text-decoration: none !important;
+  font-weight: 600;
+}
+
+header .wrap .left a:hover {
+  color: #d9c08b !important;
+}
+
+/* Buton coș */
+.cart-pill, header a[href*="cos"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f7f7f7;
+  padding: 6px 10px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #0a2230 !important;
+  font-weight: 600;
+}
+
+/* Logo mai mic pe mobil */
+.hero img.logo {
+  width: 160px !important;
+  height: auto;
+}
+@media (min-width: 600px) {
+  .hero img.logo {
+    width: 200px !important;
+  }
+}
