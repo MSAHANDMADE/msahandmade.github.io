@@ -16,23 +16,18 @@
   .pill{background:#fde68a;border-radius:999px;padding:4px 10px;font-weight:800}
   h1{font-size:clamp(28px,4vw,40px);margin:8px 0 16px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(2,8,23,.06);padding:16px}
-
-  /* ——— TABEL COȘ (STRUCTURA CLASICĂ) ——— */
   .tbl-wrap{overflow-x:auto}
   table.cart{width:100%;border-collapse:collapse;table-layout:auto}
   table.cart th,table.cart td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
   table.cart th{background:#f8fafc;text-align:left;white-space:nowrap}
-  /* col. 1: nume + poză */
   .cart-line{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center}
   .cart-thumb{width:72px;height:72px;border-radius:12px;object-fit:cover;border:1px solid var(--line)}
   .name{display:block;line-height:1.25;word-break:break-word;font-weight:800}
   .unit{color:var(--muted);font-weight:700;margin-top:4px}
-
-  /* col. 2: CANTITATE – DOAR CSS, nu schimb DOM-ul */
+  /* Cantitate */
   .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden}
   .qty button{width:42px;height:42px;border:0;background:#f1f5f9;font-size:22px;font-weight:800;line-height:1;cursor:pointer}
   .qty input[type="number"]{width:66px;height:42px;border:0;text-align:center;font-weight:800;font-size:18px}
-  /* asigur vizibilitate col. Cant. & Total pe mobil */
   table.cart th:nth-child(2), table.cart td:nth-child(2){min-width:150px;text-align:center;white-space:nowrap}
   table.cart th:nth-child(3), table.cart td:nth-child(3){min-width:110px;text-align:right;white-space:nowrap}
   @media (max-width:420px){
@@ -41,19 +36,14 @@
     table.cart th:nth-child(2), table.cart td:nth-child(2){min-width:130px}
     table.cart th:nth-child(3), table.cart td:nth-child(3){min-width:96px}
   }
-
   .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
   .btn{padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:700;cursor:pointer}
   .btn.primary{background:var(--brand);color:#fff;border-color:transparent}
   .btn.danger{background:#fee2e2;color:#991b1b;border-color:#fecaca}
   .btn[disabled]{opacity:.55;pointer-events:none}
-
-  /* ——— TOTALURI ——— */
   .totals{display:grid;gap:8px}
   .row{display:flex;justify-content:space-between}
   .grand{font-weight:900;font-size:22px}
-
-  /* ——— FORM ——— */
   form input, form textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:16px;margin-bottom:10px;background:#fff}
   .switch{display:flex;gap:18px;margin:6px 0 12px}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -64,7 +54,6 @@
 </head>
 <body>
 <div class="wrap">
-  <!-- NAV -->
   <header class="nav">
     <nav>
       <a href="index.html">Acasă</a>
@@ -77,7 +66,7 @@
 
   <h1>Coșul tău</h1>
 
-  <!-- LISTĂ PRODUSE – tbody-ul PE CARE ÎL POPULEAZĂ SCRIPTUL TĂU -->
+  <!-- LISTĂ PRODUSE -->
   <section class="card">
     <div class="tbl-wrap">
       <table class="cart" aria-label="Produse în coș">
@@ -89,36 +78,17 @@
           </tr>
         </thead>
         <tbody id="cart-items">
-          <!-- Scriptul tău inserează aici:
-               <tr>
-                 <td>
-                   <div class="cart-line">
-                     <img class="cart-thumb" src="...">
-                     <div><span class="name">Nume produs</span><div class="unit">XX,XX RON</div></div>
-                   </div>
-                 </td>
-                 <td>
-                   <div class="qty">
-                     <button class="qminus">−</button>
-                     <input type="number" value="1" min="1">
-                     <button class="qplus">+</button>
-                   </div>
-                 </td>
-                 <td>...</td>
-               </tr>
-          -->
           <tr><td colspan="3" class="muted">Se încarcă…</td></tr>
         </tbody>
       </table>
     </div>
-
     <div class="actions">
       <button id="clear-cart" class="btn danger" type="button">Golește coșul</button>
       <a class="btn" href="produse.html">Continuă cumpărăturile</a>
     </div>
   </section>
 
-  <!-- TOTALURI – ID-urile clasice folosite de scriptul tău -->
+  <!-- TOTALURI -->
   <section class="card" style="margin-top:16px">
     <h2 style="margin:0 0 8px">Totaluri</h2>
     <div class="totals">
@@ -130,7 +100,7 @@
     </div>
   </section>
 
-  <!-- FORMULAR – NUMAI STRUCTURĂ; logica rămâne la scriptul tău/EmailJS -->
+  <!-- FORMULAR -->
   <section class="card" style="margin-top:16px">
     <h2 style="margin:0 0 8px">Detalii pentru livrare</h2>
 
@@ -140,13 +110,11 @@
         <label><input type="radio" name="tip" value="pj"> Persoană juridică</label>
       </div>
 
-      <!-- PF -->
       <div class="pf-only two">
         <input id="nume"    name="nume"    placeholder="Nume" required>
         <input id="prenume" name="prenume" placeholder="Prenume" required>
       </div>
 
-      <!-- PJ -->
       <div class="pj-only" id="pj-box">
         <input id="firma" name="firma" placeholder="Denumire firmă">
         <div class="two">
@@ -167,6 +135,10 @@
       <input id="zip"     name="zip"     placeholder="Cod poștal">
       <textarea id="mentiuni" name="mentiuni" placeholder="Mențiuni (opțional)" rows="3"></textarea>
 
+      <!-- câmpuri ascunse trimise la EmailJS/proforma -->
+      <textarea id="cart_json" name="cart_json" hidden></textarea>
+      <input   id="cart_total" name="cart_total" type="hidden" />
+
       <button id="place-order" type="submit" class="btn primary" style="width:100%;margin-top:8px">
         Plasează comanda
       </button>
@@ -178,12 +150,141 @@
   </footer>
 </div>
 
-<!-- IMPORTANT: doar utilitare. NU ating submit-ul, NU previn default. -->
 <script>
-  // An la footer
-  (function(){const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();})();
+/* ===== Coș AUTOSUFICIENT în cos.html (fără alte fișiere) ===== */
+(function(){
+  const KEYS = ['MSA_CART','msa_cart','CART','CART_ITEMS'];
+  const $ = s => document.querySelector(s);
+  const toNum = v => { const n=Number(v); return isFinite(n)&&!isNaN(n)?n:0; };
+  const fmt = x => toNum(x).toFixed(2)+' RON';
 
-  // PF/PJ – doar afișare + required pe câmpurile PJ
+  function readAny(){
+    for(const k of KEYS){
+      try{
+        const raw = localStorage.getItem(k);
+        if(!raw) continue;
+        const data = JSON.parse(raw);
+        if(Array.isArray(data) && data.length) return data.map(n=>({
+          id: String(n.id || n.productId || ''),
+          name: n.name || n.title || '',
+          price: toNum(n.price || n.unitPrice || n.amount || 0),
+          image: n.image || n.img || '',
+          qty: Math.max(1, toNum(n.qty || n.quantity || 1))
+        }));
+      }catch(e){}
+    }
+    return [];
+  }
+
+  function writeCanon(items){
+    try{ localStorage.setItem('MSA_CART', JSON.stringify(items||[])); }catch(e){}
+  }
+
+  function calc(items){
+    const sub = items.reduce((s,i)=>s+toNum(i.price)*toNum(i.qty),0);
+    let disc=0; if(sub>=400) disc=sub*0.20; else if(sub>=300) disc=sub*0.15; else if(sub>=200) disc=sub*0.10;
+    const ship = (sub-disc)>=300 ? 0 : 0;
+    const tot = Math.max(0, sub-disc+ship);
+    return {sub,disc,ship,tot};
+  }
+
+  function updateBadge(items){
+    const el = $('#cart-count'); if(!el) return;
+    const c = items.reduce((s,i)=>s+toNum(i.qty),0);
+    el.textContent = c;
+  }
+
+  function render(){
+    let items = readAny();
+    writeCanon(items); // normalizăm în MSA_CART pentru consistență
+    const tb = $('#cart-items');
+    tb.innerHTML = '';
+    if(!items.length){
+      tb.innerHTML = '<tr><td colspan="3" class="muted">Coșul este gol.</td></tr>';
+      fillTotals({sub:0,disc:0,ship:0,tot:0});
+      updateBadge(items);
+      syncHidden(items);
+      return;
+    }
+
+    items.forEach(it=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <div class="cart-line">
+            ${it.image ? `<img class="cart-thumb" src="${it.image}" alt="${it.name}">` : `<div></div>`}
+            <div>
+              <span class="name">${it.name}</span>
+              <div class="unit">${fmt(it.price)}</div>
+            </div>
+          </div>
+        </td>
+        <td style="text-align:center">
+          <div class="qty">
+            <button class="qminus" aria-label="Scade">−</button>
+            <input type="number" min="1" value="${toNum(it.qty)}" />
+            <button class="qplus" aria-label="Crește">+</button>
+          </div>
+        </td>
+        <td style="text-align:right"><strong>${fmt(it.price*it.qty)}</strong></td>
+      `;
+      const input = tr.querySelector('input');
+      tr.querySelector('.qminus').addEventListener('click', ()=>{
+        input.value = Math.max(1, toNum(input.value)-1);
+        it.qty = toNum(input.value); saveAndRerender();
+      });
+      tr.querySelector('.qplus').addEventListener('click', ()=>{
+        input.value = toNum(input.value)+1;
+        it.qty = toNum(input.value); saveAndRerender();
+      });
+      input.addEventListener('change', ()=>{
+        input.value = Math.max(1, toNum(input.value));
+        it.qty = toNum(input.value); saveAndRerender();
+      });
+      tb.appendChild(tr);
+    });
+
+    fillTotals(calc(items));
+    updateBadge(items);
+    syncHidden(items);
+
+    function saveAndRerender(){
+      // citim iar, actualizăm itemul curent după id, salvăm canonic și reafișăm
+      let cur = readAny();
+      const idx = cur.findIndex(x=>x.id===it.id);
+      if(idx>=0) cur[idx].qty = it.qty;
+      KEYS.forEach(k=>localStorage.setItem(k, JSON.stringify(cur)));
+      render();
+    }
+  }
+
+  function fillTotals(t){
+    const set = (id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
+    set('subval', fmt(t.sub));
+    set('discval','− '+fmt(t.disc));
+    set('shipval', fmt(t.ship));
+    set('totval',  fmt(t.tot));
+  }
+
+  function syncHidden(items){
+    const t = calc(items);
+    const area = document.getElementById('cart_json');
+    const tot  = document.getElementById('cart_total');
+    if(area){
+      area.value = JSON.stringify(items.map(i=>({
+        id:i.id, name:i.name, price:toNum(i.price), qty:toNum(i.qty), line:toNum(i.price)*toNum(i.qty)
+      })));
+    }
+    if(tot){ tot.value = t.tot.toFixed(2); }
+  }
+
+  // Golește coșul
+  document.getElementById('clear-cart')?.addEventListener('click', ()=>{
+    KEYS.forEach(k=>localStorage.setItem(k,'[]'));
+    render();
+  });
+
+  // PF/PJ toggle
   (function(){
     function sync(){
       const isPJ=(document.querySelector('input[name="tip"]:checked')||{}).value==='pj';
@@ -195,22 +296,17 @@
     document.querySelectorAll('input[name="tip"]').forEach(r=>r.addEventListener('change', sync));
   })();
 
-  // Anti dublu-click DOAR pe buton (nu atinge submit-ul formularului)
-  (function(){
-    const btn=document.getElementById('place-order');
-    if(!btn) return;
-    btn.addEventListener('click', function(){
-      if(btn.disabled) return;
-      btn.disabled = true;
-      btn.textContent = 'Se trimite...';
-      // lăsăm formularul să se trimită normal (EmailJS/proforma)
-      // dacă scriptul tău semnalizează eroare, reactivarea o face el; dacă nu, poți re-activa după 10s:
-      setTimeout(()=>{ try{btn.disabled=false; btn.textContent='Plasează comanda';}catch(_){}} , 10000);
-    });
-  })();
-</script>
+  // anul în footer
+  (function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
 
-<!-- Scriptul tău – lasă-l exact cum e -->
-<script src="script.js"></script>
+  // re-render pe schimbări din alt tab
+  window.addEventListener('storage', e=>{
+    if(e && KEYS.includes(e.key)) render();
+  });
+
+  // Init
+  document.addEventListener('DOMContentLoaded', render);
+})();
+</script>
 </body>
 </html>
