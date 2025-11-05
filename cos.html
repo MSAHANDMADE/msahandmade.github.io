@@ -17,25 +17,27 @@
   h1{font-size:clamp(28px,4vw,40px);margin:8px 0 16px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(2,8,23,.06);padding:16px}
 
-  /* ——— TABEL COȘ ——— */
+  /* ——— TABEL COȘ (STRUCTURA CLASICĂ) ——— */
   .tbl-wrap{overflow-x:auto}
   table.cart{width:100%;border-collapse:collapse;table-layout:auto}
   table.cart th,table.cart td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
   table.cart th{background:#f8fafc;text-align:left;white-space:nowrap}
-  /* Nume produs se poate rupe pe 2 rânduri */
-  table.cart td:nth-child(1){max-width:0}
-  table.cart td:nth-child(1) .name{display:block;line-height:1.25;word-break:break-word}
-  /* Cant. și Total au lățime minimă ca să se vadă pe mobil */
-  table.cart th:nth-child(2), table.cart td:nth-child(2){min-width:150px;white-space:nowrap;text-align:center}
-  table.cart th:nth-child(3), table.cart td:nth-child(3){min-width:110px;white-space:nowrap;text-align:right}
+  /* col. 1: nume + poză */
+  .cart-line{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center}
+  .cart-thumb{width:72px;height:72px;border-radius:12px;object-fit:cover;border:1px solid var(--line)}
+  .name{display:block;line-height:1.25;word-break:break-word;font-weight:800}
+  .unit{color:var(--muted);font-weight:700;margin-top:4px}
 
-  /* Cantitate — mare și clar */
+  /* col. 2: CANTITATE – DOAR CSS, nu schimb DOM-ul */
   .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:12px;overflow:hidden}
   .qty button{width:42px;height:42px;border:0;background:#f1f5f9;font-size:22px;font-weight:800;line-height:1;cursor:pointer}
-  .qty input{width:66px;height:42px;border:0;text-align:center;font-weight:800;font-size:18px}
+  .qty input[type="number"]{width:66px;height:42px;border:0;text-align:center;font-weight:800;font-size:18px}
+  /* asigur vizibilitate col. Cant. & Total pe mobil */
+  table.cart th:nth-child(2), table.cart td:nth-child(2){min-width:150px;text-align:center;white-space:nowrap}
+  table.cart th:nth-child(3), table.cart td:nth-child(3){min-width:110px;text-align:right;white-space:nowrap}
   @media (max-width:420px){
     .qty button{width:36px;height:36px;font-size:20px}
-    .qty input{width:54px;height:36px;font-size:16px}
+    .qty input[type="number"]{width:54px;height:36px;font-size:16px}
     table.cart th:nth-child(2), table.cart td:nth-child(2){min-width:130px}
     table.cart th:nth-child(3), table.cart td:nth-child(3){min-width:96px}
   }
@@ -51,7 +53,7 @@
   .row{display:flex;justify-content:space-between}
   .grand{font-weight:900;font-size:22px}
 
-  /* ——— FORMULAR ——— */
+  /* ——— FORM ——— */
   form input, form textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:16px;margin-bottom:10px;background:#fff}
   .switch{display:flex;gap:18px;margin:6px 0 12px}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -75,7 +77,7 @@
 
   <h1>Coșul tău</h1>
 
-  <!-- LISTĂ PRODUSE -->
+  <!-- LISTĂ PRODUSE – tbody-ul PE CARE ÎL POPULEAZĂ SCRIPTUL TĂU -->
   <section class="card">
     <div class="tbl-wrap">
       <table class="cart" aria-label="Produse în coș">
@@ -86,8 +88,25 @@
             <th style="text-align:right">Total</th>
           </tr>
         </thead>
-        <tbody id="cart-body">
-          <!-- Scriptul va popula aici -->
+        <tbody id="cart-items">
+          <!-- Scriptul tău inserează aici:
+               <tr>
+                 <td>
+                   <div class="cart-line">
+                     <img class="cart-thumb" src="...">
+                     <div><span class="name">Nume produs</span><div class="unit">XX,XX RON</div></div>
+                   </div>
+                 </td>
+                 <td>
+                   <div class="qty">
+                     <button class="qminus">−</button>
+                     <input type="number" value="1" min="1">
+                     <button class="qplus">+</button>
+                   </div>
+                 </td>
+                 <td>...</td>
+               </tr>
+          -->
           <tr><td colspan="3" class="muted">Se încarcă…</td></tr>
         </tbody>
       </table>
@@ -99,7 +118,7 @@
     </div>
   </section>
 
-  <!-- TOTALURI (ID-urile clasice) -->
+  <!-- TOTALURI – ID-urile clasice folosite de scriptul tău -->
   <section class="card" style="margin-top:16px">
     <h2 style="margin:0 0 8px">Totaluri</h2>
     <div class="totals">
@@ -109,10 +128,9 @@
       <hr />
       <div class="row grand"><span>Total</span><span id="totval">0.00 RON</span></div>
     </div>
-    <p class="muted" style="margin-top:8px">Reduceri: ≥200 RON −10%, ≥300 RON −15%, ≥400 RON −20%. Livrare gratuită la 300 RON.</p>
   </section>
 
-  <!-- FORMULAR (aceleași ID/NAME pe care le folosești deja) -->
+  <!-- FORMULAR – NUMAI STRUCTURĂ; logica rămâne la scriptul tău/EmailJS -->
   <section class="card" style="margin-top:16px">
     <h2 style="margin:0 0 8px">Detalii pentru livrare</h2>
 
@@ -160,117 +178,9 @@
   </footer>
 </div>
 
-<!-- (1) Dacă ai scriptul tău, îl lași. Dacă nu, codul de mai jos este autosuficient. -->
+<!-- IMPORTANT: doar utilitare. NU ating submit-ul, NU previn default. -->
 <script>
-/* ====== CART CORE (nu atinge EmailJS/proforma; doar coșul) ====== */
-(function(){
-  const KEY = 'MSA_CART'; // aceeași cheie pe care o folosește Produse prin MSACart
-  const $ = sel => document.querySelector(sel);
-
-  // dacă există MSACart (din produsele.html), îl folosim; altfel fallback localStorage
-  const api = window.MSACart ? {
-    get: () => (window.MSACart.getItems ? window.MSACart.getItems() : readLS()),
-    set: (arr) => (window.MSACart.setItems ? window.MSACart.setItems(arr) : writeLS(arr)),
-    add: (it,qty=1) => (window.MSACart.addToCart ? window.MSACart.addToCart(it,qty) : addLS(it,qty)),
-    upd: (id,qty) => (window.MSACart.updateQty ? window.MSACart.updateQty(id,qty) : updLS(id,qty)),
-    del: (id) => (window.MSACart.remove ? window.MSACart.remove(id) : delLS(id)),
-    clr: () => (window.MSACart.clear ? window.MSACart.clear() : clearLS())
-  } : {
-    get: readLS, set: writeLS, add: addLS, upd: updLS, del: delLS, clr: clearLS
-  };
-
-  function readLS(){
-    try{ const raw=localStorage.getItem(KEY); const a=raw?JSON.parse(raw):[]; return Array.isArray(a)?a:[] }catch(_){return []}
-  }
-  function writeLS(a){ try{ localStorage.setItem(KEY, JSON.stringify(a||[])); }catch(_){}
-    updateBadge(); updateTotals(); }
-  function addLS(it,qty){
-    if(!it||!it.id) return; const q=Number(qty||1)||1;
-    const items=readLS(); const i=items.findIndex(x=>x.id===it.id);
-    if(i>=0){ items[i].qty=(Number(items[i].qty)||1)+q; }
-    else{ items.push({ id:String(it.id), name:it.name||'', price:Number(it.price)||0, image:it.image||'', qty:q }); }
-    writeLS(items);
-  }
-  function updLS(id,qty){
-    const items=readLS(); const it=items.find(x=>x.id===id); if(!it) return;
-    it.qty=Math.max(1,Number(qty)||1); writeLS(items);
-  }
-  function delLS(id){ writeLS(readLS().filter(x=>x.id!==id)); }
-  function clearLS(){ writeLS([]); }
-
-  function formatRON(x){ return (Number(x)||0).toFixed(2)+' RON'; }
-  function sums(items){
-    const sub = items.reduce((s,x)=>s+(Number(x.price)||0)*(Number(x.qty)||1),0);
-    let disc=0; if(sub>=400) disc=sub*0.20; else if(sub>=300) disc=sub*0.15; else if(sub>=200) disc=sub*0.10;
-    const ship = (sub-disc)>=300 ? 0 : 0;
-    const tot = Math.max(0, sub-disc+ship);
-    return {sub,disc,ship,tot};
-  }
-
-  function render(){
-    const tb = $('#cart-body'); if(!tb) return;
-    const items = api.get();
-    tb.innerHTML = '';
-    if(!items.length){
-      tb.innerHTML = '<tr><td colspan="3" class="muted">Coșul este gol.</td></tr>';
-      updateTotals(); updateBadge(); return;
-    }
-    items.forEach(it=>{
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>
-          <span class="name">${it.name||''}</span>
-          <div class="price" style="margin-top:4px">${formatRON(it.price||0)}</div>
-        </td>
-        <td style="text-align:center">
-          <div class="qty">
-            <button class="qminus" aria-label="Scade">−</button>
-            <input type="number" min="1" value="${Number(it.qty)||1}" />
-            <button class="qplus" aria-label="Crește">+</button>
-          </div>
-        </td>
-        <td style="text-align:right"><strong>${formatRON((it.price||0)*(it.qty||1))}</strong></td>
-      `;
-      // evenimente qty
-      const input = tr.querySelector('input');
-      const minus = tr.querySelector('.qminus');
-      const plus  = tr.querySelector('.qplus');
-      minus.addEventListener('click', ()=>{ const v=Math.max(1,(Number(input.value)||1)-1); input.value=v; api.upd(it.id,v); render(); });
-      plus .addEventListener('click', ()=>{ const v=(Number(input.value)||1)+1; input.value=v; api.upd(it.id,v); render(); });
-      input.addEventListener('change', ()=>{ const v=Math.max(1,Number(input.value)||1); api.upd(it.id,v); render(); });
-
-      tb.appendChild(tr);
-    });
-    updateTotals(); updateBadge();
-  }
-
-  function updateTotals(){
-    const items = api.get();
-    const t = sums(items);
-    const $id = id => document.getElementById(id);
-    if($id('subval')) $id('subval').textContent = formatRON(t.sub);
-    if($id('discval')) $id('discval').textContent = '− '+formatRON(t.disc);
-    if($id('shipval')) $id('shipval').textContent = formatRON(t.ship);
-    if($id('totval')) $id('totval').textContent = formatRON(t.tot);
-  }
-  function updateBadge(){
-    const el = document.getElementById('cart-count'); if(!el) return;
-    const items = api.get(); const c = items.reduce((s,x)=>s+(Number(x.qty)||1),0);
-    el.textContent = c;
-  }
-
-  // butoane globale
-  document.getElementById('clear-cart')?.addEventListener('click', ()=>{ api.clr(); render(); });
-  window.addEventListener('storage', e=>{ if(e.key===KEY) render(); });
-
-  // init
-  document.addEventListener('DOMContentLoaded', ()=>{ render(); });
-})();
-</script>
-
-<!-- (2) Utilitare locale: an, PF/PJ toggle, blocare dublu-submit (NU ating EmailJS) -->
-<script>
-  // anul în footer
+  // An la footer
   (function(){const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();})();
 
   // PF/PJ – doar afișare + required pe câmpurile PJ
@@ -285,20 +195,22 @@
     document.querySelectorAll('input[name="tip"]').forEach(r=>r.addEventListener('change', sync));
   })();
 
-  // blocare dublu-submit – nu schimb logica ta de trimitere (EmailJS/proforma)
+  // Anti dublu-click DOAR pe buton (nu atinge submit-ul formularului)
   (function(){
-    const f=document.getElementById('order-form');
-    const b=document.getElementById('place-order');
-    if(!f||!b) return;
-    let sent=false;
-    f.addEventListener('submit',function(e){
-      if(sent){ e.preventDefault(); return false; }
-      sent=true; b.disabled=true; b.textContent='Se trimite...';
-      // dacă trimiterea e gestionată în alt script, acesta va prelua submit-ul
-      // dacă apare o eroare, poți re-activa butonul manual:
-      // b.disabled=false; b.textContent='Plasează comanda'; sent=false;
-    },{capture:true});
+    const btn=document.getElementById('place-order');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      if(btn.disabled) return;
+      btn.disabled = true;
+      btn.textContent = 'Se trimite...';
+      // lăsăm formularul să se trimită normal (EmailJS/proforma)
+      // dacă scriptul tău semnalizează eroare, reactivarea o face el; dacă nu, poți re-activa după 10s:
+      setTimeout(()=>{ try{btn.disabled=false; btn.textContent='Plasează comanda';}catch(_){}} , 10000);
+    });
   })();
 </script>
+
+<!-- Scriptul tău – lasă-l exact cum e -->
+<script src="script.js"></script>
 </body>
 </html>
