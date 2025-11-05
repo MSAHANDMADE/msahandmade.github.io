@@ -218,6 +218,92 @@
     });
 
     loadCart();
-  </script>
+  </script><script>
+  // === AJUTOR: ia coșul indiferent cum a fost salvat (MSACart / cart) ===
+  function getNormalizedCart() {
+    const raw = localStorage.getItem('MSACart') || localStorage.getItem('cart') || '[]';
+    let arr = [];
+    try { arr = JSON.parse(raw) || []; } catch(e) { arr = []; }
+
+    // normalizează câmpurile pentru randare
+    return arr.map(it => ({
+      name:   it.name || it.title || it.nume || 'Produs',
+      price:  Number(it.price ?? it.pret ?? it.unitPrice ?? 0),
+      quantity: Number(it.quantity ?? it.qty ?? it.cant ?? 1),
+      image:  it.image || it.img || it.poza || '',
+      id:     it.id || it.sku || it.code || ''
+    }));
+  }
+
+  const cartItemsContainer = document.getElementById('cart-items');
+  const subtotalEl = document.getElementById('subtotal');
+  const totalEl = document.getElementById('total');
+  const shippingCost = 20;
+
+  function renderCart() {
+    const cart = getNormalizedCart();
+    if (!cartItemsContainer) return;
+
+    cartItemsContainer.innerHTML = '';
+    let subtotal = 0;
+
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML = `<div style="padding:14px;border-radius:12px;background:#fff">
+        Coșul este gol.</div>`;
+    }
+
+    cart.forEach((item, idx) => {
+      const line = item.price * item.quantity;
+      subtotal += line;
+
+      const row = document.createElement('div');
+      row.className = 'cart-item';
+      row.innerHTML = `
+        <img src="${item.image}" alt="${item.name}">
+        <div class="cart-item-info">
+          <div class="cart-item-title">${item.name}</div>
+          <div class="cart-item-price">${item.price.toFixed(2)} RON</div>
+          <div class="qty">
+            <button type="button" data-delta="-1" data-idx="${idx}">−</button>
+            <input type="number" value="${item.quantity}" min="1" readonly>
+            <button type="button" data-delta="1" data-idx="${idx}">+</button>
+          </div>
+        </div>
+        <div class="item-total">${line.toFixed(2)} RON</div>
+      `;
+      cartItemsContainer.appendChild(row);
+    });
+
+    subtotalEl && (subtotalEl.textContent = `${subtotal.toFixed(2)} RON`);
+    totalEl && (totalEl.textContent = `${(subtotal + shippingCost).toFixed(2)} RON`);
+  }
+
+  // butoanele +/-
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-delta]');
+    if (!btn) return;
+    const delta = Number(btn.dataset.delta);
+    const idx = Number(btn.dataset.idx);
+
+    // actualizează în cheia existentă (prioritate MSACart)
+    const key = localStorage.getItem('MSACart') ? 'MSACart' : 'cart';
+    let cart = [];
+    try { cart = JSON.parse(localStorage.getItem(key)) || []; } catch(e) { cart = []; }
+
+    const item = cart[idx];
+    if (!item) return;
+    const curr = Number(item.quantity ?? item.qty ?? item.cant ?? 1);
+    const next = Math.max(1, curr + delta);
+    if ('quantity' in item) item.quantity = next;
+    else if ('qty' in item) item.qty = next;
+    else if ('cant' in item) item.cant = next;
+    else item.quantity = next;
+
+    localStorage.setItem(key, JSON.stringify(cart));
+    renderCart();
+  });
+
+  document.addEventListener('DOMContentLoaded', renderCart);
+</script>
 </body>
 </html>
