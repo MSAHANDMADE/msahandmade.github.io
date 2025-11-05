@@ -3,18 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Coș — MSA Handmade</title>
+  <title>Coșul tău — M.S.A Handmade</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     :root{--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--bg:#fafafa;--card:#fff;--brand:#0f172a}
     *{box-sizing:border-box}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);margin:0}
-    a{text-decoration:none;color:var(--ink)}
+    a{text-decoration:none;color:inherit}
     .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
     .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 2px 10px rgba(2,6,23,.06)}
     .inner{padding:16px}
     .muted{color:var(--muted)}
     .btn{padding:10px 14px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:700;cursor:pointer}
+    .btn[disabled]{opacity:.6;cursor:not-allowed}
     .btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
     h1{font-size:36px;margin:16px 0}
     h2{margin:0 0 8px}
@@ -32,29 +33,29 @@
     th,td{padding:12px;border-bottom:1px solid var(--line);vertical-align:middle}
     th{background:#f8fafc;text-align:left;white-space:nowrap}
 
-    /* Lățimi corecte – NU mai tăiem butoanele */
-    td:nth-child(2), th:nth-child(2){min-width:160px;white-space:nowrap}
-    td:nth-child(3), th:nth-child(3){min-width:110px;text-align:right;white-space:nowrap}
+    /* Lățimi – ca să nu se taie butoanele */
+    td:nth-child(2), th:nth-child(2){min-width:170px;white-space:nowrap}
+    td:nth-child(3), th:nth-child(3){min-width:120px;text-align:right;white-space:nowrap}
     td:nth-child(4){width:48px;text-align:right}
 
-    .item-cell{display:flex;gap:12px;align-items:center;min-width:0}
-    .item-cell img{width:64px;height:64px;object-fit:cover;border-radius:8px;flex:0 0 auto}
-    .item-meta{min-width:0}
-    .item-title{font-weight:700;line-height:1.2;word-wrap:break-word}
+    .item-cell{display:flex;gap:12px;align-items:flex-start;min-width:0}
+    .item-cell img{width:68px;height:68px;object-fit:cover;border-radius:10px;flex:0 0 auto}
+    .item-meta{min-width:0;display:flex;flex-direction:column;gap:4px}
+    .item-title{font-weight:800;line-height:1.2;word-wrap:break-word}
     .item-price{color:var(--muted);font-size:12px}
 
-    .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:visible;min-width:150px;justify-content:center;gap:4px;padding:2px}
-    .qty button{width:34px;height:34px;border:0;background:#f8fafc;font-size:18px;border-radius:8px}
-    .qty input{width:56px;height:34px;border:1px solid var(--line);border-radius:8px;text-align:center}
-    @media (max-width:420px){ .qty{min-width:140px} .qty input{width:50px} }
+    .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:12px;gap:6px;padding:2px 6px;min-width:150px;justify-content:center}
+    .qty button{width:36px;height:36px;border:0;background:#f8fafc;font-size:18px;border-radius:10px}
+    .qty input{width:56px;height:36px;border:1px solid var(--line);border-radius:10px;text-align:center}
+    @media (max-width:420px){ .qty{min-width:140px} .qty input{width:52px} }
 
-    .rm{width:36px;height:36px;border:0;border-radius:8px;background:#fee2e2;color:#991b1b}
+    .rm{width:36px;height:36px;border:0;border-radius:10px;background:#fee2e2;color:#991b1b}
 
     .row{display:flex;justify-content:space-between;margin:6px 0}
     .row strong{font-weight:800}
 
     /* formular */
-    form input, form textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}
+    form input, form textarea, form select{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fff}
     form textarea{resize:vertical}
     .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .full{grid-column:1/-1}
@@ -76,7 +77,7 @@
   <h1>Coșul tău</h1>
 
   <div class="grid">
-    <!-- STÂNGA: tabel -->
+    <!-- STÂNGA: coș -->
     <div class="card">
       <div class="inner tbl-wrap">
         <table>
@@ -125,7 +126,7 @@
             <input name="prenume" placeholder="Prenume" required>
           </div>
 
-          <!-- PJ (apare DOAR când e selectat “pj”) -->
+          <!-- PJ -->
           <div class="pj-only form-grid">
             <input name="firma" placeholder="Denumire firmă" class="full">
             <input name="cui" placeholder="CUI">
@@ -142,190 +143,162 @@
             <textarea name="mentiuni" rows="2" placeholder="Mențiuni (opțional)" class="full"></textarea>
           </div>
 
-          <button type="submit" class="btn" style="width:100%;margin-top:12px">Plasează comanda</button>
+          <button id="submit-order" type="submit" class="btn" style="width:100%;margin-top:12px">Plasează comanda</button>
         </form>
       </div>
     </div>
   </div>
 
-  <p class="muted" style="text-align:center;margin:22px 0 6px">© <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</p>
+  <p class="muted" style="text-align:center;margin:22px 0 6px">© <span id="year"></span> — M.S.A Handmade. Toate drepturile rezervate.</p>
 </div>
 
-<!-- EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<!-- Coș -->
-<script src="cart.js"></script>
+<!-- CART LOGIC: compatibil cu MSACart din cart.js, altfel folosește localStorage -->
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
+(() => {
+  const LS_KEY = 'MSA_CART';
 
-  // PF / PJ toggle + required
-  function syncPFJ(){
-    const isPJ = (document.querySelector('input[name="tip"]:checked')||{}).value === 'pj';
-    document.querySelectorAll('.pj-only').forEach(el => el.style.display = isPJ ? '' : 'none');
-    document.querySelectorAll('.pf-only').forEach(el => el.style.display = isPJ ? 'none' : '');
+  // Preferă MSACart dacă există, altfel fallback simplu
+  const api = window.MSACart ? {
+    get:   () => MSACart.getCart(),
+    setQ:  (id,qty) => MSACart.setQty(id, qty),
+    rm:    (id) => MSACart.removeItem(id),
+    money: (v) => MSACart.money(v),
+    totals:(c) => MSACart._calcTotals ? MSACart._calcTotals(c) : calcTotals(c),
+    badge: () => MSACart.updateCartCountBadge && MSACart.updateCartCountBadge()
+  } : {
+    get:   () => JSON.parse(localStorage.getItem(LS_KEY)||'[]'),
+    setQ:  (id,qty) => { const c = api.get().map(p=>p.id===id?{...p,qty}:p); localStorage.setItem(LS_KEY, JSON.stringify(c)); },
+    rm:    (id) => { const c = api.get().filter(p=>p.id!==id); localStorage.setItem(LS_KEY, JSON.stringify(c)); },
+    money: (v) => Number(v).toFixed(2),
+    totals:(c) => calcTotals(c),
+    badge: () => {
+      const n = api.get().reduce((s,p)=>s+Number(p.qty||0),0);
+      const el = document.getElementById('cart-count'); if (el) el.textContent = String(n);
+    }
+  };
 
-    const pjReq = ['firma','cui','reg'];
-    const pfReq = ['nume','prenume'];
-    pjReq.forEach(n => { const el = document.querySelector(`[name="${n}"]`); if (el) el.required = isPJ; });
-    pfReq.forEach(n => { const el = document.querySelector(`[name="${n}"]`); if (el) el.required = !isPJ; });
-  }
-  document.addEventListener('DOMContentLoaded', syncPFJ);
-  document.querySelectorAll('input[name="tip"]').forEach(r => r.addEventListener('change', syncPFJ));
-</script>
-</body><script>
-(function () {
-  // Utils
-  const $ = (s) => document.querySelector(s);
-  const hasMSA = !!window.MSACart;
-  const LS_KEY = (localStorage.getItem('MSACart') && 'MSACart') ||
-                 (localStorage.getItem('cart') && 'cart') || 'MSACart';
-  const money = (n) => (hasMSA && MSACart.money) ? MSACart.money(Number(n)) : Number(n||0).toFixed(2);
-
-  // Normalizare item
-  const norm = (it) => ({
-    id: it.id ?? it.sku ?? it.code ?? '',
-    name: it.name ?? it.title ?? it.nume ?? 'Produs',
-    price: Number(it.price ?? it.pret ?? it.unitPrice ?? 0),
-    qty: Number(it.qty ?? it.quantity ?? it.cant ?? 1),
-    image: it.image ?? it.img ?? it.poza ?? ''
-  });
-
-  // Citește / scrie în aceeași cheie ca până acum
-  const readRaw  = () => { try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]')||[] }catch{ return [] } };
-  const writeRaw = (arr) => localStorage.setItem(LS_KEY, JSON.stringify(arr));
-
-  const getCart = () => hasMSA && MSACart.getCart ? MSACart.getCart().map(norm) : readRaw().map(norm);
-
-  function setQty(id, q){
-    q = Math.max(1, Number(q||1));
-    const arr = readRaw();
-    const it = arr.find(x => (x.id ?? x.sku ?? x.code ?? '') === id);
-    if (!it) return;
-    if ('qty' in it) it.qty = q;
-    else if ('quantity' in it) it.quantity = q;
-    else if ('cant' in it) it.cant = q;
-    else it.qty = q;
-    writeRaw(arr);
-    if (hasMSA && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge();
-    render();
-  }
-  function removeItem(id){
-    writeRaw(readRaw().filter(x => (x.id ?? x.sku ?? x.code ?? '') !== id));
-    if (hasMSA && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge();
-    render();
-  }
-  function clearCart(){
-    writeRaw([]);
-    if (hasMSA && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge();
-    render();
-  }
-
-  // Reduceri + livrare
   function calcTotals(cart){
-    const subtotal = cart.reduce((s,p)=>s+p.price*p.qty,0);
+    const subtotal = cart.reduce((s,p)=> s + p.price * p.qty, 0);
     let discount = 0;
-    if (subtotal >= 400) discount = subtotal*0.20;
-    else if (subtotal >= 300) discount = subtotal*0.15;
-    else if (subtotal >= 200) discount = subtotal*0.10;
-    const after = subtotal - discount;
-    const shipping = (after >= 300 || after === 0) ? 0 : 20;
-    const total = after + shipping;
+    if (subtotal >= 400) discount = subtotal * 0.20;
+    else if (subtotal >= 300) discount = subtotal * 0.15;
+    else if (subtotal >= 200) discount = subtotal * 0.10;
+    const afterDisc = subtotal - discount;
+    const shipping = afterDisc >= 300 || afterDisc===0 ? 0 : 20;
+    const total = afterDisc + shipping;
     return { subtotal, discount, shipping, total };
   }
 
-  // RENDER tabel + totaluri
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+
   function render(){
-    const body = document.getElementById('cart-body');
-    if (!body) return;
+    const cart = api.get();
+    const tbody = $('#cart-body');
+    tbody.innerHTML = '';
 
-    const cart = getCart();
-    body.innerHTML = '';
-
-    if (!cart.length){
-      body.innerHTML = `<tr><td colspan="4" class="muted">Coșul este gol.</td></tr>`;
-      updateTotals([]);
-      return;
+    if (!cart.length) {
+      tbody.innerHTML = '<tr><td colspan="4" class="muted">Coșul este gol.</td></tr>';
+    } else {
+      cart.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.dataset.id = p.id;
+        tr.innerHTML = `
+          <td>
+            <div class="item-cell">
+              ${p.image ? `<img src="${p.image}" alt="${p.name}">` : `<div style="width:68px;height:68px;border-radius:10px;background:#f1f5f9"></div>`}
+              <div class="item-meta">
+                <div class="item-title">${p.name}</div>
+                <div class="item-price">${api.money(p.price)} RON</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="qty">
+              <button class="qminus" aria-label="Scade">−</button>
+              <input class="qval" type="number" min="1" value="${p.qty}">
+              <button class="qplus" aria-label="Crește">+</button>
+            </div>
+          </td>
+          <td style="text-align:right"><strong class="line-total">${api.money(p.price*p.qty)} RON</strong></td>
+          <td style="text-align:right"><button class="rm" title="Șterge">×</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
-    cart.forEach(p => {
-      const tr = document.createElement('tr');
-      tr.dataset.id = p.id;
-      tr.innerHTML = `
-        <td>
-          <div class="item-cell">
-            ${p.image ? `<img src="${p.image}" alt="${p.name}">` : `<div style="width:64px;height:64px;border-radius:8px;background:#eef"></div>`}
-            <div class="item-meta">
-              <div class="item-title">${p.name}</div>
-              <div class="item-price">${money(p.price)} RON</div>
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="qty">
-            <button class="qminus" aria-label="Scade">−</button>
-            <input class="qval" type="number" min="1" value="${p.qty}">
-            <button class="qplus" aria-label="Crește">+</button>
-          </div>
-        </td>
-        <td style="text-align:right"><strong class="line-total">${money(p.price*p.qty)} RON</strong></td>
-        <td style="text-align:right"><button class="rm" title="Șterge">×</button></td>
-      `;
-      body.appendChild(tr);
-    });
-
-    updateTotals(cart);
+    const t = api.totals(cart);
+    $('#subval').textContent  = `${api.money(t.subtotal)} RON`;
+    $('#discval').textContent = `− ${api.money(t.discount)} RON`;
+    $('#shipval').textContent = `${api.money(t.shipping)} RON`;
+    $('#totval').textContent  = `${api.money(t.total)} RON`;
+    api.badge();
   }
 
-  function updateTotals(cart){
-    const c = cart && cart.length ? cart : getCart();
-    const t = calcTotals(c);
-    document.getElementById('subval').textContent  = `${money(t.subtotal)} RON`;
-    document.getElementById('discval').textContent = `− ${money(t.discount)} RON`;
-    document.getElementById('shipval').textContent = `${money(t.shipping)} RON`;
-    document.getElementById('totval').textContent  = `${money(t.total)} RON`;
-    const badge = document.getElementById('cart-count');
-    if (badge) badge.textContent = String(c.reduce((s,p)=>s+p.qty,0));
-  }
+  // Delegare evenimente pe tabel
+  document.addEventListener('click', (e) => {
+    const tr = e.target.closest('tr'); if (!tr) return;
+    const id = tr.dataset.id;
+    const cart = api.get();
+    const idx = cart.findIndex(x => String(x.id) === String(id));
+    if (idx === -1) return;
 
-  // Delegare UNICĂ de evenimente pe tabel
-  const tableBody = document.getElementById('cart-body');
-  if (tableBody){
-    tableBody.addEventListener('click', (e)=>{
-      const tr = e.target.closest('tr'); if (!tr) return;
-      const id = tr.dataset.id;
-      if (e.target.closest('.qminus')){
-        const inp = tr.querySelector('.qval'); const next = Math.max(1, Number(inp.value||1)-1);
-        inp.value = next; setQty(id, next);
-      }
-      if (e.target.closest('.qplus')){
-        const inp = tr.querySelector('.qval'); const next = Number(inp.value||1)+1;
-        inp.value = next; setQty(id, next);
-      }
-      if (e.target.closest('.rm')) removeItem(id);
-    });
-    tableBody.addEventListener('change', (e)=>{
-      const inp = e.target.closest('.qval'); if (!inp) return;
-      const tr = e.target.closest('tr'); const id = tr.dataset.id;
-      const next = Math.max(1, Number(inp.value||1)); inp.value = next; setQty(id, next);
-    });
-  }
-
-  // Golește coșul
-  const clearBtn = document.getElementById('clear-cart');
-  if (clearBtn) clearBtn.addEventListener('click', (e)=>{ e.preventDefault(); clearCart(); });
-
-  // actualizare când se schimbă din alt tab
-  window.addEventListener('storage', (ev)=>{ if (ev.key === LS_KEY) render(); });
-
-  // init
-  document.addEventListener('DOMContentLoaded', ()=>{
-    // Year
-    const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
-    render();
-    if (hasMSA && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge();
+    if (e.target.closest('.qminus')) {
+      const next = Math.max(1, Number(cart[idx].qty||1) - 1);
+      api.setQ(id, next); render();
+    }
+    if (e.target.closest('.qplus')) {
+      const next = Number(cart[idx].qty||1) + 1;
+      api.setQ(id, next); render();
+    }
+    if (e.target.closest('.rm')) {
+      api.rm(id); render();
+    }
   });
 
-  // PF/PJ toggle din pagina ta rămâne așa cum l-ai pus (mai sus în pagină)
+  document.addEventListener('change', (e) => {
+    if (!e.target.classList.contains('qval')) return;
+    const tr = e.target.closest('tr'); if (!tr) return;
+    const id = tr.dataset.id;
+    const val = Math.max(1, Number(e.target.value||1));
+    api.setQ(id, val); render();
+  });
+
+  // Golește coșul
+  const clearBtn = $('#clear-cart');
+  if (clearBtn) clearBtn.addEventListener('click', (e)=>{ e.preventDefault(); 
+    api.get().forEach(p=>api.rm(p.id)); render();
+  });
+
+  // PF / PJ toggle + required
+  function syncPFJ(){
+    const isPJ = (document.querySelector('input[name="tip"][value="pj"]')||{}).checked;
+    $$('.pj-only').forEach(el => el.style.display = isPJ ? '' : 'none');
+    $$('.pf-only').forEach(el => el.style.display = isPJ ? 'none' : '');
+
+    const reqPJ = ['firma','cui','reg'];
+    const reqPF = ['nume','prenume'];
+    reqPJ.forEach(n => { const el = document.querySelector(`[name="${n}"]`); if (el) el.required = isPJ; });
+    reqPF.forEach(n => { const el = document.querySelector(`[name="${n}"]`); if (el) el.required = !isPJ; });
+  }
+  document.addEventListener('DOMContentLoaded', syncPFJ);
+  $$('input[name="tip"]').forEach(r => r.addEventListener('change', syncPFJ));
+
+  // Previne dublu-submit; nu atinge logica ta EmailJS
+  const form = $('#order-form');
+  if (form) form.addEventListener('submit', () => {
+    const btn = document.getElementById('submit-order');
+    if (btn) { btn.disabled = true; setTimeout(()=>btn.disabled=false, 8000); }
+  });
+
+  // Init
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.addEventListener('DOMContentLoaded', render);
+  window.addEventListener('storage', render);
 })();
 </script>
+
+<!-- IMPORTANT: păstrează cart.js-ul tău exact cum este, încărcat înainte sau în alte pagini -->
+<script src="cart.js"></script>
+</body>
 </html>
