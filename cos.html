@@ -386,6 +386,276 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     document.addEventListener('DOMContentLoaded', render);
     window.addEventListener('storage', (ev)=>{ if (ev.key===LS_KEY) render(); });
-  </script>
+  </script><style id="fix-cos-css">
+  /* layout produs: titlu sus; jos: Cant. (stepper) + Total; responsive ok */
+  .msa-item{display:grid;grid-template-columns:72px 1fr auto;gap:14px;align-items:center;padding:14px;border-bottom:1px solid #e5e7eb}
+  .msa-item:last-child{border-bottom:0}
+  .msa-thumb{width:72px;height:72px;border-radius:12px;object-fit:cover;background:#f1f5f9}
+  .msa-title{font-weight:800;line-height:1.2;margin:0 0 6px}
+  .msa-unit{font-size:12px;color:#64748b;margin-bottom:8px}
+  .msa-qtyrow{display:flex;align-items:center;gap:10px}
+  .msa-qty{display:inline-flex;align-items:center;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
+  .msa-qty button{width:40px;height:38px;border:0;background:#f8fafc;font-size:20px}
+  .msa-qty input{width:56px;height:38px;border:0;text-align:center;font-weight:700}
+  .msa-remove{width:40px;height:40px;border:0;border-radius:10px;background:#fee2e2;color:#991b1b;font-size:20px}
+  .msa-linetotal{font-weight:800;font-size:18px;white-space:nowrap}
+  @media (max-width:640px){
+    .msa-item{grid-template-columns:60px 1fr;grid-template-areas:
+      "img title"
+      "img qty"
+      "img total"}
+    .msa-thumb{grid-area:img}
+    .msa-titlewrap{grid-area:title}
+    .msa-qtyrow{grid-area:qty}
+    .msa-totalwrap{grid-area:total;justify-self:end}
+  }
+</style>
+
+<script>
+(function(){
+  // ===== Config EmailJS (ale tale)
+  const EMAILJS_PUBLIC_KEY = 'iSadfb7-TV_89l_6k';
+  const EMAILJS_SERVICE_ID = 'service_ix0zpp7';
+  const EMAILJS_TEMPLATE_ADMIN = 'template_13qpqtt';
+  const EMAILJS_TEMPLATE_CLIENT = 'template_9yctwor';
+  try { if (window.emailjs && emailjs.init) emailjs.init(EMAILJS_PUBLIC_KEY); } catch(e){}
+
+  // ===== Selectoare tolerante (lucrăm cu ce există deja în pagina ta)
+  const elList = document.querySelector('#cart-items') || document.querySelector('#cart-list') || document.querySelector('#cart-mount');
+  const elSub  = document.querySelector('#subval')   || document.querySelector('#subtotal');
+  const elDisc = document.querySelector('#discval')  || document.querySelector('#discount');
+  const elShip = document.querySelector('#shipval')  || document.querySelector('#shipping');
+  const elTot  = document.querySelector('#totval')   || document.querySelector('#total');
+  const btnClear = document.querySelector('#clear-cart');
+
+  // Formular (acceptă ambele variante pe care le-ai folosit)
+  const form = document.querySelector('#order-form') || document.querySelector('#orderForm');
+  const submitBtn = document.querySelector('#submitBtn') || document.querySelector('#submit-order');
+
+  // ===== Integrare cu MSACart sau localStorage
+  const LS_KEY = (localStorage.getItem('MSACart') !== null) ? 'MSACart' :
+                 (localStorage.getItem('cart') !== null) ? 'cart' : 'MSACart';
+
+  function getCart(){
+    try{ if (window.MSACart && MSACart.getCart) return MSACart.getCart(); }catch(e){}
+    try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }catch(e){ return []; }
+  }
+  function setCart(next){
+    try{ if (window.MSACart && MSACart.setCart) return MSACart.setCart(next); }catch(e){}
+    localStorage.setItem(LS_KEY, JSON.stringify(next));
+  }
+  function setQty(id, qty){
+    try{ if (window.MSACart && MSACart.setQty) return MSACart.setQty(id, qty); }catch(e){}
+    const cart = getCart().map(p => String(p.id)===String(id) ? {...p, qty, quantity: qty} : p);
+    setCart(cart);
+  }
+  function removeItem(id){
+    try{ if (window.MSACart && MSACart.removeItem) return MSACart.removeItem(id); }catch(e){}
+    const cart = getCart().filter(p => String(p.id)!==String(id));
+    setCart(cart);
+  }
+  function clearCart(){
+    try{ if (window.MSACart && MSACart.clear) return MSACart.clear(); }catch(e){}
+    setCart([]);
+  }
+  function money(v){
+    try{ if (window.MSACart && MSACart.money) return MSACart.money(v); }catch(e){}
+    return Number(v||0).toFixed(2);
+  }
+
+  function calcTotals(cart){
+    const subtotal = cart.reduce((s,p)=> s + (p.price||0) * (p.qty||p.quantity||1), 0);
+    const discount = subtotal>=400? subtotal*0.20 : subtotal>=300? subtotal*0.15 : subtotal>=200? subtotal*0.10 : 0;
+    const shipping = (subtotal - discount) >= 300 || subtotal===0 ? 0 : 20;
+    const total = subtotal - discount + shipping;
+    return {subtotal, discount, shipping, total};
+  }
+
+  async function buildProformaHTML(cart, totals, form){
+    try{
+      if (window.MSACart && MSACart.buildProformaHTML) {
+        return await MSACart.buildProformaHTML(cart, totals, form);
+      }
+    }catch(e){}
+    const rows = cart.map(p=>{
+      const q = p.qty||p.quantity||1;
+      return `<tr>
+        <td style="padding:8px 6px;border-bottom:1px solid #eee">${p.name||''}</td>
+        <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:center">${q}</td>
+        <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:right">${money(p.price)} RON</td>
+        <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:right">${money(q*(p.price||0))} RON</td>
+      </tr>`;
+    }).join('');
+    return `
+      <h3 style="margin:0 0 8px">Proformă</h3>
+      <div style="margin:6px 0 12px">
+        <div><b>Nr. comandă:</b> #${form.order_id}</div>
+        <div><b>Data:</b> ${new Date().toLocaleDateString('ro-RO')}</div>
+      </div>
+      <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+        <thead>
+          <tr>
+            <th align="left"  style="padding:8px 6px;border-bottom:1px solid #ccc">Produs</th>
+            <th align="center"style="padding:8px 6px;border-bottom:1px solid #ccc">Cant.</th>
+            <th align="right" style="padding:8px 6px;border-bottom:1px solid #ccc">Preț</th>
+            <th align="right" style="padding:8px 6px;border-bottom:1px solid #ccc">Total</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div style="margin-top:12px;text-align:right">
+        <div>Subtotal: <b>${money(totals.subtotal)} RON</b></div>
+        <div>Reducere: <b>− ${money(totals.discount)} RON</b></div>
+        <div>Livrare:  <b>${money(totals.shipping)} RON</b></div>
+        <div style="font-size:18px">Total: <b>${money(totals.total)} RON</b></div>
+      </div>`;
+  }
+
+  // ===== Render listă
+  function render(){
+    if (!elList) return;
+    const cart = getCart();
+    elList.innerHTML = '';
+    if (!cart.length){
+      elList.innerHTML = '<div class="muted">Coșul este gol.</div>';
+    } else {
+      cart.forEach(p=>{
+        const id  = p.id;
+        const q   = p.qty || p.quantity || 1;
+        const row = document.createElement('div');
+        row.className = 'msa-item';
+        row.dataset.id = id;
+        row.innerHTML = `
+          <img class="msa-thumb" src="${p.image||''}" alt="${p.name||''}">
+          <div class="msa-titlewrap">
+            <div class="msa-title">${p.name||'Produs'}</div>
+            <div class="msa-unit">${money(p.price)} RON</div>
+            <div class="msa-qtyrow">
+              <div class="msa-qty">
+                <button class="msa-dec" aria-label="Scade">−</button>
+                <input class="msa-qval" value="${q}" readonly>
+                <button class="msa-inc" aria-label="Crește">+</button>
+              </div>
+              <button class="msa-remove" title="Șterge">×</button>
+            </div>
+          </div>
+          <div class="msa-totalwrap">
+            <div class="msa-linetotal">${money((p.price||0)*q)} RON</div>
+          </div>`;
+        elList.appendChild(row);
+      });
+    }
+    const t = calcTotals(cart);
+    if (elSub)  elSub.textContent  = `${money(t.subtotal)} RON`;
+    if (elDisc) elDisc.textContent = `− ${money(t.discount)} RON`;
+    if (elShip) elShip.textContent = `${money(t.shipping)} RON`;
+    if (elTot)  elTot.textContent  = `${money(t.total)} RON`;
+    try{ if (window.MSACart && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge(); }catch(e){}
+  }
+
+  // ===== Evenimente listă (+ / − / ștergere)
+  if (elList) elList.addEventListener('click', (e)=>{
+    const row = e.target.closest('.msa-item'); if (!row) return;
+    const id = row.dataset.id;
+    if (e.target.closest('.msa-inc')){
+      const cart = getCart();
+      const idx = cart.findIndex(x=>String(x.id)===String(id));
+      if (idx>-1){ const next = (cart[idx].qty||cart[idx].quantity||1)+1; setQty(id,next); render(); }
+    }
+    if (e.target.closest('.msa-dec')){
+      const cart = getCart();
+      const idx = cart.findIndex(x=>String(x.id)===String(id));
+      if (idx>-1){ const cur = (cart[idx].qty||cart[idx].quantity||1); const next = Math.max(1, cur-1); setQty(id,next); render(); }
+    }
+    if (e.target.closest('.msa-remove')){ removeItem(id); render(); }
+  });
+
+  if (btnClear) btnClear.addEventListener('click', (ev)=>{ ev.preventDefault(); clearCart(); render(); });
+
+  // ===== PF / PJ toggle (folosește clasele din pagina ta, dacă există)
+  function syncPFJ(){
+    const isPJ = (document.querySelector('input[name="tip"]:checked')||{}).value?.toLowerCase?.() === 'pj';
+    document.querySelectorAll('.pj-only,#sectPJ').forEach(el => el.style.display = isPJ ? '' : 'none');
+    document.querySelectorAll('.pf-only,#sectPF').forEach(el => el.style.display = isPJ ? 'none' : '');
+
+    const setReq = (name, on) => {
+      const el = document.querySelector(`[name="${name}"]`) || document.getElementById(name);
+      if (el) el.required = !!on;
+    };
+    // obligatorii: PJ => firma,cui,reg ; PF => nume,prenume
+    setReq('firma', isPJ); setReq('cui', isPJ); setReq('reg', isPJ); setReq('regcom', isPJ);
+    setReq('nume', !isPJ); setReq('prenume', !isPJ);
+  }
+  document.querySelectorAll('input[name="tip"]').forEach(r=> r.addEventListener('change', syncPFJ));
+  document.addEventListener('DOMContentLoaded', syncPFJ);
+
+  // ===== Submit + EmailJS + Proformă (fără dublu-click)
+  if (form){
+    let sending = false;
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      if (sending) return;
+
+      const cart = getCart();
+      if (!cart.length){ alert('Coșul este gol.'); return; }
+
+      sending = true;
+      if (submitBtn){ submitBtn.disabled = true; submitBtn.textContent = 'Se trimite…'; }
+
+      const t = calcTotals(cart);
+      const fd = Object.fromEntries(new FormData(form).entries());
+      const isPJ = (fd.tip||'pf').toLowerCase()==='pj';
+      const order_id = Date.now().toString().slice(-6);
+
+      const produseText = cart.map(p => `• ${p.name} × ${(p.qty||p.quantity||1)} — ${money((p.price||0)*(p.qty||p.quantity||1))} RON`).join('\n');
+      const htmlProforma = await buildProformaHTML(cart, t, {order_id});
+
+      const paramsAdmin = {
+        tip: isPJ ? 'Persoană juridică' : 'Persoană fizică',
+        nume: fd.nume||'-',
+        prenume: fd.prenume||'-',
+        email: fd.email||'-',
+        telefon: fd.telefon||'-',
+        judet: fd.judet||'-',
+        oras: fd.oras||'-',
+        codpostal: fd.codpostal||'-',
+        adresa: fd.adresa||'-',
+        mentiuni: fd.mentiuni||'-',
+        produse: produseText,
+        subtotal: money(t.subtotal),
+        livrare: money(t.shipping),
+        total: money(t.total),
+        order_id
+      };
+      const paramsClient = {
+        to_email: fd.email||'-',
+        nume: (fd.nume || fd.firma || 'Client'),
+        order_id,
+        html_proforma: htmlProforma
+      };
+
+      try{
+        if (window.emailjs && emailjs.send){
+          await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, paramsAdmin);
+          await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, paramsClient);
+        }
+        clearCart(); render();
+        alert('✅ Comanda a fost trimisă! Verifică emailul.');
+        try{ window.location.href = 'multumesc.html'; }catch(e){}
+      }catch(err){
+        console.error(err);
+        alert('A apărut o eroare la trimiterea emailului. Încearcă din nou.');
+      }finally{
+        sending = false;
+        if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = 'Plasează comanda'; }
+      }
+    });
+  }
+
+  // init
+  document.addEventListener('DOMContentLoaded', render);
+  window.addEventListener('storage', (ev)=>{ if (ev.key===LS_KEY) render(); });
+})();
+</script>
 </body>
 </html>
