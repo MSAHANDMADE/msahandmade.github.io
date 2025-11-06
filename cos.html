@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Coșul tău — M.S.A Handmade Decor</title>
   <meta name="description" content="Finalizează comanda pe M.S.A Handmade Decor. Livrare gratuită de la 300 RON și reduceri automate.">
-
   <link rel="stylesheet" href="styles.css" />
   <style>
-    :root{--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--bg:#fafafa;--card:#fff;--brand:#0f172a}
+    :root{--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--bg:#fafafa;--card:#fff}
     *{box-sizing:border-box}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);margin:0}
     a{text-decoration:none;color:var(--ink)}
@@ -18,13 +17,13 @@
     .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 2px 10px rgba(2,6,23,.06)}
     .inner{padding:16px}
     .muted{color:var(--muted)}
-    .btn{padding:10px 14px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:700;cursor:pointer}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid #0f172a;background:#0f172a;color:#fff;font-weight:700;cursor:pointer}
     .btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
 
     .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
     @media (max-width:900px){.grid{grid-template-columns:1fr}}
 
-    /* LISTĂ PRODUSE – titlu sus, Cant. & Total jos, perfect pe mobil */
+    /* LISTĂ PRODUSE – titlu sus; jos: Cant. + Total (mobil ok) */
     .item{display:grid;grid-template-columns:72px 1fr auto;gap:14px;padding:14px;border-bottom:1px solid var(--line);align-items:center}
     .item:last-child{border-bottom:0}
     .thumb{width:72px;height:72px;object-fit:cover;border-radius:12px;background:#f1f5f9}
@@ -73,9 +72,7 @@
     <div class="grid">
       <!-- STÂNGA: produse -->
       <div class="card">
-        <div class="inner" id="cart-list">
-          <!-- items here -->
-        </div>
+        <div class="inner" id="cart-list"><!-- items aici --></div>
         <div class="inner" style="display:flex;gap:10px;flex-wrap:wrap">
           <button id="clear-cart" class="btn ghost">Golește coșul</button>
           <a href="produse.html" class="btn ghost">Continuă cumpărăturile</a>
@@ -133,97 +130,50 @@
     <p class="muted" style="text-align:center;margin:22px 0 6px">© <span id="year"></span> — M.S.A Handmade. Toate drepturile rezervate.</p>
   </div>
 
-  <!-- Coș (păstrat neschimbat) -->
+  <!-- Coș (lăsăm cart.js-ul tău) -->
   <script src="cart.js"></script>
 
   <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
   <script>
-    /* ===== EmailJS – datele tale ===== */
+    // ===== EmailJS – datele tale
     const EMAILJS_PUBLIC_KEY = 'iSadfb7-TV_89l_6k';
     const EMAILJS_SERVICE_ID = 'service_ix0zpp7';
     const EMAILJS_TEMPLATE_ADMIN = 'template_13qpqtt';  // către magazin
     const EMAILJS_TEMPLATE_CLIENT = 'template_9yctwor'; // către client
     try { emailjs.init(EMAILJS_PUBLIC_KEY); } catch(e){}
 
-    /* ===== Helpers pentru integrarea cu MSACart (fără să-l schimbăm) ===== */
-    const LS_KEY = (localStorage.getItem('MSACart') !== null) ? 'MSACart' :
-                   (localStorage.getItem('cart') !== null) ? 'cart' : 'MSACart';
+    // ===== Coș: citire din MSACart sau localStorage
+    const LS_KEY = (localStorage.getItem('MSACart') !== null) ? 'MSACart'
+                 : (localStorage.getItem('cart') !== null) ? 'cart'
+                 : 'MSACart';
 
-    function getCartSmart(){
+    function getCart(){
       try{ if (window.MSACart && typeof MSACart.getCart==='function') return MSACart.getCart(); }catch(e){}
-      try{ return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); }catch(e){ return []; }
+      try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }catch(e){ return []; }
     }
-    function setCartSmart(next){
-      try{
-        if (window.MSACart && typeof MSACart.setCart==='function'){ MSACart.setCart(next); return; }
-      }catch(e){}
+    function setCart(next){
+      try{ if (window.MSACart && typeof MSACart.setCart==='function'){ MSACart.setCart(next); return; } }catch(e){}
       localStorage.setItem(LS_KEY, JSON.stringify(next));
     }
-    function setQtySmart(id, qty){
-      try{ if (window.MSACart && typeof MSACart.setQty==='function') return MSACart.setQty(id, qty); }catch(e){}
-      const cart = getCartSmart().map(p => (String(p.id)===String(id) ? {...p, qty: qty, quantity: qty} : p));
-      setCartSmart(cart);
+    function setQty(id, qty){
+      try{ if (window.MSACart && typeof MSACart.setQty==='function'){ MSACart.setQty(id, qty); return; } }catch(e){}
+      const cart = getCart().map(p => String(p.id)===String(id) ? {...p, qty, quantity: qty} : p);
+      setCart(cart);
     }
-    function removeSmart(id){
-      try{ if (window.MSACart && typeof MSACart.removeItem==='function') return MSACart.removeItem(id); }catch(e){}
-      const cart = getCartSmart().filter(p => String(p.id)!==String(id));
-      setCartSmart(cart);
+    function removeItem(id){
+      try{ if (window.MSACart && typeof MSACart.removeItem==='function'){ MSACart.removeItem(id); return; } }catch(e){}
+      setCart(getCart().filter(p => String(p.id)!==String(id)));
     }
-    function clearSmart(){
-      try{ if (window.MSACart && typeof MSACart.clear==='function') return MSACart.clear(); }catch(e){}
-      setCartSmart([]);
+    function clearCart(){
+      try{ if (window.MSACart && typeof MSACart.clear==='function'){ MSACart.clear(); return; } }catch(e){}
+      setCart([]);
     }
     function money(v){
       try{ if (window.MSACart && typeof MSACart.money==='function') return MSACart.money(v); }catch(e){}
       return Number(v||0).toFixed(2);
     }
-    async function buildProformaHTML(cart, totals, form){
-      try{
-        if (window.MSACart && typeof MSACart.buildProformaHTML==='function'){
-          return await MSACart.buildProformaHTML(cart, totals, form);
-        }
-      }catch(e){}
-      // fallback simplu
-      const rows = cart.map(p=>`
-        <tr>
-          <td style="padding:8px 6px;border-bottom:1px solid #eee">${p.name}</td>
-          <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:center">${p.qty||p.quantity||1}</td>
-          <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:right">${money(p.price)} RON</td>
-          <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:right">${money((p.qty||p.quantity||1)*p.price)} RON</td>
-        </tr>`).join('');
-      return `
-        <h3>Proformă</h3>
-        <div style="margin:6px 0 12px">
-          <div><b>Nr. comandă:</b> #${form.order_id}</div>
-          <div><b>Data:</b> ${new Date().toLocaleDateString('ro-RO')}</div>
-        </div>
-        <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
-          <thead>
-            <tr>
-              <th align="left" style="padding:8px 6px;border-bottom:1px solid #ccc">Produs</th>
-              <th align="center" style="padding:8px 6px;border-bottom:1px solid #ccc">Cant.</th>
-              <th align="right" style="padding:8px 6px;border-bottom:1px solid #ccc">Preț</th>
-              <th align="right" style="padding:8px 6px;border-bottom:1px solid #ccc">Total</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-        <div style="margin-top:12px;text-align:right">
-          <div>Subtotal: <b>${money(totals.subtotal)} RON</b></div>
-          <div>Reducere: <b>− ${money(totals.discount)} RON</b></div>
-          <div>Livrare: <b>${money(totals.shipping)} RON</b></div>
-          <div style="font-size:18px">Total: <b>${money(totals.total)} RON</b></div>
-        </div>`;
-    }
-
-    /* ===== Afișare coș ===== */
-    const list = document.getElementById('cart-list');
-    const subEl = document.getElementById('subval');
-    const discEl = document.getElementById('discval');
-    const shipEl = document.getElementById('shipval');
-    const totEl = document.getElementById('totval');
 
     function calcTotals(cart){
       const subtotal = cart.reduce((s,p)=> s + (p.price||0) * (p.qty||p.quantity||1), 0);
@@ -233,19 +183,62 @@
       return {subtotal, discount, shipping, total};
     }
 
+    async function buildProformaHTML(cart, totals, form){
+      try{ if (window.MSACart && typeof MSACart.buildProformaHTML==='function'){ return await MSACart.buildProformaHTML(cart, totals, form); } }catch(e){}
+      const rows = cart.map(p=>{
+        const q = p.qty||p.quantity||1;
+        return `<tr>
+          <td style="padding:8px 6px;border-bottom:1px solid #eee">${p.name||''}</td>
+          <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:center">${q}</td>
+          <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:right">${money(p.price)} RON</td>
+          <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:right">${money(q*(p.price||0))} RON</td>
+        </tr>`;
+      }).join('');
+      return `
+        <h3 style="margin:0 0 8px">Proformă</h3>
+        <div style="margin:6px 0 12px">
+          <div><b>Nr. comandă:</b> #${form.order_id}</div>
+          <div><b>Data:</b> ${new Date().toLocaleDateString('ro-RO')}</div>
+        </div>
+        <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+          <thead>
+            <tr>
+              <th align="left"  style="padding:8px 6px;border-bottom:1px solid #ccc">Produs</th>
+              <th align="center"style="padding:8px 6px;border-bottom:1px solid #ccc">Cant.</th>
+              <th align="right" style="padding:8px 6px;border-bottom:1px solid #ccc">Preț</th>
+              <th align="right" style="padding:8px 6px;border-bottom:1px solid #ccc">Total</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+        <div style="margin-top:12px;text-align:right">
+          <div>Subtotal: <b>${money(totals.subtotal)} RON</b></div>
+          <div>Reducere: <b>− ${money(totals.discount)} RON</b></div>
+          <div>Livrare:  <b>${money(totals.shipping)} RON</b></div>
+          <div style="font-size:18px">Total: <b>${money(totals.total)} RON</b></div>
+        </div>`;
+    }
+
+    // ===== Render listă
+    const list = document.getElementById('cart-list');
+    const subEl  = document.getElementById('subval');
+    const discEl = document.getElementById('discval');
+    const shipEl = document.getElementById('shipval');
+    const totEl  = document.getElementById('totval');
+
     function render(){
-      const cart = getCartSmart();
+      const cart = getCart();
       list.innerHTML = '';
       if (!cart.length){
-        list.innerHTML = '<div class="inner muted">Coșul este gol.</div>';
+        list.innerHTML = '<div class="muted">Coșul este gol.</div>';
       } else {
         cart.forEach(p=>{
-          const id = p.id;
-          const qty = p.qty || p.quantity || 1;
-          const li = document.createElement('div');
-          li.className = 'item';
-          li.dataset.id = id;
-          li.innerHTML = `
+          const id  = p.id;
+          const q   = p.qty || p.quantity || 1;
+          const row = document.createElement('div');
+          row.className = 'item';
+          row.dataset.id = id;
+          row.innerHTML = `
             <img class="thumb" src="${p.image||''}" alt="${p.name||''}">
             <div class="titlewrap">
               <div class="title">${p.name||'Produs'}</div>
@@ -253,62 +246,58 @@
               <div class="qtyrow">
                 <div class="qty">
                   <button class="dec" aria-label="Scade">−</button>
-                  <input class="qval" value="${qty}" readonly>
+                  <input class="qval" value="${q}" readonly>
                   <button class="inc" aria-label="Crește">+</button>
                 </div>
                 <button class="remove" title="Șterge">×</button>
               </div>
             </div>
             <div class="totalwrap">
-              <div class="lineTotal">${money((p.price||0)*qty)} RON</div>
+              <div class="lineTotal">${money((p.price||0)*q)} RON</div>
             </div>`;
-          list.appendChild(li);
+          list.appendChild(row);
         });
       }
-      // totaluri
       const t = calcTotals(cart);
-      subEl.textContent = `${money(t.subtotal)} RON`;
+      subEl.textContent  = `${money(t.subtotal)} RON`;
       discEl.textContent = `− ${money(t.discount)} RON`;
       shipEl.textContent = `${money(t.shipping)} RON`;
-      totEl.textContent = `${money(t.total)} RON`;
+      totEl.textContent  = `${money(t.total)} RON`;
       try{ if (window.MSACart && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge(); }catch(e){}
     }
 
-    // plus / minus / remove (delegare)
+    // + / − / ștergere
     list.addEventListener('click', (e)=>{
       const row = e.target.closest('.item'); if (!row) return;
       const id = row.dataset.id;
       if (e.target.closest('.inc')){
-        const cart = getCartSmart();
+        const cart = getCart();
         const idx = cart.findIndex(x=>String(x.id)===String(id));
-        if (idx>-1){ const next = (cart[idx].qty||cart[idx].quantity||1)+1; setQtySmart(id, next); render(); }
+        if (idx>-1){ const next = (cart[idx].qty||cart[idx].quantity||1)+1; setQty(id,next); render(); }
       }
       if (e.target.closest('.dec')){
-        const cart = getCartSmart();
+        const cart = getCart();
         const idx = cart.findIndex(x=>String(x.id)===String(id));
-        if (idx>-1){ const cur = (cart[idx].qty||cart[idx].quantity||1); const next = Math.max(1, cur-1); setQtySmart(id, next); render(); }
+        if (idx>-1){ const cur = (cart[idx].qty||cart[idx].quantity||1); const next = Math.max(1, cur-1); setQty(id,next); render(); }
       }
-      if (e.target.closest('.remove')){ removeSmart(id); render(); }
+      if (e.target.closest('.remove')){ removeItem(id); render(); }
     });
 
-    // golește coșul
-    document.getElementById('clear-cart').addEventListener('click', (e)=>{ e.preventDefault(); clearSmart(); render(); });
+    // Golește coșul
+    document.getElementById('clear-cart').addEventListener('click', (e)=>{ e.preventDefault(); clearCart(); render(); });
 
-    // PF/PJ toggle + required
+    // PF/PJ
     function syncPFJ(){
       const isPJ = (document.querySelector('input[name="tip"]:checked')||{}).value === 'pj';
       document.querySelectorAll('.pj-only').forEach(el => el.style.display = isPJ ? '' : 'none');
       document.querySelectorAll('.pf-only').forEach(el => el.style.display = isPJ ? 'none' : '');
-
-      const pjReq = ['firma','cui','reg'];
-      const pfReq = ['nume','prenume'];
-      pjReq.forEach(n => { const el = document.querySelector(`[name="${n}"]`); if (el) el.required = isPJ; });
-      pfReq.forEach(n => { const el = document.querySelector(`[name="${n}"]`); if (el) el.required = !isPJ; });
+      ['firma','cui','reg'].forEach(n => { const el = document.querySelector(`[name="${n}"]`); if (el) el.required = isPJ; });
+      ['nume','prenume'].forEach(n => { const el = document.querySelector(`[name="${n}"]`); if (el) el.required = !isPJ; });
     }
     document.addEventListener('DOMContentLoaded', syncPFJ);
     document.querySelectorAll('input[name="tip"]').forEach(r => r.addEventListener('change', syncPFJ));
 
-    // Submit o singură dată + EmailJS
+    // Submit (o singură dată) + EmailJS + Proformă
     const form = document.getElementById('order-form');
     const submitBtn = document.getElementById('submitBtn');
     let sending = false;
@@ -316,291 +305,13 @@
     form.addEventListener('submit', async (e)=>{
       e.preventDefault();
       if (sending) return;
-      const cart = getCartSmart();
+
+      const cart = getCart();
       if (!cart.length){ alert('Coșul este gol.'); return; }
 
       sending = true;
       submitBtn.disabled = true;
       submitBtn.textContent = 'Se trimite…';
-
-      const t = calcTotals(cart);
-      const formData = Object.fromEntries(new FormData(form).entries());
-      const order_id = Date.now().toString().slice(-6);
-
-      // text simplu pentru admin
-      const produseText = cart.map(p => `• ${p.name} × ${p.qty||p.quantity||1} — ${money((p.price||0)*(p.qty||p.quantity||1))} RON`).join('\n');
-
-      // proforma HTML pentru client
-      const html_proforma = await buildProformaHTML(cart, {...t}, {order_id});
-
-      const paramsAdmin = {
-        tip: formData.tip==='pj' ? 'Persoană juridică' : 'Persoană fizică',
-        nume: formData.nume||'-',
-        prenume: formData.prenume||'-',
-        email: formData.email,
-        telefon: formData.telefon,
-        judet: formData.judet,
-        oras: formData.oras,
-        codpostal: formData.codpostal||'-',
-        adresa: formData.adresa,
-        mentiuni: formData.mentiuni||'-',
-        produse: produseText,
-        subtotal: money(t.subtotal),
-        livrare: money(t.shipping),
-        total: money(t.total),
-        order_id
-      };
-
-      const paramsClient = {
-        to_email: formData.email,
-        nume: (formData.nume || formData.firma || 'Client'),
-        order_id,
-        html_proforma
-      };
-
-      try{
-        if (window.emailjs && typeof emailjs.send==='function'){
-          // 1) către magazin
-          await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, paramsAdmin);
-          // 2) confirmare client
-          await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, paramsClient);
-        } else {
-          alert('Comanda a fost înregistrată local (EmailJS nu e configurat în această pagină).');
-        }
-
-        clearSmart();
-        render();
-        alert('✅ Comanda a fost trimisă! Verifică emailul de confirmare.');
-        try{ window.location.href = 'multumesc.html'; }catch(e){}
-      } catch(err){
-        console.error(err);
-        alert('A apărut o eroare la trimiterea emailului. Te rugăm încearcă din nou.');
-      } finally {
-        sending = false;
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Plasează comanda';
-      }
-    });
-
-    // init
-    document.getElementById('year').textContent = new Date().getFullYear();
-    document.addEventListener('DOMContentLoaded', render);
-    window.addEventListener('storage', (ev)=>{ if (ev.key===LS_KEY) render(); });
-  </script><style id="fix-cos-css">
-  /* layout produs: titlu sus; jos: Cant. (stepper) + Total; responsive ok */
-  .msa-item{display:grid;grid-template-columns:72px 1fr auto;gap:14px;align-items:center;padding:14px;border-bottom:1px solid #e5e7eb}
-  .msa-item:last-child{border-bottom:0}
-  .msa-thumb{width:72px;height:72px;border-radius:12px;object-fit:cover;background:#f1f5f9}
-  .msa-title{font-weight:800;line-height:1.2;margin:0 0 6px}
-  .msa-unit{font-size:12px;color:#64748b;margin-bottom:8px}
-  .msa-qtyrow{display:flex;align-items:center;gap:10px}
-  .msa-qty{display:inline-flex;align-items:center;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden}
-  .msa-qty button{width:40px;height:38px;border:0;background:#f8fafc;font-size:20px}
-  .msa-qty input{width:56px;height:38px;border:0;text-align:center;font-weight:700}
-  .msa-remove{width:40px;height:40px;border:0;border-radius:10px;background:#fee2e2;color:#991b1b;font-size:20px}
-  .msa-linetotal{font-weight:800;font-size:18px;white-space:nowrap}
-  @media (max-width:640px){
-    .msa-item{grid-template-columns:60px 1fr;grid-template-areas:
-      "img title"
-      "img qty"
-      "img total"}
-    .msa-thumb{grid-area:img}
-    .msa-titlewrap{grid-area:title}
-    .msa-qtyrow{grid-area:qty}
-    .msa-totalwrap{grid-area:total;justify-self:end}
-  }
-</style>
-
-<script>
-(function(){
-  // ===== Config EmailJS (ale tale)
-  const EMAILJS_PUBLIC_KEY = 'iSadfb7-TV_89l_6k';
-  const EMAILJS_SERVICE_ID = 'service_ix0zpp7';
-  const EMAILJS_TEMPLATE_ADMIN = 'template_13qpqtt';
-  const EMAILJS_TEMPLATE_CLIENT = 'template_9yctwor';
-  try { if (window.emailjs && emailjs.init) emailjs.init(EMAILJS_PUBLIC_KEY); } catch(e){}
-
-  // ===== Selectoare tolerante (lucrăm cu ce există deja în pagina ta)
-  const elList = document.querySelector('#cart-items') || document.querySelector('#cart-list') || document.querySelector('#cart-mount');
-  const elSub  = document.querySelector('#subval')   || document.querySelector('#subtotal');
-  const elDisc = document.querySelector('#discval')  || document.querySelector('#discount');
-  const elShip = document.querySelector('#shipval')  || document.querySelector('#shipping');
-  const elTot  = document.querySelector('#totval')   || document.querySelector('#total');
-  const btnClear = document.querySelector('#clear-cart');
-
-  // Formular (acceptă ambele variante pe care le-ai folosit)
-  const form = document.querySelector('#order-form') || document.querySelector('#orderForm');
-  const submitBtn = document.querySelector('#submitBtn') || document.querySelector('#submit-order');
-
-  // ===== Integrare cu MSACart sau localStorage
-  const LS_KEY = (localStorage.getItem('MSACart') !== null) ? 'MSACart' :
-                 (localStorage.getItem('cart') !== null) ? 'cart' : 'MSACart';
-
-  function getCart(){
-    try{ if (window.MSACart && MSACart.getCart) return MSACart.getCart(); }catch(e){}
-    try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }catch(e){ return []; }
-  }
-  function setCart(next){
-    try{ if (window.MSACart && MSACart.setCart) return MSACart.setCart(next); }catch(e){}
-    localStorage.setItem(LS_KEY, JSON.stringify(next));
-  }
-  function setQty(id, qty){
-    try{ if (window.MSACart && MSACart.setQty) return MSACart.setQty(id, qty); }catch(e){}
-    const cart = getCart().map(p => String(p.id)===String(id) ? {...p, qty, quantity: qty} : p);
-    setCart(cart);
-  }
-  function removeItem(id){
-    try{ if (window.MSACart && MSACart.removeItem) return MSACart.removeItem(id); }catch(e){}
-    const cart = getCart().filter(p => String(p.id)!==String(id));
-    setCart(cart);
-  }
-  function clearCart(){
-    try{ if (window.MSACart && MSACart.clear) return MSACart.clear(); }catch(e){}
-    setCart([]);
-  }
-  function money(v){
-    try{ if (window.MSACart && MSACart.money) return MSACart.money(v); }catch(e){}
-    return Number(v||0).toFixed(2);
-  }
-
-  function calcTotals(cart){
-    const subtotal = cart.reduce((s,p)=> s + (p.price||0) * (p.qty||p.quantity||1), 0);
-    const discount = subtotal>=400? subtotal*0.20 : subtotal>=300? subtotal*0.15 : subtotal>=200? subtotal*0.10 : 0;
-    const shipping = (subtotal - discount) >= 300 || subtotal===0 ? 0 : 20;
-    const total = subtotal - discount + shipping;
-    return {subtotal, discount, shipping, total};
-  }
-
-  async function buildProformaHTML(cart, totals, form){
-    try{
-      if (window.MSACart && MSACart.buildProformaHTML) {
-        return await MSACart.buildProformaHTML(cart, totals, form);
-      }
-    }catch(e){}
-    const rows = cart.map(p=>{
-      const q = p.qty||p.quantity||1;
-      return `<tr>
-        <td style="padding:8px 6px;border-bottom:1px solid #eee">${p.name||''}</td>
-        <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:center">${q}</td>
-        <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:right">${money(p.price)} RON</td>
-        <td style="padding:8px 6px;border-bottom:1px solid #eee;text-align:right">${money(q*(p.price||0))} RON</td>
-      </tr>`;
-    }).join('');
-    return `
-      <h3 style="margin:0 0 8px">Proformă</h3>
-      <div style="margin:6px 0 12px">
-        <div><b>Nr. comandă:</b> #${form.order_id}</div>
-        <div><b>Data:</b> ${new Date().toLocaleDateString('ro-RO')}</div>
-      </div>
-      <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
-        <thead>
-          <tr>
-            <th align="left"  style="padding:8px 6px;border-bottom:1px solid #ccc">Produs</th>
-            <th align="center"style="padding:8px 6px;border-bottom:1px solid #ccc">Cant.</th>
-            <th align="right" style="padding:8px 6px;border-bottom:1px solid #ccc">Preț</th>
-            <th align="right" style="padding:8px 6px;border-bottom:1px solid #ccc">Total</th>
-          </tr>
-        </thead>
-        <tbody>${rows}</tbody>
-      </table>
-      <div style="margin-top:12px;text-align:right">
-        <div>Subtotal: <b>${money(totals.subtotal)} RON</b></div>
-        <div>Reducere: <b>− ${money(totals.discount)} RON</b></div>
-        <div>Livrare:  <b>${money(totals.shipping)} RON</b></div>
-        <div style="font-size:18px">Total: <b>${money(totals.total)} RON</b></div>
-      </div>`;
-  }
-
-  // ===== Render listă
-  function render(){
-    if (!elList) return;
-    const cart = getCart();
-    elList.innerHTML = '';
-    if (!cart.length){
-      elList.innerHTML = '<div class="muted">Coșul este gol.</div>';
-    } else {
-      cart.forEach(p=>{
-        const id  = p.id;
-        const q   = p.qty || p.quantity || 1;
-        const row = document.createElement('div');
-        row.className = 'msa-item';
-        row.dataset.id = id;
-        row.innerHTML = `
-          <img class="msa-thumb" src="${p.image||''}" alt="${p.name||''}">
-          <div class="msa-titlewrap">
-            <div class="msa-title">${p.name||'Produs'}</div>
-            <div class="msa-unit">${money(p.price)} RON</div>
-            <div class="msa-qtyrow">
-              <div class="msa-qty">
-                <button class="msa-dec" aria-label="Scade">−</button>
-                <input class="msa-qval" value="${q}" readonly>
-                <button class="msa-inc" aria-label="Crește">+</button>
-              </div>
-              <button class="msa-remove" title="Șterge">×</button>
-            </div>
-          </div>
-          <div class="msa-totalwrap">
-            <div class="msa-linetotal">${money((p.price||0)*q)} RON</div>
-          </div>`;
-        elList.appendChild(row);
-      });
-    }
-    const t = calcTotals(cart);
-    if (elSub)  elSub.textContent  = `${money(t.subtotal)} RON`;
-    if (elDisc) elDisc.textContent = `− ${money(t.discount)} RON`;
-    if (elShip) elShip.textContent = `${money(t.shipping)} RON`;
-    if (elTot)  elTot.textContent  = `${money(t.total)} RON`;
-    try{ if (window.MSACart && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge(); }catch(e){}
-  }
-
-  // ===== Evenimente listă (+ / − / ștergere)
-  if (elList) elList.addEventListener('click', (e)=>{
-    const row = e.target.closest('.msa-item'); if (!row) return;
-    const id = row.dataset.id;
-    if (e.target.closest('.msa-inc')){
-      const cart = getCart();
-      const idx = cart.findIndex(x=>String(x.id)===String(id));
-      if (idx>-1){ const next = (cart[idx].qty||cart[idx].quantity||1)+1; setQty(id,next); render(); }
-    }
-    if (e.target.closest('.msa-dec')){
-      const cart = getCart();
-      const idx = cart.findIndex(x=>String(x.id)===String(id));
-      if (idx>-1){ const cur = (cart[idx].qty||cart[idx].quantity||1); const next = Math.max(1, cur-1); setQty(id,next); render(); }
-    }
-    if (e.target.closest('.msa-remove')){ removeItem(id); render(); }
-  });
-
-  if (btnClear) btnClear.addEventListener('click', (ev)=>{ ev.preventDefault(); clearCart(); render(); });
-
-  // ===== PF / PJ toggle (folosește clasele din pagina ta, dacă există)
-  function syncPFJ(){
-    const isPJ = (document.querySelector('input[name="tip"]:checked')||{}).value?.toLowerCase?.() === 'pj';
-    document.querySelectorAll('.pj-only,#sectPJ').forEach(el => el.style.display = isPJ ? '' : 'none');
-    document.querySelectorAll('.pf-only,#sectPF').forEach(el => el.style.display = isPJ ? 'none' : '');
-
-    const setReq = (name, on) => {
-      const el = document.querySelector(`[name="${name}"]`) || document.getElementById(name);
-      if (el) el.required = !!on;
-    };
-    // obligatorii: PJ => firma,cui,reg ; PF => nume,prenume
-    setReq('firma', isPJ); setReq('cui', isPJ); setReq('reg', isPJ); setReq('regcom', isPJ);
-    setReq('nume', !isPJ); setReq('prenume', !isPJ);
-  }
-  document.querySelectorAll('input[name="tip"]').forEach(r=> r.addEventListener('change', syncPFJ));
-  document.addEventListener('DOMContentLoaded', syncPFJ);
-
-  // ===== Submit + EmailJS + Proformă (fără dublu-click)
-  if (form){
-    let sending = false;
-    form.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      if (sending) return;
-
-      const cart = getCart();
-      if (!cart.length){ alert('Coșul este gol.'); return; }
-
-      sending = true;
-      if (submitBtn){ submitBtn.disabled = true; submitBtn.textContent = 'Se trimite…'; }
 
       const t = calcTotals(cart);
       const fd = Object.fromEntries(new FormData(form).entries());
@@ -635,9 +346,11 @@
       };
 
       try{
-        if (window.emailjs && emailjs.send){
+        if (window.emailjs && typeof emailjs.send==='function'){
           await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, paramsAdmin);
           await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, paramsClient);
+        } else {
+          alert('EmailJS nu este încărcat.');
         }
         clearCart(); render();
         alert('✅ Comanda a fost trimisă! Verifică emailul.');
@@ -647,15 +360,15 @@
         alert('A apărut o eroare la trimiterea emailului. Încearcă din nou.');
       }finally{
         sending = false;
-        if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = 'Plasează comanda'; }
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Plasează comanda';
       }
     });
-  }
 
-  // init
-  document.addEventListener('DOMContentLoaded', render);
-  window.addEventListener('storage', (ev)=>{ if (ev.key===LS_KEY) render(); });
-})();
-</script>
+    // init
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.addEventListener('DOMContentLoaded', render);
+    window.addEventListener('storage', (ev)=>{ if (ev.key===LS_KEY) render(); });
+  </script>
 </body>
 </html>
