@@ -370,5 +370,131 @@
     document.addEventListener('DOMContentLoaded', render);
     window.addEventListener('storage', (ev)=>{ if (ev.key===LS_KEY) render(); });
   </script>
+  <!-- DEBUG + RANDĂRII ROBUSTE COS (nu modifică cart.js) -->
+<script>
+(function(){
+  // 1) Găsim containerul existent (acceptă oricare dintre cele folosite de tine)
+  const elList = document.querySelector('#cart-list') || document.querySelector('#cart-items') || document.querySelector('#cart-mount');
+  const elSub  = document.querySelector('#subval')   || document.querySelector('#subtotal');
+  const elDisc = document.querySelector('#discval')  || document.querySelector('#discount');
+  const elShip = document.querySelector('#shipval')  || document.querySelector('#shipping');
+  const elTot  = document.querySelector('#totval')   || document.querySelector('#total');
+
+  // 2) Cheie detectată
+  const LS_KEY = (localStorage.getItem('MSACart') !== null) ? 'MSACart'
+                : (localStorage.getItem('cart') !== null)    ? 'cart'
+                : 'MSACart';
+
+  // 3) Citește coșul fie din MSACart API, fie direct din localStorage
+  function getCart(){
+    try{ if (window.MSACart && typeof MSACart.getCart==='function') return MSACart.getCart(); }catch(e){}
+    try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }catch(e){ return []; }
+  }
+  // Normalizare câmpuri (indiferent cum au fost salvate)
+  function N(p){
+    return {
+      id:   p.id ?? p.sku ?? p.code ?? '',
+      name: p.name ?? p.title ?? p.nume ?? 'Produs',
+      price: Number(p.price ?? p.pret ?? p.unitPrice ?? 0),
+      qty:  Number(p.qty ?? p.quantity ?? p.cant ?? 1),
+      image: p.image ?? p.img ?? p.poza ?? ''
+    };
+  }
+  function money(v){ return Number(v||0).toFixed(2); }
+  function totals(list){
+    const sub = list.reduce((s,p)=> s + p.price*p.qty, 0);
+    const disc = sub>=400? sub*0.20 : sub>=300? sub*0.15 : sub>=200? sub*0.10 : 0;
+    const ship = (sub-disc)>=300 || sub===0 ? 0 : 20;
+    return {sub, disc, ship, tot: sub-disc+ship};
+  }
+
+  // 4) Mic banner vizibil cu ce am găsit (ca să știi pe loc dacă vede coșul)
+  const info = document.createElement('div');
+  info.style.cssText='margin:8px 0 12px;padding:8px 10px;border-radius:8px;background:#fff3cd;color:#7a5b00;font-weight:700';
+  document.body.insertBefore(info, document.body.firstChild);
+
+  // 5) Randare simplă (nu atinge stilurile tale; doar pune elemente)
+  function render(){
+    const raw  = getCart();
+    const list = raw.map(N);
+    const t    = totals(list);
+
+    info.textContent = `Detectat coș în "${LS_KEY}" — ${list.length} produs(e).`;
+
+    if (elList){
+      elList.innerHTML = '';
+      if (!list.length){
+        elList.innerHTML = '<div style="color:#64748b">Coșul este gol.</div>';
+      } else {
+        list.forEach(p=>{
+          const row = document.createElement('div');
+          row.style.cssText='display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #eceff4';
+          row.innerHTML = `
+            <img src="${p.image}" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:12px;background:#eee">
+            <div>
+              <div style="font-weight:800">${p.name}</div>
+              <div style="color:#64748b;font-size:12px">${money(p.price)} RON</div>
+              <div style="display:flex;gap:10px;margin-top:8px;align-items:center">
+                <div style="display:inline-flex;align-items:center;border:1px solid #e2e8f0;border-radius:10px;overflow:hidden">
+                  <button data-act="dec" data-id="${p.id}" style="width:40px;height:36px;border:0;background:#f8fafc;font-size:20px">−</button>
+                  <input value="${p.qty}" readonly style="width:56px;height:36px;text-align:center;border:0;font-weight:700">
+                  <button data-act="inc" data-id="${p.id}" style="width:40px;height:36px;border:0;background:#f8fafc;font-size:20px">+</button>
+                </div>
+                <button data-act="del" data-id="${p.id}" style="width:40px;height:36px;border:0;border-radius:10px;background:#fee2e2;color:#991b1b;font-size:20px">×</button>
+              </div>
+            </div>
+            <div style="font-weight:800;white-space:nowrap">${money(p.price*p.qty)} RON</div>
+          `;
+          elList.appendChild(row);
+        });
+      }
+    }
+    if (elSub)  elSub.textContent  = `${money(t.sub)} RON`;
+    if (elDisc) elDisc.textContent = `− ${money(t.disc)} RON`;
+    if (elShip) elShip.textContent = `${money(t.ship)} RON`;
+    if (elTot)  elTot.textContent  = `${money(t.tot)} RON`;
+  }
+
+  // 6) + / − / ștergere (funcționează indiferent de structura veche; păstrează qty/quantity)
+  function setCart(next){
+    // păstrăm compatibilitatea (qty și/sau quantity)
+    const prev = (function(){
+      try{ if (window.MSACart && MSACart.getCart) return MSACart.getCart(); }catch(e){}
+      try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }catch(e){ return []; }
+    })();
+    // reconstruim obiectele în forma originală ca să nu stricăm alte pagini
+    const rebuilt = next.map(n=>{
+      const old = prev.find(x => String(x.id)===String(n.id)) || {};
+      const out = {...old};
+      out.id    = n.id;
+      out.name  = n.name;
+      out.price = n.price;
+      out.image = n.image;
+      if ('qty' in old) out.qty = n.qty;
+      if ('quantity' in old) out.quantity = n.qty;
+      if (!('qty' in old) && !('quantity' in old)) out.qty = n.qty; // fallback
+      return out;
+    });
+    try{ if (window.MSACart && MSACart.setCart){ MSACart.setCart(rebuilt); return; } }catch(e){}
+    localStorage.setItem(LS_KEY, JSON.stringify(rebuilt));
+  }
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button[data-act]'); if (!btn || !elList) return;
+    const id  = btn.dataset.id;
+    const act = btn.dataset.act;
+    const list = getCart().map(N);
+    const i = list.findIndex(p => String(p.id)===String(id));
+    if (i<0) return;
+    if (act==='inc') list[i].qty++;
+    if (act==='dec') list[i].qty = Math.max(1, list[i].qty-1);
+    if (act==='del') list.splice(i,1);
+    setCart(list);
+    render();
+  });
+
+  document.addEventListener('DOMContentLoaded', render);
+  window.addEventListener('storage', (ev)=>{ if (ev.key===LS_KEY) render(); });
+})();
+</script>
 </body>
 </html>
