@@ -119,7 +119,7 @@
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <script>
-/* ===== Config EmailJS ===== */
+/* ===== Config EmailJS (aceleași ID-uri) ===== */
 const EMAILJS_PUBLIC_KEY = 'iSadfb7-TV_89l_6k';
 const EMAILJS_SERVICE_ID = 'service_ix0zpp7';
 const EMAILJS_TEMPLATE_ADMIN  = 'template_13qpqtt';
@@ -129,19 +129,10 @@ try{ emailjs.init(EMAILJS_PUBLIC_KEY); }catch(_){}
 /* ===== DOAR localStorage (MSA_CART) ===== */
 const LS_KEY = 'MSA_CART';
 
-function readCart(){
-  try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }catch(_){ return []; }
-}
-function writeCart(arr){
-  localStorage.setItem(LS_KEY, JSON.stringify(arr||[]));
-}
-function setQty(id, qty){
-  const c = readCart().map(p => String(p.id)===String(id) ? {...p, qty:qty} : p);
-  writeCart(c);
-}
-function removeItem(id){
-  writeCart(readCart().filter(p=> String(p.id)!==String(id)));
-}
+function readCart(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }catch(_){ return []; } }
+function writeCart(arr){ localStorage.setItem(LS_KEY, JSON.stringify(arr||[])); }
+function setQty(id, qty){ writeCart(readCart().map(p => String(p.id)===String(id) ? {...p, qty:qty} : p)); }
+function removeItem(id){ writeCart(readCart().filter(p=> String(p.id)!==String(id))); }
 function clearCart(){ writeCart([]); }
 function money(n){ return (Number(n)||0).toFixed(2)+' RON'; }
 function totals(cart){
@@ -225,39 +216,105 @@ function syncPFJ(){
 }
 document.querySelectorAll('input[name="tip"]').forEach(r=> r.addEventListener('change', syncPFJ));
 
-/* ===== Proforma ===== */
+/* ===== PROFORMA exact ca în modelul tău ===== */
 function buildProformaHTML(orderId, cart, t, fd){
+  const fmt = (n)=> (Number(n)||0).toFixed(2) + ' RON';
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('ro-RO', { day:'2-digit', month:'2-digit', year:'numeric' });
+
+  const isPJ = fd.tip === 'pj';
+  const clientTitle = isPJ ? 'Cumpărător (PJ)' : 'Cumpărător (PF)';
+  const clientName  = isPJ ? (fd.firma||'-') : `${fd.nume||''} ${fd.prenume||''}`.trim() || '-';
+  const clientExtra = isPJ
+    ? `<div>CUI: ${fd.cui||'-'}</div><div>Nr. Reg. Com.: ${fd.reg||'-'}</div>`
+    : '';
+
   const rows = cart.map(p=>{
     const q = Number(p.qty)||1;
+    const price = Number(p.price)||0;
     return `<tr>
-      <td style="padding:8px;border-bottom:1px solid #eee">${p.name}</td>
-      <td style="padding:8px;border-bottom:1px solid #eee;text-align:center">${q}</td>
-      <td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(Number(p.price)||0).toFixed(2)} RON</td>
-      <td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(q*(Number(p.price)||0)).toFixed(2)} RON</td>
+      <td>${p.name||'Produs'}</td>
+      <td style="text-align:center">${q}</td>
+      <td style="text-align:right">${fmt(price)}</td>
+      <td style="text-align:right">${fmt(q*price)}</td>
     </tr>`;
   }).join('');
+
+  const css = `
+    <style>
+      .pfwrap{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#0f172a}
+      .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:12px}
+      .box{border:1px solid #e2e8f0;border-radius:12px;padding:12px;background:#fff;box-sizing:border-box;flex:1}
+      .center{text-align:center}
+      .title{font-size:16px;font-weight:700;margin-bottom:6px}
+      .subtitle{font-size:13px;color:#475569;margin-bottom:6px}
+      table{width:100%;border-collapse:collapse;margin-top:6px}
+      th,td{padding:10px;border-bottom:1px solid #e2e8f0}
+      th{background:#f8fafc;text-align:left}
+      tfoot td{font-weight:700}
+      .total{font-size:18px;font-weight:800}
+      .note{font-size:13px;color:#64748b;margin-top:12px}
+    </style>`;
+
   return `
-    <h3 style="font-family:system-ui;margin:0 0 8px">Proformă #${orderId}</h3>
-    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;font-family:system-ui">
-      <thead><tr style="background:#f8fafc">
-        <th align="left"  style="padding:8px;border-bottom:1px solid #ddd">Produs</th>
-        <th align="center"style="padding:8px;border-bottom:1px solid #ddd">Cant.</th>
-        <th align="right" style="padding:8px;border-bottom:1px solid #ddd">Preț</th>
-        <th align="right" style="padding:8px;border-bottom:1px solid #ddd">Total</th>
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-    <div style="text-align:right;margin-top:10px;font-family:system-ui">
-      <div>Subtotal: <b>${t.subtotal.toFixed(2)} RON</b></div>
-      <div>Reducere: <b>− ${t.discount.toFixed(2)} RON</b></div>
-      <div>Livrare:  <b>${t.shipping.toFixed(2)} RON</b></div>
-      <div style="font-size:18px">TOTAL: <b>${t.total.toFixed(2)} RON</b></div>
+    ${css}
+    <div class="pfwrap">
+      <div class="header">
+        <div class="box">
+          <div class="title">Vânzător</div>
+          <div><strong>STOICA MIHAELA – PERSOANĂ FIZICĂ AUTORIZATĂ</strong></div>
+          <div>jud. Ilfov, Oraș Bragadiru, Strada Generalului, Nr. 10, Cam. 1, Bl. 1, Ap. 2</div>
+          <div>CUI: 32196263</div>
+          <div>Nr. Reg. Com.: F23/2058/2008</div>
+          <div>Neplătitor de TVA</div>
+          <div>Tel: 0733119233</div>
+          <div>Email: msahandmade.contact@gmail.com</div>
+        </div>
+
+        <div class="box center" style="max-width:240px;flex:0 0 240px">
+          <div class="title">Proformă</div>
+          <div class="subtitle">MSA Handmade Decor</div>
+          <div>Nr. comandă: <strong>#${orderId}</strong></div>
+          <div>Data: <strong>${dateStr}</strong></div>
+        </div>
+
+        <div class="box">
+          <div class="title">${clientTitle}</div>
+          <div><strong>${clientName}</strong></div>
+          <div>${fd.adresa||'-'}, ${fd.oras||'-'}, ${fd.judet||'-'}${fd.codpostal? ', '+fd.codpostal:''}</div>
+          <div>Tel: ${fd.telefon||'-'}</div>
+          <div>Email: ${fd.email||'-'}</div>
+          ${clientExtra}
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Produs</th>
+            <th style="width:80px;text-align:center">Cant.</th>
+            <th style="width:110px;text-align:right">Preț</th>
+            <th style="width:120px;text-align:right">Total</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+        <tfoot>
+          <tr><td colspan="3" align="right">Subtotal</td><td>${fmt(t.subtotal)}</td></tr>
+          <tr><td colspan="3" align="right">Reducere</td><td>− ${fmt(t.discount)}</td></tr>
+          <tr><td colspan="3" align="right">Livrare</td><td>${fmt(t.shipping)}</td></tr>
+          <tr><td colspan="3" align="right" class="total">TOTAL</td><td class="total">${fmt(t.total)}</td></tr>
+        </tfoot>
+      </table>
+
+      <div class="note">
+        * Proforma nu este document fiscal. STOICA MIHAELA – PFA este neplătitor de TVA.<br/>
+        Plata se va efectua conform instrucțiunilor transmise ulterior prin email.
+      </div>
     </div>
-    <div style="color:#64748b;margin-top:8px;font-family:system-ui">Proforma nu este document fiscal.</div>
   `;
 }
 
-/* ===== EmailJS Submit ===== */
+/* ===== Submit (EmailJS) ===== */
 const orderForm = document.getElementById('order-form');
 const submitBtn = document.getElementById('submitBtn');
 let sending = false;
