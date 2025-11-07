@@ -18,6 +18,7 @@
   .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
   @media (max-width:900px){.grid{grid-template-columns:1fr}}
 
+  /* listă produse în coș */
   .item{display:grid;grid-template-columns:72px 1fr;gap:14px;padding:14px;border-bottom:1px solid var(--line);align-items:start}
   .thumb{width:72px;height:72px;object-fit:cover;border-radius:12px;background:#eef2f7}
   .title{font-weight:800;line-height:1.2;margin:0}
@@ -82,10 +83,12 @@
         </div>
 
         <form id="order-form">
+          <!-- PF -->
           <div class="pf-only form-grid">
             <input name="nume" placeholder="Nume" required>
             <input name="prenume" placeholder="Prenume" required>
           </div>
+          <!-- PJ -->
           <div class="pj-only form-grid" style="display:none">
             <input name="firma" placeholder="Denumire firmă" class="full">
             <input name="cui" placeholder="CUI">
@@ -119,16 +122,20 @@
   <p class="muted" style="text-align:center;margin:22px 0 6px">© <span id="year"></span> — M.S.A Handmade. Toate drepturile rezervate.</p>
 </div>
 
+<!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <script>
+/* ===== Config EmailJS ===== */
 const EMAILJS_PUBLIC_KEY = 'iSadfb7-TV_89l_6k';
 const EMAILJS_SERVICE_ID = 'service_ix0zpp7';
 const EMAILJS_TEMPLATE_ADMIN  = 'template_13qpqtt';
 const EMAILJS_TEMPLATE_CLIENT = 'template_9yctwor';
 try{ emailjs.init(EMAILJS_PUBLIC_KEY); }catch(_){}
 
+/* ===== DOAR localStorage (MSA_CART) ===== */
 const LS_KEY = 'MSA_CART';
+
 function readCart(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }catch(_){ return []; } }
 function writeCart(arr){ localStorage.setItem(LS_KEY, JSON.stringify(arr||[])); }
 function setQty(id, qty){ writeCart(readCart().map(p => String(p.id)===String(id) ? {...p, qty:qty} : p)); }
@@ -143,9 +150,14 @@ function totals(cart){
   return {subtotal, discount, shipping, total};
 }
 
-/* Render coș */
+/* ===== Render ===== */
+const list  = document.getElementById('cart-list');
+const subEl = document.getElementById('subval');
+const disEl = document.getElementById('discval');
+const shpEl = document.getElementById('shipval');
+const totEl = document.getElementById('totval');
+
 function render(){
-  const list = document.getElementById('cart-list');
   const cart = readCart();
   list.innerHTML = '';
   if (!cart.length){
@@ -153,86 +165,237 @@ function render(){
   }else{
     cart.forEach(p=>{
       const q = Number(p.qty)||1;
-      list.innerHTML += `
-      <div class="item" data-id="${p.id}">
+      const el = document.createElement('div');
+      el.className = 'item';
+      el.dataset.id = p.id;
+      el.innerHTML = `
         <img class="thumb" src="${p.image||''}" alt="${p.name||''}">
         <div>
-          <p class="title">${p.name}</p>
+          <p class="title">${p.name||'Produs'}</p>
           <div class="unit">${money(p.price)}</div>
           <div class="meta">
             <div>
               <div class="qty">
-                <button class="dec">−</button>
+                <button class="dec" type="button">−</button>
                 <input class="qval" value="${q}" readonly>
-                <button class="inc">+</button>
+                <button class="inc" type="button">+</button>
               </div>
-              <button class="remove">×</button>
+              <button class="remove" type="button">×</button>
             </div>
             <div class="lineTotal">${money((Number(p.price)||0)*q)}</div>
           </div>
-        </div>
-      </div>`;
+        </div>`;
+      list.appendChild(el);
     });
   }
   const t = totals(cart);
-  document.getElementById('subval').textContent = money(t.subtotal);
-  document.getElementById('discval').textContent = '− '+money(t.discount);
-  document.getElementById('shipval').textContent = money(t.shipping);
-  document.getElementById('totval').textContent = money(t.total);
+  subEl.textContent = money(t.subtotal);
+  disEl.textContent = '− ' + money(t.discount);
+  shpEl.textContent = money(t.shipping);
+  totEl.textContent = money(t.total);
+
   const badge = document.querySelector('[data-cart-count]');
   if (badge) badge.textContent = cart.reduce((s,p)=> s + (Number(p.qty)||1), 0);
 }
-document.addEventListener('click',(e)=>{
-  const row=e.target.closest('.item'); if(!row)return;
-  const id=row.dataset.id;
-  const cart=readCart();
-  const i=cart.findIndex(x=>String(x.id)===String(id));
-  if(i<0)return;
-  const q=Number(cart[i].qty)||1;
-  if(e.target.closest('.inc')){setQty(id,q+1);render();}
-  if(e.target.closest('.dec')){setQty(id,Math.max(1,q-1));render();}
-  if(e.target.closest('.remove')){removeItem(id);render();}
+
+/* ===== Actions ===== */
+list.addEventListener('click', (e)=>{
+  const row = e.target.closest('.item'); if (!row) return;
+  const id = row.dataset.id;
+  const cart = readCart();
+  const i = cart.findIndex(x=> String(x.id)===String(id));
+  if (i<0) return;
+  const q = Number(cart[i].qty)||1;
+  if (e.target.closest('.inc')) { setQty(id, q+1); render(); }
+  if (e.target.closest('.dec')) { setQty(id, Math.max(1,q-1)); render(); }
+  if (e.target.closest('.remove')){ removeItem(id); render(); }
 });
-document.getElementById('clear-cart').addEventListener('click',e=>{e.preventDefault();clearCart();render();});
+document.getElementById('clear-cart').addEventListener('click', e=>{ e.preventDefault(); clearCart(); render(); });
 
-/* PF/PJ switch */
+/* ===== PF / PJ ===== */
 function syncPFJ(){
-  const tip=(document.querySelector('input[name="tip"]:checked')||{}).value||'pf';
-  const isPJ=tip==='pj';
-  document.querySelector('.pj-only').style.display=isPJ?'':'none';
-  document.querySelector('.pf-only').style.display=isPJ?'none':'';
-  ['firma','cui','reg'].forEach(n=>{const el=document.querySelector(`[name="${n}"]`);if(el)el.required=isPJ;});
-  ['nume','prenume'].forEach(n=>{const el=document.querySelector(`[name="${n}"]`);if(el)el.required=!isPJ;});
+  const tip = (document.querySelector('input[name="tip"]:checked')||{}).value || 'pf';
+  const isPJ = tip==='pj';
+  document.querySelector('.pj-only').style.display = isPJ ? '' : 'none';
+  document.querySelector('.pf-only').style.display = isPJ ? 'none' : '';
+  ['firma','cui','reg'].forEach(n=>{ const el=document.querySelector(`[name="${n}"]`); if(el) el.required=isPJ; });
+  ['nume','prenume'].forEach(n=>{ const el=document.querySelector(`[name="${n}"]`); if(el) el.required=!isPJ; });
 }
-document.querySelectorAll('input[name="tip"]').forEach(r=>r.addEventListener('change',syncPFJ));
+document.querySelectorAll('input[name="tip"]').forEach(r=> r.addEventListener('change', syncPFJ));
 
-/* Proformă */
+/* ===== PROFORMA (stânga client, mijloc nr comanda, dreapta vânzător) ===== */
 function buildProformaHTML(orderId, cart, t, fd){
-  const fmt = n=>(Number(n)||0).toFixed(2)+' RON';
-  const dateStr = new Date().toLocaleDateString('ro-RO',{day:'2-digit',month:'2-digit',year:'numeric'});
-  const isPJ = fd.tip==='pj';
-  const clientName = isPJ?(fd.firma||'-'):`${fd.nume||''} ${fd.prenume||''}`.trim()||'-';
-  const clientExtra = isPJ?`<div>CUI: ${fd.cui||'-'}</div><div>Nr. Reg. Com.: ${fd.reg||'-'}</div>`:'';
-  const pay = fd.plata||'ramburs';
-  const payShort = pay==='transfer'?'Transfer bancar':'Ramburs';
-  const payNote = pay==='transfer'
+  const fmt = (n)=> (Number(n)||0).toFixed(2) + ' RON';
+  const dateStr = new Date().toLocaleDateString('ro-RO', { day:'2-digit', month:'2-digit', year:'numeric' });
+
+  const isPJ = fd.tip === 'pj';
+  const clientTitle = isPJ ? 'Cumpărător (PJ)' : 'Cumpărător (PF)';
+  const clientName  = isPJ ? (fd.firma||'-') : `${fd.nume||''} ${fd.prenume||''}`.trim() || '-';
+  const clientExtra = isPJ ? `<div>CUI: ${fd.cui||'-'}</div><div>Nr. Reg. Com.: ${fd.reg||'-'}</div>` : '';
+
+  const pay = fd.plata || 'ramburs';
+  const payShort = (pay==='transfer') ? 'Transfer bancar' : 'Ramburs';
+  const payNote  = (pay==='transfer')
     ? 'Plata se efectuează prin <strong>transfer bancar</strong> în contul IBAN de mai jos.'
     : 'Plata se efectuează <strong>la livrare (ramburs)</strong>, direct către curier.';
+
   const rows = cart.map(p=>{
-    const q=Number(p.qty)||1;const price=Number(p.price)||0;
-    return `<tr><td>${p.name}</td><td style="text-align:center">${q}</td><td style="text-align:right">${fmt(price)}</td><td style="text-align:right">${fmt(q*price)}</td></tr>`;
+    const q = Number(p.qty)||1;
+    const price = Number(p.price)||0;
+    return `<tr>
+      <td>${p.name||'Produs'}</td>
+      <td style="text-align:center">${q}</td>
+      <td style="text-align:right">${fmt(price)}</td>
+      <td style="text-align:right">${fmt(q*price)}</td>
+    </tr>`;
   }).join('');
-  const css=`<style>.pfwrap{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:12px}.box{border:1px solid #e2e8f0;border-radius:12px;padding:12px;background:#fff;box-sizing:border-box;flex:1}.center{text-align:center}.title{font-size:16px;font-weight:700;margin-bottom:6px}.subtitle{font-size:13px;color:#475569;margin-bottom:6px}table{width:100%;border-collapse:collapse;margin-top:6px}th,td{padding:10px;border-bottom:1px solid #e2e8f0}th{background:#f8fafc;text-align:left}tfoot td{font-weight:700}.total{font-size:18px;font-weight:800}.note{font-size:13px;color:#64748b;margin-top:12px}</style>`;
-  return `${css}<div class="pfwrap"><div class="header">
-    <div class="box"><div class="title">${isPJ?'Cumpărător (PJ)':'Cumpărător (PF)'}</div>
-      <div><strong>${clientName}</strong></div>
-      <div>${fd.adresa||'-'}, ${fd.oras||'-'}, ${fd.judet||'-'}${fd.codpostal?', '+fd.codpostal:''}</div>
-      <div>Tel: ${fd.telefon||'-'}</div><div>Email: ${fd.email||'-'}</div>${clientExtra}</div>
-    <div class="box center" style="max-width:240px;flex:0 0 240px">
-      <div class="title">Proformă</div><div class="subtitle">MSA Handmade Decor</div>
-      <div>Nr. comandă: <strong>#${orderId}</strong></div><div>Data: <strong>${dateStr}</strong></div></div>
-    <div class="box"><div class="title">Vânzător</div>
-      <div><strong>STOICA MIHAELA – PFA</strong></div>
-      <div>jud. Ilfov, Oraș Bragadiru, Strada Generalului, Nr. 10, Cam. 1, Bl. 1, Ap. 2</div>
-      <div>CUI: 32196263</div><div>Nr. Reg. Com.: F23/2058/2008</div><div>Neplătitor de TVA</div>
-      <div>Tel: 0733119233</div><div>Email: msahandmade.contact@gmail.com
+
+  const css = `
+    <style>
+      .pfwrap{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#0f172a}
+      .header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:12px}
+      .box{border:1px solid #e2e8f0;border-radius:12px;padding:12px;background:#fff;box-sizing:border-box;flex:1}
+      .center{text-align:center}
+      .title{font-size:16px;font-weight:700;margin-bottom:6px}
+      .subtitle{font-size:13px;color:#475569;margin-bottom:6px}
+      table{width:100%;border-collapse:collapse;margin-top:6px}
+      th,td{padding:10px;border-bottom:1px solid #e2e8f0}
+      th{background:#f8fafc;text-align:left}
+      tfoot td{font-weight:700}
+      .total{font-size:18px;font-weight:800}
+      .note{font-size:13px;color:#64748b;margin-top:12px}
+    </style>`;
+
+  return `
+    ${css}
+    <div class="pfwrap">
+      <div class="header">
+        <!-- STÂNGA — Cumpărător -->
+        <div class="box">
+          <div class="title">${clientTitle}</div>
+          <div><strong>${clientName}</strong></div>
+          <div>${fd.adresa||'-'}, ${fd.oras||'-'}, ${fd.judet||'-'}${fd.codpostal? ', '+fd.codpostal:''}</div>
+          <div>Tel: ${fd.telefon||'-'}</div>
+          <div>Email: ${fd.email||'-'}</div>
+          ${clientExtra}
+        </div>
+
+        <!-- MIJLOC — Proformă -->
+        <div class="box center" style="max-width:240px;flex:0 0 240px">
+          <div class="title">Proformă</div>
+          <div class="subtitle">MSA Handmade Decor</div>
+          <div>Nr. comandă: <strong>#${orderId}</strong></div>
+          <div>Data: <strong>${dateStr}</strong></div>
+        </div>
+
+        <!-- DREAPTA — Vânzător -->
+        <div class="box">
+          <div class="title">Vânzător</div>
+          <div><strong>STOICA MIHAELA – PFA</strong></div>
+          <div>jud. Ilfov, Oraș Bragadiru, Strada Generalului, Nr. 10, Cam. 1, Bl. 1, Ap. 2</div>
+          <div>CUI: 32196263</div>
+          <div>Nr. Reg. Com.: F23/2058/2008</div>
+          <div>Neplătitor de TVA</div>
+          <div>Tel: 0733119233</div>
+          <div>Email: msahandmade.contact@gmail.com</div>
+          <div><strong>IBAN: RO71ROIN4021V44X12E165BQ — SALT BANK</strong></div>
+          <div style="margin-top:6px">Metodă de plată selectată: <strong>${payShort}</strong></div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Produs</th>
+            <th style="width:80px;text-align:center">Cant.</th>
+            <th style="width:110px;text-align:right">Preț</th>
+            <th style="width:120px;text-align:right">Total</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+        <tfoot>
+          <tr><td colspan="3" align="right">Subtotal</td><td>${fmt(t.subtotal)}</td></tr>
+          <tr><td colspan="3" align="right">Reducere</td><td>− ${fmt(t.discount)}</td></tr>
+          <tr><td colspan="3" align="right">Livrare</td><td>${fmt(t.shipping)}</td></tr>
+          <tr><td colspan="3" align="right" class="total">TOTAL</td><td class="total">${fmt(t.total)}</td></tr>
+        </tfoot>
+      </table>
+
+      <div class="note">
+        * Proforma nu este document fiscal. STOICA MIHAELA – PFA este neplătitor de TVA.<br/>
+        ${payNote}
+      </div>
+    </div>
+  `;
+}
+
+/* ===== Submit (EmailJS) ===== */
+const orderForm = document.getElementById('order-form');
+const submitBtn = document.getElementById('submitBtn');
+let sending = false;
+
+orderForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  if (sending) return;
+
+  const cart = readCart();
+  if (!cart.length){ alert('Coșul este gol.'); return; }
+
+  const fd = Object.fromEntries(new FormData(orderForm).entries());
+  const t = totals(cart);
+  const orderId = Date.now().toString().slice(-6);
+
+  const produseText = cart.map(p => `• ${p.name} × ${(Number(p.qty)||1)} — ${(((Number(p.price)||0))*(Number(p.qty)||1)).toFixed(2)} RON`).join('\n');
+  const proformaHTML = buildProformaHTML(orderId, cart, t, fd);
+
+  const pay = fd.plata || 'ramburs';
+
+  const adminParams = {
+    tip: (fd.tip==='pj'?'Persoană juridică':'Persoană fizică'),
+    nume: fd.nume||'-', prenume: fd.prenume||'-',
+    email: fd.email||'-', telefon: fd.telefon||'-',
+    judet: fd.judet||'-', oras: fd.oras||'-', adresa: fd.adresa||'-',
+    codpostal: fd.codpostal||'-', mentiuni: fd.mentiuni||'-',
+    produse: produseText,
+    subtotal: t.subtotal.toFixed(2),
+    livrare: t.shipping.toFixed(2),
+    total: t.total.toFixed(2),
+    order_id: orderId,
+    plata: (pay==='transfer') ? 'Transfer bancar' : 'Ramburs'
+  };
+
+  const clientParams = {
+    to_email: fd.email,
+    nume: (fd.tip==='pj' ? (fd.firma||'Client') : (fd.nume||'Client')),
+    order_id: orderId,
+    html_proforma: proformaHTML
+  };
+
+  sending = true;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Se trimite…';
+
+  try{
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ADMIN, adminParams);
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, clientParams);
+    clearCart();
+    render();
+    alert('✅ Comanda a fost trimisă! Verifică emailul.');
+    window.location.href = 'multumesc.html';
+  }catch(err){
+    console.error(err);
+    alert('A apărut o eroare la trimiterea emailului.');
+  }finally{
+    sending = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Plasează comanda';
+  }
+});
+
+/* ===== Init ===== */
+document.getElementById('year').textContent = new Date().getFullYear();
+document.addEventListener('DOMContentLoaded', ()=>{ render(); syncPFJ(); });
+window.addEventListener('storage', (ev)=>{ if (ev.key===LS_KEY) render(); });
+</script>
+</body>
+</html>
