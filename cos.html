@@ -117,34 +117,76 @@
 
 <!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<!-- cart.js (dacă există, e folosit; altfel citim direct din localStorage) -->
+<!-- cart.js (dacă există, e folosit) -->
 <script src="cart.js"></script>
 
 <script>
-/* ===== Config EmailJS ===== */
+/* ===== EmailJS ===== */
 const EMAILJS_PUBLIC_KEY = 'iSadfb7-TV_89l_6k';
 const EMAILJS_SERVICE_ID = 'service_ix0zpp7';
 const EMAILJS_TEMPLATE_ADMIN  = 'template_13qpqtt';
 const EMAILJS_TEMPLATE_CLIENT = 'template_9yctwor';
 try{ emailjs.init(EMAILJS_PUBLIC_KEY); }catch(_){}
 
-/* ===== Cart helpers: compatibil cu MSA_CART (exact ca în produse.html) ===== */
-const LS_KEY = 'MSA_CART'; // pagina de produse scrie în MSA_CART
+/* ===== Cart bridge: citește/scrie din MSACart și/sau localStorage (MSA_CART) ===== */
+const LS_KEY = 'MSA_CART';
 
-function getCart(){
-  try{ if (window.MSACart?.getCart) return MSACart.getCart(); }catch(_){}
+function readLS(){
   try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }catch(_){ return []; }
 }
-function setCart(next){
-  try{ if (window.MSACart?.setCart){ MSACart.setCart(next); return; } }catch(_){}
-  localStorage.setItem(LS_KEY, JSON.stringify(next||[]));
+function writeLS(arr){
+  localStorage.setItem(LS_KEY, JSON.stringify(arr||[]));
 }
-function setQty(id, qty){ setCart(getCart().map(p=> String(p.id)===String(id)? {...p, qty:qty} : p)); }
-function removeItem(id){ setCart(getCart().filter(p=> String(p.id)!==String(id))); }
-function clearCart(){ try{ MSACart?.clear && MSACart.clear(); }catch(_){ } localStorage.setItem(LS_KEY,'[]'); }
-function money(n){ return (Number(n)||0).toFixed(2)+' RON'; }
+
+function mergeCarts(a,b){
+  // combină după id și qty
+  const map = new Map();
+  [...a, ...b].forEach(p=>{
+    const id = String(p.id);
+    const prev = map.get(id) || {id, name:p.name, price:Number(p.price)||0, image:p.image||'', qty:0};
+    prev.qty = (Number(prev.qty)||0) + (Number(p.qty||p.quantity)||1);
+    map.set(id, prev);
+  });
+  return Array.from(map.values());
+}
+
+function getCart(){
+  let fromApi = [];
+  try{ if (window.MSACart && typeof MSACart.getCart==='function') fromApi = MSACart.getCart()||[]; }catch(_){}
+  const fromLS = readLS();
+
+  // dacă API-ul e gol dar LS are produse → folosește LS
+  if ((!fromApi || fromApi.length===0) && fromLS.length>0) return fromLS;
+
+  // dacă ambele au ceva → combină (rezolvă discrepanțe)
+  if ((fromApi?.length||0) > 0 && fromLS.length>0) return mergeCarts(fromApi, fromLS);
+
+  // altfel returnează ce ai
+  return fromApi?.length ? fromApi : fromLS;
+}
+
+function setCart(next){
+  // scrie în ambele
+  try{ if (window.MSACart && typeof MSACart.setCart==='function') MSACart.setCart(next); }catch(_){}
+  writeLS(next);
+}
+
+function clearCart(){
+  try{ if (window.MSACart?.clear) MSACart.clear(); }catch(_){}
+  writeLS([]);
+}
+
+function setQty(id, qty){
+  const c = getCart().map(p => String(p.id)===String(id) ? {...p, qty:qty, quantity:qty} : p);
+  setCart(c);
+}
+function removeItem(id){
+  setCart(getCart().filter(p=>String(p.id)!==String(id)));
+}
+function money(n){ return (Number(n)||0).toFixed(2) + ' RON'; }
+
 function calcTotals(cart){
-  const subtotal = cart.reduce((s,p)=> s + (Number(p.price)||0)*(Number(p.qty)||1), 0);
+  const subtotal = cart.reduce((s,p)=> s + (Number(p.price)||0)*(Number(p.qty||p.quantity)||1), 0);
   const discount = subtotal>=400? subtotal*0.20 : subtotal>=300? subtotal*0.15 : subtotal>=200? subtotal*0.10 : 0;
   const shipping = (subtotal - discount) >= 300 || subtotal===0 ? 0 : 20;
   const total = subtotal - discount + shipping;
@@ -164,7 +206,7 @@ function render(){
   if (!cart.length){ list.innerHTML = '<div class="muted">Coșul este gol.</div>'; }
   else{
     cart.forEach(p=>{
-      const q = Number(p.qty)||1;
+      const q = Number(p.qty||p.quantity)||1;
       const el = document.createElement('div');
       el.className = 'item'; el.dataset.id = p.id;
       el.innerHTML = `
@@ -193,8 +235,12 @@ function render(){
   shpEl.textContent = money(t.shipping);
   totEl.textContent = money(t.total);
 
+  // badge
   const badge = document.querySelector('[data-cart-count]');
-  if (badge) badge.textContent = cart.reduce((s,p)=>s+(Number(p.qty)||1),0);
+  if (badge) badge.textContent = cart.reduce((s,p)=> s + (Number(p.qty||p.quantity)||1), 0);
+
+  // dacă există metodă în cart.js, las-o să-și actualizeze badge-ul propriu
+  try{ if (window.MSACart && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge(); }catch(_){}
 }
 
 /* ===== Actions ===== */
@@ -204,7 +250,7 @@ list.addEventListener('click', (e)=>{
   const cart = getCart();
   const i = cart.findIndex(x=> String(x.id)===String(id));
   if (i<0) return;
-  const q = Number(cart[i].qty)||1;
+  const q = Number(cart[i].qty||cart[i].quantity)||1;
   if (e.target.closest('.inc')) { setQty(id, q+1); render(); }
   if (e.target.closest('.dec')) { setQty(id, Math.max(1,q-1)); render(); }
   if (e.target.closest('.remove')){ removeItem(id); render(); }
@@ -222,10 +268,10 @@ function syncPFJ(){
 }
 document.querySelectorAll('input[name="tip"]').forEach(r=> r.addEventListener('change', syncPFJ));
 
-/* ===== Proforma (HTML) ===== */
+/* ===== Proforma ===== */
 function buildProformaHTML(orderId, cart, totals, fd){
   const rows = cart.map(p=>{
-    const q = Number(p.qty)||1;
+    const q = Number(p.qty||p.quantity)||1;
     return `<tr>
       <td style="padding:8px;border-bottom:1px solid #eee">${p.name}</td>
       <td style="padding:8px;border-bottom:1px solid #eee;text-align:center">${q}</td>
@@ -270,7 +316,7 @@ orderForm.addEventListener('submit', async (e)=>{
   const totals = calcTotals(cart);
   const orderId = Date.now().toString().slice(-6);
 
-  const produseText = cart.map(p => `• ${p.name} × ${(Number(p.qty)||1)} — ${(((Number(p.price)||0))*(Number(p.qty)||1)).toFixed(2)} RON`).join('\n');
+  const produseText = cart.map(p => `• ${p.name} × ${(Number(p.qty||p.quantity)||1)} — ${(((Number(p.price)||0))*(Number(p.qty||p.quantity)||1)).toFixed(2)} RON`).join('\n');
   const proformaHTML = buildProformaHTML(orderId, cart, totals, fd);
 
   const adminParams = {
@@ -317,27 +363,8 @@ orderForm.addEventListener('submit', async (e)=>{
 /* ===== Init ===== */
 document.getElementById('year').textContent = new Date().getFullYear();
 document.addEventListener('DOMContentLoaded', ()=>{ render(); syncPFJ(); });
+// dacă se schimbă storage-ul din alt tab
 window.addEventListener('storage', (ev)=>{ if (ev.key===LS_KEY) render(); });
-</script><!-- DEBUG (temporar) -->
-<script>
-(function(){
-  const box = document.createElement('div');
-  box.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;background:#111;color:#0f0;padding:10px;border-radius:8px;font:12px/1.3 monospace;z-index:9999;max-height:40vh;overflow:auto';
-  box.innerHTML = '<b>DEBUG MSA_CART</b> — <button id="dbgClose" style="float:right;background:#333;color:#fff;border:0;padding:4px 8px;border-radius:6px">închide</button><pre id="dbgPre" style="white-space:pre-wrap;margin-top:8px"></pre>';
-  document.body.appendChild(box);
-  document.getElementById('dbgClose').onclick = ()=> box.remove();
-
-  function dump(){
-    let msacartApi = typeof window.MSACart;
-    let store = localStorage.getItem('MSA_CART');
-    document.getElementById('dbgPre').textContent =
-      'typeof MSACart: ' + msacartApi + '\n' +
-      'MSA_CART raw: ' + store + '\n' +
-      'Parsed count: ' + (function(){try{const arr=JSON.parse(store||'[]');return Array.isArray(arr)?arr.reduce((s,i)=>s+(+i.qty||1),0):'n/a'}catch(e){return 'parse error'}})();
-  }
-  dump();
-  window.addEventListener('storage', dump);
-})();
 </script>
 </body>
 </html>
