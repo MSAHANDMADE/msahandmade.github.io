@@ -228,7 +228,7 @@ function buildProformaHTML(orderId, cart, t, fd){
   const fmt = n => (Number(n)||0).toFixed(2)+' RON';
   const dateStr = new Date().toLocaleDateString('ro-RO',{day:'2-digit',month:'2-digit',year:'numeric'});
 
-  /* FIX: considerăm PJ și dacă există denumire firmă */
+  /* considerăm PJ și dacă există denumire firmă */
   const isPJ = (fd.tip === 'pj') || (fd.firma && fd.firma.trim().length > 0);
 
   const buyerTitle = isPJ ? 'Cumpărător (PJ)' : 'Cumpărător (PF)';
@@ -343,7 +343,7 @@ orderForm.addEventListener('submit', async (e)=>{
   const cart = readCart();
   if (!cart.length){ alert('Coșul este gol.'); return; }
 
-  /* FIX: citește explicit radio-urile (unele mobile nu le includ în FormData) */
+  // FIX: citește explicit radio-urile (unele mobile nu le includ în FormData)
   const fd = Object.fromEntries(new FormData(orderForm).entries());
   fd.tip   = (orderForm.querySelector('input[name="tip"]:checked')   || {}).value || fd.tip   || 'pf';
   fd.plata = (orderForm.querySelector('input[name="plata"]:checked') || {}).value || fd.plata || 'ramburs';
@@ -351,11 +351,15 @@ orderForm.addEventListener('submit', async (e)=>{
   const t = totals(cart);
   const orderId = Date.now().toString().slice(-6);
 
+  // aceeași regulă ca în proformă
+  const isPJ = (fd.tip === 'pj') || (fd.firma && fd.firma.trim().length > 0);
+
   const produseText = cart.map(p => `• ${p.name} × ${(Number(p.qty)||1)} — ${(((Number(p.price)||0))*(Number(p.qty)||1)).toFixed(2)} RON`).join('\n');
   const proformaHTML = buildProformaHTML(orderId, cart, t, fd);
 
+  // Email pentru tine (admin) — include și proforma HTML
   const adminParams = {
-    tip: (fd.tip==='pj'?'Persoană juridică':'Persoană fizică'),
+    tip: isPJ ? 'Persoană juridică' : 'Persoană fizică',
     firma: fd.firma || '-',
     cui: fd.cui || '-',
     reg: fd.reg || '-',
@@ -368,12 +372,14 @@ orderForm.addEventListener('submit', async (e)=>{
     livrare: t.shipping.toFixed(2),
     total: t.total.toFixed(2),
     order_id: orderId,
-    plata: (fd.plata==='transfer') ? 'Transfer bancar' : 'Ramburs'
+    plata: (fd.plata==='transfer') ? 'Transfer bancar' : 'Ramburs',
+    html_proforma: proformaHTML
   };
 
+  // Email pentru client
   const clientParams = {
     to_email: fd.email,
-    nume: (fd.tip==='pj' ? (fd.firma||'Client') : (fd.nume||'Client')),
+    nume: (isPJ ? (fd.firma||'Client') : (fd.nume||'Client')),
     order_id: orderId,
     html_proforma: proformaHTML
   };
