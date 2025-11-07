@@ -223,14 +223,14 @@ function syncPFJ(){
 }
 document.querySelectorAll('input[name="tip"]').forEach(r=> r.addEventListener('change', syncPFJ));
 
-/* ===== PROFORMA — layout ca o factură (Vânzător | Proformă | Cumpărător) ===== */
+/* ===== PROFORMA — email-safe (tabele, stiluri inline) ===== */
 function buildProformaHTML(orderId, cart, t, fd){
   const fmt = n => (Number(n)||0).toFixed(2)+' RON';
   const dateStr = new Date().toLocaleDateString('ro-RO',{day:'2-digit',month:'2-digit',year:'numeric'});
 
   const isPJ = fd.tip==='pj';
   const buyerTitle = isPJ ? 'Cumpărător (PJ)' : 'Cumpărător (PF)';
-  const buyerName  = isPJ ? (fd.firma||'-') : `${fd.nume||''} ${fd.prenume||''}`.trim()||'-';
+  const buyerName  = isPJ ? (fd.firma||'-') : (`${fd.nume||''} ${fd.prenume||''}`).trim() || '-';
   const buyerExtra = isPJ ? `<div>CUI: ${fd.cui||'-'}</div><div>Nr. Reg. Com.: ${fd.reg||'-'}</div>` : '';
 
   const pay = fd.plata||'ramburs';
@@ -239,91 +239,101 @@ function buildProformaHTML(orderId, cart, t, fd){
     ? 'Plata se efectuează prin <strong>transfer bancar</strong> în contul IBAN indicat.'
     : 'Plata se efectuează <strong>la livrare (ramburs)</strong>, direct către curier.';
 
+  // rânduri produse
   const rows = cart.map(p=>{
     const q=Number(p.qty)||1, pr=Number(p.price)||0;
-    return `<tr>
-      <td style="padding:12px 10px;border-bottom:1px solid #e9eef5">${p.name||'Produs'}</td>
-      <td style="padding:12px 10px;border-bottom:1px solid #e9eef5;text-align:center">${q}</td>
-      <td style="padding:12px 10px;border-bottom:1px solid #e9eef5;text-align:right">${fmt(pr)}</td>
-      <td style="padding:12px 10px;border-bottom:1px solid #e9eef5;text-align:right">${fmt(q*pr)}</td>
-    </tr>`;
+    return `
+      <tr>
+        <td style="padding:12px 10px;border-bottom:1px solid #e9eef5">${p.name||'Produs'}</td>
+        <td style="padding:12px 10px;border-bottom:1px solid #e9eef5;text-align:center">${q}</td>
+        <td style="padding:12px 10px;border-bottom:1px solid #e9eef5;text-align:right">${fmt(pr)}</td>
+        <td style="padding:12px 10px;border-bottom:1px solid #e9eef5;text-align:right">${fmt(q*pr)}</td>
+      </tr>`;
   }).join('');
 
-  const css = `
-  <style>
-    .pfwrap{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#0f172a}
-    .hdr{display:flex;gap:14px;align-items:stretch;margin:6px 0 14px}
-    .box{background:#fff;border:1px solid #e5edf5;border-radius:12px;padding:12px;flex:1}
-    .mid{flex:0 0 260px;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:6px}
-    .chip{display:inline-block;background:#e6f6f4;color:#0f766e;border:1px solid #99e0d8;padding:4px 10px;border-radius:999px;font-weight:700;font-size:12px}
-    .brand{font-size:22px;font-weight:800;line-height:1}
-    .sectTitle{font-weight:800;margin:0 0 6px}
-    .muted{color:#64748b}
-    table{width:100%;border-collapse:collapse;border:1px solid #e9eef5;border-radius:12px;overflow:hidden}
-    thead th{background:#f7fafc;border-bottom:1px solid #e9eef5;text-align:left;padding:10px}
-    td{padding:10px}
-    tfoot td{padding:10px}
-    tfoot tr td:first-child{text-align:right;color:#475569}
-    tfoot tr td:last-child{text-align:right;font-weight:700}
-    tfoot tr.total td{font-size:20px;font-weight:800}
-    .note{color:#64748b;font-size:13px;margin:12px 0 4px}
-  </style>`;
+  // header pe 3 coloane (tabel prezentational)
+  const header = `
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;margin:10px 0 14px">
+    <tr>
+      <!-- VÂNZĂTOR -->
+      <td valign="top" width="34%" style="padding:0 6px">
+        <div style="border:1px solid #e5edf5;border-radius:12px;padding:12px;background:#fff">
+          <div style="font-weight:800;margin:0 0 6px">Vânzător</div>
+          <div><strong>STOICA MIHAELA – Persoană Fizică Autorizată (M.S.A Handmade Decor)</strong></div>
+          <div>jud. Ilfov, oraș Bragadiru, Strada Generalului, Nr. 10, Cam. 1, Bl. 1, Ap. 2</div>
+          <div>CUI: 32196263 · ONRC: F23/2058/2008 · Neplătitor de TVA</div>
+          <div>Tel: <strong>0747246241</strong></div>
+          <div>Email: msahandmade.contact@gmail.com</div>
+          <div><strong>IBAN: RO71ROIN4021V44X12E165BQ — SALT BANK</strong></div>
+        </div>
+      </td>
 
+      <!-- PROFORMĂ -->
+      <td valign="top" width="32%" style="padding:0 6px">
+        <div style="border:1px solid #e5edf5;border-radius:12px;padding:12px;background:#fff;text-align:center">
+          <span style="display:inline-block;background:#e6f6f4;color:#0f766e;border:1px solid #99e0d8;padding:4px 10px;border-radius:999px;font-weight:700;font-size:12px">Proformă</span>
+          <div style="font-size:22px;font-weight:800;line-height:1;margin-top:6px">MSA Handmade</div>
+          <div style="color:#64748b;margin-top:6px">Nr. comandă: <strong>#${orderId}</strong></div>
+          <div style="color:#64748b">Data: <strong>${dateStr}</strong></div>
+        </div>
+      </td>
+
+      <!-- CUMPĂRĂTOR -->
+      <td valign="top" width="34%" style="padding:0 6px">
+        <div style="border:1px solid #e5edf5;border-radius:12px;padding:12px;background:#fff">
+          <div style="font-weight:800;margin:0 0 6px">${buyerTitle}</div>
+          <div><strong>${buyerName}</strong></div>
+          <div>${fd.adresa||'-'}, ${fd.oras||'-'}, ${fd.judet||'-'}${fd.codpostal?', '+fd.codpostal:''}</div>
+          <div>Tel: ${fd.telefon||'-'} · Email: ${fd.email||'-'}</div>
+          ${buyerExtra}
+        </div>
+      </td>
+    </tr>
+  </table>`;
+
+  const table = `
+  <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border:1px solid #e9eef5;border-radius:12px;border-collapse:separate;overflow:hidden">
+    <thead>
+      <tr>
+        <th align="left"  style="background:#f7fafc;border-bottom:1px solid #e9eef5;padding:10px">Produs</th>
+        <th align="center" style="background:#f7fafc;border-bottom:1px solid #e9eef5;padding:10px;width:90px">Cant.</th>
+        <th align="right" style="background:#f7fafc;border-bottom:1px solid #e9eef5;padding:10px;width:110px">Preț</th>
+        <th align="right" style="background:#f7fafc;border-bottom:1px solid #e9eef5;padding:10px;width:120px">Total</th>
+      </tr>
+    </thead>
+    <tbody>${rows}</tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" align="right" style="padding:10px;color:#475569;border-top:1px solid #e9eef5">Subtotal</td>
+        <td align="right" style="padding:10px;border-top:1px solid #e9eef5;font-weight:700">${fmt(t.subtotal)}</td>
+      </tr>
+      <tr>
+        <td colspan="3" align="right" style="padding:10px;color:#475569;border-top:1px solid #e9eef5">Reducere</td>
+        <td align="right" style="padding:10px;border-top:1px solid #e9eef5;font-weight:700">− ${fmt(t.discount)}</td>
+      </tr>
+      <tr>
+        <td colspan="3" align="right" style="padding:10px;color:#475569;border-top:1px solid #e9eef5">Livrare</td>
+        <td align="right" style="padding:10px;border-top:1px solid #e9eef5;font-weight:700">${fmt(t.shipping)}</td>
+      </tr>
+      <tr>
+        <td colspan="3" align="right" style="padding:14px 10px;font-size:18px;font-weight:800;border-top:1px solid #e9eef5">Total</td>
+        <td align="right" style="padding:14px 10px;font-size:18px;font-weight:800;border-top:1px solid #e9eef5">${fmt(t.total)}</td>
+      </tr>
+    </tfoot>
+  </table>`;
+
+  const note = `
+  <div style="color:#64748b;font-size:13px;margin:12px 0 4px">
+    Proforma nu este document fiscal. Neplătitor de TVA. Metodă de plată selectată:
+    <strong>${payShort}</strong>. ${payNote}
+  </div>`;
+
+  // ambalare
   return `
-  ${css}
-  <div class="pfwrap">
-    <div class="hdr">
-      <!-- STÂNGA — VÂNZĂTOR -->
-      <div class="box">
-        <div class="sectTitle">Vânzător</div>
-        <div><strong>STOICA MIHAELA – Persoană Fizică Autorizată (M.S.A Handmade Decor)</strong></div>
-        <div>jud. Ilfov, oraș Bragadiru, Strada Generalului, Nr. 10, Cam. 1, Bl. 1, Ap. 2</div>
-        <div>CUI: 32196263 · ONRC: F23/2058/2008 · Neplătitor de TVA</div>
-        <div>Tel: <strong>0747246241</strong></div>
-        <div>Email: msahandmade.contact@gmail.com</div>
-        <div><strong>IBAN: RO71ROIN4021V44X12E165BQ — SALT BANK</strong></div>
-      </div>
-
-      <!-- MIJLOC — PROFORMĂ -->
-      <div class="box mid">
-        <span class="chip">Proformă</span>
-        <div class="brand">MSA Handmade</div>
-        <div class="muted">Nr. comandă: <strong>#${orderId}</strong></div>
-        <div class="muted">Data: <strong>${dateStr}</strong></div>
-      </div>
-
-      <!-- DREAPTA — CUMPĂRĂTOR -->
-      <div class="box">
-        <div class="sectTitle">${buyerTitle}</div>
-        <div><strong>${buyerName}</strong></div>
-        <div>${fd.adresa||'-'}, ${fd.oras||'-'}, ${fd.judet||'-'}${fd.codpostal?', '+fd.codpostal:''}</div>
-        <div>Tel: ${fd.telefon||'-'} · Email: ${fd.email||'-'}</div>
-        ${buyerExtra}
-      </div>
-    </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Produs</th>
-          <th style="width:90px;text-align:center">Cant.</th>
-          <th style="width:110px;text-align:right">Preț</th>
-          <th style="width:120px;text-align:right">Total</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-      <tfoot>
-        <tr><td colspan="3">Subtotal</td><td>${fmt(t.subtotal)}</td></tr>
-        <tr><td colspan="3">Reducere</td><td>− ${fmt(t.discount)}</td></tr>
-        <tr><td colspan="3">Livrare</td><td>${fmt(t.shipping)}</td></tr>
-        <tr class="total"><td colspan="3">Total</td><td>${fmt(t.total)}</td></tr>
-      </tfoot>
-    </table>
-
-    <div class="note">
-      Proforma nu este document fiscal. Neplătitor de TVA. Metodă de plată selectată: <strong>${payShort}</strong>.<br/>
-      ${payNote}
-    </div>
+  <div style="font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#0f172a">
+    ${header}
+    ${table}
+    ${note}
   </div>`;
 }
 
