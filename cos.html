@@ -228,7 +228,9 @@ function buildProformaHTML(orderId, cart, t, fd){
   const fmt = n => (Number(n)||0).toFixed(2)+' RON';
   const dateStr = new Date().toLocaleDateString('ro-RO',{day:'2-digit',month:'2-digit',year:'numeric'});
 
-  const isPJ = fd.tip==='pj';
+  /* FIX: considerăm PJ și dacă există denumire firmă */
+  const isPJ = (fd.tip === 'pj') || (fd.firma && fd.firma.trim().length > 0);
+
   const buyerTitle = isPJ ? 'Cumpărător (PJ)' : 'Cumpărător (PF)';
   const buyerName  = isPJ ? (fd.firma||'-') : (`${fd.nume||''} ${fd.prenume||''}`).trim() || '-';
   const buyerExtra = isPJ ? `<div>CUI: ${fd.cui||'-'}</div><div>Nr. Reg. Com.: ${fd.reg||'-'}</div>` : '';
@@ -239,7 +241,6 @@ function buildProformaHTML(orderId, cart, t, fd){
     ? 'Plata se efectuează prin <strong>transfer bancar</strong> în contul IBAN indicat.'
     : 'Plata se efectuează <strong>la livrare (ramburs)</strong>, direct către curier.';
 
-  // rânduri produse
   const rows = cart.map(p=>{
     const q=Number(p.qty)||1, pr=Number(p.price)||0;
     return `
@@ -251,11 +252,9 @@ function buildProformaHTML(orderId, cart, t, fd){
       </tr>`;
   }).join('');
 
-  // header pe 3 coloane (tabel prezentational)
   const header = `
   <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;margin:10px 0 14px">
     <tr>
-      <!-- VÂNZĂTOR -->
       <td valign="top" width="34%" style="padding:0 6px">
         <div style="border:1px solid #e5edf5;border-radius:12px;padding:12px;background:#fff">
           <div style="font-weight:800;margin:0 0 6px">Vânzător</div>
@@ -267,8 +266,6 @@ function buildProformaHTML(orderId, cart, t, fd){
           <div><strong>IBAN: RO71ROIN4021V44X12E165BQ — SALT BANK</strong></div>
         </div>
       </td>
-
-      <!-- PROFORMĂ -->
       <td valign="top" width="32%" style="padding:0 6px">
         <div style="border:1px solid #e5edf5;border-radius:12px;padding:12px;background:#fff;text-align:center">
           <span style="display:inline-block;background:#e6f6f4;color:#0f766e;border:1px solid #99e0d8;padding:4px 10px;border-radius:999px;font-weight:700;font-size:12px">Proformă</span>
@@ -277,8 +274,6 @@ function buildProformaHTML(orderId, cart, t, fd){
           <div style="color:#64748b">Data: <strong>${dateStr}</strong></div>
         </div>
       </td>
-
-      <!-- CUMPĂRĂTOR -->
       <td valign="top" width="34%" style="padding:0 6px">
         <div style="border:1px solid #e5edf5;border-radius:12px;padding:12px;background:#fff">
           <div style="font-weight:800;margin:0 0 6px">${buyerTitle}</div>
@@ -328,7 +323,6 @@ function buildProformaHTML(orderId, cart, t, fd){
     <strong>${payShort}</strong>. ${payNote}
   </div>`;
 
-  // ambalare
   return `
   <div style="font-family:system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#0f172a">
     ${header}
@@ -349,17 +343,22 @@ orderForm.addEventListener('submit', async (e)=>{
   const cart = readCart();
   if (!cart.length){ alert('Coșul este gol.'); return; }
 
+  /* FIX: citește explicit radio-urile (unele mobile nu le includ în FormData) */
   const fd = Object.fromEntries(new FormData(orderForm).entries());
+  fd.tip   = (orderForm.querySelector('input[name="tip"]:checked')   || {}).value || fd.tip   || 'pf';
+  fd.plata = (orderForm.querySelector('input[name="plata"]:checked') || {}).value || fd.plata || 'ramburs';
+
   const t = totals(cart);
   const orderId = Date.now().toString().slice(-6);
 
   const produseText = cart.map(p => `• ${p.name} × ${(Number(p.qty)||1)} — ${(((Number(p.price)||0))*(Number(p.qty)||1)).toFixed(2)} RON`).join('\n');
   const proformaHTML = buildProformaHTML(orderId, cart, t, fd);
 
-  const pay = fd.plata || 'ramburs';
-
   const adminParams = {
     tip: (fd.tip==='pj'?'Persoană juridică':'Persoană fizică'),
+    firma: fd.firma || '-',
+    cui: fd.cui || '-',
+    reg: fd.reg || '-',
     nume: fd.nume||'-', prenume: fd.prenume||'-',
     email: fd.email||'-', telefon: fd.telefon||'-',
     judet: fd.judet||'-', oras: fd.oras||'-', adresa: fd.adresa||'-',
@@ -369,7 +368,7 @@ orderForm.addEventListener('submit', async (e)=>{
     livrare: t.shipping.toFixed(2),
     total: t.total.toFixed(2),
     order_id: orderId,
-    plata: (pay==='transfer') ? 'Transfer bancar' : 'Ramburs'
+    plata: (fd.plata==='transfer') ? 'Transfer bancar' : 'Ramburs'
   };
 
   const clientParams = {
