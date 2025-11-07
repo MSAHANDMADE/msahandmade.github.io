@@ -318,6 +318,26 @@ orderForm.addEventListener('submit', async (e)=>{
 document.getElementById('year').textContent = new Date().getFullYear();
 document.addEventListener('DOMContentLoaded', ()=>{ render(); syncPFJ(); });
 window.addEventListener('storage', (ev)=>{ if (ev.key===LS_KEY) render(); });
+</script><!-- DEBUG (temporar) -->
+<script>
+(function(){
+  const box = document.createElement('div');
+  box.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;background:#111;color:#0f0;padding:10px;border-radius:8px;font:12px/1.3 monospace;z-index:9999;max-height:40vh;overflow:auto';
+  box.innerHTML = '<b>DEBUG MSA_CART</b> — <button id="dbgClose" style="float:right;background:#333;color:#fff;border:0;padding:4px 8px;border-radius:6px">închide</button><pre id="dbgPre" style="white-space:pre-wrap;margin-top:8px"></pre>';
+  document.body.appendChild(box);
+  document.getElementById('dbgClose').onclick = ()=> box.remove();
+
+  function dump(){
+    let msacartApi = typeof window.MSACart;
+    let store = localStorage.getItem('MSA_CART');
+    document.getElementById('dbgPre').textContent =
+      'typeof MSACart: ' + msacartApi + '\n' +
+      'MSA_CART raw: ' + store + '\n' +
+      'Parsed count: ' + (function(){try{const arr=JSON.parse(store||'[]');return Array.isArray(arr)?arr.reduce((s,i)=>s+(+i.qty||1),0):'n/a'}catch(e){return 'parse error'}})();
+  }
+  dump();
+  window.addEventListener('storage', dump);
+})();
 </script>
 </body>
 </html>
