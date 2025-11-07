@@ -4,13 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Coșul tău — M.S.A Handmade Decor</title>
-<link rel="stylesheet" href="styles.css" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style>
   :root{--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--bg:#fafafa;--card:#fff}
   *{box-sizing:border-box}
   body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);margin:0}
+  a{color:inherit;text-decoration:none}
   .wrap{max-width:1100px;margin:24px auto;padding:0 16px}
-  h1{font-size:36px;margin:16px 0}
+  h1{font-size:32px;margin:12px 0}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 2px 10px rgba(2,6,23,.06)}
   .inner{padding:16px}
   .muted{color:var(--muted)}
@@ -19,25 +20,27 @@
   .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
   @media (max-width:900px){.grid{grid-template-columns:1fr}}
 
-  /* ITEM: titlu sus; rândul 2 = qty+total (responsive) */
-  .item{display:grid;grid-template-columns:72px 1fr auto;gap:14px;padding:14px;border-bottom:1px solid var(--line);align-items:center}
+  /* ITEM = imagine stânga, titlu pe rând; sub el cant+total */
+  .item{
+    display:grid;
+    grid-template-columns:72px 1fr;
+    gap:14px;
+    padding:14px;
+    border-bottom:1px solid var(--line);
+    align-items:start;
+  }
   .item:last-child{border-bottom:0}
   .thumb{width:72px;height:72px;object-fit:cover;border-radius:12px;background:#eef2f7}
   .title{font-weight:800;line-height:1.2;margin:0}
   .unit{font-size:12px;color:var(--muted);margin-top:4px}
-  .row2{grid-column:2 / 4;display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+  .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
   .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:150px}
-  .qty button{width:40px;height:38px;border:0;background:#f8fafc;font-size:20px}
+  .qty button{width:40px;height:38px;border:0;background:#f8fafc;font-size:20px;cursor:pointer}
   .qty input{width:56px;height:38px;border:0;text-align:center;font-weight:700}
-  .remove{width:40px;height:38px;border:0;border-radius:10px;background:#fee2e2;color:#991b1b;font-size:20px;margin-left:8px}
+  .remove{width:40px;height:38px;border:0;border-radius:10px;background:#fee2e2;color:#991b1b;font-size:20px;margin-left:8px;cursor:pointer}
   .lineTotal{font-weight:800;font-size:18px;white-space:nowrap}
   @media (max-width:640px){
-    .item{grid-template-columns:60px 1fr;grid-template-areas:
-      "img title"
-      "img r2"}
-    .thumb{grid-area:img}
-    .titleWrap{grid-area:title}
-    .row2{grid-area:r2}
+    .meta{flex-direction:column;align-items:flex-start;gap:8px}
   }
 
   .row{display:flex;justify-content:space-between;margin:8px 0}
@@ -50,14 +53,19 @@
   .full{grid-column:1/-1}
   @media (max-width:700px){ .form-grid{grid-template-columns:1fr} }
   .switch{display:flex;gap:18px;margin:8px 0 12px}
-  .pj-only{display:none}
   .submit{width:100%;height:50px;border:0;border-radius:12px;background:#0f172a;color:#fff;font-weight:800;font-size:18px;cursor:pointer}
   .submit[disabled]{opacity:.6;cursor:not-allowed}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .badge{background:#0f172a;color:#fff;padding:2px 8px;border-radius:999px;font-size:12px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Coșul tău</h1>
+  <div class="topbar">
+    <h1>Coșul tău <span class="badge" data-cart-count>0</span></h1>
+    <a href="produse.html" class="btn ghost">← Înapoi la produse</a>
+  </div>
 
   <div class="grid">
     <!-- STÂNGA: produse -->
@@ -95,7 +103,7 @@
           </div>
 
           <!-- PJ -->
-          <div class="pj-only form-grid">
+          <div class="pj-only form-grid" style="display:none">
             <input name="firma" placeholder="Denumire firmă" class="full">
             <input name="cui" placeholder="CUI">
             <input name="reg" placeholder="Nr. Reg. Comerț" class="full">
@@ -113,6 +121,7 @@
 
           <button id="submitBtn" type="submit" class="submit">Plasează comanda</button>
         </form>
+        <p class="hint" style="margin-top:10px">Pentru întrebări, scrie-ne la <a href="mailto:msahandmade.contact@gmail.com">msahandmade.contact@gmail.com</a>.</p>
       </div>
     </div>
   </div>
@@ -122,24 +131,26 @@
 
 <!-- EmailJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<!-- Coșul tău existent -->
+<!-- Coș (dacă ai cart.js în repo, îl va folosi) -->
 <script src="cart.js"></script>
 
 <script>
-/* ======= Config EmailJS (cheile tale) ======= */
+/* ======= Config EmailJS (păstrează-ți cheile) ======= */
 const EMAILJS_PUBLIC_KEY = 'iSadfb7-TV_89l_6k';
 const EMAILJS_SERVICE_ID = 'service_ix0zpp7';
 const EMAILJS_TEMPLATE_ADMIN  = 'template_13qpqtt';
 const EMAILJS_TEMPLATE_CLIENT = 'template_9yctwor';
 try{ emailjs.init(EMAILJS_PUBLIC_KEY); }catch(_){}
 
-/* ======= Cart helpers (nu modifică cart.js) ======= */
+/* ======= Cart helpers (nu ating logica existentă) ======= */
 const LS_KEY = (localStorage.getItem('MSACart')!==null)?'MSACart'
               : (localStorage.getItem('MSA_CART')!==null)?'MSA_CART'
               : 'MSA_CART';
 
 function getCart(){
+  // 1) preferă API-ul din cart.js, dacă există
   try{ if (window.MSACart && typeof MSACart.getCart==='function') return MSACart.getCart(); }catch(_){}
+  // 2) fallback la localStorage
   try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }catch(_){ return []; }
 }
 function setCart(next){
@@ -150,9 +161,7 @@ function setQty(id, qty){
   const c = getCart().map(p => String(p.id)===String(id) ? {...p, qty:qty, quantity:qty} : p);
   setCart(c);
 }
-function removeItem(id){
-  setCart(getCart().filter(p=>String(p.id)!==String(id)));
-}
+function removeItem(id){ setCart(getCart().filter(p=>String(p.id)!==String(id))); }
 function clearCart(){
   try{ if (window.MSACart && MSACart.clear){ MSACart.clear(); return; } }catch(_){}
   setCart([]);
@@ -167,19 +176,20 @@ function calcTotals(cart){
   return {subtotal, discount, shipping, total};
 }
 
-/* ======= Render listă + totaluri ======= */
-const list = document.getElementById('cart-list');
-const subEl  = document.getElementById('subval');
-const discEl = document.getElementById('discval');
-const shipEl = document.getElementById('shipval');
-const totEl  = document.getElementById('totval');
+/* ======= Elemente DOM ======= */
+const list  = document.getElementById('cart-list');
+const subEl = document.getElementById('subval');
+const disEl = document.getElementById('discval');
+const shpEl = document.getElementById('shipval');
+const totEl = document.getElementById('totval');
 
+/* ======= Render coș ======= */
 function render(){
   const cart = getCart();
   list.innerHTML = '';
   if (!cart.length){
     list.innerHTML = '<div class="muted">Coșul este gol.</div>';
-  } else {
+  }else{
     cart.forEach(p=>{
       const id = p.id, q = p.qty||p.quantity||1;
       const el = document.createElement('div');
@@ -187,33 +197,35 @@ function render(){
       el.dataset.id = id;
       el.innerHTML = `
         <img class="thumb" src="${p.image||''}" alt="${p.name||''}">
-        <div class="titleWrap">
+        <div>
           <p class="title">${p.name||'Produs'}</p>
           <div class="unit">${money(p.price)}</div>
-        </div>
-        <div></div>
-        <div class="row2">
-          <div>
-            <div class="qty">
-              <button class="dec" aria-label="Scade">−</button>
-              <input class="qval" value="${q}" readonly>
-              <button class="inc" aria-label="Crește">+</button>
+          <div class="meta">
+            <div>
+              <div class="qty">
+                <button class="dec" aria-label="Scade">−</button>
+                <input class="qval" value="${q}" readonly>
+                <button class="inc" aria-label="Crește">+</button>
+              </div>
+              <button class="remove" title="Șterge">×</button>
             </div>
-            <button class="remove" title="Șterge">×</button>
+            <div class="lineTotal">${money((p.price||0)*q)}</div>
           </div>
-          <div class="lineTotal">${money((p.price||0)*q)}</div>
         </div>`;
       list.appendChild(el);
     });
   }
-
   const t = calcTotals(cart);
-  subEl.textContent  = money(t.subtotal);
-  discEl.textContent = '− ' + money(t.discount);
-  shipEl.textContent = money(t.shipping);
-  totEl.textContent  = money(t.total);
+  subEl.textContent = money(t.subtotal);
+  disEl.textContent = '− ' + money(t.discount);
+  shpEl.textContent = money(t.shipping);
+  totEl.textContent = money(t.total);
 
-  try{ if (window.MSACart && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge(); }catch(_){}
+  // actualizează bulina din titlu (dacă cart.js oferă metoda, folosește-o)
+  try{ if (window.MSACart && MSACart.updateCartCountBadge) MSACart.updateCartCountBadge(); else {
+    const badge = document.querySelector('[data-cart-count]');
+    if (badge) badge.textContent = cart.reduce((s,p)=>s+(p.qty||p.quantity||1),0);
+  }}catch(_){}
 }
 
 /* ======= + / − / șterge (delegare) ======= */
@@ -237,9 +249,11 @@ document.getElementById('clear-cart').addEventListener('click', e=>{
 
 /* ======= PF / PJ ======= */
 function syncPFJ(){
-  const isPJ = (document.querySelector('input[name="tip"]:checked')||{}).value==='pj';
-  document.querySelectorAll('.pj-only').forEach(el=> el.style.display = isPJ ? '' : 'none');
-  document.querySelectorAll('.pf-only').forEach(el=> el.style.display = isPJ ? 'none' : '');
+  const tip = (document.querySelector('input[name="tip"]:checked')||{}).value || 'pf';
+  const isPJ = tip==='pj';
+  document.querySelector('.pj-only').style.display = isPJ ? '' : 'none';
+  document.querySelector('.pf-only').style.display = isPJ ? 'none' : '';
+  // Required corect
   ['firma','cui','reg'].forEach(n=>{ const el=document.querySelector(`[name="${n}"]`); if(el) el.required=isPJ; });
   ['nume','prenume'].forEach(n=>{ const el=document.querySelector(`[name="${n}"]`); if(el) el.required=!isPJ; });
 }
@@ -256,24 +270,33 @@ function buildProformaHTML(orderId, cart, totals, fd){
       <td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(q*(p.price||0)).toFixed(2)} RON</td>
     </tr>`;
   }).join('');
+  const client = (fd.tip==='pj' ? (fd.firma||'Client PJ') : ((fd.nume||'')+' '+(fd.prenume||'')).trim() || 'Client');
+  const header = (fd.tip==='pj'
+    ? `<div><b>Firmă:</b> ${fd.firma||'-'}<br><b>CUI:</b> ${fd.cui||'-'}<br><b>Nr. Reg. Comerț:</b> ${fd.reg||'-'}</div>`
+    : `<div><b>Client:</b> ${client}</div>`);
+
   return `
-    <h3 style="font-family:system-ui;margin:0 0 8px">Proformă #${orderId}</h3>
-    <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;font-family:system-ui">
-      <thead><tr style="background:#f8fafc">
-        <th align="left"  style="padding:8px;border-bottom:1px solid #ddd">Produs</th>
-        <th align="center"style="padding:8px;border-bottom:1px solid #ddd">Cant.</th>
-        <th align="right" style="padding:8px;border-bottom:1px solid #ddd">Preț</th>
-        <th align="right" style="padding:8px;border-bottom:1px solid #ddd">Total</th>
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-    <div style="text-align:right;margin-top:10px;font-family:system-ui">
-      <div>Subtotal: <b>${totals.subtotal.toFixed(2)} RON</b></div>
-      <div>Reducere: <b>− ${totals.discount.toFixed(2)} RON</b></div>
-      <div>Livrare:  <b>${totals.shipping.toFixed(2)} RON</b></div>
-      <div style="font-size:18px">TOTAL: <b>${totals.total.toFixed(2)} RON</b></div>
+    <div style="font-family:system-ui">
+      <h3 style="margin:0 0 8px">Proformă #${orderId}</h3>
+      ${header}
+      <div style="margin:8px 0 12px"><b>Adresă:</b> ${(fd.adresa||'-')}, ${(fd.oras||'-')}, ${(fd.judet||'-')} ${(fd.codpostal||'')}</div>
+      <table width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+        <thead><tr style="background:#f8fafc">
+          <th align="left"  style="padding:8px;border-bottom:1px solid #ddd">Produs</th>
+          <th align="center"style="padding:8px;border-bottom:1px solid #ddd">Cant.</th>
+          <th align="right" style="padding:8px;border-bottom:1px solid #ddd">Preț</th>
+          <th align="right" style="padding:8px;border-bottom:1px solid #ddd">Total</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div style="text-align:right;margin-top:10px">
+        <div>Subtotal: <b>${totals.subtotal.toFixed(2)} RON</b></div>
+        <div>Reducere: <b>− ${totals.discount.toFixed(2)} RON</b></div>
+        <div>Livrare:  <b>${totals.shipping.toFixed(2)} RON</b></div>
+        <div style="font-size:18px">TOTAL: <b>${totals.total.toFixed(2)} RON</b></div>
+      </div>
+      <div style="color:#64748b;margin-top:8px">Proforma nu este document fiscal.</div>
     </div>
-    <div style="color:#64748b;margin-top:8px;font-family:system-ui">Proforma nu este document fiscal.</div>
   `;
 }
 
@@ -346,6 +369,7 @@ orderForm.addEventListener('submit', async (e)=>{
 /* ======= Init ======= */
 document.getElementById('year').textContent = new Date().getFullYear();
 document.addEventListener('DOMContentLoaded', ()=>{ render(); syncPFJ(); });
+// dacă se schimbă storage-ul din alt tab
 window.addEventListener('storage', (ev)=>{ if (ev.key===LS_KEY) render(); });
 </script>
 </body>
