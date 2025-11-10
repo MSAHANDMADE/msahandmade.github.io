@@ -2,11 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.msahandmade.ro/</loc></url>
   <url><loc>https://www.msahandmade.ro/index.html</loc></url>
-  <url><loc>https://www.msahandmade.ro/contact.html</loc></url>
+  <url><loc>https://www.msahandmade.ro/produse.html</loc></url>
   <url><loc>https://www.msahandmade.ro/cos.html</loc></url>
   <url><loc>https://www.msahandmade.ro/multumesc.html</loc></url>
-  <url><loc>https://www.msahandmade.ro/produse.html</loc></url>
-
   <url><loc>https://www.msahandmade.ro/proforma.html</loc></url>
+  <url><loc>https://www.msahandmade.ro/contact.html</loc></url>
   <url><loc>https://www.msahandmade.ro/despre.html</loc></url>
+  <url><loc>https://www.msahandmade.ro/confidentialitate.html</loc></url>
+  <url><loc>https://www.msahandmade.ro/retur.html</loc></url>
+  <url><loc>https://www.msahandmade.ro/termeni.html</loc></url>
+  <url><loc>https://www.msahandmade.ro/cookies.html</loc></url>
 </urlset>
