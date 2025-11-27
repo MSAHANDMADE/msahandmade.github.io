@@ -9,6 +9,25 @@
   <meta name="description" content="Lumânări și decorațiuni MSA Handmade — create manual, cadouri cu suflet.">
   <link rel="canonical" href="https://www.msahandmade.ro/">
 
+  <!-- 🔵 META PIXEL (FACEBOOK) INSTALAT -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1917183292564267'); 
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"/>
+  </noscript>
+  <!-- 🔵 END META PIXEL -->
+
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.msahandmade.ro/">
@@ -16,10 +35,10 @@
   <meta property="og:description" content="Lumânări și decorațiuni artizanale.">
   <meta property="og:image" content="https://www.msahandmade.ro/logo.png">
 
-  <!-- Stil comun al site-ului -->
+  <!-- Stil comun -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- Stiluri specifice pentru pagina de start (hero + ninsoare + footer) -->
+  <!-- Stiluri homepage -->
   <style>
     :root{
       --brand:#0a2230;
@@ -29,11 +48,9 @@
     }
     body{background:var(--bg);}
 
-    /* BARĂ PROMO */
     .promo{background:#0f3a2e;color:#fff;text-align:center;padding:10px 12px;font-weight:800}
     .promo b{color:#ffd27a}
 
-    /* HEADER */
     .header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #eee}
     #main-nav{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:18px}
     #main-nav a{font-weight:700;color:#133;text-decoration:none}
@@ -42,8 +59,8 @@
     .cart-pill{display:inline-flex;align-items:center;gap:8px;background:#f5f5f5;padding:8px 12px;border-radius:999px;font-weight:800}
     .badge{min-width:22px;height:22px;border-radius:999px;display:inline-grid;place-items:center;background:#ffe4a4;color:#000;font-weight:800}
 
-    /* HERO */
     .wrap{max-width:980px;margin:0 auto;padding:0 16px}
+
     .hero{position:relative;padding:36px 0 28px;text-align:center}
     .hero .logo{width:220px;height:auto;display:block;margin:10px auto 18px;filter: drop-shadow(0 6px 20px rgba(0,0,0,.08))}
     .hero h1{font-size:clamp(28px,5.2vw,48px);line-height:1.15;margin:10px 0;color:#0b2230}
@@ -51,7 +68,6 @@
     .cta{appearance:none;border:0;background:#0a2230;color:#fff;padding:14px 22px;border-radius:14px;font-weight:900;min-height:48px;cursor:pointer}
     .cta:active{transform:translateY(1px)}
 
-    /* ZĂPADĂ – două straturi */
     .snow,.snow2{
       position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.55
     }
@@ -77,7 +93,6 @@
     @keyframes snowFall{to{background-position:0 1100px,10px 1090px,-10px 1120px}}
     @keyframes snowFall2{to{background-position:0 1200px,20px 1180px}}
 
-    /* FOOTER */
     footer{background:transparent;border-top:0}
     .legal{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:10px 0 4px}
     .legal a{color:#223;text-decoration:none}
@@ -85,6 +100,7 @@
     .socials{margin:14px 0 10px; display:flex; gap:14px; justify-content:center; position:relative; z-index:2}
     .socials img{display:block;width:28px;height:28px}
   </style>
+
 </head>
 <body>
 
@@ -101,7 +117,6 @@
     </nav>
   </header>
 
-  <!-- NINSOARE -->
   <div class="snow"></div>
   <div class="snow2"></div>
 
@@ -133,37 +148,38 @@
       <span>·</span>
       <a href="retur.html">Retur</a>
     </nav>
+
     <div style="text-align:center;color:#666;font-size:14px;margin-bottom:18px">
       © <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.
     </div>
   </footer>
 
-  <!-- Cart + badge sync (folosește MSACart dacă există, altfel doar citește localStorage) -->
-  
+  <!-- Script coș -->
   <script>
-(function(){
-  function updateBadge(){
-    try{
-      const raw = localStorage.getItem('MSA_CART');
-      const items = raw ? JSON.parse(raw) : [];
-      const count = Array.isArray(items)
-        ? items.reduce((s,it)=> s + (Number(it.qty)||1), 0)
-        : 0;
-      const el = document.getElementById('cart-count');
-      if (el) el.textContent = count;
-    }catch(e){}
-  }
+    (function(){
+      function updateBadge(){
+        try{
+          const raw = localStorage.getItem('MSA_CART');
+          const items = raw ? JSON.parse(raw) : [];
+          const count = Array.isArray(items)
+            ? items.reduce((s,it)=> s + (Number(it.qty)||1), 0)
+            : 0;
+          const el = document.getElementById('cart-count');
+          if (el) el.textContent = count;
+        }catch(e){}
+      }
 
-  document.addEventListener('DOMContentLoaded', function(){
-    const y = document.getElementById('year');
-    if (y) y.textContent = new Date().getFullYear();
-    updateBadge();
-  });
+      document.addEventListener('DOMContentLoaded', function(){
+        const y = document.getElementById('year');
+        if (y) y.textContent = new Date().getFullYear();
+        updateBadge();
+      });
 
-  window.addEventListener('storage', function(e){
-    if (e.key === 'MSA_CART') updateBadge();
-  });
-})();
-</script>
+      window.addEventListener('storage', function(e){
+        if (e.key === 'MSA_CART') updateBadge();
+      });
+    })();
+  </script>
+
 </body>
 </html>
