@@ -17,19 +17,16 @@
   <meta property="og:description" content="Scrie-ne pentru comenzi și detalii.">
   <meta property="og:image" content="https://www.msahandmade.ro/images/logo.png">
 
-  <!-- STILURI LOCALE: nu trebuie să modifici styles.css -->
   <style>
     :root{--ink:#111;--muted:#666;--brand:#0a2230;--soft:#f7f7f7;--card:#fff}
     *{box-sizing:border-box}
     body{margin:0;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;color:var(--ink);background:#fff}
     .promo{background:#0f3a2e;color:#fff;text-align:center;font-weight:700;padding:8px}
     .promo b{color:#ffd}
-    /* NAV */
     #main-nav{display:flex;justify-content:center;gap:14px;align-items:center;padding:12px}
     #main-nav a{text-decoration:none;color:#333;font-weight:500;padding:6px 10px}
     #main-nav a:hover{color:#d12b4a}
     .cart-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--soft)}
-    /* PAGE */
     .wrap{max-width:980px;margin:0 auto;padding:0 16px}
     h1{font-size:clamp(28px,4vw,40px);margin:18px 0}
     .card{background:var(--card);border-radius:16px;box-shadow:0 6px 18px rgba(0,0,0,.06);padding:18px}
@@ -42,7 +39,6 @@
     .btn{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:12px 16px;font-weight:800}
     .muted{color:var(--muted)}
     .break{overflow-wrap:anywhere;word-break:break-word}
-    /* FOOTER */
     footer{text-align:center;padding:20px 10px;font-size:14px;color:#666;border-top:1px solid #eee;background:#fafafa;margin-top:28px}
     footer .socials{display:flex;justify-content:center;gap:10px;margin-bottom:8px}
     footer .socials img{width:24px;height:24px}
@@ -52,12 +48,10 @@
 </head>
 <body>
 
-  <!-- bara promo -->
   <div class="promo">
     Reduceri până la <b>-20%</b> · Livrare gratuită de la <b>300 RON</b>
   </div>
 
-  <!-- nav unificat -->
   <nav id="main-nav">
     <a href="index.html">Acasă</a>
     <a href="produse.html">Produse</a>
@@ -69,7 +63,6 @@
   <main class="wrap">
     <h1>Contact</h1>
 
-    <!-- CARD INFO -->
     <section class="card" style="margin-bottom:16px">
       <h2 style="margin:0 0 8px">Scrie-ne sau sună-ne</h2>
       <p class="lead" style="margin:0 0 12px">
@@ -85,7 +78,6 @@
             </a>
           </p>
           <p><strong>Facebook:</strong><br>
-            <!-- LINK FACEBOOK ACTUALIZAT -->
             <a href="https://www.facebook.com/share/1ADr5zCYTf/" target="_blank">
               M.S.A Handmade Decor
             </a>
@@ -98,16 +90,21 @@
             </a>
           </p>
           <p><strong>WhatsApp:</strong><br>
-            <!-- LINK WHATSAPP ACTUALIZAT (fără + și fără 0) -->
             <a href="https://wa.me/40747246241" target="_blank">
               Deschide conversația
+            </a>
+          </p>
+
+          <!-- NOU: WhatsApp Channel -->
+          <p><strong>Canal WhatsApp:</strong><br>
+            <a href="https://whatsapp.com/channel/0029VbCjbygD8SDzdWfg9e0N" target="_blank">
+              Urmărește noutățile MSA Handmade
             </a>
           </p>
         </div>
       </div>
     </section>
 
-    <!-- FORMULAR -->
     <section class="card">
       <h2 style="margin:0 0 8px">Trimite mesaj</h2>
       <form id="contact-form">
@@ -137,17 +134,21 @@
     </section>
   </main>
 
-  <!-- FOOTER -->
   <footer>
     <div class="socials">
-      <!-- aceleași link-uri ca mai sus -->
       <a href="https://www.facebook.com/share/1ADr5zCYTf/" target="_blank">
         <img src="images/facebook.svg" alt="Facebook">
       </a>
       <a href="https://www.instagram.com/msahandmadedecor" target="_blank">
         <img src="images/instagram.svg" alt="Instagram">
       </a>
+
+      <!-- NOU: WhatsApp Channel în footer -->
+      <a href="https://whatsapp.com/channel/0029VbCjbygD8SDzdWfg9e0N" target="_blank">
+        <img src="images/whatsapp.svg" alt="WhatsApp Channel">
+      </a>
     </div>
+
     <small>&copy; <span id="year"></span> — MSA Handmade. Toate drepturile rezervate.</small>
     <div class="legal">
       <a href="termeni.html">Termeni & Condiții</a> ·
@@ -157,7 +158,6 @@
     </div>
   </footer>
 
-  <!-- emailjs + script mic pentru an -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
