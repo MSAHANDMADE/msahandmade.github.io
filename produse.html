@@ -1,23 +1,25 @@
 <!doctype html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" /><!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1917183292564267');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
+  <meta charset="UTF-8" />
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1917183292564267');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Produse — MSA Handmade</title>
 
@@ -34,13 +36,9 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
 
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- Stil extra: nav + zăpadă + carduri (nu înlocuiește styles.css) -->
+  <!-- Stil extra: nav + carduri -->
   <style>
     :root{ --brand:#0a2230; --gold:#ffd27a; }
-
-    /* Banner promo */
-    .promo{background:#0f3a2e;color:#fff;text-align:center;padding:10px 12px;font-weight:800}
-    .promo b{color:#ffd27a}
 
     /* Header compact */
     .header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #eee}
@@ -51,36 +49,24 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
     .cart-pill{display:inline-flex;align-items:center;gap:8px;background:#f5f5f5;padding:8px 12px;border-radius:999px;font-weight:800}
     .badge{min-width:22px;height:22px;border-radius:999px;display:inline-grid;place-items:center;background:#ffe4a4;color:#000;font-weight:800}
 
-    /* Fundal cu zăpadă ușoară */
-    body{background:linear-gradient(180deg,#f5ecf7 0%, #e3f0ff 100%)}
-    .snow,.snow2{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.55}
-    .snow{
-      background-image:
-        radial-gradient(#fff 1.2px, transparent 1.2px),
-        radial-gradient(#fff 1.2px, transparent 1.2px),
-        radial-gradient(#fff 1.2px, transparent 1.2px);
-      background-size:28px 28px,36px 36px,48px 48px;
-      background-position:0 0,10px -10px,-10px 20px;
-      animation:snowFall 22s linear infinite;
-    }
-    .snow2{
-      background-image:
-        radial-gradient(#fff 2.2px, transparent 2.2px),
-        radial-gradient(#fff 1.8px, transparent 1.8px);
-      background-size:70px 70px,90px 90px;
-      background-position:0 0,20px -20px;
-      animation:snowFall2 14s linear infinite; opacity:.65;
-    }
-    @keyframes snowFall{to{background-position:0 1100px,10px 1090px,-10px 1120px}}
-    @keyframes snowFall2{to{background-position:0 1200px,20px 1180px}}
+    /* Fundal curat (fără zăpadă) */
+    body{background:linear-gradient(180deg,#fbf7ff 0%, #eef6ff 100%)}
 
     /* Container principal */
     .wrap{max-width:1100px;margin:0 auto;padding:0 16px;position:relative;z-index:2}
     h1{margin:18px 0 10px}
 
-    /* Grilă carduri produse (dacă vrei să folosești) */
+    /* Căutare cu sugestii */
+    .search-wrap{position:relative;margin:10px 0 20px}
+    .search-input{width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:12px;font-size:16px}
+    .suggest{position:absolute;top:46px;left:0;right:0;background:#fff;border:1px solid #ddd;border-top:none;border-radius:0 0 12px 12px;box-shadow:0 12px 24px rgba(0,0,0,.06);z-index:30;overflow:hidden}
+    .suggest.hidden{display:none}
+    .suggest-item{padding:10px 14px;border-top:1px solid #f0f0f0;cursor:pointer}
+    .suggest-item:hover{background:#f6faff}
+
+    /* Grilă carduri produse */
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-    .card{grid-column:span 12;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);overflow:hidden}
+    .card{grid-column:span 12;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);overflow:hidden;position:relative}
     @media(min-width:720px){.card{grid-column:span 6}}
     @media(min-width:1024px){.card{grid-column:span 4}}
     .thumb{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;cursor:pointer;background:#fff}
@@ -90,13 +76,26 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
     .price{font-weight:700}
     .desc{font-size:.92rem;color:#555;margin-top:6px;min-height:48px}
 
-    /* Sugestii căutare */
-    .search-wrap{position:relative;margin:10px 0 20px}
-    .search-input{width:100%;padding:12px 14px;border:1px solid #ddd;border-radius:12px;font-size:16px}
-    .suggest{position:absolute;top:46px;left:0;right:0;background:#fff;border:1px solid #ddd;border-top:none;border-radius:0 0 12px 12px;box-shadow:0 12px 24px rgba(0,0,0,.06);z-index:30;overflow:hidden}
-    .suggest.hidden{display:none}
-    .suggest-item{padding:10px 14px;border-top:1px solid #f0f0f0;cursor:pointer}
-    .suggest-item:hover{background:#f6faff}
+    .btn.primary{background:#0f3a2e;color:#fff;border:0;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
+    .btn.primary:active{transform:translateY(1px)}
+
+    /* STOC EPUIZAT (premium) */
+    .card.out-of-stock{opacity:.78}
+    .card.out-of-stock .thumb{cursor:not-allowed;filter:saturate(.9)}
+    .card.out-of-stock .btn.primary{opacity:.55;cursor:not-allowed}
+    .badge-stock{
+      position:absolute;
+      top:12px;
+      left:12px;
+      z-index:5;
+      background:rgba(0,0,0,.78);
+      color:#fff;
+      padding:7px 10px;
+      border-radius:999px;
+      font-weight:900;
+      letter-spacing:.4px;
+      font-size:12px;
+    }
 
     /* Modal produs – un singur sistem stabil */
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
@@ -110,8 +109,10 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
     .muted{color:#555}
     .modal-top{display:flex;justify-content:space-between;align-items:start;gap:8px}
     .modal-close{background:#f4f4f4;border:0;border-radius:10px;padding:8px 10px;font-weight:700;cursor:pointer}
-    .btn.primary{background:#0f3a2e;color:#fff;border:0;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
     .btn.ghost{background:#f4f4f4;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+
+    .stockline{margin:.6rem 0 1rem;font-weight:900}
+    .stockline.out{color:#b00020}
 
     /* Footer legal + social */
     footer{background:transparent;border-top:0;margin-top:24px}
@@ -127,8 +128,6 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
 </head>
 <body>
 
-  <div class="promo">❄️ Reduceri de iarnă până la <b>20%</b> • Livrare gratuită de la <b>300 RON</b> 🎁</div>
-
   <header class="header">
     <nav id="main-nav" aria-label="Navigare principală">
       <a href="index.html">Acasă</a>
@@ -140,9 +139,6 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
     </nav>
   </header>
 
-  <!-- zăpadă -->
-  <div class="snow"></div><div class="snow2"></div>
-
   <main class="wrap">
     <h1>Produsele noastre</h1>
 
@@ -152,7 +148,7 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
       <div id="suggest" class="suggest hidden"></div>
     </div>
 
-    <!-- grilă (umplută din JS) -->
+    <!-- grilă -->
     <section class="grid" id="prod-list"></section>
   </main>
 
@@ -180,7 +176,7 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
     </div>
   </footer>
 
-  <!-- MODAL produs (un singur sistem) -->
+  <!-- MODAL produs -->
   <div class="modal" id="prod-modal" aria-hidden="true" role="dialog" aria-label="Previzualizare produs">
     <div class="modal-card">
       <div class="modal-media"><img id="m-img" src="" alt=""></div>
@@ -191,7 +187,8 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
         </div>
         <p id="m-desc" class="muted"></p>
         <p style="font-weight:800;margin:.6rem 0">Preț: <span id="m-price"></span></p>
-        <p id="m-specs" class="muted" style="margin:.4rem 0 1rem"></p>
+        <p id="m-specs" class="muted" style="margin:.4rem 0 .6rem"></p>
+        <div id="m-stock" class="stockline"></div>
         <button class="btn primary" id="m-add">Adaugă în coș</button>
       </div>
     </div>
@@ -199,7 +196,10 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
 
   <!-- Script pagină (produse + modal + căutare) -->
   <script>
-    // === DATE PRODUSE (exact cum le-ai avut) ===
+    // Produse fără stoc:
+    const OUT_OF_STOCK = new Set(['coronita1','coronita2']);
+
+    // === DATE PRODUSE ===
     const PRODUCTS = [
       { id:'coronita1', name:'Coroniță Crăciun – roșu & auriu', price:35, image:'images/coronita1.png',
         desc:'Strălucire caldă de sărbătoare: flori aurii și accente roșii ce transformă ușa sau peretele într-un colț de poveste.',
@@ -216,20 +216,14 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
       { id:'floricele', name:'Floricele', price:5, image:'images/floricele.png',
         desc:'Floricele delicate din ceară — un accent vesel pentru orice aranjament.',
         specs:{ material:'ceară', size:'4 × 3 cm', weight:'~25 g', notes:'' } },
-{
-  id: 'moscraciun',
-  name: 'Moș Crăciun decorativ',
-  price: 19.99,
-  image: 'images/moscraciun.jpg',
-  desc: 'Figurină Moș Crăciun turnată manual din ceară, perfectă pentru decorul de sărbători. Adu magia Crăciunului în casa ta.',
-  specs: {
-    material: 'ceară',
-    size: 'aprox. 10 cm',
-    weight: '~90 g',
-    notes: 'fabricat manual'
-  }
-},
-        
+      {
+        id: 'moscraciun',
+        name: 'Moș Crăciun decorativ',
+        price: 19.99,
+        image: 'images/moscraciun.jpg',
+        desc: 'Figurină Moș Crăciun turnată manual din ceară, perfectă pentru decorul de sărbători. Adu magia Crăciunului în casa ta.',
+        specs: { material: 'ceară', size: 'aprox. 10 cm', weight: '~90 g', notes: 'fabricat manual' }
+      },
       { id:'family', name:'Family', price:11, image:'images/family.png',
         desc:'Simbol liniștitor al armoniei: piesă lucrată din ceară, cu o prezență caldă și blândă.',
         specs:{ material:'ceară', size:'9 × 4 cm', weight:'~60 g', notes:'' } },
@@ -240,7 +234,7 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
         image:'images/ruga.png',
         desc:'Lumânare decorativă cu mâini în rugăciune, turnată manual din ceară de soia premium. Simbol al protecției și liniștii sufletești, ideală ca decor sau cadou.',
         specs:'material: ceară de soia, dimensiune: 9× 8 cm, greutate ~150 g, notes:"lumânare turnată manual, mici variații sunt posibile"'
-        },
+      },
       { id:'isus', name:'Iisus', price:33, image:'images/isus.png',
         desc:'Detalii frumoase pentru un colț de rugăciune plin de pace.',
         specs:{ material:'ceară', size:'11 × 7 cm', weight:'~300 g', notes:'' } },
@@ -265,7 +259,7 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
       { id:'floarea-soarelui', name:'Floarea-soarelui', price:33, image:'images/lumanare_floarea-soarelui.png',
         desc:'Soare mic pentru casă: floare din ceară într-o prezentare plăcută.',
         specs:{ material:'ceară + suport ipsos', size:'farfurie 10 × 5 cm', weight:'ceară ~100 g', notes:'' } },
-      {   
+      {
         id:'vazasilueta',
         name:'Vază Siluetă – cu flori',
         price:14.99,
@@ -294,9 +288,13 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
 
     const mount = document.getElementById('prod-list');
 
+    function isOut(id){ return OUT_OF_STOCK.has(String(id)); }
+
     function card(p){
+      const out = isOut(p.id);
       return `
-        <article class="card">
+        <article class="card ${out ? 'out-of-stock' : ''}">
+          ${out ? `<div class="badge-stock">STOC EPUIZAT</div>` : ``}
           <img class="thumb" src="${p.image}" alt="${p.name}" data-id="${p.id}" />
           <div class="body">
             <div class="top">
@@ -304,7 +302,9 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
               <span class="price">${p.price} RON</span>
             </div>
             <p class="desc">${p.desc||''}</p>
-            <button class="btn primary add" data-id="${p.id}">Adaugă în coș</button>
+            <button class="btn primary add" data-id="${p.id}" ${out ? 'disabled aria-disabled="true"' : ''}>
+              ${out ? 'Stoc epuizat' : 'Adaugă în coș'}
+            </button>
           </div>
         </article>
       `;
@@ -353,6 +353,7 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
     const mDesc = document.getElementById('m-desc');
     const mPrice= document.getElementById('m-price');
     const mSpecs= document.getElementById('m-specs');
+    const mStock= document.getElementById('m-stock');
     const mAdd  = document.getElementById('m-add');
     const mClose= document.getElementById('m-close');
     let currentProd = null;
@@ -363,27 +364,48 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
       mTitle.textContent = prod.name;
       mDesc.textContent = prod.desc || '';
       mPrice.textContent = `${Number(prod.price).toFixed(2)} RON`;
+
       const s = prod.specs || {};
-      mSpecs.textContent = [
-        s.material ? `Material: ${s.material}` : '',
-        s.size ? `Dimensiuni: ${s.size}` : '',
-        s.weight ? `Greutate: ${s.weight}` : '',
-        s.notes ? `Note: ${s.notes}` : ''
-      ].filter(Boolean).join(' • ');
+      if (typeof s === 'string'){
+        mSpecs.textContent = s;
+      } else {
+        mSpecs.textContent = [
+          s.material ? `Material: ${s.material}` : '',
+          s.size ? `Dimensiuni: ${s.size}` : '',
+          s.weight ? `Greutate: ${s.weight}` : '',
+          s.notes ? `Note: ${s.notes}` : ''
+        ].filter(Boolean).join(' • ');
+      }
+
+      const out = isOut(prod.id);
+      if (out){
+        mStock.textContent = 'STOC EPUIZAT';
+        mStock.classList.add('out');
+        mAdd.disabled = true;
+        mAdd.textContent = 'Stoc epuizat';
+      } else {
+        mStock.textContent = '';
+        mStock.classList.remove('out');
+        mAdd.disabled = false;
+        mAdd.textContent = 'Adaugă în coș';
+      }
+
       modal.classList.add('open');
     }
     function closeModal(){ modal.classList.remove('open'); currentProd=null; }
 
     function addCurrentToCart(){
       if (!currentProd) return;
+      if (isOut(currentProd.id)) return;
+
       if (window.MSACart && typeof MSACart.addToCart==='function'){
         MSACart.addToCart({ id:currentProd.id, name:currentProd.name, price:currentProd.price, image:currentProd.image });
       }else{
-        // fallback simplu în localStorage (MSA_CART)
         const raw = localStorage.getItem('MSA_CART');
         const list = raw ? JSON.parse(raw) : [];
         const idx = list.findIndex(x=>x.id===currentProd.id);
-        if (idx>=0) list[idx].qty=(list[idx].qty||1)+1; else list.push({id:currentProd.id,name:currentProd.name,price:currentProd.price,image:currentProd.image,qty:1});
+        if (idx>=0) list[idx].qty=(list[idx].qty||1)+1;
+        else list.push({id:currentProd.id,name:currentProd.name,price:currentProd.price,image:currentProd.image,qty:1});
         localStorage.setItem('MSA_CART', JSON.stringify(list));
       }
       updateBadge();
@@ -402,20 +424,26 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
           if (p) openModal(p);
         });
       });
+
       document.querySelectorAll('.add').forEach(btn=>{
         btn.addEventListener('click', ()=>{
           const id = btn.dataset.id;
+          if (isOut(id)) return;
+
           const p = PRODUCTS.find(x=>x.id===id);
           if (!p) return;
+
           if (window.MSACart && typeof MSACart.addToCart==='function'){
             MSACart.addToCart({ id:p.id, name:p.name, price:p.price, image:p.image });
           }else{
             const raw = localStorage.getItem('MSA_CART');
             const list = raw ? JSON.parse(raw) : [];
             const idx = list.findIndex(x=>x.id===p.id);
-            if (idx>=0) list[idx].qty=(list[idx].qty||1)+1; else list.push({id:p.id,name:p.name,price:p.price,image:p.image,qty:1});
+            if (idx>=0) list[idx].qty=(list[idx].qty||1)+1;
+            else list.push({id:p.id,name:p.name,price:p.price,image:p.image,qty:1});
             localStorage.setItem('MSA_CART', JSON.stringify(list));
           }
+
           updateBadge();
           const old = btn.textContent; btn.textContent='Adăugat!'; setTimeout(()=>btn.textContent=old,800);
         });
@@ -441,51 +469,7 @@ src="https://www.facebook.com/tr?id=1917183292564267&ev=PageView&noscript=1"
     });
   </script>
 
-  <!-- Dacă ai și alte scripturi proprii -->
-  <script src="script.js"></script><script>
-/* Stop dublare la “Adaugă în coș” – un singur handler global */
-(function(){
-  const KEY = 'MSA_CART';
-
-  function read(){ try{ return JSON.parse(localStorage.getItem(KEY))||[] }catch(_){ return [] } }
-  function write(items){
-    localStorage.setItem(KEY, JSON.stringify(items));
-    try{
-      const c = items.reduce((s,i)=>s+(+i.qty||0),0);
-      const el = document.getElementById('cart-count');
-      if (el) el.textContent = c;
-    }catch(_){}
-    // ping către celelalte pagini (badge)
-    window.dispatchEvent(new StorageEvent('storage', {key: KEY, newValue: localStorage.getItem(KEY)}));
-  }
-
-  function add(item){
-    const cart = read();
-    const i = cart.findIndex(p => String(p.id) === String(item.id));
-    if (i > -1) cart[i].qty = (Number(cart[i].qty)||0) + (Number(item.qty)||1);
-    else cart.push({ id:item.id, name:item.name, price:Number(item.price)||0, image:item.image||'', qty:Number(item.qty)||1 });
-    write(cart);
-  }
-
-  document.addEventListener('click', (e)=>{
-    const btn = e.target.closest('.add-to-cart,[data-add-to-cart]');
-    if (!btn) return;
-
-    // anti-dublu-trigger
-    if (btn.dataset.busy === '1') return;
-    btn.dataset.busy = '1'; setTimeout(()=>btn.dataset.busy='0', 350);
-
-    const d = btn.dataset;
-    if (!d.id || !d.name || !d.price) { alert('Butonul nu are data-id/name/price.'); return; }
-
-    add({ id:d.id, name:d.name, price:d.price, image:d.image||'', qty:d.qty||1 });
-
-    // feedback mic
-    const old = btn.textContent;
-    btn.textContent = 'Adăugat ✓';
-    setTimeout(()=> btn.textContent = old, 600);
-  });
-})();
-</script>
+  <!-- Scripturi proprii -->
+  <script src="script.js"></script>
 </body>
 </html>
