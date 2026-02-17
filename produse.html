@@ -1,47 +1,48 @@
 <!doctype html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8" />
+<meta charset="UTF-8" />
 
-  <!-- Meta Pixel -->
-  <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1917183292564267');
-  fbq('track', 'PageView');
-  </script>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}
+(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Produse — MSA Handmade</title>
+fbq('init','1917183292564267');
+fbq('track','PageView');
+</script>
 
-  <link rel="stylesheet" href="styles.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Produse — MSA Handmade</title>
+
+<link rel="stylesheet" href="styles.css">
 
 <style>
 
 body{
-  background:linear-gradient(180deg,#fbf7ff 0%, #eef6ff 100%);
-  font-family:system-ui;
+background:linear-gradient(180deg,#fbf7ff,#eef6ff);
 }
 
-/* header */
 .header{
 position:sticky;
 top:0;
 background:#fff;
 border-bottom:1px solid #eee;
-z-index:50;
+z-index:100;
 }
 
 #main-nav{
 max-width:1100px;
 margin:auto;
-padding:10px 16px;
+padding:12px 16px;
 display:flex;
 gap:18px;
 align-items:center;
@@ -56,24 +57,18 @@ border-radius:999px;
 font-weight:700;
 }
 
-/* container */
-
 .wrap{
 max-width:1100px;
 margin:auto;
-padding:20px 16px;
+padding:20px;
 }
-
-/* titles */
 
 .section-title{
-font-size:22px;
-margin:30px 0 14px;
+margin-top:40px;
+margin-bottom:15px;
+font-size:24px;
 font-weight:800;
-color:#0a2230;
 }
-
-/* grid */
 
 .grid{
 display:grid;
@@ -114,12 +109,10 @@ font-weight:700;
 }
 
 .desc{
-font-size:.92rem;
+font-size:.9rem;
 color:#555;
 margin:6px 0;
 }
-
-/* stock badge */
 
 .badge-stock{
 position:absolute;
@@ -132,8 +125,6 @@ border-radius:999px;
 font-weight:800;
 font-size:12px;
 }
-
-/* button */
 
 .btn{
 background:#0f3a2e;
@@ -181,25 +172,11 @@ cursor:not-allowed;
 
 <h1>Produsele noastre</h1>
 
-<div id="available-section">
-
-<div class="section-title">
-Disponibile
-</div>
-
+<div class="section-title">Disponibile</div>
 <div class="grid" id="available-grid"></div>
 
-</div>
-
-<div id="out-section">
-
-<div class="section-title">
-Stoc epuizat
-</div>
-
+<div class="section-title">Stoc epuizat</div>
 <div class="grid" id="out-grid"></div>
-
-</div>
 
 </main>
 
@@ -212,107 +189,88 @@ const OUT_OF_STOCK = new Set([
 
 const PRODUCTS = [
 
-{
-id:'coronita1',
-name:'Coroniță Crăciun – roșu & auriu',
-price:35,
-image:'images/coronita1.png',
-desc:'Coroniță decorativă premium.'
-},
+{ id:'coronita1', name:'Coroniță Crăciun – roșu & auriu', price:35, image:'images/coronita1.png', desc:'Strălucire caldă de sărbătoare.' },
 
-{
-id:'coronita2',
-name:'Coroniță Crăciun – albastru & argintiu',
-price:35,
-image:'images/coronita2.png',
-desc:'Coroniță decorativă premium.'
-},
+{ id:'coronita2', name:'Coroniță Crăciun – albastru & argintiu', price:35, image:'images/coronita2.png', desc:'Eleganță rece, iernatică.' },
 
-{
-id:'sarut',
-name:'Sărut',
-price:33,
-image:'images/sarut.jpg',
-desc:'Lumânare handmade.'
-},
+{ id:'sarut', name:'Sărut', price:33, image:'images/sarut.jpg', desc:'Două inimi, aceeași lumină.' },
 
-{
-id:'ingeras',
-name:'Îngeraș',
-price:5,
-image:'images/ingeras.png',
-desc:'Lumânare handmade.'
-},
+{ id:'ingeras', name:'Îngeraș', price:5, image:'images/ingeras.png', desc:'Mic protector al casei tale.' },
 
-{
-id:'floricele',
-name:'Floricele',
-price:5,
-image:'images/floricele.png',
-desc:'Lumânare handmade.'
-}
+{ id:'floricele', name:'Floricele', price:5, image:'images/floricele.png', desc:'Floricele delicate din ceară.' },
+
+{ id:'moscraciun', name:'Moș Crăciun decorativ', price:19.99, image:'images/moscraciun.jpg', desc:'Figurină Moș Crăciun.' },
+
+{ id:'family', name:'Family', price:11, image:'images/family.png', desc:'Simbol al armoniei.' },
+
+{ id:'ruga', name:'Lumânare Rugă', price:24.99, image:'images/ruga.png', desc:'Simbol al protecției.' },
+
+{ id:'isus', name:'Iisus', price:33, image:'images/isus.png', desc:'Detalii frumoase.' },
+
+{ id:'buchet', name:'Buchet', price:29, image:'images/buchet.jpg', desc:'Flori din ceară.' },
+
+{ id:'crin', name:'Crin', price:33, image:'images/crin.jpg', desc:'Formă florală elegantă.' },
+
+{ id:'dans', name:'Dans', price:33, image:'images/dans.jpg', desc:'Siluete în mișcare.' },
+
+{ id:'flori', name:'Flori', price:33, image:'images/flori.jpg', desc:'Suport ipsos.' },
+
+{ id:'inger', name:'Înger', price:33, image:'images/inger.jpg', desc:'Simbol al protecției.' },
+
+{ id:'logodna', name:'Logodnă', price:33, image:'images/logodna.jpg', desc:'Romantică și elegantă.' },
+
+{ id:'peisaj', name:'Peisaj', price:99, image:'images/peisaj.jpg', desc:'Peisaj turnat în ceară.' },
+
+{ id:'peisajiarna', name:'Peisaj de iarnă', price:99, image:'images/peisajiarna.jpg', desc:'Farmecul iernii.' },
+
+{ id:'indragostiti', name:'Îndrăgostiți', price:99, image:'images/indragostiti.jpg', desc:'Două inimi.' }
 
 ];
 
 function createCard(p,out){
 
 return `
-
 <div class="card">
 
-${out ? `<div class="badge-stock">STOC EPUIZAT</div>` : ``}
+${out ? `<div class="badge-stock">STOC EPUIZAT</div>` : ""}
 
-<img class="thumb" src="${p.image}">
+<img src="${p.image}" class="thumb">
 
 <div class="body">
 
 <div>${p.name}</div>
 
-<div class="price">
-${p.price} RON
-</div>
+<div class="price">${p.price} RON</div>
 
-<div class="desc">
-${p.desc}
-</div>
+<div class="desc">${p.desc}</div>
 
 <button class="btn"
 ${out ? "disabled" : ""}
-data-id="${p.id}"
 >
-
 ${out ? "Stoc epuizat" : "Adaugă în coș"}
-
 </button>
 
 </div>
-
 </div>
-
 `;
 
 }
 
 function render(){
 
-const availableGrid =
-document.getElementById("available-grid");
+const available=document.getElementById("available-grid");
+const out=document.getElementById("out-grid");
 
-const outGrid =
-document.getElementById("out-grid");
-
-availableGrid.innerHTML="";
-outGrid.innerHTML="";
+available.innerHTML="";
+out.innerHTML="";
 
 PRODUCTS.forEach(p=>{
 
-const out = OUT_OF_STOCK.has(p.id);
-
-if(out)
-outGrid.innerHTML += createCard(p,true);
+if(OUT_OF_STOCK.has(p.id))
+out.innerHTML+=createCard(p,true);
 
 else
-availableGrid.innerHTML += createCard(p,false);
+available.innerHTML+=createCard(p,false);
 
 });
 
