@@ -42,16 +42,14 @@
   <style>
     :root{
       --brand:#0a2230;
-      --brand-2:#0e344c;
-      --gold:#d9c08b;
-      --bg:linear-gradient(180deg,#f5ecf7 0%, #e3f0ff 100%);
+      --bg:linear-gradient(180deg,#fbf7ff 0%, #eef6ff 100%);
     }
     body{background:var(--bg);}
 
     .promo{background:#0f3a2e;color:#fff;text-align:center;padding:10px 12px;font-weight:800}
     .promo b{color:#ffd27a}
 
-    .header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid #eee}
+    .header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #eee}
     #main-nav{max-width:1100px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:18px}
     #main-nav a{font-weight:700;color:#133;text-decoration:none}
     #main-nav a:hover{color:#d12b4a}
@@ -61,14 +59,68 @@
 
     .wrap{max-width:980px;margin:0 auto;padding:0 16px}
 
-    .hero{position:relative;padding:36px 0 28px;text-align:center}
-    .hero .logo{width:220px;height:auto;display:block;margin:10px auto 18px;filter: drop-shadow(0 6px 20px rgba(0,0,0,.08))}
-    .hero h1{font-size:clamp(28px,5.2vw,48px);line-height:1.15;margin:10px 0;color:#0b2230}
-    .lead{max-width:780px;margin:10px auto 18px;color:#444;font-size:1.1rem}
-    .cta{appearance:none;border:0;background:#0a2230;color:#fff;padding:14px 22px;border-radius:14px;font-weight:900;min-height:48px;cursor:pointer}
+    /* HERO premium */
+    .hero{
+      position:relative;
+      padding:44px 0 30px;
+      text-align:center;
+      z-index:2;
+    }
+
+    /* “card” subtil ca să pară premium */
+    .hero-card{
+      max-width:860px;
+      margin:0 auto;
+      padding:28px 18px 26px;
+      border-radius:22px;
+      background:rgba(255,255,255,.78);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border:1px solid rgba(20,30,40,.06);
+      box-shadow: 0 18px 60px rgba(10,34,48,.10);
+      position:relative;
+      z-index:3;
+    }
+
+    /* Logo mai mare și mai “clar” */
+    .hero .logo{
+      width:340px;
+      max-width:86%;
+      height:auto;
+      display:block;
+      margin:6px auto 12px;
+      filter: drop-shadow(0 14px 34px rgba(0,0,0,.16));
+    }
+
+    .hero h1{
+      font-size:clamp(30px,5.5vw,54px);
+      line-height:1.12;
+      margin:14px 0 10px;
+      color:#0b2230;
+      letter-spacing:-.5px;
+    }
+
+    .lead{
+      max-width:760px;
+      margin:10px auto 18px;
+      color:#3f4550;
+      font-size:1.08rem;
+      line-height:1.55;
+    }
+
+    .cta{
+      appearance:none;border:0;
+      background:#0a2230;color:#fff;
+      padding:14px 22px;border-radius:14px;
+      font-weight:900;min-height:48px;
+      cursor:pointer;
+      box-shadow: 0 12px 26px rgba(10,34,48,.18);
+      display:inline-block;
+      text-decoration:none;
+    }
     .cta:active{transform:translateY(1px)}
 
-    /* 🌹 PETALE (în loc de ninsoare) — aceeași densitate (2 straturi) */
+    /* 🌹 Petale fine (premium, curate) */
     .petals,.petals2{
       position:fixed;
       inset:0;
@@ -76,37 +128,39 @@
       z-index:1;
     }
 
+    /* strat 1: rar, mic, blur mic */
     .petals{
-      opacity:.55;
+      opacity:.28;
       background-image:
-        radial-gradient(ellipse 10px 6px at 10px 10px, rgba(210,30,70,.55) 0%, rgba(210,30,70,.0) 70%),
-        radial-gradient(ellipse 12px 7px at 18px 14px, rgba(255,120,150,.45) 0%, rgba(255,120,150,.0) 70%),
-        radial-gradient(ellipse 9px 5px at 6px 18px, rgba(180,20,60,.40) 0%, rgba(180,20,60,.0) 70%);
-      background-size: 70px 70px, 90px 90px, 110px 110px;
-      background-position: 0 0, 20px -20px, -10px 30px;
-      animation: petalsFall 22s linear infinite;
-      filter: blur(.2px);
+        radial-gradient(ellipse 10px 6px at 12px 12px, rgba(220,40,90,.45) 0%, rgba(220,40,90,0) 70%),
+        radial-gradient(ellipse 12px 7px at 18px 16px, rgba(255,140,175,.40) 0%, rgba(255,140,175,0) 70%),
+        radial-gradient(ellipse 9px 5px at 6px 18px, rgba(190,20,70,.28) 0%, rgba(190,20,70,0) 70%);
+      background-size: 140px 140px, 180px 180px, 220px 220px;
+      background-position: 0 0, 30px -30px, -20px 40px;
+      animation: petalsFall 26s linear infinite;
+      filter: blur(.35px);
     }
 
+    /* strat 2: puțin mai vizibil, dar tot fin */
     .petals2{
-      opacity:.65;
+      opacity:.34;
       background-image:
-        radial-gradient(ellipse 14px 8px at 14px 14px, rgba(255,70,110,.55) 0%, rgba(255,70,110,.0) 70%),
-        radial-gradient(ellipse 11px 6px at 22px 18px, rgba(255,160,185,.45) 0%, rgba(255,160,185,.0) 70%);
-      background-size: 120px 120px, 150px 150px;
-      background-position: 0 0, 35px -35px;
-      animation: petalsFall2 14s linear infinite;
-      filter: blur(.25px);
+        radial-gradient(ellipse 14px 8px at 14px 14px, rgba(255,80,130,.42) 0%, rgba(255,80,130,0) 70%),
+        radial-gradient(ellipse 11px 6px at 24px 18px, rgba(255,175,198,.38) 0%, rgba(255,175,198,0) 70%);
+      background-size: 240px 240px, 300px 300px;
+      background-position: 0 0, 45px -45px;
+      animation: petalsFall2 18s linear infinite;
+      filter: blur(.45px);
     }
 
     @keyframes petalsFall{
       to{
-        background-position: 120px 1100px, -60px 1090px, 90px 1120px;
+        background-position: 90px 1200px, -70px 1180px, 80px 1250px;
       }
     }
     @keyframes petalsFall2{
       to{
-        background-position: -90px 1200px, 140px 1180px;
+        background-position: -80px 1350px, 120px 1320px;
       }
     }
 
@@ -140,10 +194,12 @@
 
   <main class="wrap">
     <section class="hero">
-      <img src="logo.png" alt="MSA Handmade Logo" class="logo" loading="eager" width="440" height="440">
-      <h1>Bun venit la MSA Handmade</h1>
-      <p class="lead">Lumânări și decorațiuni artizanale create manual — perfecte pentru tine sau pentru un cadou cu suflet.</p>
-      <p><a class="cta" href="produse.html">Vezi produsele</a></p>
+      <div class="hero-card">
+        <img src="logo.png" alt="MSA Handmade Logo" class="logo" loading="eager" width="680" height="680">
+        <h1>Bun venit la MSA Handmade</h1>
+        <p class="lead">Lumânări și decorațiuni artizanale create manual — perfecte pentru tine sau pentru un cadou cu suflet.</p>
+        <p><a class="cta" href="produse.html">Vezi produsele</a></p>
+      </div>
     </section>
   </main>
 
