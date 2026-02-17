@@ -19,7 +19,7 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1917183292564267'); 
+    fbq('init', '1917183292564267');
     fbq('track', 'PageView');
   </script>
   <noscript>
@@ -68,30 +68,47 @@
     .cta{appearance:none;border:0;background:#0a2230;color:#fff;padding:14px 22px;border-radius:14px;font-weight:900;min-height:48px;cursor:pointer}
     .cta:active{transform:translateY(1px)}
 
-    .snow,.snow2{
-      position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.55
+    /* 🌹 PETALE (în loc de ninsoare) — aceeași densitate (2 straturi) */
+    .petals,.petals2{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:1;
     }
-    .snow{
+
+    .petals{
+      opacity:.55;
       background-image:
-        radial-gradient(#fff 1.2px, transparent 1.2px),
-        radial-gradient(#fff 1.2px, transparent 1.2px),
-        radial-gradient(#fff 1.2px, transparent 1.2px);
-      background-size:28px 28px,36px 36px,48px 48px;
-      background-position:0 0,10px -10px,-10px 20px;
-      animation:snowFall 22s linear infinite;
-      opacity:.55
+        radial-gradient(ellipse 10px 6px at 10px 10px, rgba(210,30,70,.55) 0%, rgba(210,30,70,.0) 70%),
+        radial-gradient(ellipse 12px 7px at 18px 14px, rgba(255,120,150,.45) 0%, rgba(255,120,150,.0) 70%),
+        radial-gradient(ellipse 9px 5px at 6px 18px, rgba(180,20,60,.40) 0%, rgba(180,20,60,.0) 70%);
+      background-size: 70px 70px, 90px 90px, 110px 110px;
+      background-position: 0 0, 20px -20px, -10px 30px;
+      animation: petalsFall 22s linear infinite;
+      filter: blur(.2px);
     }
-    .snow2{
+
+    .petals2{
+      opacity:.65;
       background-image:
-        radial-gradient(#fff 2.2px, transparent 2.2px),
-        radial-gradient(#fff 1.8px, transparent 1.8px);
-      background-size:70px 70px,90px 90px;
-      background-position:0 0,20px -20px;
-      animation:snowFall2 14s linear infinite;
-      opacity:.65
+        radial-gradient(ellipse 14px 8px at 14px 14px, rgba(255,70,110,.55) 0%, rgba(255,70,110,.0) 70%),
+        radial-gradient(ellipse 11px 6px at 22px 18px, rgba(255,160,185,.45) 0%, rgba(255,160,185,.0) 70%);
+      background-size: 120px 120px, 150px 150px;
+      background-position: 0 0, 35px -35px;
+      animation: petalsFall2 14s linear infinite;
+      filter: blur(.25px);
     }
-    @keyframes snowFall{to{background-position:0 1100px,10px 1090px,-10px 1120px}}
-    @keyframes snowFall2{to{background-position:0 1200px,20px 1180px}}
+
+    @keyframes petalsFall{
+      to{
+        background-position: 120px 1100px, -60px 1090px, 90px 1120px;
+      }
+    }
+    @keyframes petalsFall2{
+      to{
+        background-position: -90px 1200px, 140px 1180px;
+      }
+    }
 
     footer{background:transparent;border-top:0}
     .legal{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:10px 0 4px}
@@ -104,7 +121,7 @@
 </head>
 <body>
 
-  <div class="promo">❄️ Reduceri de iarnă până la <b>20%</b> • Livrare gratuită de la <b>300 RON</b> 🎁</div>
+  <div class="promo">🌹 Reduceri speciale • Livrare gratuită de la <b>300 RON</b> 🎁</div>
 
   <header class="header">
     <nav id="main-nav" aria-label="Navigare principală">
@@ -117,8 +134,9 @@
     </nav>
   </header>
 
-  <div class="snow"></div>
-  <div class="snow2"></div>
+  <!-- Petale -->
+  <div class="petals"></div>
+  <div class="petals2"></div>
 
   <main class="wrap">
     <section class="hero">
